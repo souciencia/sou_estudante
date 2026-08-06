@@ -11,7 +11,13 @@ O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e uni
 
 ## Como rodar o projeto
 
-Se seu sistema for Windows, é recomendável utilizar o WSL (Windows Subsystem for Linux) para rodar esse projeto. Confira mais informações sobre o WSL no artigo oficial da Microsoft [Como instalar o Linux no Windows com o WSL](https://learn.microsoft.com/pt-br/windows/wsl/install).
+Se seu sistema for Windows, é recomendável utilizar **Docker Engine** dentro do **WSL** (Windows Subsystem for Linux) para rodar esse projeto.
+
+Confira mais informações sobre o WSL no artigo oficial da Microsoft: 
+<https://learn.microsoft.com/pt-br/windows/wsl/install>. 
+
+Confira mais informações sobre Docker Engine no site oficial do Docker: 
+<https://docs.docker.com/engine/install/ubuntu/#installation-methods>
 
 ### 1. Crie o arquivo .env na raiz do projeto
 
