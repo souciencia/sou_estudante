@@ -1,0 +1,146 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "analysis": {
+      "analyzer": {
+        "brazilian_search": {
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "sequencial": { "type": "long" },
+      "nu_ano_censo": { "type": "integer" },
+      "edicao": { "type": "keyword" },
+      "dt_carga": { "type": "date", "format": "yyyy/MM/dd HH:mm:ss.SSS||yyyy-MM-dd HH:mm:ss||strict_date_optional_time" },
+      "instituicao": {
+        "properties": {
+          "co_ies": { "type": "keyword" },
+          "no_ies": { "type": "text", "analyzer": "brazilian_search", "fields": { "keyword": { "type": "keyword" } } },
+          "sg_ies": { "type": "keyword" },
+          "co_mantenedora_ies": { "type": "keyword" },
+          "no_mantenedora_ies": { "type": "keyword" },
+          "tp_categoria_administrativa_ies": { "type": "keyword" },
+          "no_categoria_administrativa_ies": { "type": "keyword" },
+          "tp_organizacao_academica_ies": { "type": "keyword" },
+          "no_organizacao_academica_ies": { "type": "keyword" },
+          "tp_rede_ies": { "type": "keyword" },
+          "in_comunitaria_ies": { "type": "boolean" },
+          "in_confessional_ies": { "type": "boolean" },
+          "endereco": {
+            "properties": {
+              "ds_endereco_ies": { "type": "keyword" },
+              "ds_numero_endereco_ies": { "type": "keyword" },
+              "ds_complemento_endereco_ies": { "type": "keyword" },
+              "no_bairro_ies": { "type": "keyword" },
+              "nu_cep_ies": { "type": "keyword" }
+            }
+          },
+          "corpo_docente": {
+            "properties": {
+              "qt_doc_total": { "type": "integer" },
+              "qt_doc_exe": { "type": "integer" },
+              "doc_por_curso": { "type": "float" },
+              "perc_grad": { "type": "float" },
+              "perc_esp": { "type": "float" },
+              "perc_mestres": { "type": "float" },
+              "perc_doutores": { "type": "float" }
+            }
+          }
+        }
+      },
+      "curso": {
+        "properties": {
+          "co_curso": { "type": "keyword" },
+          "no_curso": { "type": "text", "analyzer": "brazilian_search", "fields": { "keyword": { "type": "keyword" } } },
+          "tp_grau_academico": { "type": "keyword" },
+          "no_grau_academico": { "type": "keyword" },
+          "in_gratuito": { "type": "boolean" },
+          "tp_modalidade_ensino": { "type": "keyword" },
+          "no_modalidade_ensino": { "type": "keyword" },
+          "tp_nivel_academico": { "type": "keyword" },
+          "no_nivel_academico": { "type": "keyword" },
+          "cine": {
+            "properties": {
+              "co_cine_rotulo": { "type": "keyword" },
+              "no_cine_rotulo": { "type": "keyword" },
+              "co_cine_area_geral": { "type": "keyword" },
+              "no_cine_area_geral": { "type": "keyword" },
+              "co_cine_area_especifica": { "type": "keyword" },
+              "no_cine_area_especifica": { "type": "keyword" },
+              "co_cine_area_detalhada": { "type": "keyword" },
+              "no_cine_area_detalhada": { "type": "keyword" }
+            }
+          }
+        }
+      },
+      "localizacao": {
+        "properties": {
+          "co_regiao": { "type": "keyword" },
+          "no_regiao": { "type": "keyword" },
+          "co_uf": { "type": "keyword" },
+          "no_uf": { "type": "keyword" },
+          "sg_uf": { "type": "keyword" },
+          "co_municipio": { "type": "keyword" },
+          "no_municipio": { "type": "keyword" },
+          "in_capital": { "type": "boolean" },
+          "no_campus": { "type": "keyword" },
+          "no_municipio_campus": { "type": "keyword" },
+          "sg_uf_campus": { "type": "keyword" },
+          "ds_regiao_campus": { "type": "keyword" }
+        }
+      },
+      "censo_metricas": {
+        "properties": {
+          "qt_vg_total": { "type": "integer" },
+          "qt_vg_total_diurno": { "type": "integer" },
+          "qt_vg_total_noturno": { "type": "integer" },
+          "qt_vg_total_ead": { "type": "integer" },
+          "qt_ing": { "type": "integer" },
+          "qt_ing_prounii": { "type": "integer" },
+          "qt_ing_prounip": { "type": "integer" },
+          "qt_ing_fies": { "type": "integer" },
+          "qt_ing_reserva_vaga": { "type": "integer" },
+          "qt_mat": { "type": "integer" },
+          "qt_apoio_social": { "type": "integer" },
+          "qt_mat_apoio_social": { "type": "integer" },
+          "qt_ativ_extracurricular": { "type": "integer" },
+          "qt_mat_ativ_extracurricular": { "type": "integer" }
+        }
+      },
+      "qualidade_mec": {
+        "properties": {
+          "conceito_enade_continuo": { "type": "float" },
+          "conceito_enade_faixa": { "type": "integer" },
+          "idd_continuo": { "type": "float" },
+          "idd_faixa": { "type": "integer" },
+          "cpc_continuo": { "type": "float" },
+          "cpc_faixa": { "type": "integer" },
+          "igc_continuo": { "type": "float" },
+          "igc_faixa": { "type": "integer" },
+          "tap": { "type": "float" },
+          "tca": { "type": "float" },
+          "tda": { "type": "float" }
+        }
+      },
+      "sisu": {
+        "properties": {
+          "tem_sisu": { "type": "boolean" },
+          "ds_turno": { "type": "keyword" },
+          "tp_mod_concorrencia": { "type": "keyword" },
+          "tipo_concorrencia": { "type": "keyword" },
+          "tipo_concorrencia_normalizado": { "type": "keyword" },
+          "ds_mod_concorrencia": { "type": "text" },
+          "qt_vagas_concorrencia": { "type": "integer" },
+          "nu_notacorte": { "type": "float" },
+          "qt_inscricao": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

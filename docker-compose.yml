@@ -1,0 +1,96 @@
+services:
+  se_es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.0
+    container_name: ${ESNODE01_NAME}
+    environment:
+      - node.name=${ESNODE01_NAME}
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=true
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    volumes:
+      - elsou-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - data_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'" ]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  se_bulker:
+    build:
+      context: ./packages/bulker
+    container_name: se_bulker
+    environment:
+      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
+      - ELASTICSEARCH_APIKEY=${ELASTICSEARCH_APIKEY}
+      - ES_INDEX_NAME=ofertas
+      - CSV_FILE_PATH=/data/dados.csv
+    volumes:
+      - ./packages/bulker/data:/data:z
+    networks:
+      - data_net
+    profiles:
+      - bulker
+
+
+  se_api:
+    build:
+      context: ./packages/api
+    container_name: se_api
+    environment:
+      - ES_URL=${ELASTICSEARCH_URL}
+      - ES_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ES_PASSWORD=${ELASTIC_PASSWORD}
+      - ES_APIKEY=${ELASTICSEARCH_APIKEY}
+    ports:
+      - "8080:8080"
+    networks:
+      - data_net
+    depends_on:
+      se_es01:
+        condition: service_healthy
+    restart: unless-stopped
+
+  se_front:
+    build:
+      context: ./packages/front
+      dockerfile: Dockerfile.dev
+      # target: deps # Interrompemos o build no estágio de dependências
+    container_name: se_front
+    environment:
+      - NODE_ENV=development
+      - API_URL=${API_URL}
+      - FORCE_COLOR=1
+    ports:
+      - "3000:3000"
+    volumes: # apenas enquanto dev
+      - ./packages/front:/app:z
+      - /app/node_modules
+      - /app/.next  
+    networks:
+      - data_net
+    depends_on:
+      - se_api
+      - se_es01
+    restart: unless-stopped
+
+volumes:
+  elsou-data:
+    driver: local
+
+networks:
+  # sou_net:
+  #   driver: bridge
+  data_net:
+    driver: bridge

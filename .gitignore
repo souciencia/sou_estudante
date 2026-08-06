@@ -1,0 +1,59 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+packages/bulker/data/*
+queries/
+*/session.json
+session.json
+
+.env
+.opencode/
+
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+
+front/node_modules/
+bulker/data
+tasks
+.opencode/
+
+# testing
+coverage/
+
+# next.js (geralmente no /front)
+.next/
+out/
+
+# production
+build/
+dist/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+*storybook.log
+storybook-static
