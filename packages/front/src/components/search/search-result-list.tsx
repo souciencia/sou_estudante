@@ -2,19 +2,30 @@
 import { SkeletonCard } from '@/components/card/skeleton-card'
 import { ErrorMessage } from '@/components/text/error-message'
 import { Typo } from '@/components/text/typo'
-import type { OfertaCompleta } from '@/services/api/types'
+import type { OfertaCompleta, PaginationLinks } from '@/services/api/types'
+import { Pagination } from '../site-elements/pagination'
 import SearchResultItem from './search-result-item'
 
 interface SearchResultListProps {
   cursos: OfertaCompleta[]
   isLoading?: boolean
   error?: string | null
+  total?: number
+  currentPage?: number
+  limit?: number
+  links?: PaginationLinks | null
+  onNavigate?: (url: string) => void
 }
 
 export default function SearchResultList({
   cursos,
   isLoading,
   error,
+  total = 0,
+  currentPage = 1,
+  limit = 20,
+  links,
+  onNavigate,
 }: SearchResultListProps) {
   // Loading
   if (isLoading) {
@@ -47,7 +58,9 @@ export default function SearchResultList({
   return (
     <div className="space-y-4">
       <Typo v="mute" s="sm" t="p" className="cursor-auto">
-        {cursos.length} {cursos.length === 1 ? 'curso' : 'cursos'}
+        {total > 0
+          ? `${total} ${total === 1 ? 'curso' : 'cursos'} encontrado${total === 1 ? '' : 's'}`
+          : `${cursos.length} ${cursos.length === 1 ? 'curso' : 'cursos'}`}
       </Typo>
       <div className="grid gap-4">
         {cursos.map((curso, index) => {
@@ -59,6 +72,16 @@ export default function SearchResultList({
           return <SearchResultItem key={key} oferta={curso} />
         })}
       </div>
+
+      {links && onNavigate && (
+        <Pagination
+          links={links}
+          currentPage={currentPage}
+          total={total}
+          limit={limit}
+          onNavigate={onNavigate}
+        />
+      )}
     </div>
   )
 }

@@ -41,11 +41,20 @@ export function isApiError(
   return !result.success
 }
 
+export interface PaginationLinks {
+  self: string
+  first: string
+  prev?: string
+  next?: string
+  last: string
+}
+
 export interface CursoListResponse {
   total: number
   page: number
   limit: number
   results: OfertaCompleta[]
+  links: PaginationLinks
 }
 
 // Tipos da nova estrutura da API baseada no índice Ofertas

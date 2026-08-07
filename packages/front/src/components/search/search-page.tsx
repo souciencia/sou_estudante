@@ -2,13 +2,22 @@
 
 import { useState } from 'react'
 import { SearchInput } from '@/components/form-elements/search-input'
-import SearchResultList from './search-result-list'
 import { useSearchCursos } from '@/utils/use-search-cursos'
 import { Button } from '../button/button'
+import SearchResultList from './search-result-list'
+import { cn } from '@/utils/cn'
 
 export function SearchPage() {
   const [query, setQuery] = useState('')
-  const { results, isLoading, error } = useSearchCursos(query)
+  const {
+    results,
+    isLoading,
+    error,
+    total,
+    currentPage,
+    links,
+    navigateToPage,
+  } = useSearchCursos(query)
 
   return (
     <div className="flex flex-col space-y-6 border">
@@ -23,11 +32,15 @@ export function SearchPage() {
 
       <aside></aside>
 
-      <main>
+      <main className={cn(`m-2 p-8 max-w-[1000]`)}>
         <SearchResultList
           cursos={results}
           isLoading={isLoading}
           error={error}
+          total={total}
+          currentPage={currentPage}
+          links={links}
+          onNavigate={navigateToPage}
         />
       </main>
     </div>

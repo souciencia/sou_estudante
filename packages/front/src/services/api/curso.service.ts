@@ -17,14 +17,26 @@ export const cursoService = {
     page = 1,
     limit = 20,
   ): Promise<CursoListResponse> {
+    const emptyResponse: CursoListResponse = {
+      total: 0,
+      page,
+      limit,
+      results: [],
+      links: {
+        self: '',
+        first: '',
+        last: '',
+      },
+    }
+
     if (!query || query.trim().length < API_CONFIG.SEARCH_MIN_CHARS) {
-      return { total: 0, page, limit, results: [] }
+      return emptyResponse
     }
 
     const result = await apiClient<CursoListResponse>(
       `${API_CONFIG.ENDPOINTS.SEARCH_OFERTAS}?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`,
     )
 
-    return result.success ? result.data : { total: 0, page, limit, results: [] }
+    return result.success ? result.data : emptyResponse
   },
 }
