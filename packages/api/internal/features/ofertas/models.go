@@ -2,10 +2,20 @@ package ofertas
 
 // ListResponse é a resposta paginada de busca de ofertas
 type ListResponse struct {
-	Total   int       `json:"total"`
-	Page    int       `json:"page"`
-	Limit   int       `json:"limit"`
-	Results []Oferta  `json:"results"`
+	Total   int              `json:"total"`
+	Page    int              `json:"page"`
+	Limit   int              `json:"limit"`
+	Results []Oferta         `json:"results"`
+	Links   PaginationLinks  `json:"links"`
+}
+
+// PaginationLinks contém URLs HATEOAS para navegação de páginas
+type PaginationLinks struct {
+	Self  string  `json:"self"`
+	First string  `json:"first"`
+	Prev  *string `json:"prev,omitempty"`
+	Next  *string `json:"next,omitempty"`
+	Last  string  `json:"last"`
 }
 
 // Oferta representa uma oferta completa no índice

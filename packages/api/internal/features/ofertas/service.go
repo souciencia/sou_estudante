@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
 )
 
 // Service define a interface de negócio para ofertas
@@ -57,12 +58,16 @@ func (s *ServiceImpl) BuscarOfertas(
 		items = append(items, item)
 	}
 
-	// 4. Montar response
+	// 4. Gerar links de paginação
+	links := buildPaginationLinks(query, page, limit, result.Total)
+
+	// 5. Montar response
 	return &ListResponse{
 		Total:   result.Total,
 		Page:    page,
 		Limit:   limit,
 		Results: items,
+		Links:   links,
 	}, nil
 }
 
@@ -81,4 +86,39 @@ func transformHitToOferta(hit map[string]interface{}) (Oferta, error) {
 	}
 
 	return oferta, nil
+}
+
+// buildPaginationLinks gera links HATEOAS para navegação de páginas
+func buildPaginationLinks(query string, page, limit, total int) PaginationLinks {
+	// Calcular última página
+	lastPage := (total + limit - 1) / limit
+	if lastPage < 1 {
+		lastPage = 1
+	}
+
+	// Função helper para construir URL
+	buildURL := func(p int) string {
+		return fmt.Sprintf("/ofertas?q=%s&page=%d&limit=%d", 
+			url.QueryEscape(query), p, limit)
+	}
+
+	links := PaginationLinks{
+		Self:  buildURL(page),
+		First: buildURL(1),
+		Last:  buildURL(lastPage),
+	}
+
+	// Adicionar prev se não estamos na primeira página
+	if page > 1 {
+		prevURL := buildURL(page - 1)
+		links.Prev = &prevURL
+	}
+
+	// Adicionar next se não estamos na última página
+	if page < lastPage {
+		nextURL := buildURL(page + 1)
+		links.Next = &nextURL
+	}
+
+	return links
 }
