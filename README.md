@@ -92,6 +92,30 @@ Como o fluxo da informação passa por três containers distintos, é importante
 [http://localhost:3000/](http://localhost:3000/)
 [http://localhost:3000/discovering](http://localhost:3000/discovering) (futura página de pesquisa e onde estou testando as coisas)
 
+## Contribuidores
+**Para usuário do VS Code:**
+Recomendamos a instalação da extensão oficial do [Biome](https://biomejs.dev/pt-br/).
+
+**Para usuários de Nvim**
+Recomendamos o uso do plugin [conform.nvim](https://github.com/stevearc/conform.nvim).
+
+```lua
+require("conform").setup({
+  formatters_by_ft = {
+    typescript = { "biome" },
+    typescriptreact = { "biome" },
+    javascript = { "biome" },
+    css = { "biome" },
+    json = { "biome" },
+    go = { "gofmt" },
+  },
+  format_on_save = {
+    timeout_ms = 500,
+    lsp_fallback = true,
+  },
+})
+```
+
 ## Licença livre
 
 Este programa é um software livre; você pode redistribuí-lo e/ou modificá-lo sob os termos da Licença Pública Geral GNU como publicada pela Free Software Foundation; na versão 3 da Licença, ou (a seu critério) qualquer versão posterior.
