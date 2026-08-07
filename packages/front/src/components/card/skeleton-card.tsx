@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { cn } from "@/utils/cn";
+import { cn } from '@/utils/cn'
 
 type SkeletonCardProps = {
-  className?: string;
-};
+  className?: string
+}
 
 /**
  * Componente SkeletonCard - Placeholder animado para cards de cursos
@@ -23,7 +23,7 @@ export function SkeletonCard({ className }: SkeletonCardProps) {
   return (
     <div
       className={cn(
-        "animate-pulse rounded-lg border border-gray-200 bg-white p-4 shadow-sm",
+        'animate-pulse rounded-lg border border-gray-200 bg-white p-4 shadow-sm',
         className,
       )}
       role="status"
@@ -43,5 +43,5 @@ export function SkeletonCard({ className }: SkeletonCardProps) {
 
       <span className="sr-only">Carregando...</span>
     </div>
-  );
+  )
 }

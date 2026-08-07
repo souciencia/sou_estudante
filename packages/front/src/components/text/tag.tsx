@@ -1,5 +1,5 @@
-import type { HTMLAttributes } from "react"
-import { cn } from "@/utils/cn"
+import type { HTMLAttributes } from 'react'
+import { cn } from '@/utils/cn'
 
 type TagProps = HTMLAttributes<HTMLDivElement> & {
   label: string
@@ -8,18 +8,17 @@ type TagProps = HTMLAttributes<HTMLDivElement> & {
 
 export const Tag = ({ label, module, ...props }: TagProps) => {
   return (
-    <span data-module={`${module}`}
+    <span
+      data-module={`${module}`}
       {...props}
-
-      className={
-        cn(
-          'bg-button-surface text-button-fg',
-          'border text-xs px-2 py-1 mr-1',
-          'rounded-2xl transition duration-300',
-          'text-tag font-bold'
-        )}
+      className={cn(
+        'bg-button-surface text-button-fg',
+        'border text-xs px-2 py-1 mr-1',
+        'rounded-2xl transition duration-300',
+        'text-tag font-bold',
+      )}
     >
-        {label}
+      {label}
     </span>
   )
 }

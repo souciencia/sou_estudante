@@ -1,12 +1,12 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from 'react'
 
 interface SurfaceProps extends HTMLAttributes<HTMLDivElement> {
-  children?: ReactNode;
+  children?: ReactNode
 }
 
 export const Surface = ({
   children,
-  className = "",
+  className = '',
   ...props
 }: SurfaceProps) => {
   return (
@@ -16,5 +16,5 @@ export const Surface = ({
     >
       {children}
     </div>
-  );
-};
+  )
+}

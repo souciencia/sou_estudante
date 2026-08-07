@@ -1,29 +1,29 @@
-'use client';
+'use client'
 
-import { useState, useEffect, useTransition } from 'react';
-import { Search, Loader2 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect, useTransition } from 'react'
+import { Search, Loader2 } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function SearchHero() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get('q') || '');
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [query, setQuery] = useState(searchParams.get('q') || '')
   // const [isPending, setIsPending] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition()
 
   // Debounce: evita chamadas excessivas à API enquanto o usuário digita
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       startTransition(() => {
         if (query) {
-          router.push(`/?q=${encodeURIComponent(query)}`);
+          router.push(`/?q=${encodeURIComponent(query)}`)
         } else {
-          router.push('/');
+          router.push('/')
         }
-      });
-    }, 400);
-    return () => clearTimeout(delayDebounceFn);
-  }, [query, router]);
+      })
+    }, 400)
+    return () => clearTimeout(delayDebounceFn)
+  }, [query, router])
 
   return (
     <div className="w-full max-w-2xl mx-auto p-4">
@@ -47,5 +47,5 @@ export default function SearchHero() {
         Dica: Tente "Engenharia de Software" ou "Universidade de São Paulo"
       </p>
     </div>
-  );
+  )
 }

@@ -11,23 +11,22 @@
   --radius-thin: 4px;
   --radius-normal: 8px;
 
+  --color-bg: oklch(0.97 0.01 75);
+  --color-card-surface: oklch(1 0 0);
+  --color-card-accent-background: oklch(0.97 0.015 165);
 
-  --color-bg: oklch(0.97 0.01 75); 
-  --color-card-surface: oklch(1 0 0); 
-  --color-card-accent-background: oklch(0.97 0.015 165); 
+  --color-fg: oklch(0.15 0 0);
+  --color-fg-muted: oklch(0.55 0 0);
 
-  --color-fg: oklch(0.15 0 0); 
-  --color-fg-muted: oklch(0.55 0 0); 
+  --color-card-fg: oklch(0.48 0.13 165);
+  --color-card-bg: oklch(0.95 0.03 165);
 
-  --color-card-fg: oklch(0.48 0.13 165); 
-  --color-card-bg: oklch(0.95 0.03 165); 
+  --color-progress-bar-foreground: oklch(0.48 0.03 240);
+  --color-progress-bar-background: oklch(0.94 0.01 75);
 
-  --color-progress-bar-foreground: oklch(0.48 0.03 240); 
-  --color-progress-bar-background: oklch(0.94 0.01 75); 
+  --color-card-border: oklch(0.92 0 0);
 
-  --color-card-border: oklch(0.92 0 0); 
-
-  --radius-card: 2.5rem; 
+  --radius-card: 2.5rem;
   --radius-full: 9999px;
 
   --text-card-title: 1.1rem;
@@ -35,22 +34,20 @@
   --text-tag: 0.625rem;
 }
 
-[data-module='1'] {
+[data-module="1"] {
   --color-button-surface: var(--color-cyan-100);
   --color-button-fg: var(--color-cyan-600);
 }
-[data-module='2'] {
+[data-module="2"] {
   --color-button-surface: var(--color-lime-100);
   --color-button-fg: var(--color-lime-600);
 }
-
 
 /* @media (prefers-color-scheme: dark) {
   :root {
    
   }
 } */
-
 
 body {
   /* background: var(--color-site-background);

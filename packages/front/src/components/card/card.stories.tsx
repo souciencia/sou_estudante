@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { Card } from "./index"
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { Card } from './index'
 
 const meta = {
   component: Card,
@@ -17,10 +17,10 @@ export const Default: Story = {
   render: (args) => (
     <Card {...args}>
       <Card.Header title="Algum título" subtitle="algum subtítulo">
-        <Card.IconEnade n='1' />
+        <Card.IconEnade n="1" />
       </Card.Header>
-      <Card.Tags source={['Gratuito', 'FUVEST']} className="ml-11"/>
-      <Card.ProgressBar title="Teste" percentage={'50%'}/>
+      <Card.Tags source={['Gratuito', 'FUVEST']} className="ml-11" />
+      <Card.ProgressBar title="Teste" percentage={'50%'} />
     </Card>
-  )
+  ),
 }

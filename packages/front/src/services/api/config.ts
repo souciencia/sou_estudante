@@ -4,7 +4,7 @@
 export const API_CONFIG = {
   // Base URL: usa proxy do Next.js (/api) que faz rewrite interno para se_api:8080
   // Isso resolve problemas de CORS e permite comunicação via rede interna Docker
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "/api",
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || '/api',
 
   // Configurações de cache do Next.js
   CACHE: {
@@ -13,7 +13,7 @@ export const API_CONFIG = {
 
   // Endpoints centralizados (facilita manutenção e descoberta)
   ENDPOINTS: {
-    SEARCH_OFERTAS: "/ofertas",
+    SEARCH_OFERTAS: '/ofertas',
     // Futuros endpoints dos 5 módulos:
     // GET_CURSO: '/cursos/:id',
     // COMO_INGRESSAR: '/ingresso',
@@ -30,4 +30,4 @@ export const API_CONFIG = {
 
   // Validação de busca
   SEARCH_MIN_CHARS: 5,
-} as const;
+} as const

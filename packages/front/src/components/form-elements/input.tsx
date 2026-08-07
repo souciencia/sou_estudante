@@ -1,17 +1,17 @@
 // components/atoms/Input.tsx
-import type React from "react";
+import type React from 'react'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  variant?: "light" | "dark" | "accent";
+  variant?: 'light' | 'dark' | 'accent'
 }
 
-const Input = ({ variant = "light", className = "", ...props }: InputProps) => {
+const Input = ({ variant = 'light', className = '', ...props }: InputProps) => {
   // Mapeamento das tuas variáveis de borda
   const borderColors = {
-    light: "border-[var(--color-border-light)]",
-    dark: "border-[var(--color-border-dark)]",
-    accent: "border-[var(--color-border-accent)]",
-  };
+    light: 'border-[var(--color-border-light)]',
+    dark: 'border-[var(--color-border-dark)]',
+    accent: 'border-[var(--color-border-accent)]',
+  }
 
   return (
     <input
@@ -27,7 +27,7 @@ const Input = ({ variant = "light", className = "", ...props }: InputProps) => {
       `}
       {...props}
     />
-  );
-};
+  )
+}
 
-export default Input;
+export default Input

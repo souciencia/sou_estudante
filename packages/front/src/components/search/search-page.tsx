@@ -1,16 +1,15 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { SearchInput } from "@/components/form-elements/search-input";
-import SearchResultList from "./search-result-list";
-import { useSearchCursos } from "@/utils/use-search-cursos";
-import { Button } from "../button/button";
-
+import { useState } from 'react'
+import { SearchInput } from '@/components/form-elements/search-input'
+import SearchResultList from './search-result-list'
+import { useSearchCursos } from '@/utils/use-search-cursos'
+import { Button } from '../button/button'
 
 export function SearchPage() {
-  const [query, setQuery] = useState("");
-  const { results, isLoading, error } = useSearchCursos(query);
-  
+  const [query, setQuery] = useState('')
+  const { results, isLoading, error } = useSearchCursos(query)
+
   return (
     <div className="flex flex-col space-y-6 border">
       <div className="p-2">
@@ -20,15 +19,17 @@ export function SearchPage() {
           <Button>Menor desistência</Button>
           <Button>A Z</Button>
         </div>
-      </div>  
+      </div>
 
-      <aside>
-
-      </aside>
+      <aside></aside>
 
       <main>
-        <SearchResultList cursos={results} isLoading={isLoading} error={error}/>
+        <SearchResultList
+          cursos={results}
+          isLoading={isLoading}
+          error={error}
+        />
       </main>
     </div>
-  );
+  )
 }
