@@ -2,6 +2,8 @@
 
 O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e universidades, feita para ajudar estudantes e pesquisadores.
 
+> [Kanban do projeto no Github](https://github.com/users/RicardoIreno/projects/1/views/1?system_template=kanban)
+
 ## Arquitetura
 
 - **Banco de dados:** Elasticsearch
@@ -13,35 +15,22 @@ O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e uni
 
 Se seu sistema for Windows, é recomendável utilizar **Docker Engine** dentro do **WSL** (Windows Subsystem for Linux) para rodar esse projeto.
 
-Confira mais informações sobre o WSL no artigo oficial da Microsoft: 
-<https://learn.microsoft.com/pt-br/windows/wsl/install>. 
+> Confira mais informações sobre o WSL no artigo oficial da Microsoft: 
+> <https://learn.microsoft.com/pt-br/windows/wsl/install>. 
+>
+> Confira mais informações sobre Docker Engine no site oficial do Docker: 
+> <https://docs.docker.com/engine/install/ubuntu/#installation-methods>
 
-Confira mais informações sobre Docker Engine no site oficial do Docker: 
-<https://docs.docker.com/engine/install/ubuntu/#installation-methods>
+### 1. Construção dos containers (build)
 
-### 1. Crie o arquivo .env na raiz do projeto
+1. Renomeie o arquivo `.env.example`, na raíz do projeto, para `.env`.
+2. Etapa de *build* dos containers: `docker-compose build`.
+3. `docker-compose up -d` para o *start*. Omitir a *flag* `-d` mostrará os logs em tempo real.
+4. Use `docker ps` para conferir se os containers estão rodando.
 
-O seu conteúdo deverá ser exte:
+### 2. Configurando a API Key do Elasticsearch
 
-```sh
-ESNODE01_NAME=se_es01
-ELASTICSEARCH_URL=http://se_es01:9200
-ELASTICSEARCH_HOSTS=http://se_es01:9200
-ELASTICSEARCH_USERNAME=xxxxxxxxxx
-ELASTIC_PASSWORD=xxxxxxxxxxxxx
-ELASTICSEARCH_APIKEY=xxxxxxxxxxxxxxxxxxxxxx
-API_URL=http://se_api:8080
-```
-
-### 2. Construção dos containers (build)
-
-1. Etapa de **build** dos containers: `docker-compose build`
-2. `docker-compose up -d` para o **start**. Omitir a *flag* `-d` que mostrará os logs em tempo real.
-3. Use `docker ps` para conferir se os containers estão rodando.
-
-### 3. Configurando a API Key do Elasticsearch
-
-Ação necessária para estabelecer a comunicação entre o Elasticsearch e a nossa API. Vamos obter a chave de API através da interação com o Elasticsearch.
+Precisamos obter a have de API através da interação com o Elasticsearch.
 
 1. Acesse [http://localhost:9200/](http://localhost:9200/) pelo navegador. Usuário e senha são os mesmos do arquivo [.env](.env). Ao acessar, o resultado esperado deve ser:
 
@@ -71,15 +60,12 @@ curl -u elastic -X POST "http://localhost:9200/_security/api_key" \
      -H "Content-Type: application/json" \
      -d '{"name": "my_api"}'
 ```
-Resutlado esperado:
+Resultado esperado:
 
 ```json
 {"id":"qM-xxxxxxxxxxxxxxxxx","name":"my_api","api_key":"xxxxxxxxxxxxxx","encoded":"xxxxxxxxxxxxxxxxxxxxxxxxx=="}
 ```
-3. Atualize o `.env` com a chave de API gerada.
-
-Cole o valor de `encoded` da resposta na variável `ELASTICSEARCH_API_KEY`, dentro do arquivo `.env` na raíz do projeto. 
-
+3. Atualize o `.env` com a chave de API gerada colandi o valor de `encoded` da resposta na variável `ELASTICSEARCH_API_KEY`.
 4. Restart o container `se_api` através do comando: `docker compose restart se_api`.
 
 ### 4. Carga de dados de exemplo
@@ -102,10 +88,9 @@ Como o fluxo da informação passa por três containers distintos, é importante
 **API funcionando e comunicando com o Elasticsearch**
 [http://localhost:8080/ofertas?q=medicina](http://localhost:8080/ofertas?q=medicina)
 
-**Frontend funcionando**
-[http://localhost:3000/](http://localhost:3000/) 
-
-
+**Frontend funcionando (construção em estágio inicial)**
+[http://localhost:3000/](http://localhost:3000/)
+[http://localhost:3000/discovering](http://localhost:3000/discovering) (futura página de pesquisa e onde estou testando as coisas)
 
 ## Licença livre
 

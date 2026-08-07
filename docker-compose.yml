@@ -47,6 +47,7 @@ services:
   se_api:
     build:
       context: ./packages/api
+      dockerfile: Dockerfile.dev
     container_name: se_api
     environment:
       - ES_URL=${ELASTICSEARCH_URL}
