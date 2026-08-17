@@ -2,8 +2,8 @@
 
 O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e universidades, feita para ajudar estudantes e pesquisadores.
 
-> [Kanban do projeto no Github](https://github.com/users/RicardoIreno/projects/1/views/1?system_template=kanban)
-> Confira a pasta [docks](https://github.com/souciencia/sou_estudante/tree/main/docs)
+>- [Kanban do projeto no Github](https://github.com/users/RicardoIreno/projects/1/views/1?system_template=kanban)
+>- Confira a pasta [docks](https://github.com/souciencia/sou_estudante/tree/main/docs)
 
 
 ## Arquitetura
