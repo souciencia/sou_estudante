@@ -43,7 +43,6 @@ services:
     profiles:
       - bulker
 
-
   se_api:
     build:
       context: ./packages/api
@@ -73,12 +72,14 @@ services:
       - NODE_ENV=development
       - API_URL=${API_URL}
       - FORCE_COLOR=1
+      - WATCHPACK_POLLING=true # (Adicionado depois) p HMR no Podman
     ports:
       - "3000:3000"
-    volumes: # apenas enquanto dev
+    volumes:
+      # apenas enquanto dev
       - ./packages/front:/app:z
       - /app/node_modules
-      - /app/.next  
+      - /app/.next
     networks:
       - data_net
     depends_on:
