@@ -1,6 +1,5 @@
 import { cn } from '@/utils/cn'
 import type { ReactNode } from 'react'
-import { StringifyOptions } from 'vitest/internal/browser'
 
 interface Props {
   v?: 'prev' | 'full'

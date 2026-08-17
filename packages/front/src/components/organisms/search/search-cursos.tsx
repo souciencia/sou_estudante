@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { SearchInput } from '@/components/form-elements/search-input'
-import { Typo } from '@/components/text/typo'
+import { SearchInput } from '@/components/atoms/search-input'
+import { Typo } from '@/components/atoms/typo'
 import { useSearchCursos } from '@/utils/use-search-cursos'
 import SearchResultList from './search-result-list'
 

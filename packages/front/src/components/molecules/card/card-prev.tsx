@@ -1,5 +1,5 @@
 import type { OfertaCompleta } from '@/services/api/types'
-import { Typo } from '../text/typo'
+import { Typo } from '../../atoms/typo'
 
 interface CardProps {
   module?: 1 | 2 | 3 | 4 | 5

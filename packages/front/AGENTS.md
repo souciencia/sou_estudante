@@ -1,7 +1,7 @@
 
 # Frontend (`front/`)
 
-⚠️​ Whenever you write code, format it according to the rules in the `.editorconfig` file and `biome.json`.
+⚠️​ Whenever your write code, format it according to the rules in the `.editorconfig` file and `biome.json`.
 
 ## Core Tech Stack
 - Framework: Next.js (App Router)

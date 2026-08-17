@@ -1,7 +1,7 @@
 // components/SearchResultItem.tsx
-import { Typo } from '@/components/text/typo'
+import { Typo } from '@/components/atoms/typo'
 import type { OfertaCompleta } from '@/services/api/types'
-import { Card } from '../card'
+import { Card } from '@/components/molecules/card'
 
 interface SearchResultItemProps {
   oferta: OfertaCompleta

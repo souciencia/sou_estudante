@@ -1,4 +1,4 @@
-import { Typo } from '@/components/text/typo'
+import { Typo } from '@/components/atoms/typo'
 import type { PaginationLinks } from '@/services/api/types'
 import { cn } from '@/utils/cn'
 

@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn'
-import { Tag } from '@/components/text/tag'
+import { Tag } from '@/components/atoms/tag'
 
 interface Props {
   className?: string

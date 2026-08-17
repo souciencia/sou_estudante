@@ -1,9 +1,9 @@
 // components/SearchResultList.tsx
-import { SkeletonCard } from '@/components/card/skeleton-card'
-import { ErrorMessage } from '@/components/text/error-message'
-import { Typo } from '@/components/text/typo'
+import { SkeletonCard } from '@/components/molecules/card/skeleton-card'
+import { ErrorMessage } from '@/components/atoms/error-message'
+import { Typo } from '@/components/atoms/typo'
 import type { OfertaCompleta, PaginationLinks } from '@/services/api/types'
-import { Pagination } from '../site-elements/pagination'
+import { Pagination } from './search-pagination'
 import SearchResultItem from './search-result-item'
 
 interface SearchResultListProps {

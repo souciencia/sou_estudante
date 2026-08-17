@@ -1,4 +1,4 @@
-import { SearchPage } from '@/components/search/search-page'
+import { SearchPage } from '@/components/organisms/search-page'
 
 export default async function Home({ searchParams }: any) {
   const params = await searchParams

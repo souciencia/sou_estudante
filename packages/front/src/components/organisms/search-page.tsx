@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { SearchInput } from '@/components/form-elements/search-input'
+import { SearchInput } from '@/components/atoms/search-input'
 import { useSearchCursos } from '@/utils/use-search-cursos'
-import { Button } from '../button/button'
-import SearchResultList from './search-result-list'
+import { Button } from '../atoms/button'
+import SearchResultList from './search/search-result-list'
 import { cn } from '@/utils/cn'
 
 export function SearchPage() {

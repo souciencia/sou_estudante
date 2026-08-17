@@ -3,22 +3,25 @@
 O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e universidades, feita para ajudar estudantes e pesquisadores.
 
 > [Kanban do projeto no Github](https://github.com/users/RicardoIreno/projects/1/views/1?system_template=kanban)
+> Mini NOte taking
+> - Incorporar: https://meyrele.github.io/sou-estudante-plataforma/
+
 
 ## Arquitetura
 
 - **Banco de dados:** Elasticsearch
 - **API:** Golang
-- **Interface:** TypeScript + Next.js 
+- **Interface:** TypeScript + Next.js
 - **Base:** Containers individuais + docker-compose.yml
 
 ## Como rodar o projeto
 
 Se seu sistema for Windows, é recomendável utilizar **Docker Engine** dentro do **WSL** (Windows Subsystem for Linux) para rodar esse projeto.
 
-> Confira mais informações sobre o WSL no artigo oficial da Microsoft: 
-> <https://learn.microsoft.com/pt-br/windows/wsl/install>. 
+> Confira mais informações sobre o WSL no artigo oficial da Microsoft:
+> <https://learn.microsoft.com/pt-br/windows/wsl/install>.
 >
-> Confira mais informações sobre Docker Engine no site oficial do Docker: 
+> Confira mais informações sobre Docker Engine no site oficial do Docker:
 > <https://docs.docker.com/engine/install/ubuntu/#installation-methods>
 
 ### 1. Construção dos containers (build)
@@ -73,17 +76,17 @@ Resultado esperado:
 A carga dos dados é feita usando um container especializado nessa tarefa, o `se_bulker`, que está configurado para dar o *start* apenas com um comando específico.
 
 1. Cole o arquivo csv com o o nome `dados.csv` na pasta `packages/bulker/data/`
-2. Dê o *start* no container `se_bulker` através do comando `docker compose --profile bulker up se_bulker`. 
+2. Dê o *start* no container `se_bulker` através do comando `docker compose --profile bulker up se_bulker`.
 
-Aguarde a etapa de *build* e a mensagem informando "Ingestão concluída!". 
+Aguarde a etapa de *build* e a mensagem informando "Ingestão concluída!".
 
 ## As coisas estão funcionando?
 
 Como o fluxo da informação passa por três containers distintos, é importante sabermos se cada uma delas está funcionando separadamente. Para isso usamos tanto os logs dos containers, `docker logs -f [nome/id]`, como também verificamos as respostas das aplicações em suas devidas portas.
 
 
-**Elasticsearch funcionando** 
-[http://localhost:9200/](http://localhost:9200/) 
+**Elasticsearch funcionando**
+[http://localhost:9200/](http://localhost:9200/)
 
 **API funcionando e comunicando com o Elasticsearch**
 [http://localhost:8080/ofertas?q=medicina](http://localhost:8080/ofertas?q=medicina)

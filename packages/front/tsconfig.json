@@ -29,7 +29,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "src/components/button/button.stories.tsx",
+    "src/components/atoms/button/button.stories.tsx",
     "src/app/discovering"
   ],
   "exclude": ["node_modules"]

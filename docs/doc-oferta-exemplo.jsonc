@@ -1,0 +1,113 @@
+// Exemplo de documento (source) indexado no Elasticsearch pelo bulker.
+// Estrutura derivada de packages/bulker/structs.go (Document) e mapper.go.
+{
+  "sequencial": 20231234567890,
+  "nu_ano_censo": 2023,
+  "edicao": "2023",
+  "dt_carga": "2024-05-10",
+  "instituicao": {
+    "co_ies": "1234",
+    "no_ies": "Universidade Federal do Exemplo",
+    "sg_ies": "UFEX",
+    "co_mantenedora_ies": "5678",
+    "no_mantenedora_ies": "Fundação Universidade do Exemplo",
+    "tp_categoria_administrativa_ies": "1",
+    "no_categoria_administrativa_ies": "Federal",
+    "tp_organizacao_academica_ies": "1",
+    "no_organizacao_academica_ies": "Universidade",
+    "tp_rede_ies": "1",
+    "in_comunitaria_ies": false,
+    "in_confessional_ies": false,
+    "endereco": {
+      "ds_endereco_ies": "Av. das Nações, 1000",
+      "ds_numero_endereco_ies": "S/N",
+      "ds_complemento_endereco_ies": "Campus Central",
+      "no_bairro_ies": "Centro",
+      "nu_cep_ies": "01000-000"
+    },
+    "corpo_docente": {
+      "qt_doc_total": 350,
+      "qt_doc_exe": 340,
+      "doc_por_curso": 12.5,
+      "perc_grad": 10.0,
+      "perc_esp": 15.0,
+      "perc_mestres": 40.0,
+      "perc_doutores": 35.0
+    }
+  },
+  "curso": {
+    "co_curso": "123456",
+    "no_curso": "Engenharia de Software",
+    "tp_grau_academico": "1",
+    "no_grau_academico": "Bacharelado",
+    "in_gratuito": true,
+    "tp_modalidade_ensino": "1",
+    "no_modalidade_ensino": "Presencial",
+    "tp_nivel_academico": "1",
+    "no_nivel_academico": "Graduação",
+    "cine": {
+      "co_cine_rotulo": "48",
+      "no_cine_rotulo": "Tecnologias de Informação e Comunicação",
+      "co_cine_area_geral": "4",
+      "no_cine_area_geral": "Ciências, Matemática e Computação",
+      "co_cine_area_especifica": "48",
+      "no_cine_area_especifica": "Computação",
+      "co_cine_area_detalhada": "481",
+      "no_cine_area_detalhada": "Ciência da Computação"
+    }
+  },
+  "localizacao": {
+    "co_regiao": "1",
+    "no_regiao": "Norte",
+    "co_uf": "12",
+    "no_uf": "Acre",
+    "sg_uf": "AC",
+    "co_municipio": "1200401",
+    "no_municipio": "Rio Branco",
+    "in_capital": true,
+    "no_campus": "Campus Central",
+    "no_municipio_campus": "Rio Branco",
+    "sg_uf_campus": "AC",
+    "ds_regiao_campus": "Região Central"
+  },
+  "censo_metricas": {
+    "qt_vg_total": 100,
+    "qt_vg_total_diurno": 50,
+    "qt_vg_total_noturno": 50,
+    "qt_vg_total_ead": 0,
+    "qt_ing": 80,
+    "qt_ing_prounii": 5,
+    "qt_ing_prounip": 3,
+    "qt_ing_fies": 10,
+    "qt_ing_reserva_vaga": 20,
+    "qt_mat": 450,
+    "qt_apoio_social": 120,
+    "qt_mat_apoio_social": 100,
+    "qt_ativ_extracurricular": 40,
+    "qt_mat_ativ_extracurricular": 35
+  },
+  "qualidade_mec": {
+    "conceito_enade_continuo": 3.5,
+    "conceito_enade_faixa": 4,
+    "idd_continuo": 2.8,
+    "idd_faixa": 3,
+    "cpc_continuo": 3.2,
+    "cpc_faixa": 3,
+    "igc_continuo": 3.9,
+    "igc_faixa": 4,
+    "tap": 0.85,
+    "tca": 0.72,
+    "tda": 0.68
+  },
+  "sisu": {
+    "tem_sisu": true,
+    "ds_turno": "Integral",
+    "tp_mod_concorrencia": "AC",
+    "tipo_concorrencia": "Ampla concorrência",
+    "tipo_concorrencia_normalizado": "ampla_concorrencia",
+    "ds_mod_concorrencia": "Ampla concorrência",
+    "qt_vagas_concorrencia": 30,
+    "nu_notacorte": 750.25,
+    "qt_inscricao": 1500
+  }
+}

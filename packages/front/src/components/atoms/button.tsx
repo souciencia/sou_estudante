@@ -5,6 +5,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   module?: '1' | '2' | '3' | '4' | '5'
   active?: boolean
+  icon?: 'attention' | ''
 }
 
 export const Button = ({
@@ -12,6 +13,7 @@ export const Button = ({
   module,
   active,
   className,
+  icon,
   ...props
 }: ButtonProps) => {
   return (
@@ -26,7 +28,11 @@ export const Button = ({
         `${className || ''}`,
       )}
     >
+     
+     {/* implemente aqui */}
+      
       {children}
+
     </button>
   )
 }

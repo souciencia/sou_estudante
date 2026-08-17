@@ -1,0 +1,1 @@
+// Crie aqui um componente que mostra (ou chama) um dos .svg em `packages/front/src/assets` dependendo de qual valor é passado nas propriedades
