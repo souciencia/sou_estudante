@@ -55,6 +55,8 @@ services:
       - ES_APIKEY=${ELASTICSEARCH_APIKEY}
     ports:
       - "8080:8080"
+    volumes:
+      - ./packages/api:/app:z
     networks:
       - data_net
     depends_on:
