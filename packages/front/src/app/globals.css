@@ -43,6 +43,13 @@
 
   --color-card-border: oklch(0.92 0 0);
 
+  /* --- Tag / badge --- */
+  --color-tag-bg: #E8F7F0;
+  --color-tag-fg: #1B8A5A;
+  --color-tag-border: rgba(46, 204, 138, 0.3);
+  --radius-tag: 20px;
+  --border-width-tag: 1.5px;
+
 
    /* --- Tipografia --- */
   --font-display: "Playfair Display", Georgia, serif;
@@ -62,7 +69,23 @@
 
   --text-card-title: 1.1rem;
   --text-card: 0.625rem;
-  --text-tag: 0.625rem;
+  /* --text-tag: 0.625rem; */
+  --text-tag: 10px;
+
+  /* --- FilterGroup (molecule) --- */
+  --filter-group-width: 280px;
+  --filter-group-title-gap: 28px;
+  --filter-group-list-gap: 22px;
+  --filter-group-control-gap: 16px;
+  --filter-group-checkbox-size: 20px;
+  --filter-group-checkbox-radius: 6px;
+  --filter-group-title-color: var(--color-fg);
+  --filter-group-label-color: var(--color-fg);
+  --filter-group-count-color: var(--color-fg-muted);
+  --filter-group-checkbox-border-color: var(--color-card-border);
+  --filter-group-checkbox-border-color-hover: #8a8a8a;
+  --filter-group-checkbox-bg-checked: var(--color-plum-800);
+  --filter-group-checkbox-check-color: #ffffff;
 }
 
 [data-module="1"] {
@@ -94,4 +117,43 @@ body {
   /* background: var(--color-site-background);
   color: var(--color-fg); */
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* --- FilterGroup: checkbox control (reusable molecule) --- */
+.filter-group__checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--filter-group-checkbox-size);
+  height: var(--filter-group-checkbox-size);
+  min-width: var(--filter-group-checkbox-size);
+  border-radius: var(--filter-group-checkbox-radius);
+  border: 1.5px solid var(--filter-group-checkbox-border-color);
+  background-color: var(--color-card-surface);
+  margin: 0;
+  cursor: pointer;
+  transition: border-color var(--motion-fast) var(--ease-prow);
+}
+
+.filter-group__option-control:hover .filter-group__checkbox {
+  border-color: var(--filter-group-checkbox-border-color-hover);
+}
+
+.filter-group__checkbox:focus-visible {
+  outline: 2px solid var(--color-plum-700);
+  outline-offset: 2px;
+}
+
+.filter-group__checkbox:checked {
+  background-color: var(--filter-group-checkbox-bg-checked);
+  border-color: var(--filter-group-checkbox-bg-checked);
+}
+
+.filter-group__checkbox:checked::after {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 60%;
+  margin: 20% auto;
+  background-color: var(--filter-group-checkbox-check-color);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
