@@ -1,17 +1,16 @@
 // components/atoms/typo.tsx
-import type React from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 import { cn } from '@/utils/cn'
 
 type TypographyVariant = 'title' | 'normal' | 'mute' | 'accent'
 type TypographySize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-type TypographyTag = 'h1' | 'h2' | 'h3' | 'p' | 'span'
+type TypographyTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'p' | 'span'
 
-interface TypoProps {
+interface TypoProps extends HTMLAttributes<HTMLElement> {
   v?: TypographyVariant
   s?: TypographySize
   t?: TypographyTag
-  children: React.ReactNode
-  className?: string
+  children: ReactNode
 }
 
 const variantStyles: Record<TypographyVariant, string> = {
@@ -36,9 +35,10 @@ export const Typo = ({
   t: Tag = 'span',
   children,
   className,
+  ...props
 }: TypoProps) => {
   return (
-    <Tag className={cn(variantStyles[v], sizeStyles[s], className)}>
+    <Tag className={cn(variantStyles[v], sizeStyles[s], className)} {...props}>
       {children}
     </Tag>
   )

@@ -5,7 +5,6 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   module?: '1' | '2' | '3' | '4' | '5'
   active?: boolean
-  icon?: 'attention' | ''
 }
 
 export const Button = ({
@@ -27,12 +26,8 @@ export const Button = ({
         'shadow-md transition duration-300',
         `${className || ''}`,
       )}
-    >
-     
-     {/* implemente aqui */}
-      
+    > 
       {children}
-
     </button>
   )
 }

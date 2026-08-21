@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Card } from './index'
+import SeloEnade from '@/components/molecules/selo-enade'
 
 const meta = {
   component: Card,
@@ -17,7 +18,7 @@ export const Default: Story = {
   render: (args) => (
     <Card {...args}>
       <Card.Header title="Algum título" subtitle="algum subtítulo">
-        <Card.IconEnade n="1" />
+        <SeloEnade faixa={4}/>
       </Card.Header>
       <Card.Tags source={['Gratuito', 'FUVEST']} className="ml-11" />
       <Card.ProgressBar title="Teste" percentage={'50%'} />
