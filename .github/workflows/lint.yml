@@ -25,6 +25,7 @@ jobs:
           go-version: '1.22'
 
       - name: Check TypeScript / CSS format (Biome)
+        working-directory: packages/front
         run: npx @biomejs/biome ci .
 
       - name: Check Go format (gofmt)
