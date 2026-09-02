@@ -1,6 +1,6 @@
 // src/components/organisms/search/search-cursos.test.tsx
 import { fireEvent, render, screen } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 import { SearchCursos } from './search-cursos'
 
@@ -14,6 +14,7 @@ describe('SearchCursos', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.useFakeTimers()
     vi.mocked(useSearchCursos).mockReturnValue({
       query: 'medicina',
       results: [
@@ -44,13 +45,20 @@ describe('SearchCursos', () => {
     })
   })
 
-  it('preenche o input com o termo da URL e dispara setQuery ao digitar', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('preenche o input com o termo da URL e dispara setQuery com debounce ao digitar', () => {
     render(<SearchCursos />)
 
     const input = screen.getByRole('textbox')
     expect(input).toHaveValue('medicina')
 
     fireEvent.change(input, { target: { value: 'direito' } })
+    expect(mockSetQuery).not.toHaveBeenCalled()
+
+    vi.advanceTimersByTime(300)
     expect(mockSetQuery).toHaveBeenCalledWith('direito')
   })
 })
