@@ -101,6 +101,48 @@ func (r *ElasticsearchRepository) Search(
 		})
 	}
 
+	if len(filters.Categoria) > 0 {
+		shouldCategorias := []map[string]interface{}{}
+		for _, cat := range filters.Categoria {
+			switch strings.ToLower(cat) {
+			case "privada":
+				shouldCategorias = append(shouldCategorias, map[string]interface{}{
+					"term": map[string]interface{}{"curso.in_gratuito": false},
+				})
+			case "federal":
+				shouldCategorias = append(shouldCategorias, map[string]interface{}{
+					"bool": map[string]interface{}{
+						"must": []map[string]interface{}{
+							{"term": map[string]interface{}{"curso.in_gratuito": true}},
+							{"term": map[string]interface{}{"sisu.tem_sisu": true}},
+						},
+					},
+				})
+			case "estadual":
+				shouldCategorias = append(shouldCategorias, map[string]interface{}{
+					"bool": map[string]interface{}{
+						"must": []map[string]interface{}{
+							{"term": map[string]interface{}{"curso.in_gratuito": true}},
+							{"term": map[string]interface{}{"sisu.tem_sisu": false}},
+						},
+					},
+				})
+			case "municipal":
+				shouldCategorias = append(shouldCategorias, map[string]interface{}{
+					"term": map[string]interface{}{"curso.in_gratuito": true},
+				})
+			}
+		}
+		if len(shouldCategorias) > 0 {
+			filterClauses = append(filterClauses, map[string]interface{}{
+				"bool": map[string]interface{}{
+					"should":               shouldCategorias,
+					"minimum_should_match": 1,
+				},
+			})
+		}
+	}
+
 	if len(filters.Enade) > 0 {
 		filterClauses = append(filterClauses, map[string]interface{}{
 			"terms": map[string]interface{}{
@@ -224,6 +266,34 @@ func (r *ElasticsearchRepository) Search(
 				"terms": map[string]interface{}{
 					"field": "enade.conceito_faixa_enade.keyword",
 					"size":  10,
+				},
+			},
+			"categorias": map[string]interface{}{
+				"filters": map[string]interface{}{
+					"filters": map[string]interface{}{
+						"Privada": map[string]interface{}{
+							"term": map[string]interface{}{"curso.in_gratuito": false},
+						},
+						"Federal": map[string]interface{}{
+							"bool": map[string]interface{}{
+								"must": []map[string]interface{}{
+									{"term": map[string]interface{}{"curso.in_gratuito": true}},
+									{"term": map[string]interface{}{"sisu.tem_sisu": true}},
+								},
+							},
+						},
+						"Estadual": map[string]interface{}{
+							"bool": map[string]interface{}{
+								"must": []map[string]interface{}{
+									{"term": map[string]interface{}{"curso.in_gratuito": true}},
+									{"term": map[string]interface{}{"sisu.tem_sisu": false}},
+								},
+							},
+						},
+						"Municipal": map[string]interface{}{
+							"term": map[string]interface{}{"curso.in_gratuito": true},
+						},
+					},
 				},
 			},
 			"turnos": map[string]interface{}{
@@ -358,6 +428,7 @@ func (r *ElasticsearchRepository) Search(
 			UFs:         parseBuckets("ufs"),
 			Turnos:      parseBuckets("turnos"),
 			Graus:       parseBuckets("graus"),
+			Categorias:  parseBuckets("categorias"),
 			Modalidades: parseBuckets("modalidades"),
 			Enades:      parseBuckets("enades"),
 		}

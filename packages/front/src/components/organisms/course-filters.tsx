@@ -94,17 +94,28 @@ export function CourseFilters({ className }: CourseFiltersProps) {
     })
   }
 
+  const normalize = (str: string) =>
+    str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toUpperCase()
+      .trim()
+
   const getCount = (
     group: keyof SearchAggregations,
     matchValue: string,
   ): number | undefined => {
     if (!aggregations?.[group]) return undefined
+    const normMatch = normalize(matchValue)
     const bucket = aggregations[group]?.find((b) => {
-      const k = b.key.toUpperCase()
-      const m = matchValue.toUpperCase()
-      return k === m || k.includes(m) || m.includes(k)
+      const normKey = normalize(b.key)
+      return (
+        normKey === normMatch ||
+        normKey.includes(normMatch) ||
+        normMatch.includes(normKey)
+      )
     })
-    return bucket?.count
+    return bucket ? bucket.count : 0
   }
 
   const estados = showAllEstados
