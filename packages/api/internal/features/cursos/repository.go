@@ -35,7 +35,7 @@ func NewElasticsearchRepository(client *elasticsearch.Client) Repository {
 	}
 }
 
-// Search executa busca no Elasticsearch com filtros e ordenação
+// Search executa busca no Elasticsearch com filtros cumulativos e ordenação
 func (r *ElasticsearchRepository) Search(
 	ctx context.Context,
 	query string,
@@ -48,86 +48,97 @@ func (r *ElasticsearchRepository) Search(
 	// 2. Construir cláusulas de filtro
 	filterClauses := []map[string]interface{}{}
 
-	if filters.UF != "" {
+	if len(filters.UF) > 0 {
+		ufs := make([]string, len(filters.UF))
+		for i, uf := range filters.UF {
+			ufs[i] = strings.ToUpper(uf)
+		}
 		filterClauses = append(filterClauses, map[string]interface{}{
-			"term": map[string]interface{}{
-				"localizacao.sg_uf.keyword": strings.ToUpper(filters.UF),
+			"terms": map[string]interface{}{
+				"localizacao.sg_uf.keyword": ufs,
 			},
 		})
 	}
 
-	if filters.Grau != "" {
-		filterClauses = append(filterClauses, map[string]interface{}{
-			"match": map[string]interface{}{
-				"curso.no_grau_academico": filters.Grau,
-			},
-		})
-	}
-
-	if filters.Modalidade != "" {
-		if strings.EqualFold(filters.Modalidade, "EaD") || strings.Contains(strings.ToLower(filters.Modalidade), "distância") {
-			filterClauses = append(filterClauses, map[string]interface{}{
-				"bool": map[string]interface{}{
-					"should": []map[string]interface{}{
-						{"term": map[string]interface{}{"curso.tp_modalidade_ensino.keyword": "2"}},
-						{"match": map[string]interface{}{"curso.no_modalidade_ensino": "DISTÂNCIA"}},
-					},
-					"minimum_should_match": 1,
-				},
-			})
-		} else {
-			filterClauses = append(filterClauses, map[string]interface{}{
-				"bool": map[string]interface{}{
-					"should": []map[string]interface{}{
-						{"term": map[string]interface{}{"curso.tp_modalidade_ensino.keyword": "1"}},
-						{"match": map[string]interface{}{"curso.no_modalidade_ensino": "PRESENCIAL"}},
-					},
-					"minimum_should_match": 1,
+	if len(filters.Grau) > 0 {
+		shouldGraus := make([]map[string]interface{}, 0, len(filters.Grau))
+		for _, grau := range filters.Grau {
+			shouldGraus = append(shouldGraus, map[string]interface{}{
+				"match": map[string]interface{}{
+					"curso.no_grau_academico": grau,
 				},
 			})
 		}
+		filterClauses = append(filterClauses, map[string]interface{}{
+			"bool": map[string]interface{}{
+				"should":               shouldGraus,
+				"minimum_should_match": 1,
+			},
+		})
 	}
 
-	if filters.Enade != "" {
+	if len(filters.Modalidade) > 0 {
+		shouldModalidades := []map[string]interface{}{}
+		for _, mod := range filters.Modalidade {
+			if strings.EqualFold(mod, "EaD") || strings.Contains(strings.ToLower(mod), "distância") {
+				shouldModalidades = append(shouldModalidades,
+					map[string]interface{}{"term": map[string]interface{}{"curso.tp_modalidade_ensino.keyword": "2"}},
+					map[string]interface{}{"match": map[string]interface{}{"curso.no_modalidade_ensino": "DISTÂNCIA"}},
+				)
+			} else {
+				shouldModalidades = append(shouldModalidades,
+					map[string]interface{}{"term": map[string]interface{}{"curso.tp_modalidade_ensino.keyword": "1"}},
+					map[string]interface{}{"match": map[string]interface{}{"curso.no_modalidade_ensino": "PRESENCIAL"}},
+				)
+			}
+		}
 		filterClauses = append(filterClauses, map[string]interface{}{
-			"term": map[string]interface{}{
+			"bool": map[string]interface{}{
+				"should":               shouldModalidades,
+				"minimum_should_match": 1,
+			},
+		})
+	}
+
+	if len(filters.Enade) > 0 {
+		filterClauses = append(filterClauses, map[string]interface{}{
+			"terms": map[string]interface{}{
 				"enade.conceito_faixa_enade.keyword": filters.Enade,
 			},
 		})
 	}
 
-	if filters.Turno != "" {
-		switch strings.ToLower(filters.Turno) {
-		case "noturno":
-			filterClauses = append(filterClauses, map[string]interface{}{
-				"bool": map[string]interface{}{
-					"should": []map[string]interface{}{
-						{"range": map[string]interface{}{"censo_metricas.qt_vg_total_noturno": map[string]interface{}{"gt": 0}}},
-						{"match": map[string]interface{}{"sisu.ofertas.turno": "NOTURNO"}},
-					},
-					"minimum_should_match": 1,
-				},
-			})
-		case "diurno":
-			filterClauses = append(filterClauses, map[string]interface{}{
-				"bool": map[string]interface{}{
-					"should": []map[string]interface{}{
-						{"range": map[string]interface{}{"censo_metricas.qt_vg_total_diurno": map[string]interface{}{"gt": 0}}},
-						{"match": map[string]interface{}{"sisu.ofertas.turno": "MATUTINO"}},
-						{"match": map[string]interface{}{"sisu.ofertas.turno": "VESPERTINO"}},
-					},
-					"minimum_should_match": 1,
-				},
-			})
-		case "integral":
-			filterClauses = append(filterClauses, map[string]interface{}{
-				"match": map[string]interface{}{"sisu.ofertas.turno": "INTEGRAL"},
-			})
-		case "ead":
-			filterClauses = append(filterClauses, map[string]interface{}{
-				"range": map[string]interface{}{"censo_metricas.qt_vg_total_ead": map[string]interface{}{"gt": 0}},
-			})
+	if len(filters.Turno) > 0 {
+		shouldTurnos := []map[string]interface{}{}
+		for _, turno := range filters.Turno {
+			switch strings.ToLower(turno) {
+			case "noturno":
+				shouldTurnos = append(shouldTurnos,
+					map[string]interface{}{"range": map[string]interface{}{"censo_metricas.qt_vg_total_noturno": map[string]interface{}{"gt": 0}}},
+					map[string]interface{}{"match": map[string]interface{}{"sisu.ofertas.turno": "NOTURNO"}},
+				)
+			case "diurno":
+				shouldTurnos = append(shouldTurnos,
+					map[string]interface{}{"range": map[string]interface{}{"censo_metricas.qt_vg_total_diurno": map[string]interface{}{"gt": 0}}},
+					map[string]interface{}{"match": map[string]interface{}{"sisu.ofertas.turno": "MATUTINO"}},
+					map[string]interface{}{"match": map[string]interface{}{"sisu.ofertas.turno": "VESPERTINO"}},
+				)
+			case "integral":
+				shouldTurnos = append(shouldTurnos,
+					map[string]interface{}{"match": map[string]interface{}{"sisu.ofertas.turno": "INTEGRAL"}},
+				)
+			case "ead":
+				shouldTurnos = append(shouldTurnos,
+					map[string]interface{}{"range": map[string]interface{}{"censo_metricas.qt_vg_total_ead": map[string]interface{}{"gt": 0}}},
+				)
+			}
 		}
+		filterClauses = append(filterClauses, map[string]interface{}{
+			"bool": map[string]interface{}{
+				"should":               shouldTurnos,
+				"minimum_should_match": 1,
+			},
+		})
 	}
 
 	// 3. Montar bool query

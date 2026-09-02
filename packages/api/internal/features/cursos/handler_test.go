@@ -30,7 +30,7 @@ func (m *MockService) BuscarCursos(
 	return m.ReturnResponse, m.ReturnErr
 }
 
-func TestHandlerExtraiFiltros(t *testing.T) {
+func TestHandlerExtraiFiltrosCumulativos(t *testing.T) {
 	mockService := &MockService{
 		ReturnResponse: &CursoListResponse{
 			Total:   0,
@@ -43,7 +43,7 @@ func TestHandlerExtraiFiltros(t *testing.T) {
 
 	handler := &Handler{Service: mockService}
 
-	req := httptest.NewRequest(http.MethodGet, "/cursos?q=medicina&uf=SP&turno=Noturno&grau=Bacharelado&sort=enade", nil)
+	req := httptest.NewRequest(http.MethodGet, "/cursos?q=medicina&uf=SP,RJ&turno=Noturno,Diurno&grau=Bacharelado&sort=enade", nil)
 	rec := httptest.NewRecorder()
 
 	handler.ServeHTTP(rec, req)
@@ -55,14 +55,14 @@ func TestHandlerExtraiFiltros(t *testing.T) {
 	if mockService.CapturedQuery != "medicina" {
 		t.Errorf("esperado query 'medicina', recebido '%s'", mockService.CapturedQuery)
 	}
-	if mockService.CapturedFilters.UF != "SP" {
-		t.Errorf("esperado UF 'SP', recebido '%s'", mockService.CapturedFilters.UF)
+	if len(mockService.CapturedFilters.UF) != 2 || mockService.CapturedFilters.UF[0] != "SP" || mockService.CapturedFilters.UF[1] != "RJ" {
+		t.Errorf("esperado UF ['SP', 'RJ'], recebido '%v'", mockService.CapturedFilters.UF)
 	}
-	if mockService.CapturedFilters.Turno != "Noturno" {
-		t.Errorf("esperado Turno 'Noturno', recebido '%s'", mockService.CapturedFilters.Turno)
+	if len(mockService.CapturedFilters.Turno) != 2 || mockService.CapturedFilters.Turno[0] != "Noturno" || mockService.CapturedFilters.Turno[1] != "Diurno" {
+		t.Errorf("esperado Turno ['Noturno', 'Diurno'], recebido '%v'", mockService.CapturedFilters.Turno)
 	}
-	if mockService.CapturedFilters.Grau != "Bacharelado" {
-		t.Errorf("esperado Grau 'Bacharelado', recebido '%s'", mockService.CapturedFilters.Grau)
+	if len(mockService.CapturedFilters.Grau) != 1 || mockService.CapturedFilters.Grau[0] != "Bacharelado" {
+		t.Errorf("esperado Grau ['Bacharelado'], recebido '%v'", mockService.CapturedFilters.Grau)
 	}
 	if mockService.CapturedFilters.Sort != "enade" {
 		t.Errorf("esperado Sort 'enade', recebido '%s'", mockService.CapturedFilters.Sort)

@@ -52,7 +52,7 @@ describe('CourseFilters', () => {
     expect(screen.getByText('Conceito Enade')).toBeInTheDocument()
   })
 
-  it('atualiza os parâmetros da URL ao marcar e desmarcar uma opção de filtro', () => {
+  it('atualiza os parâmetros da URL de forma cumulativa ao selecionar mais de uma opção no mesmo grupo', () => {
     const params = new URLSearchParams('turno=Noturno')
     vi.mocked(useSearchParams).mockReturnValue(
       params as unknown as ReadonlyURLSearchParams,
@@ -61,15 +61,51 @@ describe('CourseFilters', () => {
     render(<CourseFilters />)
 
     const noturnoCheckbox = screen.getByRole('checkbox', { name: 'Noturno' })
+    const diurnoCheckbox = screen.getByRole('checkbox', { name: 'Diurno' })
     expect(noturnoCheckbox).toBeChecked()
+    expect(diurnoCheckbox).not.toBeChecked()
 
-    // Clicar em Federal (adiciona categoria=Federal e reseta page=1)
-    const federalCheckbox = screen.getByRole('checkbox', { name: 'Federal' })
-    expect(federalCheckbox).not.toBeChecked()
-
-    fireEvent.click(federalCheckbox)
+    // Clicar em Diurno acumula com Noturno
+    fireEvent.click(diurnoCheckbox)
     expect(mockUpdateParams).toHaveBeenCalledWith({
-      categoria: 'Federal',
+      turno: 'Noturno,Diurno',
+      page: '1',
+    })
+  })
+
+  it('remove apenas a opção desmarcada quando houver múltiplos valores no mesmo filtro', () => {
+    const params = new URLSearchParams('turno=Diurno,Noturno')
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<CourseFilters />)
+
+    const noturnoCheckbox = screen.getByRole('checkbox', { name: 'Noturno' })
+    const diurnoCheckbox = screen.getByRole('checkbox', { name: 'Diurno' })
+    expect(noturnoCheckbox).toBeChecked()
+    expect(diurnoCheckbox).toBeChecked()
+
+    // Desmarcar Noturno mantém Diurno
+    fireEvent.click(noturnoCheckbox)
+    expect(mockUpdateParams).toHaveBeenCalledWith({
+      turno: 'Diurno',
+      page: '1',
+    })
+  })
+
+  it('remove o parâmetro da URL quando a última opção for desmarcada', () => {
+    const params = new URLSearchParams('turno=Noturno')
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<CourseFilters />)
+
+    const noturnoCheckbox = screen.getByRole('checkbox', { name: 'Noturno' })
+    fireEvent.click(noturnoCheckbox)
+    expect(mockUpdateParams).toHaveBeenCalledWith({
+      turno: null,
       page: '1',
     })
   })

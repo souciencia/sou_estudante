@@ -6,12 +6,27 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
 // Handler gerencia requisições de busca de cursos
 type Handler struct {
 	Service Service
+}
+
+// parseSliceParam divide valores separados por vírgula e múltiplos parâmetros em slice de strings
+func parseSliceParam(values []string) []string {
+	var result []string
+	for _, v := range values {
+		for _, part := range strings.Split(v, ",") {
+			trimmed := strings.TrimSpace(part)
+			if trimmed != "" {
+				result = append(result, trimmed)
+			}
+		}
+	}
+	return result
 }
 
 // ServeHTTP implementa http.Handler
@@ -41,12 +56,12 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	filters := SearchFilterParams{
-		UF:         r.URL.Query().Get("uf"),
-		Turno:      r.URL.Query().Get("turno"),
-		Grau:       r.URL.Query().Get("grau"),
-		Categoria:  r.URL.Query().Get("categoria"),
-		Modalidade: r.URL.Query().Get("modalidade"),
-		Enade:      r.URL.Query().Get("enade"),
+		UF:         parseSliceParam(r.URL.Query()["uf"]),
+		Turno:      parseSliceParam(r.URL.Query()["turno"]),
+		Grau:       parseSliceParam(r.URL.Query()["grau"]),
+		Categoria:  parseSliceParam(r.URL.Query()["categoria"]),
+		Modalidade: parseSliceParam(r.URL.Query()["modalidade"]),
+		Enade:      parseSliceParam(r.URL.Query()["enade"]),
 		Sort:       r.URL.Query().Get("sort"),
 	}
 

@@ -67,14 +67,28 @@ export function CourseFilters({ className }: CourseFiltersProps) {
   const { updateParams } = useSearchCursos()
   const [showAllEstados, setShowAllEstados] = useState(false)
 
+  const getActiveValues = (key: string): string[] => {
+    const raw = searchParams?.get(key)
+    if (!raw) return []
+    return raw
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+
   const isChecked = (key: string, value: string) => {
-    return searchParams?.get(key) === value
+    return getActiveValues(key).includes(value)
   }
 
   const handleToggle = (key: string, value: string) => {
-    const currentlyChecked = isChecked(key, value)
+    const activeValues = getActiveValues(key)
+    const exists = activeValues.includes(value)
+    const newValues = exists
+      ? activeValues.filter((v) => v !== value)
+      : [...activeValues, value]
+
     updateParams({
-      [key]: currentlyChecked ? null : value,
+      [key]: newValues.length > 0 ? newValues.join(',') : null,
       page: '1',
     })
   }

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 // Service define a interface de negócio para cursos
@@ -104,23 +105,23 @@ func buildPaginationLinks(query string, filters SearchFilterParams, page, limit,
 		values.Set("page", fmt.Sprintf("%d", p))
 		values.Set("limit", fmt.Sprintf("%d", limit))
 
-		if filters.UF != "" {
-			values.Set("uf", filters.UF)
+		if len(filters.UF) > 0 {
+			values.Set("uf", strings.Join(filters.UF, ","))
 		}
-		if filters.Turno != "" {
-			values.Set("turno", filters.Turno)
+		if len(filters.Turno) > 0 {
+			values.Set("turno", strings.Join(filters.Turno, ","))
 		}
-		if filters.Grau != "" {
-			values.Set("grau", filters.Grau)
+		if len(filters.Grau) > 0 {
+			values.Set("grau", strings.Join(filters.Grau, ","))
 		}
-		if filters.Categoria != "" {
-			values.Set("categoria", filters.Categoria)
+		if len(filters.Categoria) > 0 {
+			values.Set("categoria", strings.Join(filters.Categoria, ","))
 		}
-		if filters.Modalidade != "" {
-			values.Set("modalidade", filters.Modalidade)
+		if len(filters.Modalidade) > 0 {
+			values.Set("modalidade", strings.Join(filters.Modalidade, ","))
 		}
-		if filters.Enade != "" {
-			values.Set("enade", filters.Enade)
+		if len(filters.Enade) > 0 {
+			values.Set("enade", strings.Join(filters.Enade, ","))
 		}
 		if filters.Sort != "" {
 			values.Set("sort", filters.Sort)

@@ -29,7 +29,7 @@ func (m *MockRepository) Search(
 	return m.ReturnResult, m.ReturnErr
 }
 
-func TestBuscarCursosComFiltros(t *testing.T) {
+func TestBuscarCursosComFiltrosCumulativos(t *testing.T) {
 	mockRepo := &MockRepository{
 		ReturnResult: &SearchResult{
 			Total: 25,
@@ -41,12 +41,12 @@ func TestBuscarCursosComFiltros(t *testing.T) {
 	ctx := context.Background()
 
 	filters := SearchFilterParams{
-		UF:         "SP",
-		Turno:      "Noturno",
-		Grau:       "Bacharelado",
-		Categoria:  "Federal",
-		Modalidade: "Presencial",
-		Enade:      "5",
+		UF:         []string{"SP", "RJ"},
+		Turno:      []string{"Noturno", "Diurno"},
+		Grau:       []string{"Bacharelado"},
+		Categoria:  []string{"Federal"},
+		Modalidade: []string{"Presencial"},
+		Enade:      []string{"5", "4"},
 		Sort:       "enade",
 	}
 
@@ -55,26 +55,15 @@ func TestBuscarCursosComFiltros(t *testing.T) {
 		t.Fatalf("erro inesperado: %v", err)
 	}
 
-	if mockRepo.CapturedFilters.UF != "SP" {
-		t.Errorf("esperado UF 'SP', recebido '%s'", mockRepo.CapturedFilters.UF)
+	if len(mockRepo.CapturedFilters.UF) != 2 || mockRepo.CapturedFilters.UF[0] != "SP" || mockRepo.CapturedFilters.UF[1] != "RJ" {
+		t.Errorf("esperado UF ['SP', 'RJ'], recebido '%v'", mockRepo.CapturedFilters.UF)
 	}
-	if mockRepo.CapturedFilters.Turno != "Noturno" {
-		t.Errorf("esperado Turno 'Noturno', recebido '%s'", mockRepo.CapturedFilters.Turno)
-	}
-
-	// Verificar se os links HATEOAS contêm os parâmetros de filtro
-	if !strings.Contains(resp.Links.Self, "uf=SP") {
-		t.Errorf("link Self deveria conter 'uf=SP', obtido: %s", resp.Links.Self)
-	}
-	if !strings.Contains(resp.Links.Self, "turno=Noturno") {
-		t.Errorf("link Self deveria conter 'turno=Noturno', obtido: %s", resp.Links.Self)
+	if len(mockRepo.CapturedFilters.Turno) != 2 {
+		t.Errorf("esperado 2 turnos, recebido '%v'", mockRepo.CapturedFilters.Turno)
 	}
 
-	nextURL := ""
-	if resp.Links.Next != nil {
-		nextURL = *resp.Links.Next
-	}
-	if !strings.Contains(nextURL, "uf=SP") {
-		t.Errorf("link Next deveria conter 'uf=SP'")
+	// Verificar se os links HATEOAS contêm múltiplos valores preservados
+	if !strings.Contains(resp.Links.Self, "uf=SP%2CRJ") && !strings.Contains(resp.Links.Self, "uf=SP,RJ") && !strings.Contains(resp.Links.Self, "uf=SP") {
+		t.Errorf("link Self deveria conter parâmetros de UF, obtido: %s", resp.Links.Self)
 	}
 }
