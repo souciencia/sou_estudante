@@ -1,5 +1,5 @@
 // components/molecules/filter-group/filter-group-root.tsx
-import { useId, type ReactNode } from 'react'
+import { type ReactNode, useId } from 'react'
 import { cn } from '@/utils/cn'
 import { FilterGroupContext } from './filter-group-context'
 

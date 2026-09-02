@@ -5,6 +5,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   module?: '1' | '2' | '3' | '4' | '5'
   active?: boolean
+  icon?: ReactNode
 }
 
 export const Button = ({
