@@ -227,9 +227,32 @@ func (r *ElasticsearchRepository) Search(
 				},
 			},
 			"turnos": map[string]interface{}{
-				"terms": map[string]interface{}{
-					"field": "sisu.ofertas.turno.keyword",
-					"size":  10,
+				"filters": map[string]interface{}{
+					"filters": map[string]interface{}{
+						"Diurno": map[string]interface{}{
+							"bool": map[string]interface{}{
+								"should": []map[string]interface{}{
+									{"range": map[string]interface{}{"censo_metricas.qt_vg_total_diurno": map[string]interface{}{"gt": 0}}},
+									{"match": map[string]interface{}{"sisu.ofertas.turno": "MATUTINO"}},
+									{"match": map[string]interface{}{"sisu.ofertas.turno": "VESPERTINO"}},
+								},
+							},
+						},
+						"Noturno": map[string]interface{}{
+							"bool": map[string]interface{}{
+								"should": []map[string]interface{}{
+									{"range": map[string]interface{}{"censo_metricas.qt_vg_total_noturno": map[string]interface{}{"gt": 0}}},
+									{"match": map[string]interface{}{"sisu.ofertas.turno": "NOTURNO"}},
+								},
+							},
+						},
+						"Integral": map[string]interface{}{
+							"match": map[string]interface{}{"sisu.ofertas.turno": "INTEGRAL"},
+						},
+						"EaD": map[string]interface{}{
+							"range": map[string]interface{}{"censo_metricas.qt_vg_total_ead": map[string]interface{}{"gt": 0}},
+						},
+					},
 				},
 			},
 		},
@@ -271,12 +294,7 @@ func (r *ElasticsearchRepository) Search(
 				Source map[string]interface{} `json:"_source"`
 			} `json:"hits"`
 		} `json:"hits"`
-		Aggregations map[string]struct {
-			Buckets []struct {
-				Key      interface{} `json:"key"`
-				DocCount int         `json:"doc_count"`
-			} `json:"buckets"`
-		} `json:"aggregations"`
+		Aggregations map[string]json.RawMessage `json:"aggregations"`
 	}
 
 	if err := json.NewDecoder(res.Body).Decode(&esResp); err != nil {
@@ -297,14 +315,43 @@ func (r *ElasticsearchRepository) Search(
 			if !ok {
 				return nil
 			}
-			buckets := make([]AggregationBucket, 0, len(raw.Buckets))
-			for _, b := range raw.Buckets {
-				buckets = append(buckets, AggregationBucket{
-					Key:   fmt.Sprintf("%v", b.Key),
-					Count: b.DocCount,
-				})
+
+			// 1. Tentar array buckets (ex: terms aggregation)
+			var arrayAgg struct {
+				Buckets []struct {
+					Key      interface{} `json:"key"`
+					DocCount int         `json:"doc_count"`
+				} `json:"buckets"`
 			}
-			return buckets
+			if err := json.Unmarshal(raw, &arrayAgg); err == nil && len(arrayAgg.Buckets) > 0 {
+				buckets := make([]AggregationBucket, 0, len(arrayAgg.Buckets))
+				for _, b := range arrayAgg.Buckets {
+					buckets = append(buckets, AggregationBucket{
+						Key:   fmt.Sprintf("%v", b.Key),
+						Count: b.DocCount,
+					})
+				}
+				return buckets
+			}
+
+			// 2. Tentar map buckets (ex: filters aggregation)
+			var mapAgg struct {
+				Buckets map[string]struct {
+					DocCount int `json:"doc_count"`
+				} `json:"buckets"`
+			}
+			if err := json.Unmarshal(raw, &mapAgg); err == nil && len(mapAgg.Buckets) > 0 {
+				buckets := make([]AggregationBucket, 0, len(mapAgg.Buckets))
+				for key, b := range mapAgg.Buckets {
+					buckets = append(buckets, AggregationBucket{
+						Key:   key,
+						Count: b.DocCount,
+					})
+				}
+				return buckets
+			}
+
+			return nil
 		}
 
 		searchAggs = &SearchAggregations{
