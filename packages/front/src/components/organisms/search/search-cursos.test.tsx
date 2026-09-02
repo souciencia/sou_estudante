@@ -42,6 +42,7 @@ describe('SearchCursos', () => {
       setQuery: mockSetQuery,
       navigateToPage: mockNavigateToPage,
       updateParams: vi.fn(),
+      resetFilters: vi.fn(),
     })
   })
 

@@ -33,6 +33,7 @@ describe('CourseFilters', () => {
       setQuery: vi.fn(),
       navigateToPage: vi.fn(),
       updateParams: mockUpdateParams,
+      resetFilters: vi.fn(),
     })
   })
 

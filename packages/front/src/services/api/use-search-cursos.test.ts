@@ -170,4 +170,21 @@ describe('useSearchCursos', () => {
       '/cursos?q=direito&page=2&sort=enade',
     )
   })
+
+  it('remove todos os filtros ativos e reseta página ao acionar resetFilters mantendo q', () => {
+    const params = new URLSearchParams(
+      'q=direito&page=3&uf=SP&turno=Noturno&sort=enade',
+    )
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    const { result } = renderHook(() => useSearchCursos())
+
+    act(() => {
+      result.current.resetFilters()
+    })
+
+    expect(mockReplace).toHaveBeenCalledWith('/cursos?q=direito&page=1')
+  })
 })

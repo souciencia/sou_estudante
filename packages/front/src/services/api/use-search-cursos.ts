@@ -19,6 +19,7 @@ export interface UseSearchCursosReturn {
   setQuery: (newQuery: string) => void
   navigateToPage: (pageOrUrl: number | string) => void
   updateParams: (newParams: Record<string, string | null>) => void
+  resetFilters: () => void
 }
 
 export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
@@ -65,6 +66,19 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
     },
     [updateParams],
   )
+
+  const resetFilters = useCallback(() => {
+    const toClear: Record<string, string | null> = {}
+    if (searchParams) {
+      for (const [key] of searchParams.entries()) {
+        if (key !== 'q') {
+          toClear[key] = null
+        }
+      }
+    }
+    toClear.page = '1'
+    updateParams(toClear)
+  }, [searchParams, updateParams])
 
   const navigateToPage = useCallback(
     (pageOrUrl: number | string) => {
@@ -149,5 +163,6 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
     setQuery,
     navigateToPage,
     updateParams,
+    resetFilters,
   }
 }
