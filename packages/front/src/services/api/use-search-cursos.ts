@@ -2,10 +2,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { API_CONFIG } from '@/services/api'
 import { cursoService } from '@/services/api/curso.service'
-import type { OfertaCompleta, PaginationLinks } from '@/services/api/types'
+import type { Curso, PaginationLinks } from '@/services/api/types'
 
 export function useSearchCursos(query: string) {
-  const [results, setResults] = useState<OfertaCompleta[]>([])
+  const [results, setResults] = useState<Curso[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [total, setTotal] = useState(0)

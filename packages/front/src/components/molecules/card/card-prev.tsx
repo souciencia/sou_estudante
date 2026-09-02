@@ -1,15 +1,15 @@
-import type { OfertaCompleta } from '@/services/api/types'
+import type { Curso } from '@/services/api/types'
 import { Typo } from '../../atoms/typo'
 
 interface CardProps {
   module?: 1 | 2 | 3 | 4 | 5
   className?: string
-  oferta: OfertaCompleta
+  curso: Curso
 }
 
-export default function Card({ module, oferta }: CardProps) {
-  const nomeCurso = oferta.curso?.no_curso || 'Curso não especificado'
-  const siglaIES = oferta.instituicao?.sg_ies || ''
+export default function Card({ module, curso }: CardProps) {
+  const nomeCurso = curso.curso?.no_curso || 'Curso não especificado'
+  const siglaIES = curso.instituicao?.co_ies || ''
 
   return (
     <article

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect, useTransition } from 'react'
-import { Search, Loader2 } from 'lucide-react'
+import { Loader2, Search } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState, useTransition } from 'react'
 
 export default function SearchHero() {
   const router = useRouter()

@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { SearchInput } from '@/components/atoms/search-input'
-import { useSearchCursos } from '@/utils/use-search-cursos'
+import { useSearchCursos } from '@/services/api/use-search-cursos'
+import { cn } from '@/utils/cn'
 import { Button } from '../atoms/button'
 import SearchResultList from './search/search-result-list'
-import { cn } from '@/utils/cn'
 
 export function SearchPage() {
   const [query, setQuery] = useState('')

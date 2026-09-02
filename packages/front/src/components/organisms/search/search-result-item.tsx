@@ -1,31 +1,28 @@
 // components/SearchResultItem.tsx
-import { Typo } from '@/components/atoms/typo'
-import type { OfertaCompleta } from '@/services/api/types'
+
 import { Card } from '@/components/molecules/card'
+import type { Curso } from '@/services/api/types'
 
 interface SearchResultItemProps {
-  oferta: OfertaCompleta
+  curso: Curso
 }
 
-export default function SearchResultItem({ oferta }: SearchResultItemProps) {
+export default function SearchResultItem({ curso }: SearchResultItemProps) {
   // Extrair dados da estrutura completa
-  const nomeCurso = oferta.curso?.no_curso || 'Curso não especificado'
-  const siglaIES = oferta.instituicao?.sg_ies || ''
-  const nomeIES = oferta.instituicao?.no_ies || 'Instituição não especificada'
-  const grauAcademico = oferta.curso?.no_grau_academico || ''
-  const modalidade = oferta.curso?.no_modalidade_ensino || ''
-  const municipio = oferta.localizacao?.no_municipio || ''
-  const uf = oferta.localizacao?.sg_uf || ''
-  const campus = oferta.localizacao?.no_campus || ''
+  const nomeCurso = curso.curso?.no_curso || 'Curso não especificado'
+  const grauAcademico = curso.curso?.no_grau_academico || ''
+  const modalidade = curso.curso?.no_modalidade_ensino || ''
+  const municipio = curso.localizacao?.no_municipio || ''
+  const uf = curso.localizacao?.sg_uf || ''
 
   // Dados de qualidade
-  const conceitoEnade = oferta.qualidade_mec?.conceito_enade_faixa
-  const cpc = oferta.qualidade_mec?.cpc_faixa
+  const conceitoEnade = curso.enade?.conceito_faixa_enade
 
-  // Dados do SISU
-  const notaCorte = oferta.sisu?.nu_notacorte
-  const turno = oferta.sisu?.ds_turno || ''
-  const gratuito = oferta.curso?.in_gratuito
+  // Dados do SISU (primeira oferta do curso)
+  const oferta = curso.sisu?.ofertas?.[0]
+  const notaCorte = oferta?.nota_corte
+  const turno = oferta?.turno || ''
+  const gratuito = curso.curso?.in_gratuito
 
   // Montar tags dinâmicas
   const tags: string[] = []
@@ -48,7 +45,7 @@ export default function SearchResultItem({ oferta }: SearchResultItemProps) {
     <Card>
       <Card.Header
         title={nomeCurso}
-        subtitle={`${siglaIES} ${localizacaoCompleta ? `• ${localizacaoCompleta}` : ''}`}
+        subtitle={localizacaoCompleta ? `• ${localizacaoCompleta}` : ''}
       >
         {conceitoEnadeFormatado && (
           <Card.IconEnade n={conceitoEnadeFormatado} />

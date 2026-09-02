@@ -1,5 +1,5 @@
-import { cn } from '@/utils/cn'
 import type { ReactNode } from 'react'
+import { cn } from '@/utils/cn'
 
 interface Props {
   v?: 'prev' | 'full'

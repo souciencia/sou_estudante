@@ -1,13 +1,14 @@
 // components/SearchResultList.tsx
-import { SkeletonCard } from '@/components/molecules/card/skeleton-card'
+
 import { ErrorMessage } from '@/components/atoms/error-message'
 import { Typo } from '@/components/atoms/typo'
-import type { OfertaCompleta, PaginationLinks } from '@/services/api/types'
+import { SkeletonCard } from '@/components/molecules/card/skeleton-card'
+import type { Curso, PaginationLinks } from '@/services/api/types'
 import { Pagination } from './search-pagination'
 import SearchResultItem from './search-result-item'
 
 interface SearchResultListProps {
-  cursos: OfertaCompleta[]
+  cursos: Curso[]
   isLoading?: boolean
   error?: string | null
   total?: number
@@ -69,7 +70,7 @@ export default function SearchResultList({
             ? `seq-${curso.sequencial}`
             : `${curso.instituicao?.co_ies}-${curso.curso?.co_curso}-${index}`
 
-          return <SearchResultItem key={key} oferta={curso} />
+          return <SearchResultItem key={key} curso={curso} />
         })}
       </div>
 

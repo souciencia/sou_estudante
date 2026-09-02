@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { SearchInput } from '@/components/atoms/search-input'
 import { Typo } from '@/components/atoms/typo'
-import { useSearchCursos } from '@/utils/use-search-cursos'
+import { useSearchCursos } from '@/services/api/use-search-cursos'
 import SearchResultList from './search-result-list'
 
 export function SearchCursos() {
@@ -14,7 +14,6 @@ export function SearchCursos() {
     error,
     total,
     currentPage,
-    limit,
     links,
     navigateToPage,
   } = useSearchCursos(query)

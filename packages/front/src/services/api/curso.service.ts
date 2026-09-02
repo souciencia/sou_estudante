@@ -34,7 +34,7 @@ export const cursoService = {
     }
 
     const result = await apiClient<CursoListResponse>(
-      `${API_CONFIG.ENDPOINTS.SEARCH_OFERTAS}?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`,
+      `${API_CONFIG.ENDPOINTS.SEARCH_CURSOS}?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`,
     )
 
     return result.success ? result.data : emptyResponse

@@ -13,7 +13,7 @@ export const API_CONFIG = {
 
   // Endpoints centralizados (facilita manutenção e descoberta)
   ENDPOINTS: {
-    SEARCH_OFERTAS: '/ofertas',
+    SEARCH_CURSOS: '/cursos',
     // Futuros endpoints dos 5 módulos:
     // GET_CURSO: '/cursos/:id',
     // COMO_INGRESSAR: '/ingresso',
