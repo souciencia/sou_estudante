@@ -1,44 +1,54 @@
+// components/organisms/search-page.tsx
 'use client'
 
-import { useState } from 'react'
+import { Button } from '@/components/atoms/button'
 import { SearchInput } from '@/components/atoms/search-input'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 import { cn } from '@/utils/cn'
-import { Button } from '../atoms/button'
 import SearchResultList from './search/search-result-list'
 
 export function SearchPage() {
-  const [query, setQuery] = useState('')
   const {
+    query,
     results,
     isLoading,
     error,
     total,
     currentPage,
+    limit,
     links,
+    setQuery,
     navigateToPage,
-  } = useSearchCursos(query)
+    updateParams,
+  } = useSearchCursos()
+
+  const handleSort = (sortOption: string) => {
+    updateParams({ sort: sortOption })
+  }
 
   return (
     <div className="flex flex-col space-y-6 border">
       <div className="p-2">
-        <SearchInput onSearchChange={setQuery} />
-        <div className="my-4 pt-4 border-t-2 border-gray-300">
-          <Button>Maior Enade</Button>
-          <Button>Menor desistência</Button>
-          <Button>A Z</Button>
+        <SearchInput defaultValue={query} onSearchChange={setQuery} />
+        <div className="my-4 pt-4 border-t-2 border-gray-300 flex gap-2">
+          <Button onClick={() => handleSort('enade')}>Maior Enade</Button>
+          <Button onClick={() => handleSort('desistencia')}>
+            Menor desistência
+          </Button>
+          <Button onClick={() => handleSort('az')}>A Z</Button>
         </div>
       </div>
 
-      <aside></aside>
+      <aside />
 
-      <main className={cn(`m-2 p-8 max-w-[1000]`)}>
+      <main className={cn('m-2 p-8 max-w-[1000]')}>
         <SearchResultList
           cursos={results}
           isLoading={isLoading}
           error={error}
           total={total}
           currentPage={currentPage}
+          limit={limit}
           links={links}
           onNavigate={navigateToPage}
         />
