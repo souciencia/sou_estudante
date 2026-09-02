@@ -1,5 +1,16 @@
 package cursos
 
+// SearchFilterParams contém parâmetros opcionais de filtragem e ordenação
+type SearchFilterParams struct {
+	UF         string `json:"uf,omitempty"`
+	Turno      string `json:"turno,omitempty"`
+	Grau       string `json:"grau,omitempty"`
+	Categoria  string `json:"categoria,omitempty"`
+	Modalidade string `json:"modalidade,omitempty"`
+	Enade      string `json:"enade,omitempty"`
+	Sort       string `json:"sort,omitempty"`
+}
+
 // CursoListResponse é a resposta paginada de busca de cursos
 type CursoListResponse struct {
 	Total   int              `json:"total"`

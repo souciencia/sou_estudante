@@ -2,7 +2,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { API_CONFIG } from '@/services/api'
 import { cursoService } from '@/services/api/curso.service'
 import type { Curso, PaginationLinks } from '@/services/api/types'
@@ -84,6 +84,18 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
     [updateParams],
   )
 
+  const activeFilters = useMemo(() => {
+    const filters: Record<string, string> = {}
+    if (!searchParams) return filters
+
+    for (const [key, value] of searchParams.entries()) {
+      if (key !== 'q' && key !== 'page' && key !== 'limit') {
+        filters[key] = value
+      }
+    }
+    return filters
+  }, [searchParams])
+
   useEffect(() => {
     if (!query || query.length < API_CONFIG.SEARCH_MIN_CHARS) {
       setResults((prev) => (prev.length > 0 ? [] : prev))
@@ -99,7 +111,7 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
     setError(null)
 
     cursoService
-      .searchCursos(query, currentPage)
+      .searchCursos(query, currentPage, limit, activeFilters)
       .then((response) => {
         if (!isCurrent) return
         setResults(response.results)
@@ -123,7 +135,7 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
     return () => {
       isCurrent = false
     }
-  }, [query, currentPage])
+  }, [query, currentPage, limit, activeFilters])
 
   return {
     query,

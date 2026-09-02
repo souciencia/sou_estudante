@@ -9,7 +9,7 @@ import (
 
 // Service define a interface de negócio para cursos
 type Service interface {
-	BuscarCursos(ctx context.Context, query string, page, limit int) (*CursoListResponse, error)
+	BuscarCursos(ctx context.Context, query string, filters SearchFilterParams, page, limit int) (*CursoListResponse, error)
 }
 
 // ServiceImpl implementa Service com validação e transformação
@@ -28,6 +28,7 @@ func NewService(repo Repository) Service {
 func (s *ServiceImpl) BuscarCursos(
 	ctx context.Context,
 	query string,
+	filters SearchFilterParams,
 	page, limit int,
 ) (*CursoListResponse, error) {
 	// 1. Validar parâmetros
@@ -42,7 +43,7 @@ func (s *ServiceImpl) BuscarCursos(
 	}
 
 	// 2. Buscar no repositório
-	result, err := s.Repository.Search(ctx, query, page, limit)
+	result, err := s.Repository.Search(ctx, query, filters, page, limit)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao buscar cursos: %w", err)
 	}
@@ -59,7 +60,7 @@ func (s *ServiceImpl) BuscarCursos(
 	}
 
 	// 4. Gerar links de paginação
-	links := buildPaginationLinks(query, page, limit, result.Total)
+	links := buildPaginationLinks(query, filters, page, limit, result.Total)
 
 	// 5. Montar response
 	return &CursoListResponse{
@@ -88,18 +89,44 @@ func transformHitToCurso(hit map[string]interface{}) (Curso, error) {
 	return curso, nil
 }
 
-// buildPaginationLinks gera links HATEOAS para navegação de páginas
-func buildPaginationLinks(query string, page, limit, total int) PaginationLinks {
+// buildPaginationLinks gera links HATEOAS para navegação de páginas preservando filtros
+func buildPaginationLinks(query string, filters SearchFilterParams, page, limit, total int) PaginationLinks {
 	// Calcular última página
 	lastPage := (total + limit - 1) / limit
 	if lastPage < 1 {
 		lastPage = 1
 	}
 
-	// Função helper para construir URL
+	// Função helper para construir URL com query params
 	buildURL := func(p int) string {
-		return fmt.Sprintf("/cursos?q=%s&page=%d&limit=%d",
-			url.QueryEscape(query), p, limit)
+		values := url.Values{}
+		values.Set("q", query)
+		values.Set("page", fmt.Sprintf("%d", p))
+		values.Set("limit", fmt.Sprintf("%d", limit))
+
+		if filters.UF != "" {
+			values.Set("uf", filters.UF)
+		}
+		if filters.Turno != "" {
+			values.Set("turno", filters.Turno)
+		}
+		if filters.Grau != "" {
+			values.Set("grau", filters.Grau)
+		}
+		if filters.Categoria != "" {
+			values.Set("categoria", filters.Categoria)
+		}
+		if filters.Modalidade != "" {
+			values.Set("modalidade", filters.Modalidade)
+		}
+		if filters.Enade != "" {
+			values.Set("enade", filters.Enade)
+		}
+		if filters.Sort != "" {
+			values.Set("sort", filters.Sort)
+		}
+
+		return fmt.Sprintf("/cursos?%s", values.Encode())
 	}
 
 	links := PaginationLinks{

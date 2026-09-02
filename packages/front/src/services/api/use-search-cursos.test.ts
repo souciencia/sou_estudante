@@ -79,10 +79,35 @@ describe('useSearchCursos', () => {
     expect(result.current.currentPage).toBe(2)
 
     await waitFor(() => {
-      expect(cursoService.searchCursos).toHaveBeenCalledWith('medicina', 2)
+      expect(cursoService.searchCursos).toHaveBeenCalledWith(
+        'medicina',
+        2,
+        20,
+        {},
+      )
       expect(result.current.results).toHaveLength(1)
       expect(result.current.total).toBe(15)
       expect(result.current.isLoading).toBe(false)
+    })
+  })
+
+  it('repassa os filtros ativos da URL para cursoService.searchCursos', async () => {
+    const params = new URLSearchParams('q=medicina&page=1&uf=SP&turno=Noturno')
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    const { result } = renderHook(() => useSearchCursos())
+
+    expect(result.current.query).toBe('medicina')
+
+    await waitFor(() => {
+      expect(cursoService.searchCursos).toHaveBeenCalledWith(
+        'medicina',
+        1,
+        20,
+        { uf: 'SP', turno: 'Noturno' },
+      )
     })
   })
 
