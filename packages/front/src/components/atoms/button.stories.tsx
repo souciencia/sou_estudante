@@ -1,13 +1,12 @@
-import { Button } from './button'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import AttentionIcon from '@/assets/attention-icon'
+import { Button } from './button'
 
 const meta = {
-  title: "Atoms/Button",
+  title: 'Atoms/Button',
   component: Button,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof Button>
-
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -28,11 +27,12 @@ export const Module2: Story = {
 
 export const Module3: Story = {
   args: {
-    children: (<>
-      <AttentionIcon />
-      como interpretar
-    </>
+    children: (
+      <>
+        <AttentionIcon />
+        como interpretar
+      </>
     ),
-    module: '2'
+    module: '2',
   },
 }

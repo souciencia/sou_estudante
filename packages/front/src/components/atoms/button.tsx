@@ -26,7 +26,7 @@ export const Button = ({
         'shadow-md transition duration-300',
         `${className || ''}`,
       )}
-    > 
+    >
       {children}
     </button>
   )
