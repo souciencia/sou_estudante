@@ -12,7 +12,7 @@ import (
 	"api_estudante/internal/config"
 	"api_estudante/internal/database"
 	"api_estudante/internal/middlewares"
-	"api_estudante/internal/features/ofertas"
+	"api_estudante/internal/features/cursos"
 )
 
 
@@ -29,11 +29,11 @@ func main() {
 	mux := http.NewServeMux()
 	
 
-	ofertaRepo := ofertas.NewElasticsearchRepository(esClient)
-	ofertaService := ofertas.NewService(ofertaRepo)
-	ofertaHandler := &ofertas.Handler{Service: ofertaService}
+	cursoRepo := cursos.NewElasticsearchRepository(esClient)
+	cursoService := cursos.NewService(cursoRepo)
+	cursoHandler := &cursos.Handler{Service: cursoService}
 	
-	mux.Handle("/ofertas", ofertaHandler)
+	mux.Handle("/cursos", cursoHandler)
 
 	// Cadeia de Middlewares
 	// Você pode encadear mais middlewares aqui (Logging, Auth, etc)

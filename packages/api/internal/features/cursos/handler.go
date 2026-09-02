@@ -1,4 +1,4 @@
-package ofertas
+package cursos
 
 import (
 	"context"
@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-// Handler gerencia requisições de busca de ofertas
+// Handler gerencia requisições de busca de cursos
 type Handler struct {
 	Service Service
 }
 
 // ServeHTTP implementa http.Handler
-// GET /ofertas?q={termo}&page={page}&limit={limit}
+// GET /cursos?q={termo}&page={page}&limit={limit}
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// 1. Validar método HTTP
 	if r.Method != http.MethodGet {
@@ -45,10 +45,10 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	// 4. Chamar service
-	response, err := h.Service.BuscarOfertas(ctx, query, page, limit)
+	response, err := h.Service.BuscarCursos(ctx, query, page, limit)
 	if err != nil {
-		slog.Error("Erro ao buscar ofertas", "error", err, "query", query)
-		http.Error(w, "Erro interno ao buscar ofertas", http.StatusInternalServerError)
+		slog.Error("Erro ao buscar cursos", "error", err, "query", query)
+		http.Error(w, "Erro interno ao buscar cursos", http.StatusInternalServerError)
 		return
 	}
 

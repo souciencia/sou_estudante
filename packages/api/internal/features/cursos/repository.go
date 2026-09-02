@@ -1,4 +1,4 @@
-package ofertas
+package cursos
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
-// Repository define contrato de acesso a ofertas
+// Repository define contrato de acesso a cursos
 type Repository interface {
 	Search(ctx context.Context, query string, page, limit int) (*SearchResult, error)
 }
@@ -30,7 +30,7 @@ type SearchResult struct {
 func NewElasticsearchRepository(client *elasticsearch.Client) Repository {
 	return &ElasticsearchRepository{
 		client: client,
-		index:  "ofertas", // Índice atualizado
+		index:  "cursos", // Índice de cursos
 	}
 }
 
@@ -49,12 +49,11 @@ func (r *ElasticsearchRepository) Search(
 			"multi_match": map[string]interface{}{
 				"query": query,
 				"fields": []string{
-					"curso.no_curso^3",              // Peso maior no nome do curso
-					"curso.cine.no_cine_rotulo^2",   // Peso no CINE
-					"instituicao.no_ies",            // Nome da instituição
-					"instituicao.sg_ies^1.5",        // Sigla da instituição
-					"localizacao.no_municipio",      // Município
-					"localizacao.sg_uf",             // UF
+					"curso.no_curso^3",                // Peso maior no nome do curso
+					"curso.cine.no_cine_rotulo^2",     // Peso no CINE
+					"localizacao.no_municipio",        // Município
+					"localizacao.sg_uf",               // UF
+					"localizacao.no_regiao",           // Região
 				},
 				"type":      "best_fields",
 				"fuzziness": "AUTO", // Tolera erros de digitação
