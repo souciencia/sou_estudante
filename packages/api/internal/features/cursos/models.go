@@ -11,13 +11,30 @@ type SearchFilterParams struct {
 	Sort       string   `json:"sort,omitempty"`
 }
 
+// AggregationBucket representa um item de contagem de uma agregação
+type AggregationBucket struct {
+	Key   string `json:"key"`
+	Count int    `json:"count"`
+}
+
+// SearchAggregations mapeia as agregações por grupo de filtro
+type SearchAggregations struct {
+	UFs         []AggregationBucket `json:"ufs,omitempty"`
+	Turnos      []AggregationBucket `json:"turnos,omitempty"`
+	Graus       []AggregationBucket `json:"graus,omitempty"`
+	Categorias  []AggregationBucket `json:"categorias,omitempty"`
+	Modalidades []AggregationBucket `json:"modalidades,omitempty"`
+	Enades      []AggregationBucket `json:"enades,omitempty"`
+}
+
 // CursoListResponse é a resposta paginada de busca de cursos
 type CursoListResponse struct {
-	Total   int              `json:"total"`
-	Page    int              `json:"page"`
-	Limit   int              `json:"limit"`
-	Results []Curso          `json:"results"`
-	Links   PaginationLinks  `json:"links"`
+	Total        int                 `json:"total"`
+	Page         int                 `json:"page"`
+	Limit        int                 `json:"limit"`
+	Results      []Curso             `json:"results"`
+	Links        PaginationLinks     `json:"links"`
+	Aggregations *SearchAggregations `json:"aggregations,omitempty"`
 }
 
 // PaginationLinks contém URLs HATEOAS para navegação de páginas

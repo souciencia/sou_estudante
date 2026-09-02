@@ -49,12 +49,27 @@ export interface PaginationLinks {
   last: string
 }
 
+export interface AggregationBucket {
+  key: string
+  count: number
+}
+
+export interface SearchAggregations {
+  ufs?: AggregationBucket[]
+  turnos?: AggregationBucket[]
+  graus?: AggregationBucket[]
+  categorias?: AggregationBucket[]
+  modalidades?: AggregationBucket[]
+  enades?: AggregationBucket[]
+}
+
 export interface CursoListResponse {
   total: number
   page: number
   limit: number
   results: Curso[]
   links: PaginationLinks
+  aggregations?: SearchAggregations
 }
 
 // Tipos da estrutura do índice de cursos

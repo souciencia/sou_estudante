@@ -67,3 +67,36 @@ func TestBuscarCursosComFiltrosCumulativos(t *testing.T) {
 		t.Errorf("link Self deveria conter parâmetros de UF, obtido: %s", resp.Links.Self)
 	}
 }
+
+func TestBuscarCursosRetornaAgregacoes(t *testing.T) {
+	mockRepo := &MockRepository{
+		ReturnResult: &SearchResult{
+			Total: 10,
+			Hits:  []map[string]interface{}{},
+			Aggregations: &SearchAggregations{
+				UFs: []AggregationBucket{
+					{Key: "SP", Count: 7},
+					{Key: "RJ", Count: 3},
+				},
+				Graus: []AggregationBucket{
+					{Key: "BACHARELADO", Count: 10},
+				},
+			},
+		},
+	}
+
+	service := NewService(mockRepo)
+	ctx := context.Background()
+
+	resp, err := service.BuscarCursos(ctx, "medicina", SearchFilterParams{}, 1, 10)
+	if err != nil {
+		t.Fatalf("erro inesperado: %v", err)
+	}
+
+	if resp.Aggregations == nil {
+		t.Fatal("esperado aggregations preenchido, recebido nil")
+	}
+	if len(resp.Aggregations.UFs) != 2 || resp.Aggregations.UFs[0].Key != "SP" || resp.Aggregations.UFs[0].Count != 7 {
+		t.Errorf("agregacao de UF incorreta: %v", resp.Aggregations.UFs)
+	}
+}

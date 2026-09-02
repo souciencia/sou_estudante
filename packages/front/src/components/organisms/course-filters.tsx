@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { Typo } from '@/components/atoms/typo'
 import { FilterGroup } from '@/components/molecules/filter-group'
+import type { SearchAggregations } from '@/services/api/types'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 import { cn } from '@/utils/cn'
 
@@ -64,7 +65,7 @@ interface CourseFiltersProps {
 
 export function CourseFilters({ className }: CourseFiltersProps) {
   const searchParams = useSearchParams()
-  const { updateParams } = useSearchCursos()
+  const { updateParams, aggregations } = useSearchCursos()
   const [showAllEstados, setShowAllEstados] = useState(false)
 
   const getActiveValues = (key: string): string[] => {
@@ -93,6 +94,19 @@ export function CourseFilters({ className }: CourseFiltersProps) {
     })
   }
 
+  const getCount = (
+    group: keyof SearchAggregations,
+    matchValue: string,
+  ): number | undefined => {
+    if (!aggregations?.[group]) return undefined
+    const bucket = aggregations[group]?.find((b) => {
+      const k = b.key.toUpperCase()
+      const m = matchValue.toUpperCase()
+      return k === m || k.includes(m) || m.includes(k)
+    })
+    return bucket?.count
+  }
+
   const estados = showAllEstados
     ? [...ESTADOS_PRINCIPAIS, ...OUTROS_ESTADOS]
     : ESTADOS_PRINCIPAIS
@@ -107,6 +121,7 @@ export function CourseFilters({ className }: CourseFiltersProps) {
               key={item.value}
               label={item.label}
               value={item.value}
+              resultCount={getCount('ufs', item.value)}
               checked={isChecked('uf', item.value)}
               onChange={() => handleToggle('uf', item.value)}
             />
@@ -135,6 +150,7 @@ export function CourseFilters({ className }: CourseFiltersProps) {
               key={item.value}
               label={item.label}
               value={item.value}
+              resultCount={getCount('turnos', item.value)}
               checked={isChecked('turno', item.value)}
               onChange={() => handleToggle('turno', item.value)}
             />
@@ -150,6 +166,7 @@ export function CourseFilters({ className }: CourseFiltersProps) {
               key={item.value}
               label={item.label}
               value={item.value}
+              resultCount={getCount('graus', item.value)}
               checked={isChecked('grau', item.value)}
               onChange={() => handleToggle('grau', item.value)}
             />
@@ -165,6 +182,7 @@ export function CourseFilters({ className }: CourseFiltersProps) {
               key={item.value}
               label={item.label}
               value={item.value}
+              resultCount={getCount('categorias', item.value)}
               checked={isChecked('categoria', item.value)}
               onChange={() => handleToggle('categoria', item.value)}
             />
@@ -180,6 +198,7 @@ export function CourseFilters({ className }: CourseFiltersProps) {
               key={item.value}
               label={item.label}
               value={item.value}
+              resultCount={getCount('modalidades', item.value)}
               checked={isChecked('modalidade', item.value)}
               onChange={() => handleToggle('modalidade', item.value)}
             />
@@ -195,6 +214,7 @@ export function CourseFilters({ className }: CourseFiltersProps) {
               key={item.value}
               label={item.label}
               value={item.value}
+              resultCount={getCount('enades', item.value)}
               checked={isChecked('enade', item.value)}
               onChange={() => handleToggle('enade', item.value)}
             />

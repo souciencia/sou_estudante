@@ -43,6 +43,7 @@ describe('SearchCursos', () => {
       navigateToPage: mockNavigateToPage,
       updateParams: vi.fn(),
       resetFilters: vi.fn(),
+      aggregations: null,
     })
   })
 

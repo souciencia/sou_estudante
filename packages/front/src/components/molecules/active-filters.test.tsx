@@ -35,6 +35,7 @@ describe('ActiveFilters', () => {
       navigateToPage: vi.fn(),
       updateParams: mockUpdateParams,
       resetFilters: mockResetFilters,
+      aggregations: null,
     })
   })
 

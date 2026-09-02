@@ -42,6 +42,7 @@ describe('SearchResultSection', () => {
       navigateToPage: vi.fn(),
       updateParams: vi.fn(),
       resetFilters: vi.fn(),
+      aggregations: null,
     })
 
     render(<SearchResultSection />)
@@ -64,6 +65,7 @@ describe('SearchResultSection', () => {
       navigateToPage: vi.fn(),
       updateParams: vi.fn(),
       resetFilters: vi.fn(),
+      aggregations: null,
     })
 
     const { container } = render(<SearchResultSection />)

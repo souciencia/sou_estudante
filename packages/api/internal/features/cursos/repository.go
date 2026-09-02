@@ -23,8 +23,9 @@ type ElasticsearchRepository struct {
 
 // SearchResult encapsula resposta do Elasticsearch
 type SearchResult struct {
-	Total int
-	Hits  []map[string]interface{}
+	Total        int
+	Hits         []map[string]interface{}
+	Aggregations *SearchAggregations
 }
 
 // NewElasticsearchRepository cria nova instância do repository
@@ -35,7 +36,7 @@ func NewElasticsearchRepository(client *elasticsearch.Client) Repository {
 	}
 }
 
-// Search executa busca no Elasticsearch com filtros cumulativos e ordenação
+// Search executa busca no Elasticsearch com filtros cumulativos, ordenação e agregações
 func (r *ElasticsearchRepository) Search(
 	ctx context.Context,
 	query string,
@@ -192,7 +193,7 @@ func (r *ElasticsearchRepository) Search(
 		})
 	}
 
-	// 5. Query DSL completa
+	// 5. Query DSL completa com Agregações
 	esQuery := map[string]interface{}{
 		"query": map[string]interface{}{
 			"bool": boolQuery,
@@ -200,6 +201,38 @@ func (r *ElasticsearchRepository) Search(
 		"size": limit,
 		"from": from,
 		"sort": sortClauses,
+		"aggs": map[string]interface{}{
+			"ufs": map[string]interface{}{
+				"terms": map[string]interface{}{
+					"field": "localizacao.sg_uf.keyword",
+					"size":  30,
+				},
+			},
+			"graus": map[string]interface{}{
+				"terms": map[string]interface{}{
+					"field": "curso.no_grau_academico.keyword",
+					"size":  10,
+				},
+			},
+			"modalidades": map[string]interface{}{
+				"terms": map[string]interface{}{
+					"field": "curso.no_modalidade_ensino.keyword",
+					"size":  10,
+				},
+			},
+			"enades": map[string]interface{}{
+				"terms": map[string]interface{}{
+					"field": "enade.conceito_faixa_enade.keyword",
+					"size":  10,
+				},
+			},
+			"turnos": map[string]interface{}{
+				"terms": map[string]interface{}{
+					"field": "sisu.ofertas.turno.keyword",
+					"size":  10,
+				},
+			},
+		},
 	}
 
 	// 6. Serializar para JSON
@@ -238,6 +271,12 @@ func (r *ElasticsearchRepository) Search(
 				Source map[string]interface{} `json:"_source"`
 			} `json:"hits"`
 		} `json:"hits"`
+		Aggregations map[string]struct {
+			Buckets []struct {
+				Key      interface{} `json:"key"`
+				DocCount int         `json:"doc_count"`
+			} `json:"buckets"`
+		} `json:"aggregations"`
 	}
 
 	if err := json.NewDecoder(res.Body).Decode(&esResp); err != nil {
@@ -251,8 +290,35 @@ func (r *ElasticsearchRepository) Search(
 		hits = append(hits, hit.Source)
 	}
 
+	var searchAggs *SearchAggregations
+	if len(esResp.Aggregations) > 0 {
+		parseBuckets := func(name string) []AggregationBucket {
+			raw, ok := esResp.Aggregations[name]
+			if !ok {
+				return nil
+			}
+			buckets := make([]AggregationBucket, 0, len(raw.Buckets))
+			for _, b := range raw.Buckets {
+				buckets = append(buckets, AggregationBucket{
+					Key:   fmt.Sprintf("%v", b.Key),
+					Count: b.DocCount,
+				})
+			}
+			return buckets
+		}
+
+		searchAggs = &SearchAggregations{
+			UFs:         parseBuckets("ufs"),
+			Turnos:      parseBuckets("turnos"),
+			Graus:       parseBuckets("graus"),
+			Modalidades: parseBuckets("modalidades"),
+			Enades:      parseBuckets("enades"),
+		}
+	}
+
 	return &SearchResult{
-		Total: esResp.Hits.Total.Value,
-		Hits:  hits,
+		Total:        esResp.Hits.Total.Value,
+		Hits:         hits,
+		Aggregations: searchAggs,
 	}, nil
 }

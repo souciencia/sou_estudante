@@ -5,7 +5,11 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { API_CONFIG } from '@/services/api'
 import { cursoService } from '@/services/api/curso.service'
-import type { Curso, PaginationLinks } from '@/services/api/types'
+import type {
+  Curso,
+  PaginationLinks,
+  SearchAggregations,
+} from '@/services/api/types'
 
 export interface UseSearchCursosReturn {
   query: string
@@ -16,6 +20,7 @@ export interface UseSearchCursosReturn {
   currentPage: number
   limit: number
   links: PaginationLinks | null
+  aggregations: SearchAggregations | null
   setQuery: (newQuery: string) => void
   navigateToPage: (pageOrUrl: number | string) => void
   updateParams: (newParams: Record<string, string | null>) => void
@@ -38,6 +43,9 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
   const [total, setTotal] = useState(0)
   const [limit, setLimit] = useState(20)
   const [links, setLinks] = useState<PaginationLinks | null>(null)
+  const [aggregations, setAggregations] = useState<SearchAggregations | null>(
+    null,
+  )
 
   const updateParams = useCallback(
     (newParams: Record<string, string | null>) => {
@@ -116,6 +124,7 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
       setTotal((prev) => (prev > 0 ? 0 : prev))
       setLinks((prev) => (prev !== null ? null : prev))
       setError((prev) => (prev !== null ? null : prev))
+      setAggregations((prev) => (prev !== null ? null : prev))
       setIsLoading((prev) => (prev ? false : prev))
       return
     }
@@ -132,6 +141,7 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
         setTotal(response.total)
         setLimit(response.limit)
         setLinks(response.links)
+        setAggregations(response.aggregations ?? null)
       })
       .catch((_err) => {
         if (!isCurrent) return
@@ -139,6 +149,7 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
         setResults([])
         setTotal(0)
         setLinks(null)
+        setAggregations(null)
       })
       .finally(() => {
         if (isCurrent) {
@@ -160,6 +171,7 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
     currentPage,
     limit,
     links,
+    aggregations,
     setQuery,
     navigateToPage,
     updateParams,

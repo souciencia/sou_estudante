@@ -65,11 +65,12 @@ func (s *ServiceImpl) BuscarCursos(
 
 	// 5. Montar response
 	return &CursoListResponse{
-		Total:   result.Total,
-		Page:    page,
-		Limit:   limit,
-		Results: items,
-		Links:   links,
+		Total:        result.Total,
+		Page:         page,
+		Limit:        limit,
+		Results:      items,
+		Links:        links,
+		Aggregations: result.Aggregations,
 	}, nil
 }
 
