@@ -34,8 +34,8 @@ services:
     environment:
       - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
       - ELASTICSEARCH_APIKEY=${ELASTICSEARCH_APIKEY}
-      - ES_INDEX_NAME=ofertas
-      - CSV_FILE_PATH=/data/dados.csv
+      - ES_INDEX_NAME=cursos
+      - JSON_FILE_PATH=/data/dados_curso_completo.json
     volumes:
       - ./packages/bulker/data:/data:z
     networks:
@@ -57,6 +57,7 @@ services:
       - "8080:8080"
     volumes:
       - ./packages/api:/app:z
+      - go-mod-cache:/root/go/pkg/mod
     networks:
       - data_net
     depends_on:
@@ -92,9 +93,11 @@ services:
 volumes:
   elsou-data:
     driver: local
+  go-mod-cache:
+    driver: local
+  node_modules-data:
 
 networks:
-  # sou_net:
-  #   driver: bridge
   data_net:
     driver: bridge
+  #   driver: bridge

@@ -1,0 +1,18 @@
+{
+  "mappings": {
+    "properties": {
+      "co_ies": { "type": "keyword" },
+      "no_ies": { 
+        "type": "text",
+        "fields": { "keyword": { "type": "keyword" } }
+      },
+      "sg_ies": { "type": "keyword" },
+      "ds_organizacao_academica": { "type": "keyword" },
+      "ds_categoria_adm": { "type": "keyword" },
+      "no_campus": { "type": "text" },
+      "no_municipio_campus": { "type": "keyword" },
+      "sg_uf_campus": { "type": "keyword" },
+      "ds_regiao": { "type": "keyword" }
+    }
+  }
+}
