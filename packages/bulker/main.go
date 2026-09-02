@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"strconv"
 	"sync/atomic"
 	"time"
 
@@ -14,7 +15,7 @@ import (
 func main() {
 	cfg := LoadConfig()
 
-	log.Printf("Iniciando bulker com arquivo %s no índice '%s'...", cfg.CSVFilePath, cfg.IndexName)
+	log.Printf("Iniciando bulker com arquivo %s no índice '%s'...", cfg.JSONFilePath, cfg.IndexName)
 
 	es, err := NewElasticsearchClient(cfg)
 	if err != nil {
@@ -26,35 +27,38 @@ func main() {
 		log.Fatalf("Erro ao criar Bulk Indexer: %s", err)
 	}
 
-	csvReader, err := NewCSVReader(cfg.CSVFilePath)
+	jsonReader, err := NewJSONReader(cfg.JSONFilePath)
 	if err != nil {
-		log.Fatalf("Erro ao abrir arquivo CSV: %s", err)
+		log.Fatalf("Erro ao abrir arquivo JSON: %s", err)
 	}
-	defer csvReader.Close()
+	defer jsonReader.Close()
 
 	var countSuccessful uint64
 	start := time.Now()
 
-	log.Printf("Processando registros do CSV...")
+	log.Printf("Processando registros do JSON...")
 
 	for {
-		record, err := csvReader.ReadRecord()
-		if csvReader.IsEOF(err) {
+		rec, err := jsonReader.ReadRecord()
+		if jsonReader.IsEOF(err) {
 			break
 		}
 		if err != nil {
-			log.Printf("Erro ao ler linha: %v", err)
+			log.Printf("Erro ao ler registro: %v", err)
 			continue
 		}
 
-		doc := mapRecordToDocument(record, csvReader.GetHeaderMap())
+		doc := mapSourceToDocument(*rec)
 		docBytes, err := json.Marshal(doc)
 		if err != nil {
 			log.Printf("Erro ao serializar JSON: %v", err)
 			continue
 		}
 
-		docID := getVal(record, csvReader.GetHeaderMap(), "sequencial")
+		docID := ""
+		if rec.Sequencial != nil {
+			docID = strconv.FormatInt(*rec.Sequencial, 10)
+		}
 
 		err = bi.Add(context.Background(), esutil.BulkIndexerItem{
 			Action:     "index",
