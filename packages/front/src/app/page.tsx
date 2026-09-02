@@ -1,11 +1,9 @@
 // app/page.tsx
-import { SearchCursos } from '@/components/organisms/search/search-cursos'
+
 import { Hero } from '@/components/organisms/hero'
+import { SearchCursos } from '@/components/organisms/search/search-cursos'
 
-export default async function Home({ searchParams }: any) {
-  const params = await searchParams
-  const query = params.q || ''
-
+export default function Home() {
   return (
     <div className="flex justify-center min-h-screen w-full bg-site-background">
       <main className="max-w-5xl flex-col py-20 px-6 sm:px-16">

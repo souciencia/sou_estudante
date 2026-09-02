@@ -14,7 +14,7 @@ export default function MarLegenda() {
         <svg
           viewBox="0 0 68 20"
           fill="none"
-          aria-hidden
+          aria-hidden="true"
           className="h-[10px] w-[34px] shrink-0"
         >
           <path
@@ -33,8 +33,8 @@ export default function MarLegenda() {
           />
         </svg>
         <span>
-          O mar do selo traduz a faixa do conceito: sereno no 5, agitado no 1
-          e 2.
+          O mar do selo traduz a faixa do conceito: sereno no 5, agitado no 1 e
+          2.
         </span>
       </div>
       {/* Neblina — estado novo, mesma linguagem e família de opacidades */}
@@ -42,7 +42,7 @@ export default function MarLegenda() {
         <svg
           viewBox="0 0 68 20"
           fill="none"
-          aria-hidden
+          aria-hidden="true"
           className="h-[10px] w-[34px] shrink-0"
         >
           <g
@@ -65,10 +65,9 @@ export default function MarLegenda() {
           />
         </svg>
         <span>
-          Neblina indica ausência: sem avaliação no ciclo, ou sem conceito
-          (SC).
+          Neblina indica ausência: sem avaliação no ciclo, ou sem conceito (SC).
         </span>
       </div>
     </div>
-  );
+  )
 }

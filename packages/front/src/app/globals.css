@@ -1,33 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --color-plum-950: #1A0E23;
-  --color-plum-900: #2B1738;
-  --color-plum-800: #3D2150;
-  --color-plum-700: #532D6B;
-  --color-plum-100: #EFE6F5;
-  --color-plum-50:  #F8F4FB;
+  --color-plum-950: #1a0e23;
+  --color-plum-900: #2b1738;
+  --color-plum-800: #3d2150;
+  --color-plum-700: #532d6b;
+  --color-plum-100: #efe6f5;
+  --color-plum-50: #f8f4fb;
 
-    /* --- Acentos por módulo --- */
-  --color-m1-accent: #D4FF00; /* M1 Carta Náutica — neon-lime  */
-  --color-m2-accent: #00E5FF; /* M2 Bússola      — cyan        */
-  --color-m3-accent: #FF67BE; /* M3 Âncora       — neon-pink   */
-  --color-m4-accent: #AE64FE; /* M4 Telescópio   — ultraviolet */
-  --color-m5-accent: #FF8D3B; /* M5 Sextante     — mango       */
+  /* --- Acentos por módulo --- */
+  --color-m1-accent: #d4ff00; /* M1 Carta Náutica — neon-lime  */
+  --color-m2-accent: #00e5ff; /* M2 Bússola      — cyan        */
+  --color-m3-accent: #ff67be; /* M3 Âncora       — neon-pink   */
+  --color-m4-accent: #ae64fe; /* M4 Telescópio   — ultraviolet */
+  --color-m5-accent: #ff8d3b; /* M5 Sextante     — mango       */
 
   /* --- Tons companheiros (texto legível sobre claro) --- */
-  --color-m1-deep: #5A6E00;
-  --color-m2-deep: #006B78;
-  --color-m3-deep: #A61E6B;
-  --color-m4-deep: #5B21A8;
-  --color-m5-deep: #A34A00;
+  --color-m1-deep: #5a6e00;
+  --color-m2-deep: #006b78;
+  --color-m3-deep: #a61e6b;
+  --color-m4-deep: #5b21a8;
+  --color-m5-deep: #a34a00;
 
   --color-button-surface: var(--color-cyan-100);
   --color-button-fg: var(--color-cyan-600);
   --color-button-surface-muted: var(--color-gray-100);
   --color-button-fg-muted: var(--color-gray-600);
 
-  --color-site-background: #F8F4FB;
+  --color-site-background: #f8f4fb;
   --color-bg: oklch(1 0 0);
   --color-card-surface: oklch(1 0 0);
   --color-card-accent-background: oklch(0.97 0.015 165);
@@ -44,26 +44,25 @@
   --color-card-border: oklch(0.92 0 0);
 
   /* --- Tag / badge --- */
-  --color-tag-bg: #E8F7F0;
-  --color-tag-fg: #1B8A5A;
+  --color-tag-bg: #e8f7f0;
+  --color-tag-fg: #1b8a5a;
   --color-tag-border: rgba(46, 204, 138, 0.3);
   --radius-tag: 20px;
   --border-width-tag: 1.5px;
 
-
-   /* --- Tipografia --- */
+  /* --- Tipografia --- */
   --font-display: "Playfair Display", Georgia, serif;
-  --font-sans:    "Source Sans 3", system-ui, sans-serif;
-  --font-mono:    "DM Mono", ui-monospace, monospace; /* dados numéricos */
-  
-  --motion-fast:   160ms;
+  --font-sans: "Source Sans 3", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, monospace; /* dados numéricos */
+
+  --motion-fast: 160ms;
   --motion-cruise: 320ms;
   --ease-prow: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --ease-tide: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --ease-tide: cubic-bezier(0.4, 0, 0.2, 1);
 
   --radius-thin: 4px;
   --radius-normal: 8px;
-  
+
   --radius-card: 2.5rem;
   --radius-full: 9999px;
 
@@ -103,10 +102,11 @@
   }
 } */
 
-
 /* Todo movimento respeita prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms;
     animation-iteration-count: 1;
     transition-duration: 0.01ms;

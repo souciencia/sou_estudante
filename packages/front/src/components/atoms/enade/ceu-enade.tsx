@@ -4,7 +4,7 @@
  * Semântica herdada do pai: o grupo inteiro vive dentro de um `<svg
  * aria-hidden>`, portanto não emite ARIA própria.
  */
-import { faixaDoMar } from "@/lib/mar-enade";
+import { faixaDoMar } from '@/lib/mar-enade'
 
 // src/components/atoms/enade/ceu-enade.tsx
 export default function CeuEnade({ faixa }: { faixa: number | null }) {
@@ -17,10 +17,10 @@ export default function CeuEnade({ faixa }: { faixa: number | null }) {
         <rect x="38" y="25" width="28" height="3.5" rx="1.75" opacity=".2" />
         <rect x="24" y="32" width="30" height="3.5" rx="1.75" opacity=".14" />
       </g>
-    );
+    )
   }
 
-  const fx = faixaDoMar(faixa);
+  const fx = faixaDoMar(faixa)
 
   switch (fx) {
     case 5:
@@ -29,7 +29,7 @@ export default function CeuEnade({ faixa }: { faixa: number | null }) {
           <circle cx="57" cy="17" r="12" fill="currentColor" opacity=".1" />
           <circle cx="57" cy="17" r="6.5" fill="currentColor" opacity=".4" />
         </>
-      );
+      )
 
     case 3:
       return (
@@ -37,7 +37,7 @@ export default function CeuEnade({ faixa }: { faixa: number | null }) {
           <ellipse cx="55" cy="17" rx="11" ry="6" />
           <ellipse cx="46" cy="20" rx="8" ry="5" />
         </g>
-      );
+      )
 
     case 2:
       return (
@@ -57,10 +57,10 @@ export default function CeuEnade({ faixa }: { faixa: number | null }) {
             <line x1="59" y1="25" x2="56" y2="31" />
           </g>
         </>
-      );
+      )
 
     default:
       // faixa 4 (e outros valores não mapeados): céu limpo, sem sol
-      return null;
+      return null
   }
 }

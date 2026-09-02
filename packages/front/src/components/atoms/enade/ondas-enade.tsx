@@ -4,23 +4,28 @@
  * `animado` — deriva por transform (.mar-onda), prefers-reduced-motion
  * respeitado globalmente pelos tokens.
  */
-import { caminhoOnda, type ParamsMar } from "@/lib/mar-enade";
+import { caminhoOnda, type ParamsMar } from '@/lib/mar-enade'
 
 // src/components/atoms/enade/ondas-enade.tsx
 export default function OndasEnade({
   params,
   animado = false,
 }: {
-  params: ParamsMar;
-  animado?: boolean;
+  params: ParamsMar
+  animado?: boolean
 }) {
-  const classeOnda = animado ? "mar-onda" : "";
+  const classeOnda = animado ? 'mar-onda' : ''
 
   return (
     <>
       <g
         className={classeOnda}
-        style={{ "--mar-dur": "16s", "--mar-shift": `${-params.wl}px` } as React.CSSProperties}
+        style={
+          {
+            '--mar-dur': '16s',
+            '--mar-shift': `${-params.wl}px`,
+          } as React.CSSProperties
+        }
       >
         <path
           d={caminhoOnda(params.yb, params.a, params.wl)}
@@ -30,7 +35,12 @@ export default function OndasEnade({
       </g>
       <g
         className={classeOnda}
-        style={{ "--mar-dur": "9s", "--mar-shift": `${-params.wl}px` } as React.CSSProperties}
+        style={
+          {
+            '--mar-dur': '9s',
+            '--mar-shift': `${-params.wl}px`,
+          } as React.CSSProperties
+        }
       >
         <path
           d={caminhoOnda(params.yf, params.a * 1.3, params.wl)}
@@ -39,5 +49,5 @@ export default function OndasEnade({
         />
       </g>
     </>
-  );
+  )
 }

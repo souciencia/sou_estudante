@@ -42,11 +42,15 @@ export const Hero = () => {
           {/* Grupo de Botões */}
           <div className="flex flex-wrap gap-4 items-center">
             {/* Botão Buscar Curso (Amarelo/Verde Limão) */}
-            <button className="inline-flex items-center gap-2 rounded-full bg-[#ccf900] px-7 py-3.5 text-sm font-semibold text-neutral-900 transition-all hover:bg-[#b5de00] hover:scale-[1.02] active:scale-[0.98]">
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-full bg-[#ccf900] px-7 py-3.5 text-sm font-semibold text-neutral-900 transition-all hover:bg-[#b5de00] hover:scale-[1.02] active:scale-[0.98]"
+            >
               <svg
                 className="w-4 h-4 text-neutral-900"
                 viewBox="0 0 16 16"
                 fill="none"
+                aria-hidden="true"
               >
                 <circle
                   cx="7"
@@ -69,11 +73,15 @@ export const Hero = () => {
             </button>
 
             {/* Botão Como Funciona (Outline / Transparente) */}
-            <button className="inline-flex items-center gap-2 rounded-full border border-slate-500/80 bg-[#163a45]/30 px-7 py-3.5 text-sm font-medium text-white transition-all hover:bg-[#163a45]/60 hover:border-slate-300">
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-500/80 bg-[#163a45]/30 px-7 py-3.5 text-sm font-medium text-white transition-all hover:bg-[#163a45]/60 hover:border-slate-300"
+            >
               <svg
                 className="w-4 h-4 text-slate-300"
                 viewBox="0 0 16 16"
                 fill="none"
+                aria-hidden="true"
               >
                 <circle
                   cx="8"
