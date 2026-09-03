@@ -190,11 +190,11 @@ func (r *ElasticsearchRepository) Search(
 			"multi_match": map[string]interface{}{
 				"query": query,
 				"fields": []string{
-					"curso.no_curso^3",                // Peso maior no nome do curso
-					"curso.cine.no_cine_rotulo^2",     // Peso no CINE
-					"localizacao.no_municipio",        // Município
-					"localizacao.sg_uf",               // UF
-					"localizacao.no_regiao",           // Região
+					"curso.no_curso^3",            // Peso maior no nome do curso
+					"curso.cine.no_cine_rotulo^2", // Peso no CINE
+					"localizacao.no_municipio",    // Município
+					"localizacao.sg_uf",           // UF
+					"localizacao.no_regiao",       // Região
 				},
 				"type":      "best_fields",
 				"fuzziness": "AUTO", // Tolera erros de digitação

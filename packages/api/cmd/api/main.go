@@ -11,10 +11,9 @@ import (
 
 	"api_estudante/internal/config"
 	"api_estudante/internal/database"
-	"api_estudante/internal/middlewares"
 	"api_estudante/internal/features/cursos"
+	"api_estudante/internal/middlewares"
 )
-
 
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
@@ -27,12 +26,11 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	
 
 	cursoRepo := cursos.NewElasticsearchRepository(esClient)
 	cursoService := cursos.NewService(cursoRepo)
 	cursoHandler := &cursos.Handler{Service: cursoService}
-	
+
 	mux.Handle("/cursos", cursoHandler)
 
 	// Cadeia de Middlewares
