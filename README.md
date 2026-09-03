@@ -3,7 +3,7 @@
 O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e universidades, feita para ajudar estudantes e pesquisadores.
 
 >- [Kanban do projeto no Github](https://github.com/users/RicardoIreno/projects/1/views/1?system_template=kanban)
->- Confira a pasta [docks](https://github.com/souciencia/sou_estudante/tree/main/docs)
+>- Confira a pasta [docs](https://github.com/souciencia/sou_estudante/tree/main/docs)
 
 
 ## Arquitetura
@@ -85,7 +85,7 @@ Como o fluxo da informação passa por três containers distintos, é importante
 
 
 **Elasticsearch funcionando**
-- (http://localhost:9200/
+- http://localhost:9200/
 
 **API funcionando e comunicando com o Elasticsearch**
 - http://localhost:8080/cursos?q=medicina
@@ -141,5 +141,3 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-

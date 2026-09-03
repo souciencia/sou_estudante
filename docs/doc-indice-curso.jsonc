@@ -1,0 +1,126 @@
+// Exemplo de documento (source) indexado no Elasticsearch pelo bulker.
+// Estrutura derivada de packages/bulker/data/amostra_dados.json (índice de cursos).
+{
+  "sequencial": 1,
+  "nu_ano_censo": 2024,
+  "edicao": "2024",
+  "dt_carga": "2026-08-24",
+  "instituicao": {
+    "co_ies": "1"
+  },
+  "curso": {
+    "co_curso": "1",
+    "no_curso": "DIREITO",
+    "tp_dimensao": 1,
+    "tp_grau_academico": "1",
+    "no_grau_academico": "BACHARELADO",
+    "in_gratuito": true,
+    "tp_modalidade_ensino": "1",
+    "no_modalidade_ensino": "PRESENCIAL",
+    "tp_nivel_academico": "1",
+    "no_nivel_academico": "GRADUAÇÃO",
+    "cine": {
+      "co_cine_rotulo": "0421D01",
+      "no_cine_rotulo": "DIREITO",
+      "co_cine_area_geral": "4",
+      "no_cine_area_geral": "NEGÓCIOS, ADMINISTRAÇÃO E DIREITO",
+      "co_cine_area_especifica": "42",
+      "no_cine_area_especifica": "DIREITO",
+      "co_cine_area_detalhada": "421",
+      "no_cine_area_detalhada": "DIREITO"
+    }
+  },
+  "localizacao": {
+    "co_regiao": "5",
+    "no_regiao": "CENTRO-OESTE",
+    "co_uf": "51",
+    "no_uf": "MATO GROSSO",
+    "sg_uf": "MT",
+    "co_municipio": "5103403",
+    "no_municipio": "CUIABÁ",
+    "in_capital": true
+  },
+  "censo_metricas": {
+    "qt_vg_total": 111,
+    "qt_vg_total_diurno": 59,
+    "qt_vg_total_noturno": 52,
+    "qt_vg_total_ead": 0,
+    "qt_ing": 118,
+    "qt_ing_prounii": 0,
+    "qt_ing_prounip": 0,
+    "qt_ing_fies": 0,
+    "qt_ing_rpfies": 0,
+    "qt_ing_nrpfies": 0,
+    "qt_ing_reserva_vaga": 104,
+    "qt_mat": 460,
+    "qt_apoio_social": 71,
+    "qt_mat_apoio_social": 68,
+    "qt_ativ_extracurricular": 133,
+    "qt_mat_ativ_extracurricular": 132
+  },
+  "enade": {
+    "ano_enade": 2022,
+    "conceito_continuo_enade": 4.788,
+    "conceito_faixa_enade": "5"
+  },
+  "tda": {
+    "nu_ano_ingresso_tda": 2020,
+    "nu_ano_referencia_tda": 2024,
+    "tap": 34.0,
+    "tca": 59.0,
+    "tda": 7.0
+  },
+  "sisu": {
+    "tem_sisu": true,
+    "ofertas": [
+      {
+        "municipio": "5103403",
+        "nome_municipio": "CUIABÁ",
+        "turno": "MATUTINO",
+        "modalidade": "AC",
+        "ordem_modalidade": 1,
+        "grupo": "AC",
+        "descricao": "Ampla concorrência",
+        "vagas": 25,
+        "nota_corte": 746.9,
+        "inscricoes": 1294
+      },
+      {
+        "municipio": "5103403",
+        "nome_municipio": "CUIABÁ",
+        "turno": "NOTURNO",
+        "modalidade": "AC",
+        "ordem_modalidade": 1,
+        "grupo": "AC",
+        "descricao": "Ampla concorrência",
+        "vagas": 25,
+        "nota_corte": 739.0,
+        "inscricoes": 1933
+      },
+      {
+        "municipio": "5103403",
+        "nome_municipio": "CUIABÁ",
+        "turno": "MATUTINO",
+        "modalidade": "LB_EP",
+        "ordem_modalidade": 3,
+        "grupo": "LB",
+        "descricao": "Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público (Lei nº 12.711/2012).",
+        "vagas": 2,
+        "nota_corte": 691.84,
+        "inscricoes": 348
+      },
+      {
+        "municipio": "5103403",
+        "nome_municipio": "CUIABÁ",
+        "turno": "NOTURNO",
+        "modalidade": "LB_EP",
+        "ordem_modalidade": 3,
+        "grupo": "LB",
+        "descricao": "Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público (Lei nº 12.711/2012).",
+        "vagas": 2,
+        "nota_corte": 691.04,
+        "inscricoes": 577
+      }
+    ]
+  }
+}
