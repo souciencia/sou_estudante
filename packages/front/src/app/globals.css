@@ -44,20 +44,11 @@
   --color-card-border: oklch(0.92 0 0);
 
   /* --- Tag / badge --- */
-<<<<<<< HEAD
   --color-tag-bg: #e8f7f0;
   --color-tag-fg: #1b8a5a;
   --color-tag-border: rgba(46, 204, 138, 0.3);
   --radius-tag: 20px;
   --border-width-tag: 1.5px;
-=======
-  --color-tag-bg: #E8F7F0;
-  --color-tag-fg: #1B8A5A;
-  --color-tag-border: rgba(46, 204, 138, 0.3);
-  --radius-tag: 20px;
-  --border-width-tag: 1.5px;
-
->>>>>>> c0f3ba2 (wip integração dos componetes da Mey)
 
   /* --- Tipografia --- */
   --font-display: "Playfair Display", Georgia, serif;
@@ -104,12 +95,6 @@
   --color-button-surface: var(--color-lime-100);
   --color-button-fg: var(--color-lime-600);
 }
-
-/* @media (prefers-color-scheme: dark) {
-  :root {
-   
-  }
-} */
 
 /* Todo movimento respeita prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
