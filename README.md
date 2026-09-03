@@ -85,14 +85,14 @@ Como o fluxo da informação passa por três containers distintos, é importante
 
 
 **Elasticsearch funcionando**
-[http://localhost:9200/](http://localhost:9200/)
+- (http://localhost:9200/
 
 **API funcionando e comunicando com o Elasticsearch**
-[http://localhost:8080/cursos?q=medicina](http://localhost:8080/cursos?q=medicina)
+- http://localhost:8080/cursos?q=medicina
 
 **Frontend funcionando (construção em estágio inicial)**
-[http://localhost:3000/](http://localhost:3000/)
-[http://localhost:3000/discovering](http://localhost:3000/discovering) (futura página de pesquisa e onde estou testando as coisas)
+- http://localhost:3000/
+- http://localhost:3000/cursos
 
 ## Contribuidores
 **Para usuário do VS Code:**

@@ -1,0 +1,155 @@
+// ==============================================================================
+// Exemplo de Documento (_source) no Índice 'cursos' do Elasticsearch
+// ==============================================================================
+// Mapeamento definido em: packages/bulker/mapping.json
+// Struct Go do Bulker:   packages/bulker/structs.go (Document)
+// Mapper do Bulker:      packages/bulker/mapper.go (mapSourceToDocument)
+// Struct Go da API:      packages/api/internal/features/cursos/models.go (Curso)
+// Tipos TypeScript:      packages/front/src/services/api/types.ts (Curso)
+//
+// Regras de Mapeamento do Elasticsearch:
+// - dynamic: "strict" (não aceita campos desconhecidos fora do schema)
+// - analyzer: "brazilian_search" (standard tokenizer + lowercase + asciifolding) no campo curso.no_curso
+// - sisu.ofertas: mapeado como tipo "nested" para consultas estruturadas de vagas/notas
+// ==============================================================================
+{
+  // Metadados do Registro e Carga
+  "sequencial": 1,                                  // [long] Identificador sequencial de controle
+  "nu_ano_censo": 2024,                             // [integer] Ano de referência do Censo da Educação Superior
+  "edicao": "2024",                                 // [keyword] Edição correspondente ao ano do censo
+  "dt_carga": "2026-08-24 10:00:00.000",            // [date] Data e hora da importação/carga
+
+  // Identificação da Instituição de Ensino Superior (IES)
+  "instituicao": {
+    "co_ies": "1"                                   // [keyword] Código MEC da IES
+  },
+
+  // Dados Cadastrais e Acadêmicos do Curso
+  "curso": {
+    "co_curso": "1",                                // [keyword] Código MEC do curso
+    "no_curso": "DIREITO",                          // [text + keyword] Nome do curso (analisador 'brazilian_search' e subcampo .keyword)
+    "tp_dimensao": 1,                               // [integer] Tipo de dimensão acadêmica
+    "tp_grau_academico": "1",                       // [keyword] Código do grau acadêmico (1: Bacharelado, 2: Licenciatura, 3: Tecnológico)
+    "no_grau_academico": "BACHARELADO",             // [keyword] Descrição textual do grau acadêmico
+    "in_gratuito": true,                            // [boolean] Indica se o curso é público/gratuito (true) ou privado (false)
+    "tp_modalidade_ensino": "1",                    // [keyword] Código da modalidade (1: Presencial, 2: EaD / A Distância)
+    "no_modalidade_ensino": "PRESENCIAL",           // [keyword] Descrição da modalidade (PRESENCIAL / A DISTÂNCIA)
+    "tp_nivel_academico": "1",                      // [keyword] Código do nível acadêmico (1: Graduação)
+    "no_nivel_academico": "GRADUAÇÃO",              // [keyword] Descrição do nível acadêmico
+
+    // Classificação CINE Brasil (Classificação Internacional Normalizada da Educação)
+    "cine": {
+      "co_cine_rotulo": "0421D01",                  // [keyword] Código do rótulo CINE
+      "no_cine_rotulo": "DIREITO",                  // [keyword] Nome do rótulo CINE
+      "co_cine_area_geral": "4",                    // [keyword] Código da área geral
+      "no_cine_area_geral": "NEGÓCIOS, ADMINISTRAÇÃO E DIREITO", // [keyword] Nome da área geral
+      "co_cine_area_especifica": "42",              // [keyword] Código da área específica
+      "no_cine_area_especifica": "DIREITO",         // [keyword] Nome da área específica
+      "co_cine_area_detalhada": "421",              // [keyword] Código da área detalhada
+      "no_cine_area_detalhada": "DIREITO"           // [keyword] Nome da área detalhada
+    }
+  },
+
+  // Localização Geográfica do Curso / Campus
+  "localizacao": {
+    "co_regiao": "5",                               // [keyword] Código da região (1: Norte, 2: Nordeste, 3: Sudeste, 4: Sul, 5: Centro-Oeste)
+    "no_regiao": "CENTRO-OESTE",                    // [keyword] Nome da região
+    "co_uf": "51",                                  // [keyword] Código IBGE da UF
+    "no_uf": "MATO GROSSO",                         // [keyword] Nome da Unidade Federativa
+    "sg_uf": "MT",                                  // [keyword] Sigla da UF
+    "co_municipio": "5103403",                      // [keyword] Código IBGE do município
+    "no_municipio": "CUIABÁ",                       // [keyword] Nome do município
+    "in_capital": true                              // [boolean] Indica se o município é a capital do estado
+  },
+
+  // Métricas Quantitativas do Censo da Educação Superior
+  "censo_metricas": {
+    "qt_vg_total": 111,                             // [integer] Quantidade total de vagas ofertadas
+    "qt_vg_total_diurno": 59,                       // [integer] Vagas no turno diurno (matutino + vespertino)
+    "qt_vg_total_noturno": 52,                      // [integer] Vagas no turno noturno
+    "qt_vg_total_ead": 0,                           // [integer] Vagas na modalidade EaD
+    "qt_ing": 118,                                  // [integer] Quantidade total de ingressantes
+    "qt_ing_prounii": 0,                            // [integer] Ingressantes com bolsa ProUni Integral
+    "qt_ing_prounip": 0,                            // [integer] Ingressantes com bolsa ProUni Parcial
+    "qt_ing_fies": 0,                               // [integer] Ingressantes financiados pelo FIES
+    "qt_ing_rpfies": 0,                             // [integer] Ingressantes com FIES e recurso próprio
+    "qt_ing_nrpfies": 0,                            // [integer] Ingressantes com FIES sem recurso próprio
+    "qt_ing_reserva_vaga": 104,                     // [integer] Ingressantes por políticas de ações afirmativas/reserva de vagas
+    "qt_mat": 460,                                  // [integer] Quantidade total de matriculados
+    "qt_apoio_social": 71,                          // [integer] Vagas com benefício de apoio social
+    "qt_mat_apoio_social": 68,                      // [integer] Matriculados recebendo apoio social
+    "qt_ativ_extracurricular": 133,                 // [integer] Participações em atividades extracurriculares
+    "qt_mat_ativ_extracurricular": 132              // [integer] Matriculados em atividades extracurriculares
+  },
+
+  // Indicadores de Qualidade do ENADE
+  "enade": {
+    "ano_enade": 2022,                              // [integer] Ano da última aplicação do ENADE para a área
+    "conceito_continuo_enade": 4.788,               // [float] Nota contínua obtida no ENADE (0.000 a 5.000)
+    "conceito_faixa_enade": "5"                     // [keyword] Conceito ENADE em faixa (1 a 5, ou SC/Sem Conceito)
+  },
+
+  // Trajetória Discente e Taxas de Transição (TDA / TCA / TAP)
+  "tda": {
+    "nu_ano_ingresso_tda": 2020,                    // [integer] Ano de ingresso da coorte acompanhada
+    "nu_ano_referencia_tda": 2024,                  // [integer] Ano de referência do cálculo de transição
+    "tap": 34.0,                                    // [float] Taxa de Permanência (%)
+    "tca": 59.0,                                    // [float] Taxa de Conclusão Acumulada (%)
+    "tda": 7.0                                      // [float] Taxa de Desistência Acumulada (%)
+  },
+
+  // Dados e Ofertas de Vagas do SISU (Sistema de Seleção Unificada)
+  "sisu": {
+    "tem_sisu": true,                               // [boolean] Indica se o curso participa da edição do SISU
+    "ofertas": [                                    // [nested] Lista de modalidades de concorrência / vagas ofertadas
+      {
+        "municipio": "5103403",                     // [keyword] Código IBGE do município da oferta
+        "nome_municipio": "CUIABÁ",                 // [keyword] Nome do município da oferta
+        "turno": "MATUTINO",                        // [keyword] Turno da oferta (MATUTINO, VESPERTINO, NOTURNO, INTEGRAL)
+        "modalidade": "AC",                         // [keyword] Sigla da modalidade de concorrência
+        "ordem_modalidade": 1,                      // [integer] Ordem de exibição/prioridade da modalidade
+        "grupo": "AC",                              // [keyword] Grupo da modalidade (AC: Ampla Concorrência, LB: L1/L2, etc.)
+        "descricao": "Ampla concorrência",         // [text] Descrição detalhada da modalidade / cota
+        "vagas": 25,                                // [integer] Quantidade de vagas disponíveis para esta modalidade
+        "nota_corte": 746.9,                        // [float] Nota de corte final para classificação nesta modalidade
+        "inscricoes": 1294                          // [integer] Número total de inscrições concorrendo nesta modalidade
+      },
+      {
+        "municipio": "5103403",
+        "nome_municipio": "CUIABÁ",
+        "turno": "NOTURNO",
+        "modalidade": "AC",
+        "ordem_modalidade": 1,
+        "grupo": "AC",
+        "descricao": "Ampla concorrência",
+        "vagas": 25,
+        "nota_corte": 739.0,
+        "inscricoes": 1933
+      },
+      {
+        "municipio": "5103403",
+        "nome_municipio": "CUIABÁ",
+        "turno": "MATUTINO",
+        "modalidade": "LB_EP",
+        "ordem_modalidade": 3,
+        "grupo": "LB",
+        "descricao": "Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público (Lei nº 12.711/2012).",
+        "vagas": 2,
+        "nota_corte": 691.84,
+        "inscricoes": 348
+      },
+      {
+        "municipio": "5103403",
+        "nome_municipio": "CUIABÁ",
+        "turno": "NOTURNO",
+        "modalidade": "LB_EP",
+        "ordem_modalidade": 3,
+        "grupo": "LB",
+        "descricao": "Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público (Lei nº 12.711/2012).",
+        "vagas": 2,
+        "nota_corte": 691.04,
+        "inscricoes": 577
+      }
+    ]
+  }
+}

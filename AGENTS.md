@@ -18,7 +18,7 @@ Network: `data_net`.
 - ⚠️: Never try to install inside this container (dev container).
 - When making tests, verify if containers are up.
 - Execute commands and tests using: `podman exec -it ...`
-- Whenever I ask to read a **task** (or **tarefa**) file, look in the folder `docs/tasks/` for `.md` file for a equivalent. Only read a task file correspondent.
+- Whenever I ask to read a **task** (or **tarefa**) file, look in the folder `docs/` for `.md` files with a equivalent name `tarefa-...`. Only read a task file correspondent.
 
 
 ## You have
