@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import SeloEnade from '@/components/molecules/selo-enade'
+import SeloEnade from '@/components/features/selo-enade/selo-enade'
 import { Card } from './index'
 
 const meta = {

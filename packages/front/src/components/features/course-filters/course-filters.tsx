@@ -4,7 +4,7 @@
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { Typo } from '@/components/atoms/typo'
-import { FilterGroup } from '@/components/molecules/filter-group'
+import { FilterGroup } from '@/components/features/filter-group'
 import type { SearchAggregations } from '@/services/api/types'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 import { cn } from '@/utils/cn'

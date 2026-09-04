@@ -1,6 +1,4 @@
-// components/SearchResultItem.tsx
-
-import { Card } from '@/components/molecules/card'
+import { Card } from '@/components/features/card'
 import type { Curso } from '@/services/api/types'
 
 interface SearchResultItemProps {

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import SeloEnade from '../molecules/selo-enade'
+import SeloEnade from './selo-enade'
 
 const meta = {
   title: 'Atoms/SeloEnade',

@@ -1,7 +1,7 @@
 'use client'
 
 import { SearchInput } from '@/components/atoms/search-input'
-import { SearchOptions } from '@/components/molecules/search-sorting-options'
+import { SearchOptions } from '@/components/features/search-sorting-options/search-sorting-options'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 
 export function SearchHeaderBlock() {
