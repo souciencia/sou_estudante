@@ -4,8 +4,11 @@
  * A banda de fundo do card vive em BandaMar (atoms/enade).
  */
 import CeuEnade from '@/components/atoms/enade/ceu-enade'
+import {
+  paletaMar,
+  parametrosMar,
+} from '@/components/atoms/enade/geometria-mar'
 import OndasEnade from '@/components/atoms/enade/ondas-enade'
-import { paletaMar, parametrosMar } from '@/components/atoms/enade/geometria-mar'
 
 export interface SeloEnadeProps {
   faixa: 1 | 2 | 3 | 4 | 5 | 'SC' | null

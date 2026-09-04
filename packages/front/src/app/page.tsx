@@ -18,8 +18,7 @@ export default function Home() {
               Carregando busca...
             </Typo>
           }
-        >
-        </Suspense>
+        ></Suspense>
       </main>
     </div>
   )

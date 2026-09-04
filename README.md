@@ -120,6 +120,7 @@ Ao criar componentes robustos e expansíveis, utilize o **Compound Component Pat
 ### Fluxo de Trabalho para Pull Requests
 
 - Crie branches nomeados com o prefixo ao enviar o pull request ou o push. 
+- Rode os linters para padronização do código (Biome para frontend e Gofmt para a api).
 - Use prefixos como `feat-`, `fix-` e `refac-` nos nomes das branches.
 - Commite de forma descritiva: "Adiciona...", "Resolve...", "Refatora...", "Atualiza...". 
 
