@@ -6,10 +6,10 @@
  * A neblina (estado novo) usa a MESMA geometria e as MESMAS opacidades,
  * com cor neutra — nunca mais chamativa que as 5 faixas.
  */
-import { paletaMar, parametrosMar } from '@/components/atoms/enade/geometria-mar'
-
-
-
+import {
+  paletaMar,
+  parametrosMar,
+} from '@/components/atoms/enade/geometria-mar'
 
 // src/components/atoms/enade/banda-mar.tsx
 export default function BandaMar({ faixa }: { faixa: number | 'SC' | null }) {

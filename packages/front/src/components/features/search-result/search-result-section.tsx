@@ -1,7 +1,6 @@
-// components/organisms/search-result-section.tsx
 'use client'
 
-import SearchResultList from '@/components/organisms/search-result-list'
+import SearchResultList from '@/components/features/search-result/search-result-list'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 
 export default function SearchResultSection() {

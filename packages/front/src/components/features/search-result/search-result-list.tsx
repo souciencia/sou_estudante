@@ -1,10 +1,8 @@
-// components/SearchResultList.tsx
-
 import { ErrorMessage } from '@/components/atoms/error-message'
 import { Typo } from '@/components/atoms/typo'
-import { SkeletonCard } from '@/components/molecules/card/skeleton-card'
+import { SkeletonCard } from '@/components/features/card/skeleton-card'
 import type { Curso, PaginationLinks } from '@/services/api/types'
-import { Pagination } from '../molecules/search-pagination'
+import { Pagination } from '../search-pagination/search-pagination'
 import SearchResultItem from './search-result-item'
 
 interface SearchResultListProps {

@@ -1,7 +1,7 @@
 'use client'
 
 import { SearchInput } from '@/components/atoms/search-input'
-import { SearchOptions } from '@/components/molecules/search-sorting-options'
+import { SearchSortignOptions } from '@/components/features/search-sorting-options/search-sorting-options'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 
 export function SearchHeaderBlock() {
@@ -12,7 +12,7 @@ export function SearchHeaderBlock() {
       <SearchInput defaultValue={query} onSearchChange={setQuery} />
 
       <div className="my-4 pt-4 border-t border-gray-200">
-        <SearchOptions />
+        <SearchSortignOptions />
       </div>
     </div>
   )

@@ -92,36 +92,38 @@ Como o fluxo da informação passa por três containers distintos, é importante
 - http://localhost:3000/
 - http://localhost:3000/cursos
 
-## Como contribuir
 
-Já levando em conta que os contribuidores irão utilizar recursos de IA no desenvolvimento, inclui a pasta `.opencode` já com skills úteis.
+## Como Contribuir
+
+### Boas Práticas e Arquitetura
+
+#### Use DRY (Don't Repeat Yourself)
+Cada fragmento de conhecimento, regra de negócio ou lógica de código deve ter uma representação única, inequívoca e oficial dentro do sistema.
+- Evite duplicação de lógica, estilos e funções.
+- Se um comportamento se repete em múltiplos lugares, abstraia-o em uma função utilitária, *custom hook* ou componente reutilizável.
+
+### Organize o UI
+
+Para organizar a interface de usuário (UI), utilizamos a seguinte divisão:
+
+- **atoms:** Elementos visuais essenciais e indivisíveis da UI. Ex.: `Button`, `Input`, `Icon`, `Typography`. 
+
+- **features:** Estruturas complexas que desempenham um papel definido e que utilizam mais componentes em sua composição. Ex.: `Card`, `FilterGroup`, `ActiveFilters`. 
+
+- **site-blocks**: Apenas por organização, aqui ficam os  componentes como `Header`, `Footer`, `Hero`, etc. 
+
+#### Adote Compound Components para componentes robustos
+
+Ao criar componentes robustos e expansíveis, utilize o **Compound Component Pattern**, ou seja, divida o componente em subcomponentes. Todos os subcomponentes pertencem estritamente ao diretório e ao *namespace* do seu componente pai (ex.: `<Select.Option>` reside na mesma pasta do `<Select>`). Exponha APIs flexíveis e expressivas onde os subcomponentes compartilham estado implícito via *React Context* (ex.: `<Select>`, `<Select.Trigger>`, `<Select.Option>`). Implemente de forma a dar controle total sobre a composição, o layout e a ordem de renderização.
 
 
+### Fluxo de Trabalho para Pull Requests
 
+- Crie branches nomeados com o prefixo ao enviar o pull request ou o push. 
+- Rode os linters para padronização do código (Biome para frontend e Gofmt para a api).
+- Use prefixos como `feat-`, `fix-` e `refac-` nos nomes das branches.
+- Commite de forma descritiva: "Adiciona...", "Resolve...", "Refatora...", "Atualiza...". 
 
-
-**Para usuário do VS Code:**
-Recomendamos a instalação da extensão oficial do [Biome](https://biomejs.dev/pt-br/).
-
-**Para usuários de Nvim**
-Recomendamos o uso do plugin [conform.nvim](https://github.com/stevearc/conform.nvim).
-
-```lua
-require("conform").setup({
-  formatters_by_ft = {
-    typescript = { "biome" },
-    typescriptreact = { "biome" },
-    javascript = { "biome" },
-    css = { "biome" },
-    json = { "biome" },
-    go = { "gofmt" },
-  },
-  format_on_save = {
-    timeout_ms = 500,
-    lsp_fallback = true,
-  },
-})
-```
 
 ## Licença livre
 

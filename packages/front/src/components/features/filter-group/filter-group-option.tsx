@@ -1,4 +1,3 @@
-// components/molecules/filter-group/filter-group-option.tsx
 import type { ChangeEvent } from 'react'
 import { Typo } from '@/components/atoms/typo'
 import { cn } from '@/utils/cn'

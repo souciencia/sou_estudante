@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { SearchOptions } from '../organisms/search-header'
+import { SearchSortignOptions } from '../search-sorting-options'
 
 const meta = {
-  component: SearchOptions,
+  component: SearchSortignOptions,
   title: 'Organisms/SearchOptions',
   parameters: {
     nextjs: {
@@ -13,7 +13,7 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof SearchOptions>
+} satisfies Meta<typeof SearchSortignOptions>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: () => (
     <div className="max-w-xl p-4 bg-white">
-      <SearchOptions />
+      <SearchSortignOptions />
     </div>
   ),
 }
@@ -40,7 +40,7 @@ export const WithQuery: Story = {
   },
   render: () => (
     <div className="max-w-xl p-4 bg-white">
-      <SearchOptions />
+      <SearchSortignOptions />
     </div>
   ),
 }

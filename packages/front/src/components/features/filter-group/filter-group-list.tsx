@@ -1,4 +1,3 @@
-// components/molecules/filter-group/filter-group-list.tsx
 import type { ReactNode } from 'react'
 import { cn } from '@/utils/cn'
 import { useFilterGroupContext } from './filter-group-context'

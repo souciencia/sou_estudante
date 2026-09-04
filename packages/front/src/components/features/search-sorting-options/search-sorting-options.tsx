@@ -3,7 +3,7 @@
 import { Button } from '@/components/atoms/button'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 
-export function SearchOptions() {
+export function SearchSortignOptions() {
   const { updateParams } = useSearchCursos()
 
   const handleSort = (sortOption: string) => {

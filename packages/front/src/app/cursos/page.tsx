@@ -1,10 +1,10 @@
 // src/app/cursos/page.tsx
 import { Suspense } from 'react'
 import { Typo } from '@/components/atoms/typo'
-import { ActiveFilters } from '@/components/molecules/active-filters'
-import { CourseFilters } from '@/components/organisms/course-filters'
-import { SearchHeaderBlock } from '@/components/organisms/search-header'
-import SearchResultSection from '@/components/organisms/search-result-section'
+import { ActiveFilters } from '@/components/features/active-filters/active-filters'
+import { CourseFilters } from '@/components/features/course-filters/course-filters'
+import { SearchHeaderBlock } from '@/components/features/search-header/search-header'
+import SearchResultSection from '@/components/features/search-result/search-result-section'
 
 export default function CursosPage() {
   return (

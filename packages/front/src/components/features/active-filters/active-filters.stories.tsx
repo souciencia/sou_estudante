@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { ActiveFilters } from './active-filters'
+import { ActiveFilters } from '../active-filters'
 
 const meta = {
   component: ActiveFilters,

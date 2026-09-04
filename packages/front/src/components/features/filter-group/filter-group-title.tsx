@@ -1,4 +1,3 @@
-// components/molecules/filter-group/filter-group-title.tsx
 import type { ReactNode } from 'react'
 import { Typo } from '@/components/atoms/typo'
 import { cn } from '@/utils/cn'

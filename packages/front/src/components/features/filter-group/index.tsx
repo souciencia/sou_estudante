@@ -1,4 +1,3 @@
-// components/molecules/filter-group/index.tsx
 import { FilterGroupList } from './filter-group-list'
 import { FilterGroupOption } from './filter-group-option'
 import { FilterGroupRoot } from './filter-group-root'
