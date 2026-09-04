@@ -1,4 +1,3 @@
-// components/molecules/filter-group/filter-group-context.ts
 import { createContext, useContext } from 'react'
 
 export interface FilterGroupContextValue {

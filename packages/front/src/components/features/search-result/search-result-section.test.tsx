@@ -1,4 +1,3 @@
-// src/components/organisms/search-result-section.test.tsx
 import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSearchCursos } from '@/services/api/use-search-cursos'

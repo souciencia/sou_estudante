@@ -1,5 +1,3 @@
-// components/molecules/filter-group/filter-group.test.tsx
-
 import { fireEvent, render, screen } from '@testing-library/react'
 import { Component, type ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'

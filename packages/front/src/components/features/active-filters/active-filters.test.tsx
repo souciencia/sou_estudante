@@ -1,4 +1,3 @@
-// src/components/molecules/active-filters.test.tsx
 import { fireEvent, render, screen } from '@testing-library/react'
 import type { ReadonlyURLSearchParams } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
