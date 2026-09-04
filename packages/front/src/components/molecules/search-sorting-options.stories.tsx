@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { SearchOptions } from './search-options'
+import { SearchOptions } from '../organisms/search-header'
 
 const meta = {
   component: SearchOptions,

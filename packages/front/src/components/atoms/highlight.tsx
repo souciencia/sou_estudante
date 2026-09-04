@@ -6,7 +6,7 @@ interface GradientTextProps {
   className?: string
 }
 
-export const Hgh = ({
+export const Highlight = ({
   variant = 'blue',
   children,
   className = '',

@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import { Typo } from '@/components/atoms/typo'
 import { ActiveFilters } from '@/components/molecules/active-filters'
 import { CourseFilters } from '@/components/organisms/course-filters'
-import { SearchFilters } from '@/components/organisms/search-filters'
+import { SearchHeaderBlock } from '@/components/organisms/search-header'
 import SearchResultSection from '@/components/organisms/search-result-section'
 
 export default function CursosPage() {
@@ -20,7 +20,7 @@ export default function CursosPage() {
           </Typo>
         }
       >
-        <SearchFilters />
+        <SearchHeaderBlock />
       </Suspense>
 
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4">

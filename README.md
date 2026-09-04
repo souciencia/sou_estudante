@@ -74,10 +74,8 @@ Resultado esperado:
 
 A carga dos dados é feita usando um container especializado nessa tarefa, o `se_bulker`, que está configurado para dar o *start* apenas com um comando específico.
 
-1. Cole o arquivo csv com o o nome `dados.csv` na pasta `packages/bulker/data/`
-2. Dê o *start* no container `se_bulker` através do comando `docker compose --profile bulker up se_bulker`.
-
-Aguarde a etapa de *build* e a mensagem informando "Ingestão concluída!".
+1. Cole o arquivo json fonrecido pela Ecila na pasta `packages/bulker/data/`, e com o nome `dados.json`.
+2. Dê o *start* no container `se_bulker` através do comando `docker compose --profile bulker up se_bulker`, e espere a mensagem "Ingestão concluída!" Não é preciso fazer mais nada depois disso.
 
 ## As coisas estão funcionando?
 
@@ -94,7 +92,14 @@ Como o fluxo da informação passa por três containers distintos, é importante
 - http://localhost:3000/
 - http://localhost:3000/cursos
 
-## Contribuidores
+## Como contribuir
+
+Já levando em conta que os contribuidores irão utilizar recursos de IA no desenvolvimento, inclui a pasta `.opencode` já com skills úteis.
+
+
+
+
+
 **Para usuário do VS Code:**
 Recomendamos a instalação da extensão oficial do [Biome](https://biomejs.dev/pt-br/).
 

@@ -2,8 +2,7 @@
 
 import { Suspense } from 'react'
 import { Typo } from '@/components/atoms/typo'
-import { Hero } from '@/components/organisms/hero'
-import { SearchCursos } from '@/components/organisms/search/search-cursos'
+import { Hero } from '@/components/site-blocks/hero'
 
 export default function Home() {
   return (
@@ -20,7 +19,6 @@ export default function Home() {
             </Typo>
           }
         >
-          <SearchCursos />
         </Suspense>
       </main>
     </div>

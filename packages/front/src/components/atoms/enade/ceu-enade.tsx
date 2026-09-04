@@ -4,7 +4,7 @@
  * Semântica herdada do pai: o grupo inteiro vive dentro de um `<svg
  * aria-hidden>`, portanto não emite ARIA própria.
  */
-import { faixaDoMar } from '@/lib/mar-enade'
+import { faixaDoMar } from '@/components/atoms/enade/geometria-mar'
 
 // src/components/atoms/enade/ceu-enade.tsx
 export default function CeuEnade({ faixa }: { faixa: number | null }) {

@@ -4,7 +4,7 @@ import { ErrorMessage } from '@/components/atoms/error-message'
 import { Typo } from '@/components/atoms/typo'
 import { SkeletonCard } from '@/components/molecules/card/skeleton-card'
 import type { Curso, PaginationLinks } from '@/services/api/types'
-import { Pagination } from './search-pagination'
+import { Pagination } from '../molecules/search-pagination'
 import SearchResultItem from './search-result-item'
 
 interface SearchResultListProps {

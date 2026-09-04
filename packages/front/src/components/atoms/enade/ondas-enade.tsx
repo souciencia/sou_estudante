@@ -4,7 +4,7 @@
  * `animado` — deriva por transform (.mar-onda), prefers-reduced-motion
  * respeitado globalmente pelos tokens.
  */
-import { caminhoOnda, type ParamsMar } from '@/lib/mar-enade'
+import { caminhoOnda, type ParamsMar } from '@/components/atoms/enade/geometria-mar'
 
 // src/components/atoms/enade/ondas-enade.tsx
 export default function OndasEnade({
