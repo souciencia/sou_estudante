@@ -6,7 +6,9 @@ queries/
 session.json
 
 .env
-.opencode/
+.opencode/bin/
+.opencode/node_modules/
+.opencode/package*.json
 
 # dependencies
 node_modules/
@@ -22,7 +24,6 @@ node_modules/
 front/node_modules/
 bulker/data
 tasks
-.opencode/
 
 # testing
 coverage/

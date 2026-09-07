@@ -102,7 +102,7 @@ Cada fragmento de conhecimento, regra de negócio ou lógica de código deve ter
 - Evite duplicação de lógica, estilos e funções.
 - Se um comportamento se repete em múltiplos lugares, abstraia-o em uma função utilitária, *custom hook* ou componente reutilizável.
 
-### Organize o UI
+### Organize o UI 
 
 Para organizar a interface de usuário (UI), utilizamos a seguinte divisão:
 
@@ -116,6 +116,12 @@ Para organizar a interface de usuário (UI), utilizamos a seguinte divisão:
 
 Ao criar componentes robustos e expansíveis, utilize o **Compound Component Pattern**, ou seja, divida o componente em subcomponentes. Todos os subcomponentes pertencem estritamente ao diretório e ao *namespace* do seu componente pai (ex.: `<Select.Option>` reside na mesma pasta do `<Select>`). Exponha APIs flexíveis e expressivas onde os subcomponentes compartilham estado implícito via *React Context* (ex.: `<Select>`, `<Select.Trigger>`, `<Select.Option>`). Implemente de forma a dar controle total sobre a composição, o layout e a ordem de renderização.
 
+### Use as skills que estão em `.opencode/skills`
+
+Deixamos 3 skills essenciais para quem utliza agente de IA, elas irão ajudar a escrever um bom código:
+- acessibility
+- coding-and-refactoring
+- tdd
 
 ### Fluxo de Trabalho para Pull Requests
 
