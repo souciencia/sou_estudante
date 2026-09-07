@@ -102,7 +102,7 @@ Cada fragmento de conhecimento, regra de negócio ou lógica de código deve ter
 - Evite duplicação de lógica, estilos e funções.
 - Se um comportamento se repete em múltiplos lugares, abstraia-o em uma função utilitária, *custom hook* ou componente reutilizável.
 
-### Organize o UI 
+### Organize o UI
 
 Para organizar a interface de usuário (UI), utilizamos a seguinte divisão:
 
