@@ -12,6 +12,7 @@ import (
 	"api_estudante/internal/config"
 	"api_estudante/internal/database"
 	"api_estudante/internal/features/cursos"
+	"api_estudante/internal/features/sugestoes"
 	"api_estudante/internal/middlewares"
 )
 
@@ -32,6 +33,12 @@ func main() {
 	cursoHandler := &cursos.Handler{Service: cursoService}
 
 	mux.Handle("/cursos", cursoHandler)
+
+	sugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, cfg.ESDictIndexName)
+	sugestaoService := sugestoes.NewService(sugestaoRepo)
+	sugestaoHandler := &sugestoes.Handler{Service: sugestaoService}
+
+	mux.Handle("/cursos/sugestoes", sugestaoHandler)
 
 	// Cadeia de Middlewares
 	// Você pode encadear mais middlewares aqui (Logging, Auth, etc)

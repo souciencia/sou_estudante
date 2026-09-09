@@ -3,6 +3,12 @@
     "number_of_shards": 1,
     "number_of_replicas": 0,
     "analysis": {
+      "normalizer": {
+        "ascii_lower": {
+          "type": "custom",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      },
       "analyzer": {
         "brazilian_search": {
           "tokenizer": "standard",
@@ -26,7 +32,14 @@
       "curso": {
         "properties": {
           "co_curso": { "type": "keyword" },
-          "no_curso": { "type": "text", "analyzer": "brazilian_search", "fields": { "keyword": { "type": "keyword" } } },
+          "no_curso": {
+            "type": "text",
+            "analyzer": "brazilian_search",
+            "fields": {
+              "keyword": { "type": "keyword" },
+              "exato": { "type": "keyword", "normalizer": "ascii_lower" }
+            }
+          },
           "tp_dimensao": { "type": "integer" },
           "tp_grau_academico": { "type": "keyword" },
           "no_grau_academico": { "type": "keyword" },

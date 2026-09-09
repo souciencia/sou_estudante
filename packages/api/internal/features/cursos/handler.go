@@ -29,6 +29,18 @@ func parseSliceParam(values []string) []string {
 	return result
 }
 
+// parseExactParam interpreta o parâmetro "exact". Ausente ou inválido = true.
+func parseExactParam(raw string) bool {
+	if raw == "" {
+		return true
+	}
+	parsed, err := strconv.ParseBool(raw)
+	if err != nil {
+		return true
+	}
+	return parsed
+}
+
 // ServeHTTP implementa http.Handler
 // GET /cursos?q={termo}&page={page}&limit={limit}&uf={uf}&turno={turno}&grau={grau}&categoria={categoria}&modalidade={modalidade}&enade={enade}&sort={sort}
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -63,6 +75,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Modalidade: parseSliceParam(r.URL.Query()["modalidade"]),
 		Enade:      parseSliceParam(r.URL.Query()["enade"]),
 		Sort:       r.URL.Query().Get("sort"),
+		Exact:      parseExactParam(r.URL.Query().Get("exact")),
 	}
 
 	// 3. Criar contexto com timeout

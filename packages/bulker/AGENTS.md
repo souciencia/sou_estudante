@@ -2,12 +2,16 @@
 
 ```
 /
-- main.go
-- config.go
-- elasticsearch.go
-- json.go
-- mapper.go
-- structs.go
+- go.mod
+- Dockerfile
+- src/
+    - main.go
+    - config.go
+    - elasticsearch.go
+    - json.go
+    - mapper.go
+    - structs.go
+    - mapping.json
 ```
 
 ## Rules

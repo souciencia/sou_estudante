@@ -6,6 +6,11 @@ export type ApiResponse<T> = {
   // Pode ter outros campos no futuro: pagination, total, etc.
 }
 
+// Resposta do endpoint de sugestões de nomes de curso (autocomplete)
+export interface SugestoesCursosResponse {
+  results: string[]
+}
+
 export type Result<T> =
   | { success: true; data: T }
   | { success: false; error: ApiError }

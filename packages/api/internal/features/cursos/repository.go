@@ -36,6 +36,87 @@ func NewElasticsearchRepository(client *elasticsearch.Client) Repository {
 	}
 }
 
+// buildTextQuery monta a cláusula de busca textual por nome do curso.
+// Usa operator "and" para exigir que todos os termos digitados estejam
+// presentes em um mesmo campo, evitando que conectivos (ex.: "de", "e")
+// ou termos isolados correspondam a documentos irrelevantes e inflem o total.
+func buildTextQuery(query string) map[string]interface{} {
+	return map[string]interface{}{
+		"multi_match": map[string]interface{}{
+			"query": query,
+			"fields": []string{
+				"curso.no_curso^3",
+				"curso.cine.no_cine_rotulo^2",
+			},
+			"type":      "best_fields",
+			"operator":  "and",
+			"fuzziness": "AUTO",
+		},
+	}
+}
+
+// buildExactNameQuery monta a cláusula de busca por nome exato do curso.
+// Usado quando o termo digitado corresponde ao nome de um curso existente,
+// para que nomes parecidos (ex.: "MEDICINA VETERINÁRIA") não apareçam juntos.
+// O campo "exato" usa um normalizer que ignora caixa e acentos.
+func buildExactNameQuery(name string) map[string]interface{} {
+	return map[string]interface{}{
+		"term": map[string]interface{}{
+			"curso.no_curso.exato": name,
+		},
+	}
+}
+
+// hasExactCourseName verifica se existe ao menos um documento cujo nome de
+// curso seja exatamente igual a name (ignorando caixa).
+func (r *ElasticsearchRepository) hasExactCourseName(ctx context.Context, name string) (bool, error) {
+	esQuery := map[string]interface{}{
+		"query": map[string]interface{}{
+			"bool": map[string]interface{}{
+				"filter": []map[string]interface{}{
+					{"term": map[string]interface{}{"curso.no_curso.exato": name}},
+				},
+			},
+		},
+		"size": 0,
+	}
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(esQuery); err != nil {
+		return false, fmt.Errorf("erro ao montar query de nome exato: %w", err)
+	}
+
+	res, err := r.client.Search(
+		r.client.Search.WithContext(ctx),
+		r.client.Search.WithIndex(r.index),
+		r.client.Search.WithBody(&buf),
+		r.client.Search.WithTrackTotalHits(true),
+	)
+	if err != nil {
+		return false, fmt.Errorf("erro ao executar busca de nome exato: %w", err)
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		var errResp map[string]interface{}
+		json.NewDecoder(res.Body).Decode(&errResp)
+		return false, fmt.Errorf("erro ES [%s]: %v", res.Status(), errResp)
+	}
+
+	var esResp struct {
+		Hits struct {
+			Total struct {
+				Value int `json:"value"`
+			} `json:"total"`
+		} `json:"hits"`
+	}
+	if err := json.NewDecoder(res.Body).Decode(&esResp); err != nil {
+		return false, fmt.Errorf("erro ao decodificar resposta: %w", err)
+	}
+
+	return esResp.Hits.Total.Value > 0, nil
+}
+
 // Search executa busca no Elasticsearch com filtros cumulativos, ordenação e agregações
 func (r *ElasticsearchRepository) Search(
 	ctx context.Context,
@@ -185,21 +266,23 @@ func (r *ElasticsearchRepository) Search(
 	}
 
 	// 3. Montar bool query
+	mustQuery := buildTextQuery(query)
+
+	if filters.Exact {
+		normalizedQuery := strings.ToUpper(strings.TrimSpace(query))
+
+		hasExactName, err := r.hasExactCourseName(ctx, normalizedQuery)
+		if err != nil {
+			return nil, err
+		}
+
+		if hasExactName {
+			mustQuery = buildExactNameQuery(normalizedQuery)
+		}
+	}
+
 	boolQuery := map[string]interface{}{
-		"must": map[string]interface{}{
-			"multi_match": map[string]interface{}{
-				"query": query,
-				"fields": []string{
-					"curso.no_curso^3",            // Peso maior no nome do curso
-					"curso.cine.no_cine_rotulo^2", // Peso no CINE
-					"localizacao.no_municipio",    // Município
-					"localizacao.sg_uf",           // UF
-					"localizacao.no_regiao",       // Região
-				},
-				"type":      "best_fields",
-				"fuzziness": "AUTO", // Tolera erros de digitação
-			},
-		},
+		"must": mustQuery,
 	}
 
 	if len(filterClauses) > 0 {

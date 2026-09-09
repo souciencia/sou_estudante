@@ -68,3 +68,49 @@ func TestHandlerExtraiFiltrosCumulativos(t *testing.T) {
 		t.Errorf("esperado Sort 'enade', recebido '%s'", mockService.CapturedFilters.Sort)
 	}
 }
+
+func TestParseExactParam(t *testing.T) {
+	cases := map[string]bool{
+		"":      true,
+		"true":  true,
+		"1":     true,
+		"false": false,
+		"0":     false,
+		"lixo":  true,
+	}
+	for raw, want := range cases {
+		if got := parseExactParam(raw); got != want {
+			t.Errorf("parseExactParam(%q) = %v, esperado %v", raw, got, want)
+		}
+	}
+}
+
+func TestHandlerExtraiExactComDefaultTrue(t *testing.T) {
+	mockService := &MockService{
+		ReturnResponse: &CursoListResponse{
+			Total:   0,
+			Page:    1,
+			Limit:   20,
+			Results: []Curso{},
+			Links:   PaginationLinks{Self: "/cursos?q=medicina"},
+		},
+	}
+
+	handler := &Handler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos?q=medicina", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if !mockService.CapturedFilters.Exact {
+		t.Errorf("esperado Exact=true por padrão, recebido false")
+	}
+
+	reqOff := httptest.NewRequest(http.MethodGet, "/cursos?q=medicina&exact=false", nil)
+	recOff := httptest.NewRecorder()
+	handler.ServeHTTP(recOff, reqOff)
+
+	if mockService.CapturedFilters.Exact {
+		t.Errorf("esperado Exact=false quando exact=false, recebido true")
+	}
+}
