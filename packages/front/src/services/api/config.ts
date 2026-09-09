@@ -14,6 +14,7 @@ export const API_CONFIG = {
   // Endpoints centralizados (facilita manutenção e descoberta)
   ENDPOINTS: {
     SEARCH_CURSOS: '/cursos',
+    SUGESTOES_CURSOS: '/cursos/sugestoes',
     // Futuros endpoints dos 5 módulos:
     // GET_CURSO: '/cursos/:id',
     // COMO_INGRESSAR: '/ingresso',
@@ -30,4 +31,7 @@ export const API_CONFIG = {
 
   // Validação de busca
   SEARCH_MIN_CHARS: 5,
+
+  // Mínimo de caracteres para disparar sugestões de nome de curso
+  SUGGEST_MIN_CHARS: 2,
 } as const

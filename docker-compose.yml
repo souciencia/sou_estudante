@@ -58,6 +58,7 @@ services:
       - ES_USERNAME=${ELASTICSEARCH_USERNAME}
       - ES_PASSWORD=${ELASTIC_PASSWORD}
       - ES_APIKEY=${ELASTICSEARCH_APIKEY}
+      - ES_DICT_INDEX_NAME=dicionario_cursos
     ports:
       - "8080:8080"
     volumes:

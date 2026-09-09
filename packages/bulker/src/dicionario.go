@@ -52,7 +52,8 @@ const DicionarioIndexMapping = `{
   "mappings": {
     "properties": {
       "no_curso": {
-        "type": "search_as_you_type"
+        "type": "search_as_you_type",
+        "analyzer": "brazilian_search"
       }
     }
   }

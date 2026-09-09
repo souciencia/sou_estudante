@@ -1,7 +1,7 @@
 // src/services/api/curso.service.ts
 import { apiClient } from './client'
 import { API_CONFIG } from './config'
-import type { CursoListResponse } from './types'
+import type { CursoListResponse, SugestoesCursosResponse } from './types'
 
 /**
  * Serviço de cursos - encapsula todas as operações relacionadas a cursos
@@ -60,5 +60,27 @@ export const cursoService = {
     )
 
     return result.success ? result.data : emptyResponse
+  },
+
+  /**
+   * Busca nomes de cursos para autocomplete (consulta o índice de dicionário na API)
+   * @param termo - Texto digitado pelo usuário (ex: "medic")
+   * @returns Lista de nomes de cursos sugeridos
+   */
+  async sugerirCursos(termo: string): Promise<string[]> {
+    const normalized = termo.trim()
+
+    if (normalized.length < API_CONFIG.SUGGEST_MIN_CHARS) {
+      return []
+    }
+
+    const params = new URLSearchParams()
+    params.set('q', normalized)
+
+    const result = await apiClient<SugestoesCursosResponse>(
+      `${API_CONFIG.ENDPOINTS.SUGESTOES_CURSOS}?${params.toString()}`,
+    )
+
+    return result.success ? result.data.results : []
   },
 }

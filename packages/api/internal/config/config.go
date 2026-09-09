@@ -3,8 +3,9 @@ package config
 import "os"
 
 type Config struct {
-	ESURL    string
-	ESAPIKey string
+	ESURL           string
+	ESAPIKey        string
+	ESDictIndexName string
 	// ESUsername string
 	// ESPassword string
 	Port string
@@ -12,8 +13,9 @@ type Config struct {
 
 func Load() *Config {
 	return &Config{
-		ESURL:    getEnv("ES_URL", "http://localhost:9200"),
-		ESAPIKey: os.Getenv("ES_APIKEY"),
+		ESURL:           getEnv("ES_URL", "http://localhost:9200"),
+		ESAPIKey:        os.Getenv("ES_APIKEY"),
+		ESDictIndexName: getEnv("ES_DICT_INDEX_NAME", "dicionario_cursos"),
 		// ESUsername: 	os.Getenv("ES_USERNAME"),
 		// ESPassword: 	os.Getenv("ES_PASSWORD"),
 		Port: getEnv("PORT", "8080"),
