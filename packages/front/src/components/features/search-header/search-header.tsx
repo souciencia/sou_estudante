@@ -1,7 +1,7 @@
 'use client'
 
-import { useId } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useId } from 'react'
 import { Switch } from '@/components/atoms/switch'
 import { Typo } from '@/components/atoms/typo'
 import { SearchAutocomplete } from '@/components/features/search-autocomplete/search-autocomplete'
