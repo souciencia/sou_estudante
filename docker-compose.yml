@@ -47,8 +47,6 @@ services:
       - ./.env:/app/.env:z
     networks:
       - data_net
-    profiles:
-      - bulker
 
   se_api:
     build:
