@@ -17,5 +17,5 @@
   - Aplicar as regras das skills `accessibility` e `accessibility-for-focus-navigation` (foco preso no modal, fechar com ESC).
 
 ## Outros
-- **Atualização/Criação de Stories no Storybook**
-- Script que pega a Api-Key e atualiza o `.env`
+- [] **Atualização/Criação de Stories no Storybook**
+- [] Script que pega a Api-Key e atualiza o `.env`

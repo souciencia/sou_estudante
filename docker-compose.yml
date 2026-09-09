@@ -31,13 +31,20 @@ services:
     build:
       context: ./packages/bulker
     container_name: se_bulker
+    stdin_open: true
+    tty: true
     environment:
       - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - ELASTICSEARCH_APIKEY=${ELASTICSEARCH_APIKEY}
       - ES_INDEX_NAME=cursos
+      - ES_DICT_INDEX_NAME=dicionario_cursos
       - JSON_FILE_PATH=/data/dados_curso_completo.json
+      - ENV_FILE_PATH=/app/.env
     volumes:
       - ./packages/bulker/data:/data:z
+      - ./.env:/app/.env:z
     networks:
       - data_net
     profiles:
