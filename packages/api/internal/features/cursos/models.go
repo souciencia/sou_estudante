@@ -9,6 +9,7 @@ type SearchFilterParams struct {
 	Modalidade []string `json:"modalidade,omitempty"`
 	Enade      []string `json:"enade,omitempty"`
 	Sort       string   `json:"sort,omitempty"`
+	Exact      bool     `json:"exact,omitempty"`
 }
 
 // AggregationBucket representa um item de contagem de uma agregação
