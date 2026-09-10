@@ -14,19 +14,19 @@ interface TypoProps extends HTMLAttributes<HTMLElement> {
 }
 
 const variantStyles: Record<TypographyVariant, string> = {
-  title: 'text-[var(--text-title)] font-bold',
-  normal: 'text-[var(--text-normal)]',
-  mute: 'text-[var(--text-mute)] cursor-not-allowed',
-  accent: 'text-[var(--text-accent)]',
+  title: 'font-title-protagonist font-bold',
+  normal: '',
+  mute: 'text-fg-muted cursor-not-allowed',
+  accent: 'text-accent-deep',
 }
 
 const sizeStyles: Record<TypographySize, string> = {
-  xs: 'text-xs',
-  sm: 'text-sm',
-  md: 'text-base',
-  lg: 'text-lg',
-  xl: 'text-xl',
-  '2xl': 'text-2xl',
+  xs: 'text-coadjuvant-sm',
+  sm: 'text-coadjuvant',
+  md: 'text-protagonist',
+  lg: 'text-coadjuvant-lg',
+  xl: 'text-protagonist-lg',
+  '2xl': 'text-protagonist-lg',
 }
 
 export const Typo = ({

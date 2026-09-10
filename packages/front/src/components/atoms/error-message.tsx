@@ -18,14 +18,14 @@ export function ErrorMessage({ message, className }: ErrorMessageProps) {
   return (
     <div
       className={cn(
-        'flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800',
+        'flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-4 font-protagonist text-red-800',
         className,
       )}
       role="alert"
       aria-live="polite"
     >
       <AlertCircle className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-      <p className="text-sm">{message}</p>
+      <p className="text-protagonist-sm">{message}</p>
     </div>
   )
 }

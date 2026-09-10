@@ -8,7 +8,7 @@
 
 export default function MarLegenda() {
   return (
-    <div className="mt-2 flex flex-col gap-1 text-[9.5px] text-text-muted">
+    <div className="mt-2 flex flex-col gap-1 font-coadjuvant text-coadjuvant-xs text-fg-muted">
       {/* Verbatim v21 */}
       <div className="flex items-center gap-[6px]">
         <svg
@@ -19,14 +19,14 @@ export default function MarLegenda() {
         >
           <path
             d="M2 14 Q6 12.5 10 14 T18 14 T26 14"
-            stroke="#1B8A5A"
+            className="stroke-enade-ok"
             strokeWidth="1.6"
             fill="none"
             strokeLinecap="round"
           />
           <path
             d="M40 14 Q43 8 46 14 T52 14 T58 14 T64 14"
-            stroke="#C0392B"
+            className="stroke-enade-low"
             strokeWidth="1.6"
             fill="none"
             strokeLinecap="round"
