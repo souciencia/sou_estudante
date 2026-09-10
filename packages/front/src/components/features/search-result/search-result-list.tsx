@@ -1,6 +1,7 @@
 import { ErrorMessage } from '@/components/atoms/error-message'
 import { Typo } from '@/components/atoms/typo'
 import { SkeletonCard } from '@/components/features/card/skeleton-card'
+import type { Module } from '@/lib/module'
 import type { Curso, PaginationLinks } from '@/services/api/types'
 import { Pagination } from '../search-pagination/search-pagination'
 import SearchResultItem from './search-result-item'
@@ -14,6 +15,7 @@ interface SearchResultListProps {
   limit?: number
   links?: PaginationLinks | null
   onNavigate?: (url: string) => void
+  module?: Module
 }
 
 export default function SearchResultList({
@@ -25,6 +27,7 @@ export default function SearchResultList({
   limit = 20,
   links,
   onNavigate,
+  module,
 }: SearchResultListProps) {
   // Loading
   if (isLoading) {
@@ -68,7 +71,7 @@ export default function SearchResultList({
             ? `seq-${curso.sequencial}`
             : `${curso.instituicao?.co_ies}-${curso.curso?.co_curso}-${index}`
 
-          return <SearchResultItem key={key} curso={curso} />
+          return <SearchResultItem key={key} curso={curso} module={module} />
         })}
       </div>
 
@@ -79,6 +82,7 @@ export default function SearchResultList({
           total={total}
           limit={limit}
           onNavigate={onNavigate}
+          module={module}
         />
       )}
     </div>

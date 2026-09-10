@@ -6,6 +6,7 @@ import { Switch } from '@/components/atoms/switch'
 import { Typo } from '@/components/atoms/typo'
 import { SearchAutocomplete } from '@/components/features/search-autocomplete/search-autocomplete'
 import { SearchSortignOptions } from '@/components/features/search-sorting-options/search-sorting-options'
+import type { Module } from '@/lib/module'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 
 function isExactEnabled(searchParams: URLSearchParams | null): boolean {
@@ -13,7 +14,11 @@ function isExactEnabled(searchParams: URLSearchParams | null): boolean {
   return raw === null || raw === '' || raw !== 'false'
 }
 
-export function SearchHeaderBlock() {
+interface SearchHeaderBlockProps {
+  module?: Module
+}
+
+export function SearchHeaderBlock({ module }: SearchHeaderBlockProps) {
   const { query, setQuery, updateParams } = useSearchCursos()
   const searchParams = useSearchParams()
   const exact = isExactEnabled(searchParams)
@@ -25,8 +30,15 @@ export function SearchHeaderBlock() {
   }
 
   return (
-    <div className="rounded-md border p-2">
-      <SearchAutocomplete defaultValue={query} onSearchSubmit={setQuery} />
+    <div
+      data-module={module}
+      className="rounded-md border p-2 font-coadjuvant text-fg-coadjuvant"
+    >
+      <SearchAutocomplete
+        defaultValue={query}
+        onSearchSubmit={setQuery}
+        module={module}
+      />
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 px-1">
         <div className="flex items-center gap-2">
@@ -34,12 +46,13 @@ export function SearchHeaderBlock() {
             s="sm"
             t="span"
             id={exactLabelId}
-            className="cursor-auto text-gray-700"
+            className="cursor-auto text-fg-coadjuvant"
           >
             Busca exata
           </Typo>
           <Switch
             size="sm"
+            module={module}
             checked={exact}
             aria-labelledby={exactLabelId}
             aria-describedby={exactHintId}
@@ -54,7 +67,7 @@ export function SearchHeaderBlock() {
       </div>
 
       <div className="my-4 border-t border-gray-200 pt-4">
-        <SearchSortignOptions />
+        <SearchSortignOptions module={module} />
       </div>
     </div>
   )

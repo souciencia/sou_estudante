@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { Typo } from '@/components/atoms/typo'
 import { FilterGroup } from '@/components/features/filter-group'
+import type { Module } from '@/lib/module'
 import type { SearchAggregations } from '@/services/api/types'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 import { cn } from '@/utils/cn'
@@ -59,10 +60,11 @@ const CONCEITOS_ENADE = [
 ]
 
 interface CourseFiltersProps {
+  module?: Module
   className?: string
 }
 
-export function CourseFilters({ className }: CourseFiltersProps) {
+export function CourseFilters({ module, className }: CourseFiltersProps) {
   const searchParams = useSearchParams()
   const { updateParams, aggregations } = useSearchCursos()
   const [showAllEstados, setShowAllEstados] = useState(false)
@@ -122,7 +124,13 @@ export function CourseFilters({ className }: CourseFiltersProps) {
     : ESTADOS_PRINCIPAIS
 
   return (
-    <div className={cn('flex flex-col gap-6', className)}>
+    <div
+      data-module={module}
+      className={cn(
+        'flex flex-col gap-6 font-coadjuvant text-fg-coadjuvant',
+        className,
+      )}
+    >
       <FilterGroup>
         <FilterGroup.Title>Estado</FilterGroup.Title>
         <FilterGroup.List>
@@ -141,10 +149,10 @@ export function CourseFilters({ className }: CourseFiltersProps) {
           type="button"
           onClick={() => setShowAllEstados(!showAllEstados)}
           className={cn(
-            'mt-2 text-left text-sm text-blue-600 hover:underline cursor-pointer',
+            'mt-2 text-left text-coadjuvant text-accent-deep hover:underline cursor-pointer',
           )}
         >
-          <Typo s="sm" className={cn('text-blue-600')}>
+          <Typo s="sm" className={cn('text-accent-deep')}>
             {showAllEstados
               ? 'Ver menos estados'
               : `+ ${OUTROS_ESTADOS.length} estados`}

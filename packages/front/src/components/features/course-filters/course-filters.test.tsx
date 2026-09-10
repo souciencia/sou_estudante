@@ -111,6 +111,17 @@ describe('CourseFilters', () => {
     })
   })
 
+  it('exposes the module theme through data-module', () => {
+    const params = new URLSearchParams()
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    const { container } = render(<CourseFilters module="5" />)
+
+    expect(container.firstChild).toHaveAttribute('data-module', '5')
+  })
+
   it('exibe as contagens dinâmicas resultCount nas opções a partir de aggregations', () => {
     const params = new URLSearchParams()
     vi.mocked(useSearchParams).mockReturnValue(

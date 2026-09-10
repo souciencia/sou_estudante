@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { SearchSortignOptions } from '../search-sorting-options'
+import { SearchSortignOptions } from './search-sorting-options'
 
 const meta = {
   component: SearchSortignOptions,

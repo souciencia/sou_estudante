@@ -47,4 +47,12 @@ describe('HomeSearch', () => {
 
     expect(mockPush).toHaveBeenCalledWith('/cursos?q=medicina')
   })
+
+  it('propaga o módulo para o autocomplete', () => {
+    render(<HomeSearch module="2" />)
+
+    expect(
+      screen.getByRole('combobox').closest('[data-module]'),
+    ).toHaveAttribute('data-module', '2')
+  })
 })

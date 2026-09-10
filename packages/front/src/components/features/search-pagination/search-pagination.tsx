@@ -1,4 +1,5 @@
 import { Typo } from '@/components/atoms/typo'
+import type { Module } from '@/lib/module'
 import type { PaginationLinks } from '@/services/api/types'
 import { cn } from '@/utils/cn'
 
@@ -8,6 +9,7 @@ interface PaginationProps {
   total: number
   limit: number
   onNavigate: (url: string) => void
+  module?: Module
   className?: string
 }
 
@@ -17,6 +19,7 @@ export function Pagination({
   total,
   limit,
   onNavigate,
+  module,
   className,
 }: PaginationProps) {
   if (total === 0) return null
@@ -26,7 +29,11 @@ export function Pagination({
 
   return (
     <nav
-      className={cn('flex items-center justify-between gap-4 py-4', className)}
+      data-module={module}
+      className={cn(
+        'flex items-center justify-between gap-4 py-4 font-coadjuvant text-fg-coadjuvant',
+        className,
+      )}
       aria-label="Navegação de páginas"
     >
       <div className="flex gap-2">
@@ -86,11 +93,11 @@ function PaginationButton({
       disabled={disabled}
       aria-label={ariaLabel}
       className={cn(
-        'rounded-md px-4 py-2 text-sm font-medium transition-colors',
+        'rounded-md px-4 py-2 text-coadjuvant font-medium transition-colors',
         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
         disabled
-          ? 'cursor-not-allowed bg-gray-100 text-gray-400'
-          : 'bg-blue-600 text-white hover:bg-blue-700 focus-visible:outline-blue-600',
+          ? 'cursor-not-allowed bg-gray-100 text-fg-muted'
+          : 'bg-accent text-accent-deep hover:bg-accent/90 focus-visible:outline-accent',
       )}
     >
       <Typo v={disabled ? 'mute' : 'normal'} s="sm" t="span">

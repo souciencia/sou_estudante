@@ -2,13 +2,18 @@
 
 import { useRouter } from 'next/navigation'
 import { SearchAutocomplete } from '@/components/features/search-autocomplete/search-autocomplete'
+import type { Module } from '@/lib/module'
 
 export function buildCursosSearchHref(termo: string): string {
   const params = new URLSearchParams({ q: termo.trim() })
   return `/cursos?${params.toString()}`
 }
 
-export function HomeSearch() {
+interface HomeSearchProps {
+  module?: Module
+}
+
+export function HomeSearch({ module }: HomeSearchProps) {
   const router = useRouter()
 
   const handleSearchSubmit = (termo: string) => {
@@ -17,7 +22,7 @@ export function HomeSearch() {
 
   return (
     <search>
-      <SearchAutocomplete onSearchSubmit={handleSearchSubmit} />
+      <SearchAutocomplete module={module} onSearchSubmit={handleSearchSubmit} />
     </search>
   )
 }
