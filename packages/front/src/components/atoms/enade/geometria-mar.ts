@@ -24,12 +24,21 @@ export const NEBLINA_P: ParamsMar = { a: 2, wl: 30, yb: 55, yf: 63 }
 export type PaletaMar = { cor: string; fundo: string }
 
 export const CORES_MAR: Record<string, PaletaMar> = {
-  ok: { cor: '#1B8A5A', fundo: '#E8F7F0' }, // faixas 5 e 4
-  md: { cor: '#B06000', fundo: '#FFF3E0' }, // faixa 3
-  bad: { cor: '#C0392B', fundo: '#FDECEA' }, // faixas 2 e 1
+  ok: {
+    cor: 'var(--color-enade-ok)',
+    fundo: 'var(--color-enade-ok-surface)',
+  }, // faixas 5 e 4
+  md: {
+    cor: 'var(--color-enade-warn)',
+    fundo: 'var(--color-enade-warn-surface)',
+  }, // faixa 3
+  bad: {
+    cor: 'var(--color-enade-low)',
+    fundo: 'var(--color-enade-low-surface)',
+  }, // faixas 2 e 1
   neblina: {
-    cor: 'var(--color-text-muted)',
-    fundo: 'var(--color-surface-alt)',
+    cor: 'var(--color-fg-muted)',
+    fundo: 'var(--color-muted)',
   },
 }
 

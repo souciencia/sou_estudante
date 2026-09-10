@@ -1,9 +1,16 @@
 'use client'
 
 import SearchResultList from '@/components/features/search-result/search-result-list'
+import type { Module } from '@/lib/module'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 
-export default function SearchResultSection() {
+interface SearchResultSectionProps {
+  module?: Module
+}
+
+export default function SearchResultSection({
+  module,
+}: SearchResultSectionProps) {
   const {
     results,
     isLoading,
@@ -25,6 +32,7 @@ export default function SearchResultSection() {
       limit={limit}
       links={links}
       onNavigate={navigateToPage}
+      module={module}
     />
   )
 }

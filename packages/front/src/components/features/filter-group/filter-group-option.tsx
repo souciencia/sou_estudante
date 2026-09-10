@@ -1,4 +1,5 @@
 import type { ChangeEvent } from 'react'
+import { Checkbox } from '@/components/atoms/checkbox'
 import { Typo } from '@/components/atoms/typo'
 import { cn } from '@/utils/cn'
 import { useFilterGroupContext } from './filter-group-context'
@@ -32,28 +33,22 @@ export function FilterGroupOption({
     <li className={cn('flex items-center justify-between', className)}>
       <label
         htmlFor={optionInputId}
-        className="filter-group__option-control flex cursor-pointer items-center gap-[var(--filter-group-control-gap)]"
+        className="group flex cursor-pointer items-center gap-4"
       >
-        <input
+        <Checkbox
           id={optionInputId}
-          type="checkbox"
           value={value ?? label}
-          className="filter-group__checkbox"
           checked={checked}
           defaultChecked={checked !== undefined ? undefined : defaultChecked}
           disabled={disabled}
           readOnly={!onChange && checked !== undefined}
           onChange={onChange}
+          className="group-hover:border-fg-muted"
         />
-        <Typo s="md" className="text-[var(--filter-group-label-color)]">
-          {label}
-        </Typo>
+        <Typo s="sm">{label}</Typo>
       </label>
       {hasResultCount && (
-        <Typo
-          s="sm"
-          className="text-[var(--filter-group-count-color)] tabular-nums"
-        >
+        <Typo s="xs" className="tabular-nums text-fg-muted">
           {resultCount}
         </Typo>
       )}

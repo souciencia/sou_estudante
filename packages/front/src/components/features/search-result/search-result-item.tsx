@@ -1,11 +1,17 @@
 import { Card } from '@/components/features/card'
+import { ENADE_FAIXAS, type EnadeFaixa } from '@/lib/enade'
+import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
 
 interface SearchResultItemProps {
   curso: Curso
+  module?: Module
 }
 
-export default function SearchResultItem({ curso }: SearchResultItemProps) {
+export default function SearchResultItem({
+  curso,
+  module,
+}: SearchResultItemProps) {
   // Extrair dados da estrutura completa
   const nomeCurso = curso.curso?.no_curso || 'Curso não especificado'
   const grauAcademico = curso.curso?.no_grau_academico || ''
@@ -33,14 +39,14 @@ export default function SearchResultItem({ curso }: SearchResultItemProps) {
   const localizacaoCompleta = [municipio, uf].filter(Boolean).join(' - ')
 
   // Converter conceito ENADE para tipo aceito pelo componente
-  const conceitoEnadeFormatado =
+  const conceitoEnadeFormatado: EnadeFaixa | undefined =
     conceitoEnade &&
-    ['1', '2', '3', '4', '5'].includes(conceitoEnade.toString())
-      ? (conceitoEnade.toString() as '1' | '2' | '3' | '4' | '5')
+    ENADE_FAIXAS.includes(conceitoEnade.toString() as EnadeFaixa)
+      ? (conceitoEnade.toString() as EnadeFaixa)
       : undefined
 
   return (
-    <Card>
+    <Card module={module}>
       <Card.Header
         title={nomeCurso}
         subtitle={localizacaoCompleta ? `• ${localizacaoCompleta}` : ''}

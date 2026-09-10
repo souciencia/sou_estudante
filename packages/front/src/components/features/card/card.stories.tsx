@@ -14,11 +14,29 @@ export const Default: Story = {
   args: {
     children: '',
     v: 'prev',
+    module: '1',
   },
   render: (args) => (
     <Card {...args}>
       <Card.Header title="Algum título" subtitle="algum subtítulo">
         <SeloEnade faixa={4} />
+      </Card.Header>
+      <Card.Tags source={['Gratuito', 'FUVEST']} className="ml-11" />
+      <Card.ProgressBar title="Teste" percentage={'50%'} />
+    </Card>
+  ),
+}
+
+export const Module3: Story = {
+  args: {
+    children: '',
+    v: 'full',
+    module: '3',
+  },
+  render: (args) => (
+    <Card {...args}>
+      <Card.Header title="Algum título" subtitle="algum subtítulo">
+        <SeloEnade faixa={3} />
       </Card.Header>
       <Card.Tags source={['Gratuito', 'FUVEST']} className="ml-11" />
       <Card.ProgressBar title="Teste" percentage={'50%'} />

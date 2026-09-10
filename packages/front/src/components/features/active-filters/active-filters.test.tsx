@@ -96,4 +96,17 @@ describe('ActiveFilters', () => {
 
     expect(mockResetFilters).toHaveBeenCalledTimes(1)
   })
+
+  it('exposes the module theme through data-module', () => {
+    const params = new URLSearchParams('q=direito&uf=SP')
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<ActiveFilters module="3" />)
+
+    expect(
+      screen.getByRole('region', { name: 'Filtros ativos' }),
+    ).toHaveAttribute('data-module', '3')
+  })
 })

@@ -18,6 +18,14 @@ export const Primary: Story = {
   },
 }
 
+export const Active: Story = {
+  args: {
+    children: 'Botão teste',
+    module: '1',
+    active: true,
+  },
+}
+
 export const Module2: Story = {
   args: {
     children: 'Botão teste',
@@ -33,6 +41,20 @@ export const Module3: Story = {
         como interpretar
       </>
     ),
-    module: '2',
+    module: '3',
+  },
+}
+
+export const Module4: Story = {
+  args: {
+    children: 'Botão teste',
+    module: '4',
+  },
+}
+
+export const Module5: Story = {
+  args: {
+    children: 'Botão teste',
+    module: '5',
   },
 }

@@ -76,6 +76,22 @@ describe('FilterGroup', () => {
     expect(handleChange).toHaveBeenCalled()
   })
 
+  it('expõe o tema do módulo via data-module', () => {
+    render(
+      <FilterGroup module="2">
+        <FilterGroup.Title>Categoria</FilterGroup.Title>
+        <FilterGroup.List>
+          <FilterGroup.Option label="Federal" />
+        </FilterGroup.List>
+      </FilterGroup>,
+    )
+
+    expect(screen.getByRole('region', { name: 'Categoria' })).toHaveAttribute(
+      'data-module',
+      '2',
+    )
+  })
+
   it('lança erro quando um sub-componente é usado fora de Root', () => {
     render(
       <ErrorBoundary>

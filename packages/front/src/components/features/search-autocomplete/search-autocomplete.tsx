@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import type { Module } from '@/lib/module'
 import { API_CONFIG } from '@/services/api'
 import { useSugestoesCursos } from '@/services/api/use-sugestoes-cursos'
 import { cn } from '@/utils/cn'
@@ -17,6 +18,7 @@ export interface SearchAutocompleteProps {
   defaultValue?: string
   onSearchSubmit: (value: string) => void
   debounceMs?: number
+  module?: Module
   className?: string
 }
 
@@ -26,6 +28,7 @@ export function SearchAutocomplete({
   defaultValue = '',
   onSearchSubmit,
   debounceMs = API_CONFIG.SEARCH_DEBOUNCE_MS,
+  module,
   className,
 }: SearchAutocompleteProps) {
   const inputId = useId()
@@ -154,13 +157,13 @@ export function SearchAutocomplete({
   }
 
   return (
-    <div className={cn('relative', className)}>
+    <div data-module={module} className={cn('relative', className)}>
       <label htmlFor={inputId} className="sr-only">
         Buscar curso pelo nome
       </label>
 
       <Search
-        className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+        className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-fg-muted"
         aria-hidden="true"
       />
 
@@ -185,8 +188,8 @@ export function SearchAutocomplete({
         placeholder="Busque pelo nome do curso"
         className={cn(
           'w-full rounded-full border border-gray-300 bg-white py-3 pl-11 pr-4',
-          'text-base text-gray-900 placeholder:text-gray-500',
-          'focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20',
+          'font-protagonist text-protagonist text-fg-protagonist placeholder:text-fg-muted',
+          'focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20',
           'transition-colors duration-200',
         )}
       />
@@ -207,9 +210,9 @@ export function SearchAutocomplete({
               tabIndex={-1}
               onMouseDown={(e) => handleOptionMouseDown(e, sugestao)}
               className={cn(
-                'cursor-pointer px-4 py-2 text-sm text-gray-800',
-                'hover:bg-plum-100',
-                activeIndex === index && 'bg-plum-100 text-plum-800',
+                'cursor-pointer px-4 py-2 font-coadjuvant text-coadjuvant text-fg-coadjuvant',
+                'hover:bg-accent/10',
+                activeIndex === index && 'bg-accent/10 text-accent-deep',
               )}
             >
               {sugestao}

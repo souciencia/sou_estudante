@@ -96,4 +96,17 @@ describe('SearchAutocomplete', () => {
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
   })
+
+  it('exposes the module theme through data-module', () => {
+    render(
+      <SearchAutocomplete
+        debounceMs={0}
+        onSearchSubmit={mockSubmit}
+        module="2"
+      />,
+    )
+    expect(
+      screen.getByRole('combobox').closest('[data-module]'),
+    ).toHaveAttribute('data-module', '2')
+  })
 })

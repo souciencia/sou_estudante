@@ -6,24 +6,26 @@ interface Props {
   percentage: string
 }
 
-export const CardProgressBar = ({
-  title,
-  className = '',
-  percentage,
-}: Props) => {
-  const format = `h-1.5 rounded-sm`
+export const CardProgressBar = ({ title, className, percentage }: Props) => {
+  const format = 'h-1.5 rounded-sm'
 
   return (
     <div className="m-1">
-      <div className="flex justify-between text-xs font-bold uppercase text-zinc-500">
+      <div className="flex justify-between font-coadjuvant text-coadjuvant-sm font-bold uppercase text-fg-muted">
         <p>{title}</p>
         <p>{percentage}</p>
       </div>
-      <div className={cn(`w-full bg-zinc-200  my-1`, `${format} ${className}`)}>
+      <div
+        className={cn(
+          'my-1 w-full bg-progress-bar-background',
+          format,
+          className,
+        )}
+      >
         <div
-          className={cn(`bg-zinc-400 ${format}`)}
+          className={cn('bg-progress-bar-foreground', format)}
           style={{ width: percentage }}
-        ></div>
+        />
       </div>
     </div>
   )

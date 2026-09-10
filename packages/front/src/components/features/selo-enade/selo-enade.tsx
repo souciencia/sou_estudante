@@ -58,18 +58,20 @@ export default function SeloEnade({
         className={`relative z-[1] font-mono font-bold leading-none ${
           detalhe
             ? numerica !== null
-              ? 'text-[2.25rem]'
-              : 'text-[1.4rem]'
+              ? 'text-protagonist-xl'
+              : 'text-protagonist-lg'
             : numerica !== null
-              ? 'text-xl'
-              : 'text-sm'
+              ? 'text-protagonist-lg'
+              : 'text-coadjuvant'
         }`}
       >
         {texto}
       </div>
       <div
         className={`relative z-[1] font-semibold ${
-          detalhe ? 'mt-[2px] text-[10px]' : 'mt-px text-[8px] tracking-[0.3px]'
+          detalhe
+            ? 'mt-[2px] text-coadjuvant-xs'
+            : 'mt-px text-coadjuvant-xs tracking-[0.3px]'
         }`}
       >
         {detalhe && numerica !== null ? 'de 5' : 'Enade'}
