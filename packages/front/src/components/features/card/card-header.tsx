@@ -14,21 +14,21 @@ export const CardHeader = ({
   title,
   subtitle,
   children,
-  className = '',
+  className,
 }: Props) => {
   const variants = {
     prev: '',
-    full: 'bg-gradient-to-r from-green-400 to-green-100',
+    full: 'bg-gradient-to-r from-accent/40 to-accent/10',
   }
 
   return (
-    <div className={`flex w-full ${variants[v]} ${className}`}>
+    <div className={cn('flex w-full', variants[v], className)}>
       {children}
       <div>
-        <h4 className="font-sans font-bold inline-block px-2 text-card-title">
+        <h4 className="inline-block px-2 font-title-protagonist font-bold text-protagonist-lg">
           {title}
         </h4>
-        <h5 className={cn(`font-sans font-bold text-fg-muted px-2`)}>
+        <h5 className="px-2 font-protagonist font-bold text-fg-muted">
           {subtitle}
         </h5>
       </div>
