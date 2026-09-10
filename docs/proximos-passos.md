@@ -24,4 +24,19 @@
 
 ---
 
-anotaçes
+## anotações
+
+coisas do callout (compoud component)
+- LeftAccent
+- Icon
+- Footer
+
+
+variante do botão
+variantes de formato
+- arredondado
+- cantos suavizados
+variantes de tamanho
+- sm
+- md
+- lg
