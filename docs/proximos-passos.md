@@ -19,3 +19,9 @@
 ## Outros
 - [] **Atualização/Criação de Stories no Storybook**
 - [] Script que pega a Api-Key e atualiza o `.env`
+
+
+
+---
+
+anotaçes
