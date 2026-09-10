@@ -1,7 +1,6 @@
 // app/page.tsx
 
-import { Suspense } from 'react'
-import { Typo } from '@/components/atoms/typo'
+import { HomeSearch } from '@/components/features/home-search/home-search'
 import { Hero } from '@/components/site-blocks/hero'
 
 export default function Home() {
@@ -9,16 +8,9 @@ export default function Home() {
     <div className="flex justify-center min-h-screen w-full bg-site-background">
       <main className="max-w-5xl flex-col py-20 px-6 sm:px-16">
         <Hero />
-        <Typo v="title" s="xl" t="h1">
-          Teste 08.11
-        </Typo>
-        <Suspense
-          fallback={
-            <Typo v="mute" s="sm">
-              Carregando busca...
-            </Typo>
-          }
-        ></Suspense>
+        <div className="mt-10">
+          <HomeSearch />
+        </div>
       </main>
     </div>
   )
