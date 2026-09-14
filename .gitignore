@@ -6,9 +6,7 @@ queries/
 session.json
 
 .env
-.opencode/bin/
-.opencode/node_modules/
-.opencode/package*.json
+.opencode/
 
 # dependencies
 node_modules/
