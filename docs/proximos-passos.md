@@ -40,3 +40,20 @@ variantes de tamanho
 - sm
 - md
 - lg
+
+
+## Template de tarefa
+
+```md
+# Tarefa 
+
+## Situação
+
+## Objetivo
+
+## Instruções
+
+- `/packages/front/src/components/...`
+- `/packages/api/internal/features/...`
+
+```

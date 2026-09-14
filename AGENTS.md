@@ -2,13 +2,13 @@
 
 ## Project's topology
 
-| folder            | container   | port | tech          |                 |
-| ----------------- | ----------- | ---- | ------------- | --------------- |
-| .                 | `dev`       |      |               | you are here!   |
-| `packages/api`    | `se_api`    | 8080 | `Go`          |                 |
-| `packages/bulker` | `se_bulker` |      |               | using `--profiles` flag in compose    |
-| `packages/front/` | `se_front`  | 3000 | Next.js       |                 |
-|                   | `se_es01`   | 9200 | Elasticsearch | Configured in `docker-compose.yml`    |
+| folder            | container   | port | tech          |                   |
+| ----------------- | ----------- | ---- | ------------- | ----------------- |
+| .                 | `dev`       |      |               | You are here!     |
+| `packages/api`    | `se_api`    | 8080 | `Go`          |                   |
+| `packages/bulker` | `se_bulker` |      |               |                   |
+| `packages/front/` | `se_front`  | 3000 | Next.js       |                   |
+|                   | `se_es01`   | 9200 | Elasticsearch | In docker-compose |
 
 Network: `data_net`.
 
@@ -24,4 +24,3 @@ Network: `data_net`.
 ## You have
 - podman
 - podman-remote
-- git-delta
