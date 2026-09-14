@@ -10,7 +10,10 @@ require (
 	github.com/charmbracelet/lipgloss v0.10.0
 	github.com/elastic/go-elasticsearch/v8 v8.17.0
 	github.com/mattn/go-isatty v0.0.18
+	shared v0.0.0
 )
+
+replace shared => ../shared
 
 require (
 	github.com/atotto/clipboard v0.1.4 // indirect

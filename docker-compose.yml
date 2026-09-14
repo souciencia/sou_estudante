@@ -29,7 +29,8 @@ services:
 
   se_bulker:
     build:
-      context: ./packages/bulker
+      context: ./packages
+      dockerfile: bulker/Dockerfile
     container_name: se_bulker
     stdin_open: true
     tty: true
@@ -50,8 +51,8 @@ services:
 
   se_api:
     build:
-      context: ./packages/api
-      dockerfile: Dockerfile.dev
+      context: ./packages
+      dockerfile: api/Dockerfile.dev
     container_name: se_api
     environment:
       - ES_URL=${ELASTICSEARCH_URL}
@@ -63,6 +64,7 @@ services:
       - "8080:8080"
     volumes:
       - ./packages/api:/app:z
+      - ./packages/shared:/shared:z
       - go-mod-cache:/root/go/pkg/mod
     networks:
       - data_net
