@@ -1,7 +1,10 @@
 'use client'
 
 import SearchResultList from '@/components/features/search-result/search-result-list'
+<<<<<<< HEAD
 import type { Module } from '@/lib/module'
+=======
+>>>>>>> b14e213 (Dropa a organização em design atômico para os componentes)
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 
 interface SearchResultSectionProps {

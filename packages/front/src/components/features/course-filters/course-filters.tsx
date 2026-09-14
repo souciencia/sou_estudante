@@ -4,7 +4,10 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { Typo } from '@/components/atoms/typo'
 import { FilterGroup } from '@/components/features/filter-group'
+<<<<<<< HEAD
 import type { Module } from '@/lib/module'
+=======
+>>>>>>> b14e213 (Dropa a organização em design atômico para os componentes)
 import type { SearchAggregations } from '@/services/api/types'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 import { cn } from '@/utils/cn'

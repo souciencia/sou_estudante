@@ -1,7 +1,10 @@
 import { ErrorMessage } from '@/components/atoms/error-message'
 import { Typo } from '@/components/atoms/typo'
 import { SkeletonCard } from '@/components/features/card/skeleton-card'
+<<<<<<< HEAD
 import type { Module } from '@/lib/module'
+=======
+>>>>>>> b14e213 (Dropa a organização em design atômico para os componentes)
 import type { Curso, PaginationLinks } from '@/services/api/types'
 import { Pagination } from '../search-pagination/search-pagination'
 import SearchResultItem from './search-result-item'

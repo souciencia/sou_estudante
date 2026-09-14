@@ -2,7 +2,11 @@
 import { Suspense } from 'react'
 import { Typo } from '@/components/atoms/typo'
 import { ActiveFilters } from '@/components/features/active-filters/active-filters'
+<<<<<<< HEAD
 import { CourseFilters } from '@/components/features/course-filters/course-filters'
+=======
+import { CourseFilters } from '@/components/organisms/course-filters'
+>>>>>>> b14e213 (Dropa a organização em design atômico para os componentes)
 import { SearchHeaderBlock } from '@/components/features/search-header/search-header'
 import SearchResultSection from '@/components/features/search-result/search-result-section'
 

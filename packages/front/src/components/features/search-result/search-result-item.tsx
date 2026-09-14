@@ -1,6 +1,9 @@
 import { Card } from '@/components/features/card'
+<<<<<<< HEAD
 import { ENADE_FAIXAS, type EnadeFaixa } from '@/lib/enade'
 import type { Module } from '@/lib/module'
+=======
+>>>>>>> b14e213 (Dropa a organização em design atômico para os componentes)
 import type { Curso } from '@/services/api/types'
 
 interface SearchResultItemProps {
