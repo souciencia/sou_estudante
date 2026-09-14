@@ -9,6 +9,21 @@
     - Taxas de Desistência e Conclusão (TDA).
     - Ofertas e notas de corte do SISU.
 
+### callout (compoud)
+coisas do callout
+- LeftAccent
+- Icon
+- Footer
+
+### variantes do button
+- variantes de formato
+  - arredondado
+  - cantos suavizados
+- variantes de tamanho
+  - sm
+  - md
+  - lg
+
 ### Drawer / Modal de Filtros para Mobile (UX & Responsividade)
 - **Contexto**: Em telas grandes (`md+`), os filtros ocupam 1 coluna lateral. Em telas mobile (`< 768px`), eles ficam empilhados antes dos resultados, empurrando a lista de cursos para baixo.
 - **Escopo**:
@@ -23,24 +38,6 @@
 
 
 ---
-
-## anotações
-
-coisas do callout (compoud component)
-- LeftAccent
-- Icon
-- Footer
-
-
-variante do botão
-variantes de formato
-- arredondado
-- cantos suavizados
-variantes de tamanho
-- sm
-- md
-- lg
-
 
 ## Template de tarefa
 

@@ -42,4 +42,3 @@
 3. **Green Step:** (The component is ready and passing the test)
   - Commit your changes with a one-line message
 
-
