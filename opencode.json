@@ -7,7 +7,7 @@
     }
   },
   "instructions": [
-    "packages/*/AGENTS.md"
+    "packages/*/AGENTS.md", "docs/00.guidelines.md"
   ],
   "watcher": {
     "ignore": ["node_modules/**", "dist/**", ".git/**"]
