@@ -1,6 +1,5 @@
 'use client'
 
-<<<<<<< HEAD
 import { useSearchParams } from 'next/navigation'
 import { useId } from 'react'
 import { Switch } from '@/components/atoms/switch'
@@ -73,22 +72,3 @@ export function SearchHeaderBlock({ module }: SearchHeaderBlockProps) {
     </div>
   )
 }
-=======
-import { SearchInput } from '@/components/atoms/search-input'
-import { SearchOptions } from '@/components/features/search-sorting-options/search-sorting-options'
-import { useSearchCursos } from '@/services/api/use-search-cursos'
-
-export function SearchHeaderBlock() {
-  const { query, setQuery } = useSearchCursos()
-
-  return (
-    <div className="p-2 border rounded-md">
-      <SearchInput defaultValue={query} onSearchChange={setQuery} />
-
-      <div className="my-4 pt-4 border-t border-gray-200">
-        <SearchOptions />
-      </div>
-    </div>
-  )
-}
->>>>>>> b14e213 (Dropa a organização em design atômico para os componentes)
