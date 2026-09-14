@@ -4,7 +4,8 @@ WORKDIR /app
 
 RUN go install github.com/air-verse/air@v1.52.3
 
-COPY . .
+COPY shared /shared
+COPY api /app
 
 RUN go mod tidy
 

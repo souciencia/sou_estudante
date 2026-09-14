@@ -1,11 +1,13 @@
 # Estágio 1: Build
 FROM golang:1.22-alpine AS builder
 WORKDIR /app
-COPY go.mod ./
-RUN go mod download
-COPY . .
-RUN go mod tidy
-RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/api
+COPY api/go.mod api/go.sum ./api/
+COPY shared/go.mod ./shared/
+RUN cd api && go mod download
+COPY shared ./shared
+COPY api ./api
+RUN cd api && go mod tidy
+RUN cd api && CGO_ENABLED=0 GOOS=linux go build -o /app/main ./cmd/api
 
 
 # Estágio 2: Runtime (Final)

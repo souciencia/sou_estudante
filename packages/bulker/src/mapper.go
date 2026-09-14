@@ -1,6 +1,10 @@
 package main
 
-import "strconv"
+import (
+	"strconv"
+
+	"shared/cursos"
+)
 
 func intToStr(v *int) string {
 	if v == nil {
@@ -13,16 +17,16 @@ func intToBool(v *int) bool {
 	return v != nil && *v == 1
 }
 
-func mapSourceToDocument(src SourceRecord) Document {
-	return Document{
+func mapSourceToDocument(src SourceRecord) cursos.Document {
+	return cursos.Document{
 		Sequencial: src.Sequencial,
 		NuAnoCenso: src.NuAnoCenso,
 		Edicao:     intToStr(src.NuAnoCenso),
 		DtCarga:    src.DtCarga,
-		Instituicao: InstituicaoStruct{
+		Instituicao: cursos.Instituicao{
 			CoIES: intToStr(src.IESCoIES),
 		},
-		Curso: CursoStruct{
+		Curso: cursos.DadosCurso{
 			CoCurso:            intToStr(src.CursoCoCurso),
 			NoCurso:            src.CursoNoCurso,
 			TpDimensao:         src.CursoTpDimensao,
@@ -33,7 +37,7 @@ func mapSourceToDocument(src SourceRecord) Document {
 			NoModalidadeEnsino: src.CursoNoModalidadeEnsino,
 			TpNivelAcademico:   intToStr(src.CursoTpNivelAcademico),
 			NoNivelAcademico:   src.CursoNoNivelAcademico,
-			Cine: CineStruct{
+			Cine: cursos.Cine{
 				CoCineRotulo:         src.CursoCoCineRotulo,
 				NoCineRotulo:         src.CursoNoCineRotulo,
 				CoCineAreaGeral:      intToStr(src.CursoCoCineAreaGeral),
@@ -44,7 +48,7 @@ func mapSourceToDocument(src SourceRecord) Document {
 				NoCineAreaDetalhada:  src.CursoNoCineAreaDetalhada,
 			},
 		},
-		Localizacao: LocalizacaoStruct{
+		Localizacao: cursos.Localizacao{
 			CoRegiao:    intToStr(src.CursoCoRegiao),
 			NoRegiao:    src.CursoNoRegiao,
 			CoUF:        intToStr(src.CursoCoUF),
@@ -54,7 +58,7 @@ func mapSourceToDocument(src SourceRecord) Document {
 			NoMunicipio: src.CursoNoMunicipio,
 			InCapital:   intToBool(src.CursoInCapital),
 		},
-		CensoMetricas: CensoMetricasStruct{
+		CensoMetricas: cursos.CensoMetricas{
 			QtVgTotal:                src.CursoQtVgTotal,
 			QtVgTotalDiurno:          src.CursoQtVgTotalDiurno,
 			QtVgTotalNoturno:         src.CursoQtVgTotalNoturno,
@@ -72,29 +76,29 @@ func mapSourceToDocument(src SourceRecord) Document {
 			QtAtivExtracurricular:    src.CursoQtAtivExtracurricular,
 			QtMatAtivExtracurricular: src.CursoQtMatAtivExtracurricular,
 		},
-		Enade: EnadeStruct{
+		Enade: cursos.Enade{
 			AnoEnade:              src.EnadeAnoEnade,
 			ConceitoContinuoEnade: src.EnadeConceitoContinuoEnade,
 			ConceitoFaixaEnade:    src.EnadeConceitoFaixaEnade,
 		},
-		Tda: TdaStruct{
+		Tda: cursos.Tda{
 			NuAnoIngressoTda:   src.TdaNuAnoIngressoTda,
 			NuAnoReferenciaTda: src.TdaNuAnoReferenciaTda,
 			TAP:                src.TdaTap,
 			TCA:                src.TdaTca,
 			TDA:                src.TdaTda,
 		},
-		Sisu: SisuStruct{
+		Sisu: cursos.Sisu{
 			TemSisu: intToBool(src.SisuTemSisu),
 			Ofertas: mapOfertas(src.SisuOfertas),
 		},
 	}
 }
 
-func mapOfertas(src []OfertaSource) []OfertaStruct {
-	ofertas := make([]OfertaStruct, 0, len(src))
+func mapOfertas(src []OfertaSource) []cursos.Oferta {
+	ofertas := make([]cursos.Oferta, 0, len(src))
 	for _, o := range src {
-		ofertas = append(ofertas, OfertaStruct{
+		ofertas = append(ofertas, cursos.Oferta{
 			Municipio:       intToStr(o.Municipio),
 			NomeMunicipio:   o.NomeMunicipio,
 			Turno:           o.Turno,
