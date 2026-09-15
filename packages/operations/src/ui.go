@@ -62,7 +62,7 @@ var menuItems = []menuItem{
 		key:         "q",
 		shortcut:    "[q] ou [5]",
 		title:       "Sair da aplicação e fazer o down",
-		description: "Encerra o bulker e para o container",
+		description: "Encerra o operations e para o container",
 	},
 }
 
@@ -211,7 +211,7 @@ func (m TUIModel) generateApiKeyCmd() tea.Cmd {
 			m.cfg.ElasticsearchURL,
 			m.cfg.ElasticsearchUsername,
 			m.cfg.ElasticsearchPassword,
-			"bulker-tui-key",
+			"operations-tui-key",
 		)
 		if err != nil {
 			return errMsg{err: err}
@@ -489,7 +489,7 @@ func (m TUIModel) View() string {
 	var b strings.Builder
 
 	// Cabeçalho / Banner
-	b.WriteString(titleStyle.Render("⚡ BULKER — Sistema de Ingestão e Sumarização"))
+	b.WriteString(titleStyle.Render("⚡ OPERATIONS — Sistema de Ingestão e Sumarização"))
 	b.WriteString("\n\n")
 
 	// Status do Elasticsearch

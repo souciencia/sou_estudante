@@ -5,11 +5,11 @@ COPY go.mod go.sum* ./
 RUN go mod download
 COPY . .
 RUN go mod tidy
-RUN CGO_ENABLED=0 GOOS=linux go build -o bulker ./src
+RUN CGO_ENABLED=0 GOOS=linux go build -o operations ./src
 
 # Estágio 2: Runtime (Final)
 FROM alpine:latest
 WORKDIR /app
-COPY --from=builder /app/bulker .
+COPY --from=builder /app/operations .
 COPY src/mapping.json ./
-CMD ["./bulker"]
+CMD ["./operations"]
