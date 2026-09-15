@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-packages/bulker/data/*
+packages/operations/data/*
 queries/
 */session.json
 session.json
@@ -20,7 +20,7 @@ node_modules/
 
 
 front/node_modules/
-bulker/data
+operations/data
 tasks
 .opencode/
 

@@ -1,4 +1,4 @@
-module bulker
+module operations
 
 go 1.22
 

@@ -22,11 +22,11 @@ func main() {
 	// Se não houver terminal interativo anexado, informa como conectar e aguarda sinal
 	if !isatty.IsTerminal(os.Stdin.Fd()) && !isatty.IsCygwinTerminal(os.Stdin.Fd()) {
 		fmt.Println("================================================================================")
-		fmt.Println("⚡ BULKER TUI PRONTO!")
+		fmt.Println("⚡ OPERATIONS TUI PRONTO!")
 		fmt.Println("Para acessar o menu interativo, execute em outro terminal:")
-		fmt.Println("   podman exec -it se_bulker ./bulker")
+		fmt.Println("   podman exec -it se_operations ./operations")
 		fmt.Println("ou conecte-se via attach:")
-		fmt.Println("   podman attach se_bulker")
+		fmt.Println("   podman attach se_operations")
 		fmt.Println("================================================================================")
 
 		sigChan := make(chan os.Signal, 1)

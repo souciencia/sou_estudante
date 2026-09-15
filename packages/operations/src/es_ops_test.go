@@ -8,7 +8,7 @@ import (
 func TestParseAPIKeyResponse(t *testing.T) {
 	rawJSON := `{
 		"id": "VuaCfGcBCdbkQm-e5aOx",
-		"name": "bulker-key",
+		"name": "operations-key",
 		"api_key": "ui2_2RgzQJSbsuckPf9bDw",
 		"encoded": "VnVhQ2ZHY0JDZGJrUW0tZTVhT3g6dWkyXzJSZ3pRanNic3Vja1BmOWJEdw=="
 	}`

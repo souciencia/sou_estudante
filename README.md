@@ -72,10 +72,10 @@ Resultado esperado:
 
 ### 4. Carga de dados de exemplo
 
-A carga dos dados é feita usando um container especializado nessa tarefa, o `se_bulker`, que está configurado para dar o *start* apenas com um comando específico.
+A carga dos dados é feita usando um container especializado nessa tarefa, o `se_operations`, que está configurado para dar o *start* apenas com um comando específico.
 
-1. Cole o arquivo json fonrecido pela Ecila na pasta `packages/bulker/data/`, e com o nome `dados.json`.
-2. Dê o *start* no container `se_bulker` através do comando `docker compose --profile bulker up se_bulker`, e espere a mensagem "Ingestão concluída!" Não é preciso fazer mais nada depois disso.
+1. Cole o arquivo json fonrecido pela Ecila na pasta `packages/operations/data/`, e com o nome `dados.json`.
+2. Dê o *start* no container `se_operations` através do comando `docker compose --profile operations up se_operations`, e espere a mensagem "Ingestão concluída!" Não é preciso fazer mais nada depois disso.
 
 ## As coisas estão funcionando?
 

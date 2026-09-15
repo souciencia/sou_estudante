@@ -1,3 +1,12 @@
+# PRÓXIMOS PASSOS
+
+### evolução da busca
+- incluir a instituição
+- filtro por local de oferta
+- algoritmo de relevância (aproximação e ordenação) no dicionário de cursos
+- busca pro município já na página do curso
+ 
+
 ### Página de Detalhes do Curso (`/cursos/[id]`) *(Recomendado para avanço funcional)*
 - **Contexto**: Atualmente, a listagem e os filtros estão completos, mas clicar em um card não leva a uma página com os detalhes aprofundados do curso.
 - **Escopo**:
@@ -35,6 +44,10 @@ coisas do callout
 - [] **Atualização/Criação de Stories no Storybook**
 - [] Script que pega a Api-Key e atualiza o `.env`
 
+
+---
+## anotações
+- como mostrar locais de ofertas
 
 
 ---
