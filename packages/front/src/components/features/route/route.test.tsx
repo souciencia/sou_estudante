@@ -36,37 +36,53 @@ const routes = [
 ] as const;
 
 describe("Route", () => {
-    it.each(routes)(
-        "renders module $module correctly",
+    describe.each(routes)(
+        "Módulo $module - $title",
         ({ module, title, description, badge }) => {
-            const { container } = render(
+            
+            const setup = () => render(
                 <div>
                     <Route module={module} />
                 </div>
             );
 
-            expect(
-                screen.getByRole("heading", {
-                    level: 3,
-                    name: title,
-                })
-            ).toBeInTheDocument();
+            it("renders the correct heading title", () => {
+                setup();
+                expect(
+                    screen.getByRole("heading", {
+                        level: 3,
+                        name: title,
+                    })
+                ).toBeInTheDocument();
+            });
 
-            expect(screen.getByText(description)).toBeInTheDocument();
+            it("renders the correct description text", () => {
+                setup();
+                expect(screen.getByText(description)).toBeInTheDocument();
+            });
 
-            expect(screen.getByText(badge)).toBeInTheDocument();
+            it("renders the correct badge text", () => {
+                setup();
+                expect(screen.getByText(badge)).toBeInTheDocument();
+            });
 
-            const link = screen.getByRole("link");
+            it("renders a link pointing to '#'", () => {
+                setup();
+                const link = screen.getByRole("link");
+                expect(link).toHaveAttribute("href", "#");
+            });
 
-            expect(link).toHaveAttribute("href", "#");
+            it("contains the correct data-module attribute", () => {
+                const { container } = setup();
+                const route = container.querySelector(`[data-module="${module}"]`);
+                expect(route).toBeInTheDocument();
+            });
 
-            const route = container.querySelector(
-                `[data-module="${module}"]`
-            );
-
-            expect(route).toBeInTheDocument();
-
-            expect(route?.querySelector("svg")).toBeInTheDocument();
+            it("renders an SVG icon inside the route component", () => {
+                const { container } = setup();
+                const route = container.querySelector(`[data-module="${module}"]`);
+                expect(route?.querySelector("svg")).toBeInTheDocument();
+            });
         }
     );
 });
