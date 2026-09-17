@@ -1,14 +1,14 @@
 'use client'
 
-import { Module } from '@/lib/module'
-import { cn } from '@/utils/cn'
-import { CompassIcon } from './icons/CompassIcon'
-import { SextantIcon } from './icons/SextantIcon'
-import { AnchorIcon } from './icons/AnchorIcon'
-import { TelescopeIcon } from './icons/TelescopeIcon'
-import { NauticalIcon } from './icons/NauticalIcon'
-import { Tag } from '@/components/atoms/tag'
 import Link from 'next/link'
+import { Tag } from '@/components/atoms/tag'
+import type { Module } from '@/lib/module'
+import { cn } from '@/utils/cn'
+import { AnchorIcon } from './icons/AnchorIcon'
+import { CompassIcon } from './icons/CompassIcon'
+import { NauticalIcon } from './icons/NauticalIcon'
+import { SextantIcon } from './icons/SextantIcon'
+import { TelescopeIcon } from './icons/TelescopeIcon'
 
 interface RouteProps {
   module: Module

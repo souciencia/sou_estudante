@@ -8,6 +8,8 @@ export function CompassIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-hidden="true"
       {...props}
     >
       <rect fill="#00E5FF" height="40" rx="8" width="40" />

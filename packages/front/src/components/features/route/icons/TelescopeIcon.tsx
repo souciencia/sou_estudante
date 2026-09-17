@@ -8,6 +8,7 @@ export function TelescopeIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 40 40"
       width="42"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
       aria-hidden="true"
       {...props}
     >
