@@ -9,13 +9,13 @@ export default function Home() {
     <div className="flex justify-center min-h-screen w-full bg-site-background">
       <main className="max-w-5xl flex-col py-20 px-6 sm:px-16">
         <Hero />
-        <ul className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2.5 max-w-[820px] mx-auto mt-10">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2.5 max-w-[820px] mx-auto mt-10">
           <Route module={'1'} />
           <Route module={'2'} />
           <Route module={'3'} />
           <Route module={'4'} />
           <Route module={'5'} />
-        </ul>
+        </div>
         <div className="mt-10">
           <HomeSearch />
         </div>

@@ -63,10 +63,9 @@ export function Route({ module, className }: RouteProps) {
             className={cn(
                 "group relative overflow-hidden flex flex-col items-center bg-white text-center rounded-[20px] border border-card-border px-4 py-5 hover:-translate-y-0.5",
                 
+                // Animação para passagem de mouse:
                 "before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-[3px]",
-                
                 "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-200",
-                
                 "before:bg-accent", 
 
                 className
