@@ -16,7 +16,7 @@ services:
     networks:
       - data_net
     healthcheck:
-      test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'" ]
+      test: ["CMD-SHELL", "curl -s -u ${ELASTICSEARCH_USERNAME}:${ELASTIC_PASSWORD} http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'"]
       interval: 20s
       timeout: 10s
       retries: 3
@@ -70,30 +70,33 @@ services:
       - ./.env:/app/.env:z
     networks:
       - data_net
+    depends_on:
+      se_es01:
+        condition: service_healthy
 
   se_front:
     build:
       context: ./packages/front
       dockerfile: Dockerfile.dev
-      # target: deps # Interrompemos o build no estágio de dependências
     container_name: se_front
     environment:
       - NODE_ENV=development
       - API_URL=${API_URL}
       - FORCE_COLOR=1
-      - WATCHPACK_POLLING=true # (Adicionado depois) p HMR no Podman
+      - WATCHPACK_POLLING=true
     ports:
       - "3000:3000"
     volumes:
-      # apenas enquanto dev
       - ./packages/front:/app:z
-      - /app/node_modules
+      - node_modules-data:/app/node_modules
       - /app/.next
     networks:
       - data_net
     depends_on:
-      - se_api
-      - se_es01
+      se_es01:
+        condition: service_healthy
+      # se_api:
+      #   condition: service_started
     restart: unless-stopped
 
 volumes:
@@ -102,8 +105,8 @@ volumes:
   go-mod-cache:
     driver: local
   node_modules-data:
+    driver: local
 
 networks:
   data_net:
     driver: bridge
-  #   driver: bridge
