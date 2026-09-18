@@ -4,6 +4,8 @@ packages/operations/data/*
 queries/
 */session.json
 session.json
+ss.json
+scripts/
 
 .env
 .opencode/
