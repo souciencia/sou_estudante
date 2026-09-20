@@ -25,36 +25,10 @@ Se seu sistema for Windows, é recomendável utilizar **Docker Engine** dentro d
 
 ### 1. Construção dos containers (build)
 
-1. Renomeie o arquivo `.env.example`, na raíz do projeto, para `.env`.
-2. Etapa de *build* dos containers: `docker-compose build`.
-3. `docker-compose up -d` para o *start*. Omitir a *flag* `-d` mostrará os logs em tempo real.
-4. Use `docker ps` para conferir se os containers estão rodando.
+1. `docker compose build`
+2. `./setup.sh`
+3. `docker compose up -d`
 
-### 2. Configurando as API Keys do Elasticsearch
-
-O script `setup_es_env.sh` gera as **duas** chaves necessárias com privilégio mínimo e as grava no `.env`:
-
-- `ELASTICSEARCH_APIKEY` — somente leitura, usada pela API (`se_api`).
-- `ELASTICSEARCH_BULKER_APIKEY` — leitura/escrita, usada pelo `se_bulker`.
-
-```sh
-./setup_es_env.sh --non-interactive --invalidate-old -t 90d
-```
-
-O script aguarda o Elasticsearch, valida as chaves existentes e só gera novas quando necessário. Para simular sem alterar nada, use `--dry-run`.
-
-### 4. Carga de dados de exemplo
-
-A carga é feita pelo container `se_bulker`, que roda como *job* one-shot (perfil `bulker`): ele insere os dados caso ainda não existam e encerra.
-
-1. Coloque o JSON fornecido pela equipe de dados em `packages/bulker/data/dados_curso_completo.json`.
-2. Rode o job de bulking (ingestão + dicionário):
-
-```sh
-docker compose --profile bulker run --rm se_bulker
-```
-
-O job é idempotente: se o índice `cursos` já tiver documentos, a ingestão é ignorada. Para forçar a reindexação, apague os índices antes de rodar novamente.
 
 ## As coisas estão funcionando?
 
