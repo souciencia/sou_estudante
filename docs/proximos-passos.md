@@ -67,3 +67,10 @@ coisas do callout
 - `/packages/api/internal/features/...`
 
 ```
+
+
+## Situação e objetivo:
+Seguinte, está complicado demais resolver esses problemas de operations. Então, vamos voltar a um estágio mais simples: Operations deve voltar a ser Bulker. Ele deve subir somente com a flag `--profile`, adicionar os dados ao banco, caso não existam e morrer. 
+- Aproveite as estrururas de modelagem existentes
+- Separe melhor o código com base nas responsabilidades. Use arquivos pequenos e funções com uma única responsabilidade. Use também uma separação em pastas, para que seja mais dar manutenção.
+- Adote `docs/guidelines.md` como referência para refatorar o código.

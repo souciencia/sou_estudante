@@ -1,9 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-packages/operations/data/*
+packages/bulker/data/*
 queries/
 */session.json
 session.json
+ss.json
+scripts/
 
 .env
 .opencode/
@@ -20,7 +22,7 @@ node_modules/
 
 
 front/node_modules/
-operations/data
+bulker/data
 tasks
 
 # testing

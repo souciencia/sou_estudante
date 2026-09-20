@@ -25,57 +25,10 @@ Se seu sistema for Windows, é recomendável utilizar **Docker Engine** dentro d
 
 ### 1. Construção dos containers (build)
 
-1. Renomeie o arquivo `.env.example`, na raíz do projeto, para `.env`.
-2. Etapa de *build* dos containers: `docker-compose build`.
-3. `docker-compose up -d` para o *start*. Omitir a *flag* `-d` mostrará os logs em tempo real.
-4. Use `docker ps` para conferir se os containers estão rodando.
+1. `docker compose build`
+2. `./setup.sh`
+3. `docker compose up -d`
 
-### 2. Configurando a API Key do Elasticsearch
-
-Precisamos obter a have de API através da interação com o Elasticsearch.
-
-1. Acesse [http://localhost:9200/](http://localhost:9200/) pelo navegador. Usuário e senha são os mesmos do arquivo [.env](.env). Ao acessar, o resultado esperado deve ser:
-
-```json
-{
-  "name" : "elsou01",
-  "cluster_name" : "docker-cluster",
-  "cluster_uuid" : "xxxxxxxxxxxxxxxxxxx",
-  "version" : {
-    "number" : "8.17.0",
-    "build_flavor" : "default",
-    "build_type" : "docker",
-    "build_hash" : "xxxxxxxxxxxxxxxxxxxxxxxxx",
-    "build_date" : "2024-12-11T12:08:05.663969764Z",
-    "build_snapshot" : false,
-    "lucene_version" : "9.12.0",
-    "minimum_wire_compatibility_version" : "7.17.0",
-    "minimum_index_compatibility_version" : "7.0.0"
-  },
-  "tagline" : "You Know, for Search"
-}
-```
-2. Use o comando:
-
-```sh
-curl -u elastic -X POST "http://localhost:9200/_security/api_key" \
-     -H "Content-Type: application/json" \
-     -d '{"name": "my_api"}'
-```
-Resultado esperado:
-
-```json
-{"id":"qM-xxxxxxxxxxxxxxxxx","name":"my_api","api_key":"xxxxxxxxxxxxxx","encoded":"xxxxxxxxxxxxxxxxxxxxxxxxx=="}
-```
-3. Atualize o `.env` com a chave de API gerada colandi o valor de `encoded` da resposta na variável `ELASTICSEARCH_API_KEY`.
-4. Restart o container `se_api` através do comando: `docker compose restart se_api`.
-
-### 4. Carga de dados de exemplo
-
-A carga dos dados é feita usando um container especializado nessa tarefa, o `se_operations`, que está configurado para dar o *start* apenas com um comando específico.
-
-1. Cole o arquivo json fonrecido pela Ecila na pasta `packages/operations/data/`, e com o nome `dados.json`.
-2. Dê o *start* no container `se_operations` através do comando `docker compose --profile operations up se_operations`, e espere a mensagem "Ingestão concluída!" Não é preciso fazer mais nada depois disso.
 
 ## As coisas estão funcionando?
 

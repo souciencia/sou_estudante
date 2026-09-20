@@ -6,7 +6,7 @@
 | ----------------- | ----------- | ---- | ------------- | --------------- |
 | .                 | `dev`       |      |               | you are here!   |
 | `packages/api`    | `se_api`    | 8080 | `Go`          |                 |
-| `packages/operations` | `se_operations` |      |               | using `--profiles` flag in compose    |
+| `packages/bulker` | `se_bulker` |      | Go            | job one-shot via `--profile bulker`    |
 | `packages/front/` | `se_front`  | 3000 | Next.js       |                 |
 |                   | `se_es01`   | 9200 | Elasticsearch | Configured in `docker-compose.yml`    |
 
@@ -14,7 +14,7 @@ Network: `data_net`.
 
 
 ## Rules
-- ⚠️: DON'T READ `packages/operations/data/dados_curso_completo.json`.
+- ⚠️: DON'T READ `packages/bulker/data/dados_curso_completo.json`.
 - ⚠️: Never try to install inside this container (dev container).
 - When making tests, verify if containers are up.
 - Execute commands and tests using: `podman exec -it ...`

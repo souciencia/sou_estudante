@@ -16,7 +16,7 @@ services:
     networks:
       - data_net
     healthcheck:
-      test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'" ]
+      test: ["CMD-SHELL", "curl -s -u ${ELASTICSEARCH_USERNAME}:${ELASTIC_PASSWORD} http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'"]
       interval: 20s
       timeout: 10s
       retries: 3
@@ -50,50 +50,48 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  se_operations:
+  se_bulker:
     build:
-      context: ./packages/operations
-    container_name: se_operations
-    stdin_open: true
-    tty: true
+      context: ./packages/bulker
+    container_name: se_bulker
     environment:
       - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
-      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - ELASTICSEARCH_APIKEY=${ELASTICSEARCH_APIKEY}
+      - ELASTICSEARCH_APIKEY=${ELASTICSEARCH_BULKER_APIKEY}
       - ES_INDEX_NAME=cursos
       - ES_DICT_INDEX_NAME=dicionario_cursos
       - JSON_FILE_PATH=/data/dados_curso_completo.json
-      - ENV_FILE_PATH=/app/.env
     volumes:
-      - ./packages/operations/data:/data:z
-      - ./.env:/app/.env:z
+      - ./packages/bulker/data:/data:ro
     networks:
       - data_net
+    depends_on:
+      se_es01:
+        condition: service_healthy
+    profiles: ["bulker"]
 
   se_front:
     build:
       context: ./packages/front
       dockerfile: Dockerfile.dev
-      # target: deps # Interrompemos o build no estágio de dependências
     container_name: se_front
     environment:
       - NODE_ENV=development
       - API_URL=${API_URL}
       - FORCE_COLOR=1
-      - WATCHPACK_POLLING=true # (Adicionado depois) p HMR no Podman
+      - WATCHPACK_POLLING=true
     ports:
       - "3000:3000"
     volumes:
-      # apenas enquanto dev
       - ./packages/front:/app:z
-      - /app/node_modules
+      - node_modules-data:/app/node_modules
       - /app/.next
     networks:
       - data_net
     depends_on:
-      - se_api
-      - se_es01
+      se_es01:
+        condition: service_healthy
+      # se_api:
+      #   condition: service_started
     restart: unless-stopped
 
 volumes:
@@ -102,8 +100,9 @@ volumes:
   go-mod-cache:
     driver: local
   node_modules-data:
+    driver: local
 
 networks:
-  data_net:
+   data_net:
+    name: data_net
     driver: bridge
-  #   driver: bridge
