@@ -83,7 +83,7 @@ func uniqueCursos(ctx context.Context, client *elasticsearch.Client, index strin
 
 func aggregateQuery(afterKey map[string]any) ([]byte, error) {
 	composite := map[string]any{
-		"size":    pageSize,
+		"size": pageSize,
 		"sources": []map[string]any{
 			{"no_curso": map[string]any{"terms": map[string]any{"field": sourceField}}},
 		},

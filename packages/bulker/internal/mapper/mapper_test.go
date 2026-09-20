@@ -27,7 +27,7 @@ func TestToDocumentConvertsFlattenedRecordIntoIndexedDocument(t *testing.T) {
 		CursoNoUF:       "MATO GROSSO",
 		CursoSgUF:       "MT",
 		SisuTemSisu:     intPtr(1),
-		SisuOfertas:     []model.OfertaSource{
+		SisuOfertas: []model.OfertaSource{
 			{Municipio: intPtr(5103403), NomeMunicipio: "CUIABÁ", Vagas: intPtr(10)},
 		},
 	}

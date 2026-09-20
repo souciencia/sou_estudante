@@ -11,6 +11,7 @@ import (
 )
 
 // IndexMapping é o mapping do índice de dicionário, embutido no binário.
+//
 //go:embed mapping.json
 var IndexMapping []byte
 

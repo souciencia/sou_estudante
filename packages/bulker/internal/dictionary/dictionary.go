@@ -54,8 +54,8 @@ func indexNames(ctx context.Context, client *elasticsearch.Client, index string,
 			continue
 		}
 		item := esutil.BulkIndexerItem{
-			Action:    "index",
-			Body:      bytes.NewReader(body),
+			Action: "index",
+			Body:   bytes.NewReader(body),
 			OnSuccess: func(context.Context, esutil.BulkIndexerItem, esutil.BulkIndexerResponseItem) {
 				atomic.AddInt64(&inserted, 1)
 			},
