@@ -1,14 +1,14 @@
-package main
+package dictionary
 
 import (
 	"encoding/json"
 	"testing"
 )
 
-// TestDicionarioIndexMappingUsaAnalyzerBrasileiro garante que o campo no_curso
-// do índice de dicionário use o analyzer brazilian_search (lowercase + asciifolding),
+// TestIndexMappingUsesBrazilianAnalyzer garante que o campo no_curso do índice
+// de dicionário use o analyzer brazilian_search (lowercase + asciifolding),
 // tornando o autocomplete insensível a acentos e caixa.
-func TestDicionarioIndexMappingUsaAnalyzerBrasileiro(t *testing.T) {
+func TestIndexMappingUsesBrazilianAnalyzer(t *testing.T) {
 	var mapping struct {
 		Settings struct {
 			Analysis struct {
@@ -27,7 +27,7 @@ func TestDicionarioIndexMappingUsaAnalyzerBrasileiro(t *testing.T) {
 		} `json:"mappings"`
 	}
 
-	if err := json.Unmarshal([]byte(DicionarioIndexMapping), &mapping); err != nil {
+	if err := json.Unmarshal(IndexMapping, &mapping); err != nil {
 		t.Fatalf("mapping deve ser JSON válido: %v", err)
 	}
 
@@ -46,8 +46,8 @@ func TestDicionarioIndexMappingUsaAnalyzerBrasileiro(t *testing.T) {
 
 	hasLowercase := false
 	hasAsciifolding := false
-	for _, f := range analyzer.Filter {
-		switch f {
+	for _, filter := range analyzer.Filter {
+		switch filter {
 		case "lowercase":
 			hasLowercase = true
 		case "asciifolding":

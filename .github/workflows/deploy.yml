@@ -1,0 +1,23 @@
+name: Deploy na VM
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Executar Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            cd /var/www/meu-projeto
+            git pull origin main
+            # Adicione aqui seus comandos de build ou restart do serviço:
+            # npm install && npm run build
+            # systemctl restart meu-servico

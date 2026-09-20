@@ -30,52 +30,31 @@ Se seu sistema for Windows, é recomendável utilizar **Docker Engine** dentro d
 3. `docker-compose up -d` para o *start*. Omitir a *flag* `-d` mostrará os logs em tempo real.
 4. Use `docker ps` para conferir se os containers estão rodando.
 
-### 2. Configurando a API Key do Elasticsearch
+### 2. Configurando as API Keys do Elasticsearch
 
-Precisamos obter a have de API através da interação com o Elasticsearch.
+O script `setup_es_env.sh` gera as **duas** chaves necessárias com privilégio mínimo e as grava no `.env`:
 
-1. Acesse [http://localhost:9200/](http://localhost:9200/) pelo navegador. Usuário e senha são os mesmos do arquivo [.env](.env). Ao acessar, o resultado esperado deve ser:
-
-```json
-{
-  "name" : "elsou01",
-  "cluster_name" : "docker-cluster",
-  "cluster_uuid" : "xxxxxxxxxxxxxxxxxxx",
-  "version" : {
-    "number" : "8.17.0",
-    "build_flavor" : "default",
-    "build_type" : "docker",
-    "build_hash" : "xxxxxxxxxxxxxxxxxxxxxxxxx",
-    "build_date" : "2024-12-11T12:08:05.663969764Z",
-    "build_snapshot" : false,
-    "lucene_version" : "9.12.0",
-    "minimum_wire_compatibility_version" : "7.17.0",
-    "minimum_index_compatibility_version" : "7.0.0"
-  },
-  "tagline" : "You Know, for Search"
-}
-```
-2. Use o comando:
+- `ELASTICSEARCH_APIKEY` — somente leitura, usada pela API (`se_api`).
+- `ELASTICSEARCH_BULKER_APIKEY` — leitura/escrita, usada pelo `se_bulker`.
 
 ```sh
-curl -u elastic -X POST "http://localhost:9200/_security/api_key" \
-     -H "Content-Type: application/json" \
-     -d '{"name": "my_api"}'
+./setup_es_env.sh --non-interactive --invalidate-old -t 90d
 ```
-Resultado esperado:
 
-```json
-{"id":"qM-xxxxxxxxxxxxxxxxx","name":"my_api","api_key":"xxxxxxxxxxxxxx","encoded":"xxxxxxxxxxxxxxxxxxxxxxxxx=="}
-```
-3. Atualize o `.env` com a chave de API gerada colandi o valor de `encoded` da resposta na variável `ELASTICSEARCH_API_KEY`.
-4. Restart o container `se_api` através do comando: `docker compose restart se_api`.
+O script aguarda o Elasticsearch, valida as chaves existentes e só gera novas quando necessário. Para simular sem alterar nada, use `--dry-run`.
 
 ### 4. Carga de dados de exemplo
 
-A carga dos dados é feita usando um container especializado nessa tarefa, o `se_operations`, que está configurado para dar o *start* apenas com um comando específico.
+A carga é feita pelo container `se_bulker`, que roda como *job* one-shot (perfil `bulker`): ele insere os dados caso ainda não existam e encerra.
 
-1. Cole o arquivo json fonrecido pela Ecila na pasta `packages/operations/data/`, e com o nome `dados.json`.
-2. Dê o *start* no container `se_operations` através do comando `docker compose --profile operations up se_operations`, e espere a mensagem "Ingestão concluída!" Não é preciso fazer mais nada depois disso.
+1. Coloque o JSON fornecido pela equipe de dados em `packages/bulker/data/dados_curso_completo.json`.
+2. Rode o job de bulking (ingestão + dicionário):
+
+```sh
+docker compose --profile bulker run --rm se_bulker
+```
+
+O job é idempotente: se o índice `cursos` já tiver documentos, a ingestão é ignorada. Para forçar a reindexação, apague os índices antes de rodar novamente.
 
 ## As coisas estão funcionando?
 
