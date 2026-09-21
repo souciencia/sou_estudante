@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
 
+  // Gera um servidor mínimo autocontido para a imagem de produção (Dockerfile)
+  output: 'standalone',
+
   // Proxy para a API do backend (resolve CORS e comunicação interna Docker)
   async rewrites() {
     return [
