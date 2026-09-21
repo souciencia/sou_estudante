@@ -55,15 +55,15 @@ Cada fragmento de conhecimento, regra de negócio ou lógica de código deve ter
 - Evite duplicação de lógica, estilos e funções.
 - Se um comportamento se repete em múltiplos lugares, abstraia-o em uma função utilitária, *custom hook* ou componente reutilizável.
 
-### Organize o UI 
+### Organize o UI
 
 Para organizar a interface de usuário (UI), utilizamos a seguinte divisão:
 
-- **atoms:** Elementos visuais essenciais e indivisíveis da UI. Ex.: `Button`, `Input`, `Icon`, `Typography`. 
+- **atoms:** Elementos visuais essenciais e indivisíveis da UI. Ex.: `Button`, `Input`, `Icon`, `Typography`.
 
-- **features:** Estruturas complexas que desempenham um papel definido e que utilizam mais componentes em sua composição. Ex.: `Card`, `FilterGroup`, `ActiveFilters`. 
+- **features:** Estruturas complexas que desempenham um papel definido e que utilizam mais componentes em sua composição. Ex.: `Card`, `FilterGroup`, `ActiveFilters`.
 
-- **site-blocks**: Apenas por organização, aqui ficam os  componentes como `Header`, `Footer`, `Hero`, etc. 
+- **site-blocks**: Apenas por organização, aqui ficam os  componentes como `Header`, `Footer`, `Hero`, etc.
 
 #### Adote Compound Components para componentes robustos
 
@@ -78,11 +78,9 @@ Deixamos 3 skills essenciais para quem utliza agente de IA, elas irão ajudar a 
 
 ### Fluxo de Trabalho para Pull Requests
 
-- Crie branches nomeados com o prefixo ao enviar o pull request ou o push. 
+- Crie branches nomeados com o prefixo ao enviar o pull request ou o push.
 - Rode os linters para padronização do código (Biome para frontend e Gofmt para a api).
-- Use prefixos como `feat-`, `fix-` e `refac-` nos nomes das branches.
-- Commite de forma descritiva: "Adiciona...", "Resolve...", "Refatora...", "Atualiza...". 
-
+- Commite de forma descritiva: "Adiciona...", "Resolve...", "Refatora...", "Atualiza...".
 
 ## Licença livre
 
