@@ -1,0 +1,13 @@
+.git
+node_modules
+.next
+out
+coverage
+storybook-static
+*.log
+tsconfig.tsbuildinfo
+next-env.d.ts
+.env*
+Dockerfile*
+.dockerignore
+README.md

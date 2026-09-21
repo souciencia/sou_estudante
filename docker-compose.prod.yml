@@ -1,0 +1,118 @@
+name: sou_estudante
+
+services:
+  se_es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.0
+    container_name: ${ESNODE01_NAME:-se_es01}
+    environment:
+      - node.name=${ESNODE01_NAME:-se_es01}
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=true
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elsou-data:/usr/share/elasticsearch/data
+    ports:
+      - "127.0.0.1:9200:9200"
+    networks:
+      - data_net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -u ${ELASTICSEARCH_USERNAME}:${ELASTIC_PASSWORD} http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  se_api:
+    build:
+      context: ./packages/api
+      dockerfile: Dockerfile
+    image: sou_estudante/api:${IMAGE_TAG:-latest}
+    container_name: se_api
+    environment:
+      - ES_URL=${ELASTICSEARCH_URL}
+      - ES_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ES_PASSWORD=${ELASTIC_PASSWORD}
+      - ES_APIKEY=${ELASTICSEARCH_APIKEY}
+      - ES_DICT_INDEX_NAME=dicionario_cursos
+      - PORT=8080
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - data_net
+    depends_on:
+      se_es01:
+        condition: service_healthy
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  se_front:
+    build:
+      context: ./packages/front
+      dockerfile: Dockerfile
+      args:
+        API_URL: ${API_URL:-http://se_api:8080}
+    image: sou_estudante/front:${IMAGE_TAG:-latest}
+    container_name: se_front
+    environment:
+      - NODE_ENV=production
+      - API_URL=${API_URL:-http://se_api:8080}
+    ports:
+      - "3000:3000"
+    networks:
+      - data_net
+    depends_on:
+      se_es01:
+        condition: service_healthy
+      se_api:
+        condition: service_started
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  se_bulker:
+    build:
+      context: ./packages/bulker
+      dockerfile: Dockerfile
+    image: sou_estudante/bulker:${IMAGE_TAG:-latest}
+    container_name: se_bulker
+    environment:
+      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
+      - ELASTICSEARCH_APIKEY=${ELASTICSEARCH_BULKER_APIKEY}
+      - ES_INDEX_NAME=cursos
+      - ES_DICT_INDEX_NAME=dicionario_cursos
+      - JSON_FILE_PATH=/data/dados_curso_completo.json
+    volumes:
+      - ./packages/bulker/data:/data:ro
+    networks:
+      - data_net
+    depends_on:
+      se_es01:
+        condition: service_healthy
+    profiles: ["bulker"]
+
+volumes:
+  elsou-data:
+    driver: local
+
+networks:
+  data_net:
+    name: data_net
+    driver: bridge

@@ -1,9 +1,20 @@
 name: Deploy na VM
+
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vm
+  cancel-in-progress: false
+
 jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
   deploy:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
@@ -15,9 +26,47 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
+          script_stop: true
+          command_timeout: 30m
           script: |
-            cd /var/www/meu-projeto
-            git pull origin main
-            # Adicione aqui seus comandos de build ou restart do serviço:
-            # npm install && npm run build
-            # systemctl restart meu-servico
+            set -euo pipefail
+
+            DEPLOY_PATH="/var/www/sou_estudante"
+            COMPOSE_FILE="docker-compose.prod.yml"
+
+            cd "$DEPLOY_PATH"
+
+            echo "==> Atualizando código (origin/main)"
+            git fetch --prune origin main
+            git checkout -f main
+            git reset --hard origin/main
+
+            if [ ! -f .env ]; then
+              echo "ERRO: .env não encontrado em $DEPLOY_PATH (crie a partir de .env.example)" >&2
+              exit 1
+            fi
+
+            echo "==> Construindo imagens de produção"
+            podman compose -f "$COMPOSE_FILE" --env-file .env build --pull
+
+            echo "==> Subindo serviços"
+            podman compose -f "$COMPOSE_FILE" --env-file .env up -d --remove-orphans
+
+            echo "==> Removendo imagens órfãs"
+            podman image prune -f
+
+            echo "==> Aguardando o frontend responder"
+            for i in $(seq 1 30); do
+              if curl -fsS -o /dev/null http://localhost:3000/; then
+                echo "Frontend OK"
+                break
+              fi
+              if [ "$i" -eq 30 ]; then
+                echo "ERRO: frontend não respondeu em http://localhost:3000" >&2
+                exit 1
+              fi
+              sleep 2
+            done
+
+            echo "==> Status dos containers"
+            podman compose -f "$COMPOSE_FILE" --env-file .env ps
