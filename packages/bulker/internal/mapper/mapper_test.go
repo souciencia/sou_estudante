@@ -27,11 +27,7 @@ func TestToDocumentConvertsFlattenedRecordIntoIndexedDocument(t *testing.T) {
 		CursoNoUF:       "MATO GROSSO",
 		CursoSgUF:       "MT",
 		SisuTemSisu:     intPtr(1),
-<<<<<<< HEAD
 		SisuOfertas: []model.OfertaSource{
-=======
-		SisuOfertas:     []model.OfertaSource{
->>>>>>> 89d2749 (Retorna o container bulker e adiciona setup.sh)
 			{Municipio: intPtr(5103403), NomeMunicipio: "CUIABÁ", Vagas: intPtr(10)},
 		},
 	}
