@@ -80,7 +80,6 @@ Deixamos 3 skills essenciais para quem utliza agente de IA, elas irão ajudar a 
 
 - Crie branches nomeados com o prefixo ao enviar o pull request ou o push. 
 - Rode os linters para padronização do código (Biome para frontend e Gofmt para a api).
-- Use prefixos como `feat-`, `fix-` e `refac-` nos nomes das branches.
 - Commite de forma descritiva: "Adiciona...", "Resolve...", "Refatora...", "Atualiza...". 
 
 
