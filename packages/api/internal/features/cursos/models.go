@@ -64,7 +64,11 @@ type Curso struct {
 
 // Instituicao representa a IES à qual o curso pertence
 type Instituicao struct {
-	CoIES string `json:"co_ies,omitempty"`
+	CoIES                   string `json:"co_ies,omitempty"`
+	NoIES                   string `json:"no_ies,omitempty"`
+	SgIES                   string `json:"sg_ies,omitempty"`
+	CategoriaAdministrativa string `json:"categoria_administrativa,omitempty"`
+	OrganizacaoAcademica    string `json:"organizacao_academica,omitempty"`
 }
 
 // DadosCurso representa os dados do curso

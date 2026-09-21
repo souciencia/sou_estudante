@@ -67,6 +67,36 @@ func buildExactNameQuery(name string) map[string]interface{} {
 	}
 }
 
+// categoriaTerms traduz o rótulo de categoria exibido na UI para os valores de
+// categoria_administrativa indexados a partir dos dados da IES.
+func categoriaTerms(categoria string) []string {
+	switch strings.ToLower(categoria) {
+	case "privada":
+		return []string{"Privada com fins lucrativos", "Privada sem fins lucrativos"}
+	case "federal":
+		return []string{"Pública Federal"}
+	case "estadual":
+		return []string{"Pública Estadual"}
+	case "municipal":
+		return []string{"Pública Municipal"}
+	default:
+		return nil
+	}
+}
+
+// categoriaFilter monta a cláusula de filtro por categoria administrativa.
+func categoriaFilter(categoria string) map[string]interface{} {
+	terms := categoriaTerms(categoria)
+	if len(terms) == 0 {
+		return nil
+	}
+	return map[string]interface{}{
+		"terms": map[string]interface{}{
+			"instituicao.categoria_administrativa": terms,
+		},
+	}
+}
+
 // hasExactCourseName verifica se existe ao menos um documento cujo nome de
 // curso seja exatamente igual a name (ignorando caixa).
 func (r *ElasticsearchRepository) hasExactCourseName(ctx context.Context, name string) (bool, error) {
@@ -185,33 +215,8 @@ func (r *ElasticsearchRepository) Search(
 	if len(filters.Categoria) > 0 {
 		shouldCategorias := []map[string]interface{}{}
 		for _, cat := range filters.Categoria {
-			switch strings.ToLower(cat) {
-			case "privada":
-				shouldCategorias = append(shouldCategorias, map[string]interface{}{
-					"term": map[string]interface{}{"curso.in_gratuito": false},
-				})
-			case "federal":
-				shouldCategorias = append(shouldCategorias, map[string]interface{}{
-					"bool": map[string]interface{}{
-						"must": []map[string]interface{}{
-							{"term": map[string]interface{}{"curso.in_gratuito": true}},
-							{"term": map[string]interface{}{"sisu.tem_sisu": true}},
-						},
-					},
-				})
-			case "estadual":
-				shouldCategorias = append(shouldCategorias, map[string]interface{}{
-					"bool": map[string]interface{}{
-						"must": []map[string]interface{}{
-							{"term": map[string]interface{}{"curso.in_gratuito": true}},
-							{"term": map[string]interface{}{"sisu.tem_sisu": false}},
-						},
-					},
-				})
-			case "municipal":
-				shouldCategorias = append(shouldCategorias, map[string]interface{}{
-					"term": map[string]interface{}{"curso.in_gratuito": true},
-				})
+			if clause := categoriaFilter(cat); clause != nil {
+				shouldCategorias = append(shouldCategorias, clause)
 			}
 		}
 		if len(shouldCategorias) > 0 {
@@ -354,28 +359,10 @@ func (r *ElasticsearchRepository) Search(
 			"categorias": map[string]interface{}{
 				"filters": map[string]interface{}{
 					"filters": map[string]interface{}{
-						"Privada": map[string]interface{}{
-							"term": map[string]interface{}{"curso.in_gratuito": false},
-						},
-						"Federal": map[string]interface{}{
-							"bool": map[string]interface{}{
-								"must": []map[string]interface{}{
-									{"term": map[string]interface{}{"curso.in_gratuito": true}},
-									{"term": map[string]interface{}{"sisu.tem_sisu": true}},
-								},
-							},
-						},
-						"Estadual": map[string]interface{}{
-							"bool": map[string]interface{}{
-								"must": []map[string]interface{}{
-									{"term": map[string]interface{}{"curso.in_gratuito": true}},
-									{"term": map[string]interface{}{"sisu.tem_sisu": false}},
-								},
-							},
-						},
-						"Municipal": map[string]interface{}{
-							"term": map[string]interface{}{"curso.in_gratuito": true},
-						},
+						"Privada":   categoriaFilter("privada"),
+						"Federal":   categoriaFilter("federal"),
+						"Estadual":  categoriaFilter("estadual"),
+						"Municipal": categoriaFilter("municipal"),
 					},
 				},
 			},

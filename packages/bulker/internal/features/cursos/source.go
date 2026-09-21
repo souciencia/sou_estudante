@@ -1,4 +1,4 @@
-package model
+package cursos
 
 // SourceRecord representa um registro achatado do arquivo JSON de origem,
 // antes de ser agrupado no Document.

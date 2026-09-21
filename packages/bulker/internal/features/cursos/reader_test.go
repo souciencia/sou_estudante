@@ -1,6 +1,8 @@
-package source
+package cursos
 
 import (
+	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
@@ -40,7 +42,7 @@ func TestReaderReturnsEveryRecordInOrder(t *testing.T) {
 		t.Errorf("segundo curso = %q, esperado %q", second.CursoNoCurso, "MEDICINA")
 	}
 
-	if _, err := reader.Next(); !IsEOF(err) {
+	if _, err := reader.Next(); !errors.Is(err, io.EOF) {
 		t.Fatalf("esperado EOF após o último registro, obtido %v", err)
 	}
 }
@@ -52,7 +54,7 @@ func TestReaderReturnsEOFForEmptyArray(t *testing.T) {
 	}
 	defer reader.Close()
 
-	if _, err := reader.Next(); !IsEOF(err) {
+	if _, err := reader.Next(); !errors.Is(err, io.EOF) {
 		t.Fatalf("esperado EOF para array vazio, obtido %v", err)
 	}
 }

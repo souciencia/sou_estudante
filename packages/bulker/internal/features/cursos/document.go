@@ -1,4 +1,4 @@
-package model
+package cursos
 
 // Document é o documento (source) indexado no Elasticsearch.
 type Document struct {
@@ -16,7 +16,20 @@ type Document struct {
 }
 
 type Instituicao struct {
-	CoIES string `json:"co_ies,omitempty"`
+	CoIES                   string `json:"co_ies,omitempty"`
+	NoIES                   string `json:"no_ies,omitempty"`
+	SgIES                   string `json:"sg_ies,omitempty"`
+	CategoriaAdministrativa string `json:"categoria_administrativa,omitempty"`
+	OrganizacaoAcademica    string `json:"organizacao_academica,omitempty"`
+}
+
+// InstituicaoInfo agrupa atributos da IES usados para enriquecer o documento
+// de curso no momento da ingestão.
+type InstituicaoInfo struct {
+	NoIES                   string
+	SgIES                   string
+	CategoriaAdministrativa string
+	OrganizacaoAcademica    string
 }
 
 type Curso struct {

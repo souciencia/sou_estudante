@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"log/slog"
-	"strconv"
 	"sync/atomic"
 
 	"github.com/elastic/go-elasticsearch/v8"
@@ -14,28 +15,34 @@ import (
 
 	"bulker/internal/config"
 	"bulker/internal/elastic"
-	"bulker/internal/mapper"
-	"bulker/internal/model"
-	"bulker/internal/source"
 )
 
 const progressInterval = 500
 
-// Documents lê o arquivo de origem e indexa cada registro no índice principal.
+// Document é um registro já mapeado, pronto para ser indexado.
+type Document struct {
+	ID   string
+	Body any
+}
+
+// Stream fornece documentos prontos para indexação, um a um.
+// Next deve retornar io.EOF quando não houver mais registros.
+type Stream interface {
+	Next() (*Document, error)
+	Close() error
+}
+
+// Run consome o stream e indexa cada documento no índice informado.
 // Retorna a quantidade de documentos indexados com sucesso.
-func Documents(ctx context.Context, client *elasticsearch.Client, cfg *config.Config) (uint64, error) {
-	indexer, err := elastic.NewBulkIndexer(client, cfg.IndexName, cfg)
+func Run(ctx context.Context, client *elasticsearch.Client, index string, cfg *config.Config, stream Stream) (uint64, error) {
+	defer stream.Close()
+
+	indexer, err := elastic.NewBulkIndexer(client, index, cfg)
 	if err != nil {
 		return 0, fmt.Errorf("criar bulk indexer: %w", err)
 	}
 
-	reader, err := source.Open(cfg.JSONFilePath)
-	if err != nil {
-		return 0, fmt.Errorf("abrir arquivo de origem %s: %w", cfg.JSONFilePath, err)
-	}
-	defer reader.Close()
-
-	var indexed uint64
+	var indexed, failed uint64
 
 	for {
 		if err := ctx.Err(); err != nil {
@@ -43,8 +50,8 @@ func Documents(ctx context.Context, client *elasticsearch.Client, cfg *config.Co
 			return atomic.LoadUint64(&indexed), err
 		}
 
-		record, err := reader.Next()
-		if source.IsEOF(err) {
+		doc, err := stream.Next()
+		if errors.Is(err, io.EOF) {
 			break
 		}
 		if err != nil {
@@ -52,7 +59,7 @@ func Documents(ctx context.Context, client *elasticsearch.Client, cfg *config.Co
 			continue
 		}
 
-		item, err := newItem(mapper.ToDocument(*record), &indexed)
+		item, err := newItem(*doc, &indexed, &failed)
 		if err != nil {
 			slog.Warn("registro ignorado", "error", err)
 			continue
@@ -67,11 +74,14 @@ func Documents(ctx context.Context, client *elasticsearch.Client, cfg *config.Co
 	if err := indexer.Close(ctx); err != nil {
 		return atomic.LoadUint64(&indexed), fmt.Errorf("finalizar bulk: %w", err)
 	}
+	if rejected := atomic.LoadUint64(&failed); rejected > 0 {
+		slog.Warn("documentos rejeitados pelo elasticsearch", "index", index, "rejeitados", rejected)
+	}
 	return atomic.LoadUint64(&indexed), nil
 }
 
-func newItem(doc model.Document, indexed *uint64) (esutil.BulkIndexerItem, error) {
-	body, err := json.Marshal(doc)
+func newItem(doc Document, indexed, failed *uint64) (esutil.BulkIndexerItem, error) {
+	body, err := json.Marshal(doc.Body)
 	if err != nil {
 		return esutil.BulkIndexerItem{}, err
 	}
@@ -80,13 +90,17 @@ func newItem(doc model.Document, indexed *uint64) (esutil.BulkIndexerItem, error
 		Action: "index",
 		Body:   bytes.NewReader(body),
 	}
-	if doc.Sequencial != nil {
-		item.DocumentID = strconv.FormatInt(*doc.Sequencial, 10)
+	if doc.ID != "" {
+		item.DocumentID = doc.ID
 	}
 	item.OnSuccess = func(context.Context, esutil.BulkIndexerItem, esutil.BulkIndexerResponseItem) {
 		if count := atomic.AddUint64(indexed, 1); count%progressInterval == 0 {
 			slog.Info("progresso da ingestão", "documentos", count)
 		}
+	}
+	item.OnFailure = func(_ context.Context, it esutil.BulkIndexerItem, resp esutil.BulkIndexerResponseItem, err error) {
+		atomic.AddUint64(failed, 1)
+		slog.Warn("documento rejeitado pelo elasticsearch", "id", it.DocumentID, "status", resp.Status, "error", err)
 	}
 	return item, nil
 }

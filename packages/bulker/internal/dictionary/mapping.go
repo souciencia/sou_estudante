@@ -2,7 +2,6 @@ package dictionary
 
 import (
 	"context"
-	_ "embed"
 	"fmt"
 
 	"github.com/elastic/go-elasticsearch/v8"
@@ -10,20 +9,15 @@ import (
 	"bulker/internal/elastic"
 )
 
-// IndexMapping é o mapping do índice de dicionário, embutido no binário.
-//
-//go:embed mapping.json
-var IndexMapping []byte
-
-func recreateIndex(ctx context.Context, client *elasticsearch.Client, index string) error {
-	exists, err := elastic.Exists(ctx, client, index)
+func recreateIndex(ctx context.Context, client *elasticsearch.Client, spec Spec) error {
+	exists, err := elastic.Exists(ctx, client, spec.TargetIndex)
 	if err != nil {
 		return err
 	}
 	if exists {
-		if err := elastic.Delete(ctx, client, index); err != nil {
-			return fmt.Errorf("remover índice de dicionário %s: %w", index, err)
+		if err := elastic.Delete(ctx, client, spec.TargetIndex); err != nil {
+			return fmt.Errorf("remover índice de dicionário %s: %w", spec.TargetIndex, err)
 		}
 	}
-	return elastic.Create(ctx, client, index, IndexMapping)
+	return elastic.Create(ctx, client, spec.TargetIndex, spec.Mapping)
 }

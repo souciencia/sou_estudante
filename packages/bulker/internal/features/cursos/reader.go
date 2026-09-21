@@ -1,11 +1,9 @@
-package source
+package cursos
 
 import (
 	"encoding/json"
 	"io"
 	"os"
-
-	"bulker/internal/model"
 )
 
 // Reader lê, de forma incremental, os registros de um arquivo JSON contendo um array.
@@ -26,8 +24,8 @@ func Open(filePath string) (*Reader, error) {
 }
 
 // Next retorna o próximo registro do array.
-// Retorna io.EOF (ver IsEOF) quando não há mais registros.
-func (r *Reader) Next() (*model.SourceRecord, error) {
+// Retorna io.EOF quando não há mais registros.
+func (r *Reader) Next() (*SourceRecord, error) {
 	if r.done {
 		return nil, io.EOF
 	}
@@ -48,7 +46,7 @@ func (r *Reader) Next() (*model.SourceRecord, error) {
 		return nil, io.EOF
 	}
 
-	var record model.SourceRecord
+	var record SourceRecord
 	if err := r.decoder.Decode(&record); err != nil {
 		return nil, err
 	}
@@ -58,9 +56,4 @@ func (r *Reader) Next() (*model.SourceRecord, error) {
 // Close fecha o arquivo de origem.
 func (r *Reader) Close() error {
 	return r.file.Close()
-}
-
-// IsEOF informa se o erro indica o fim dos registros.
-func IsEOF(err error) bool {
-	return err == io.EOF
 }

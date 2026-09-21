@@ -7,6 +7,9 @@ func TestLoadAppliesDefaultsWhenEnvIsEmpty(t *testing.T) {
 	t.Setenv("ES_INDEX_NAME", "")
 	t.Setenv("ES_DICT_INDEX_NAME", "")
 	t.Setenv("JSON_FILE_PATH", "")
+	t.Setenv("IES_INDEX_NAME", "")
+	t.Setenv("IES_JSON_FILE_PATH", "")
+	t.Setenv("IES_DICT_INDEX_NAME", "")
 
 	cfg := Load()
 
@@ -21,6 +24,15 @@ func TestLoadAppliesDefaultsWhenEnvIsEmpty(t *testing.T) {
 	}
 	if cfg.JSONFilePath != "/data/dados_curso_completo.json" {
 		t.Errorf("JSONFilePath = %q, esperado o padrão", cfg.JSONFilePath)
+	}
+	if cfg.IESIndexName != "ies" {
+		t.Errorf("IESIndexName = %q, esperado %q", cfg.IESIndexName, "ies")
+	}
+	if cfg.IESJSONFilePath != "/data/dados_ies.json" {
+		t.Errorf("IESJSONFilePath = %q, esperado o padrão", cfg.IESJSONFilePath)
+	}
+	if cfg.IESDictIndexName != "dicionario_ies" {
+		t.Errorf("IESDictIndexName = %q, esperado %q", cfg.IESDictIndexName, "dicionario_ies")
 	}
 }
 

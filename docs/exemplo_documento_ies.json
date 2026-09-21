@@ -1,0 +1,14 @@
+{
+  "_index": "ies",
+  "_id": "376",
+  "_source": {
+    "co_ies": "376",
+    "no_ies": "CENTRO UNIVERSITÁRIO ANHANGUERA DE SÃO PAULO",
+    "sg_ies": "Anhanguera SP",
+    "categoria_administrativa": "Privada com fins lucrativos",
+    "organizacao_academica": "Centro Universitário",
+    "municipio": "São Paulo",
+    "uf": "SP",
+    "regiao": "Sudeste"
+  }
+}

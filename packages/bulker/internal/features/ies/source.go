@@ -1,9 +1,8 @@
 package ies
 
-// ⚠️ NÃO UTILIZADO ATUALMENTE
-// InstituicaoCadastro representa o documento estático da IES indexado no
-// Elasticsearch pelo bulker (índice "ies").
-type InstituicaoCadastro struct {
+// SourceRecord representa um registro do arquivo NDJSON de origem das IES,
+// antes de ser mapeado no Document.
+type SourceRecord struct {
 	CoIES                   string `json:"co_ies"`
 	NoIES                   string `json:"no_ies"`
 	SgIES                   string `json:"sg_ies"`

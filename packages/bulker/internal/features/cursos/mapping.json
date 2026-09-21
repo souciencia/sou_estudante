@@ -26,7 +26,18 @@
       "dt_carga": { "type": "date", "format": "yyyy/MM/dd HH:mm:ss.SSS||yyyy-MM-dd HH:mm:ss||strict_date_optional_time" },
       "instituicao": {
         "properties": {
-          "co_ies": { "type": "keyword" }
+          "co_ies": { "type": "keyword" },
+          "no_ies": {
+            "type": "text",
+            "analyzer": "brazilian_search",
+            "fields": {
+              "keyword": { "type": "keyword" },
+              "exato": { "type": "keyword", "normalizer": "ascii_lower" }
+            }
+          },
+          "sg_ies": { "type": "keyword" },
+          "categoria_administrativa": { "type": "keyword" },
+          "organizacao_academica": { "type": "keyword" }
         }
       },
       "curso": {

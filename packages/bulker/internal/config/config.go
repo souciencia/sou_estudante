@@ -10,6 +10,9 @@ const (
 	defaultIndexName        = "cursos"
 	defaultDictIndexName    = "dicionario_cursos"
 	defaultJSONFilePath     = "/data/dados_curso_completo.json"
+	defaultIESIndexName     = "ies"
+	defaultIESJSONFilePath  = "/data/dados_ies.json"
+	defaultIESDictIndexName = "dicionario_ies"
 	defaultNumWorkers       = 4
 	defaultFlushBytes       = 5_000_000
 	defaultFlushIntervalSec = 30
@@ -22,6 +25,9 @@ type Config struct {
 	IndexName           string
 	DictIndexName       string
 	JSONFilePath        string
+	IESIndexName        string
+	IESJSONFilePath     string
+	IESDictIndexName    string
 	NumWorkers          int
 	FlushBytes          int
 	FlushIntervalSec    int
@@ -35,6 +41,9 @@ func Load() *Config {
 		IndexName:           env("ES_INDEX_NAME", defaultIndexName),
 		DictIndexName:       env("ES_DICT_INDEX_NAME", defaultDictIndexName),
 		JSONFilePath:        env("JSON_FILE_PATH", defaultJSONFilePath),
+		IESIndexName:        env("IES_INDEX_NAME", defaultIESIndexName),
+		IESJSONFilePath:     env("IES_JSON_FILE_PATH", defaultIESJSONFilePath),
+		IESDictIndexName:    env("IES_DICT_INDEX_NAME", defaultIESDictIndexName),
 		NumWorkers:          envInt("ES_NUM_WORKERS", defaultNumWorkers),
 		FlushBytes:          envInt("ES_FLUSH_BYTES", defaultFlushBytes),
 		FlushIntervalSec:    envInt("ES_FLUSH_INTERVAL_SEC", defaultFlushIntervalSec),

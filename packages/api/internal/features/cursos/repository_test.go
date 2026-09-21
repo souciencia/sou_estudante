@@ -49,3 +49,40 @@ func TestBuildExactNameQueryCasaNomeIdêntico(t *testing.T) {
 		t.Errorf("curso.no_curso.exato = %v, esperado %q", field, "MEDICINA VETERINARIA")
 	}
 }
+
+// categoriaFilter tem que filtrar pela categoria_administrativa real vinda da
+// IES, e não mais pela heurística in_gratuito + sisu.
+func TestCategoriaFilterUsaCategoriaAdministrativaDaIES(t *testing.T) {
+	built := categoriaFilter("Privada")
+
+	terms, ok := built["terms"].(map[string]interface{})
+	if !ok {
+		t.Fatalf("esperado nó terms, obtido %T", built["terms"])
+	}
+
+	want := []string{"Privada com fins lucrativos", "Privada sem fins lucrativos"}
+	if got := terms["instituicao.categoria_administrativa"]; !reflect.DeepEqual(got, want) {
+		t.Errorf("categoria_administrativa = %v, esperado %v", got, want)
+	}
+}
+
+func TestCategoriaFilterIgnoraCategoriaDesconhecida(t *testing.T) {
+	if clause := categoriaFilter("Especial"); clause != nil {
+		t.Errorf("esperado nil para categoria desconhecida, obtido %v", clause)
+	}
+}
+
+func TestCategoriaTermsCobreCategoriasDaUI(t *testing.T) {
+	cases := map[string][]string{
+		"privada":   {"Privada com fins lucrativos", "Privada sem fins lucrativos"},
+		"federal":   {"Pública Federal"},
+		"estadual":  {"Pública Estadual"},
+		"municipal": {"Pública Municipal"},
+	}
+
+	for in, want := range cases {
+		if got := categoriaTerms(in); !reflect.DeepEqual(got, want) {
+			t.Errorf("categoriaTerms(%q) = %v, esperado %v", in, got, want)
+		}
+	}
+}
