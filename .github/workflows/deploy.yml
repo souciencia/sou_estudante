@@ -15,58 +15,49 @@ jobs:
 
   deploy:
     needs: lint
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, vpn]
+    timeout-minutes: 30
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v7
+      - name: Deploy local
+        run: |
+          set -euo pipefail
 
-      - name: Executar Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.5
-        with:
-          host: ${{ secrets.VM_HOST }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.VM_SSH_KEY }}
-          script_stop: true
-          command_timeout: 30m
-          script: |
-            set -euo pipefail
+          DEPLOY_PATH="/var/www/sou_estudante"
+          COMPOSE_FILE="docker-compose.prod.yml"
 
-            DEPLOY_PATH="/var/www/sou_estudante"
-            COMPOSE_FILE="docker-compose.prod.yml"
+          cd "$DEPLOY_PATH"
 
-            cd "$DEPLOY_PATH"
+          echo "==> Atualizando código (origin/main)"
+          git fetch --prune origin main
+          git checkout -f main
+          git reset --hard origin/main
 
-            echo "==> Atualizando código (origin/main)"
-            git fetch --prune origin main
-            git checkout -f main
-            git reset --hard origin/main
+          if [ ! -f .env ]; then
+            echo "ERRO: .env não encontrado em $DEPLOY_PATH (crie a partir de .env.example)" >&2
+            exit 1
+          fi
 
-            if [ ! -f .env ]; then
-              echo "ERRO: .env não encontrado em $DEPLOY_PATH (crie a partir de .env.example)" >&2
+          echo "==> Construindo imagens de produção"
+          podman compose -f "$COMPOSE_FILE" --env-file .env build --pull
+
+          echo "==> Subindo serviços"
+          podman compose -f "$COMPOSE_FILE" --env-file .env up -d --remove-orphans
+
+          echo "==> Removendo imagens órfãs"
+          podman image prune -f
+
+          echo "==> Aguardando o frontend responder"
+          for i in $(seq 1 30); do
+            if curl -fsS -o /dev/null http://localhost:3000/; then
+              echo "Frontend OK"
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              echo "ERRO: frontend não respondeu em http://localhost:3000" >&2
               exit 1
             fi
+            sleep 2
+          done
 
-            echo "==> Construindo imagens de produção"
-            podman compose -f "$COMPOSE_FILE" --env-file .env build --pull
-
-            echo "==> Subindo serviços"
-            podman compose -f "$COMPOSE_FILE" --env-file .env up -d --remove-orphans
-
-            echo "==> Removendo imagens órfãs"
-            podman image prune -f
-
-            echo "==> Aguardando o frontend responder"
-            for i in $(seq 1 30); do
-              if curl -fsS -o /dev/null http://localhost:3000/; then
-                echo "Frontend OK"
-                break
-              fi
-              if [ "$i" -eq 30 ]; then
-                echo "ERRO: frontend não respondeu em http://localhost:3000" >&2
-                exit 1
-              fi
-              sleep 2
-            done
-
-            echo "==> Status dos containers"
-            podman compose -f "$COMPOSE_FILE" --env-file .env ps
+          echo "==> Status dos containers"
+          podman compose -f "$COMPOSE_FILE" --env-file .env ps
