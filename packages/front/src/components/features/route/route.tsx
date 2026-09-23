@@ -41,7 +41,7 @@ const ROUTES = {
     title: 'Conhecer instituição',
     description: 'Indicadores, docentes e qualidade',
     badge: 'TELESCÓPIO',
-    href: '#',
+    href: '/ies',
     icon: TelescopeIcon,
   },
   '5': {

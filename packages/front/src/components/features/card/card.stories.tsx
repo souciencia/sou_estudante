@@ -43,3 +43,26 @@ export const Module3: Story = {
     </Card>
   ),
 }
+
+export const WithFields: Story = {
+  args: {
+    children: '',
+    module: '4',
+  },
+  render: (args) => (
+    <Card {...args}>
+      <Card.Header
+        title="Universidade Federal do Mato Grosso"
+        subtitle="• UFMT"
+      />
+      <Card.Tags
+        source={['Pública Federal', 'Universidade', 'Centro-Oeste']}
+        className="ml-11"
+      />
+      <Card.Fields
+        className="ml-11 mt-2"
+        items={[{ label: 'Localização', value: 'Cuiabá - MT' }]}
+      />
+    </Card>
+  ),
+}
