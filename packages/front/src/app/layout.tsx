@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { Header } from '@/components/site-blocks/header/header'
 import './globals.css'
 
 const geistSans = Geist({
@@ -27,7 +28,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <a
+          href="#conteudo"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-card-surface focus:px-4 focus:py-2 focus:font-coadjuvant focus:text-coadjuvant focus:font-semibold focus:text-accent-deep focus:outline-2 focus:outline-offset-2 focus:outline-accent-deep"
+        >
+          Pular para o conteúdo
+        </a>
+        <Header />
+        <div id="conteudo">{children}</div>
       </body>
     </html>
   )
