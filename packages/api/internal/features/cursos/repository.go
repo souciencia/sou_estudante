@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"github.com/elastic/go-elasticsearch/v8"
+
+	"api_estudante/internal/shared"
 )
 
 // Repository define contrato de acesso a cursos
@@ -70,18 +72,7 @@ func buildExactNameQuery(name string) map[string]interface{} {
 // categoriaTerms traduz o rótulo de categoria exibido na UI para os valores de
 // categoria_administrativa indexados a partir dos dados da IES.
 func categoriaTerms(categoria string) []string {
-	switch strings.ToLower(categoria) {
-	case "privada":
-		return []string{"Privada com fins lucrativos", "Privada sem fins lucrativos"}
-	case "federal":
-		return []string{"Pública Federal"}
-	case "estadual":
-		return []string{"Pública Estadual"}
-	case "municipal":
-		return []string{"Pública Municipal"}
-	default:
-		return nil
-	}
+	return shared.CategoriaTerms(categoria)
 }
 
 // categoriaFilter monta a cláusula de filtro por categoria administrativa.
