@@ -15,6 +15,8 @@ export const API_CONFIG = {
   ENDPOINTS: {
     SEARCH_CURSOS: '/cursos',
     SUGESTOES_CURSOS: '/cursos/sugestoes',
+    SEARCH_IES: '/ies',
+    SUGESTOES_IES: '/ies/sugestoes',
     // Futuros endpoints dos 5 módulos:
     // GET_CURSO: '/cursos/:id',
     // COMO_INGRESSAR: '/ingresso',
