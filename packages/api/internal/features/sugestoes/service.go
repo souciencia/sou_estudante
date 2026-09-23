@@ -14,9 +14,9 @@ const (
 	maxSugestoesLimit      = 20
 )
 
-// Service define o contrato de negócio para sugestões de cursos
+// Service define o contrato de negócio para sugestões de nomes
 type Service interface {
-	SugerirCursos(ctx context.Context, termo string, limit int) ([]string, error)
+	Sugerir(ctx context.Context, termo string, limit int) ([]string, error)
 }
 
 // ServiceImpl implementa Service com validação e orquestração
@@ -31,8 +31,8 @@ func NewService(repo Repository) Service {
 	}
 }
 
-// SugerirCursos valida o termo e o limite e delega a busca ao repositório
-func (s *ServiceImpl) SugerirCursos(ctx context.Context, termo string, limit int) ([]string, error) {
+// Sugerir valida o termo e o limite e delega a busca ao repositório
+func (s *ServiceImpl) Sugerir(ctx context.Context, termo string, limit int) ([]string, error) {
 	termo = strings.TrimSpace(termo)
 
 	// Termos muito curtos geram ruído; retorna lista vazia sem consultar o índice

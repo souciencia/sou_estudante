@@ -28,7 +28,7 @@ func TestSugerirCursosRepassaTermoComLimitePadrao(t *testing.T) {
 	service := NewService(mockRepo)
 	ctx := context.Background()
 
-	result, err := service.SugerirCursos(ctx, "medicina", 0)
+	result, err := service.Sugerir(ctx, "medicina", 0)
 	if err != nil {
 		t.Fatalf("erro inesperado: %v", err)
 	}
@@ -54,7 +54,7 @@ func TestSugerirCursosLimitaLimiteSuperior(t *testing.T) {
 	service := NewService(mockRepo)
 	ctx := context.Background()
 
-	if _, err := service.SugerirCursos(ctx, "medicina", 999); err != nil {
+	if _, err := service.Sugerir(ctx, "medicina", 999); err != nil {
 		t.Fatalf("erro inesperado: %v", err)
 	}
 
@@ -68,7 +68,7 @@ func TestSugerirCursosRetornaVazioParaTermoCurto(t *testing.T) {
 	service := NewService(mockRepo)
 	ctx := context.Background()
 
-	result, err := service.SugerirCursos(ctx, "a", 8)
+	result, err := service.Sugerir(ctx, "a", 8)
 	if err != nil {
 		t.Fatalf("erro inesperado: %v", err)
 	}
@@ -88,7 +88,7 @@ func TestSugerirCursosNormalizaTermo(t *testing.T) {
 	service := NewService(mockRepo)
 	ctx := context.Background()
 
-	if _, err := service.SugerirCursos(ctx, "  medicina  ", 8); err != nil {
+	if _, err := service.Sugerir(ctx, "  medicina  ", 8); err != nil {
 		t.Fatalf("erro inesperado: %v", err)
 	}
 

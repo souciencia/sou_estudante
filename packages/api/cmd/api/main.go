@@ -34,7 +34,7 @@ func main() {
 
 	mux.Handle("/cursos", cursoHandler)
 
-	sugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, cfg.ESDictIndexName)
+	sugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, cfg.ESDictIndexName, "no_curso")
 	sugestaoService := sugestoes.NewService(sugestaoRepo)
 	sugestaoHandler := &sugestoes.Handler{Service: sugestaoService}
 
