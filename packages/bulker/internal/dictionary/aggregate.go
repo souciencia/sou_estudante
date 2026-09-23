@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	aggregationName = "unique_cursos"
-	sourceField     = "curso.no_curso.keyword"
+	aggregationName = "unique_terms"
+	termSourceName  = "term"
 	pageSize        = 1000
 )
 
@@ -23,7 +23,7 @@ type compositeResponse struct {
 }
 
 type compositeAggregations struct {
-	Unique compositeAggregation `json:"unique_cursos"`
+	Unique compositeAggregation `json:"unique_terms"`
 }
 
 type compositeAggregation struct {
@@ -36,16 +36,16 @@ type compositeBucket struct {
 }
 
 type compositeKey struct {
-	NoCurso string `json:"no_curso"`
+	Term string `json:"term"`
 }
 
-// uniqueCursos extrai os nomes de curso distintos do índice de origem, ordenados.
-func uniqueCursos(ctx context.Context, client *elasticsearch.Client, index string) ([]string, error) {
+// uniqueTerms extrai os termos distintos de field no índice de origem, ordenados.
+func uniqueTerms(ctx context.Context, client *elasticsearch.Client, index, field string) ([]string, error) {
 	seen := make(map[string]struct{})
 	var afterKey map[string]any
 
 	for {
-		query, err := aggregateQuery(afterKey)
+		query, err := aggregateQuery(afterKey, field)
 		if err != nil {
 			return nil, fmt.Errorf("montar agregação: %w", err)
 		}
@@ -62,8 +62,8 @@ func uniqueCursos(ctx context.Context, client *elasticsearch.Client, index strin
 
 		buckets := parsed.Aggregations.Unique.Buckets
 		for _, bucket := range buckets {
-			if name := strings.TrimSpace(bucket.Key.NoCurso); name != "" {
-				seen[name] = struct{}{}
+			if term := strings.TrimSpace(bucket.Key.Term); term != "" {
+				seen[term] = struct{}{}
 			}
 		}
 
@@ -73,19 +73,19 @@ func uniqueCursos(ctx context.Context, client *elasticsearch.Client, index strin
 		}
 	}
 
-	names := make([]string, 0, len(seen))
-	for name := range seen {
-		names = append(names, name)
+	terms := make([]string, 0, len(seen))
+	for term := range seen {
+		terms = append(terms, term)
 	}
-	sort.Strings(names)
-	return names, nil
+	sort.Strings(terms)
+	return terms, nil
 }
 
-func aggregateQuery(afterKey map[string]any) ([]byte, error) {
+func aggregateQuery(afterKey map[string]any, field string) ([]byte, error) {
 	composite := map[string]any{
 		"size": pageSize,
 		"sources": []map[string]any{
-			{"no_curso": map[string]any{"terms": map[string]any{"field": sourceField}}},
+			{termSourceName: map[string]any{"terms": map[string]any{"field": field}}},
 		},
 	}
 	if len(afterKey) > 0 {
@@ -107,7 +107,7 @@ func search(ctx context.Context, client *elasticsearch.Client, index string, que
 		client.Search.WithBody(bytes.NewReader(query)),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("buscar cursos únicos: %w", err)
+		return nil, fmt.Errorf("buscar termos únicos: %w", err)
 	}
 	defer res.Body.Close()
 

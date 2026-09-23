@@ -6,27 +6,14 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
+
+	"api_estudante/internal/shared"
 )
 
 // Handler gerencia requisições de busca de cursos
 type Handler struct {
 	Service Service
-}
-
-// parseSliceParam divide valores separados por vírgula e múltiplos parâmetros em slice de strings
-func parseSliceParam(values []string) []string {
-	var result []string
-	for _, v := range values {
-		for _, part := range strings.Split(v, ",") {
-			trimmed := strings.TrimSpace(part)
-			if trimmed != "" {
-				result = append(result, trimmed)
-			}
-		}
-	}
-	return result
 }
 
 // parseExactParam interpreta o parâmetro "exact". Ausente ou inválido = true.
@@ -68,12 +55,12 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	filters := SearchFilterParams{
-		UF:         parseSliceParam(r.URL.Query()["uf"]),
-		Turno:      parseSliceParam(r.URL.Query()["turno"]),
-		Grau:       parseSliceParam(r.URL.Query()["grau"]),
-		Categoria:  parseSliceParam(r.URL.Query()["categoria"]),
-		Modalidade: parseSliceParam(r.URL.Query()["modalidade"]),
-		Enade:      parseSliceParam(r.URL.Query()["enade"]),
+		UF:         shared.SplitCSV(r.URL.Query()["uf"]),
+		Turno:      shared.SplitCSV(r.URL.Query()["turno"]),
+		Grau:       shared.SplitCSV(r.URL.Query()["grau"]),
+		Categoria:  shared.SplitCSV(r.URL.Query()["categoria"]),
+		Modalidade: shared.SplitCSV(r.URL.Query()["modalidade"]),
+		Enade:      shared.SplitCSV(r.URL.Query()["enade"]),
 		Sort:       r.URL.Query().Get("sort"),
 		Exact:      parseExactParam(r.URL.Query().Get("exact")),
 	}

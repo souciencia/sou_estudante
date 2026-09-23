@@ -38,6 +38,7 @@ services:
       - ES_PASSWORD=${ELASTIC_PASSWORD}
       - ES_APIKEY=${ELASTICSEARCH_APIKEY}
       - ES_DICT_INDEX_NAME=dicionario_cursos
+      - IES_DICT_INDEX_NAME=dicionario_ies
     ports:
       - "8080:8080"
     volumes:
@@ -60,6 +61,9 @@ services:
       - ES_INDEX_NAME=cursos
       - ES_DICT_INDEX_NAME=dicionario_cursos
       - JSON_FILE_PATH=/data/dados_curso_completo.json
+      - IES_INDEX_NAME=ies
+      - IES_JSON_FILE_PATH=/data/dados_ies.json
+      - IES_DICT_INDEX_NAME=dicionario_ies
     volumes:
       - ./packages/bulker/data:/data:ro
     networks:

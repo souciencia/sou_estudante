@@ -13,43 +13,48 @@ import (
 	"bulker/internal/elastic"
 )
 
-// Doc é um documento do índice de dicionário.
-type Doc struct {
-	NoCurso string `json:"no_curso"`
+// Spec descreve como construir um índice de dicionário a partir de um campo
+// termo do índice de origem.
+type Spec struct {
+	SourceIndex string
+	TargetIndex string
+	SourceField string
+	DocField    string
+	Mapping     []byte
 }
 
-// Build recria o índice de dicionário a partir dos cursos únicos do índice de origem.
-// Retorna a quantidade de termos inseridos.
-func Build(ctx context.Context, client *elasticsearch.Client, sourceIndex, targetIndex string) (int, error) {
-	if err := recreateIndex(ctx, client, targetIndex); err != nil {
+// Build recria o índice de dicionário a partir dos termos únicos do índice de
+// origem. Retorna a quantidade de termos inseridos.
+func Build(ctx context.Context, client *elasticsearch.Client, spec Spec) (int, error) {
+	if err := recreateIndex(ctx, client, spec); err != nil {
 		return 0, err
 	}
 
-	names, err := uniqueCursos(ctx, client, sourceIndex)
+	terms, err := uniqueTerms(ctx, client, spec.SourceIndex, spec.SourceField)
 	if err != nil {
 		return 0, err
 	}
 
-	inserted, err := indexNames(ctx, client, targetIndex, names)
+	inserted, err := indexTerms(ctx, client, spec.TargetIndex, spec.DocField, terms)
 	if err != nil {
 		return 0, err
 	}
 
-	if err := elastic.Refresh(ctx, client, targetIndex); err != nil {
+	if err := elastic.Refresh(ctx, client, spec.TargetIndex); err != nil {
 		return 0, err
 	}
 	return inserted, nil
 }
 
-func indexNames(ctx context.Context, client *elasticsearch.Client, index string, names []string) (int, error) {
+func indexTerms(ctx context.Context, client *elasticsearch.Client, index, docField string, terms []string) (int, error) {
 	indexer, err := esutil.NewBulkIndexer(esutil.BulkIndexerConfig{Index: index, Client: client})
 	if err != nil {
 		return 0, fmt.Errorf("criar bulk indexer do dicionário: %w", err)
 	}
 
 	var inserted int64
-	for _, name := range names {
-		body, err := json.Marshal(Doc{NoCurso: name})
+	for _, term := range terms {
+		body, err := json.Marshal(map[string]string{docField: term})
 		if err != nil {
 			continue
 		}

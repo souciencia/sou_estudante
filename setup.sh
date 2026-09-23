@@ -43,8 +43,8 @@ ENV_EXAMPLE_FILE="./.env.example"
 API_KEY_NAME="app-api-key"
 BULKER_API_KEY_NAME="bulker-api-key"
 API_KEY_EXPIRATION=""          # Ex: 30d (vazio = sem expiração)
-API_INDEX_PATTERN="cursos,dicionario_cursos"
-BULKER_INDEX_PATTERN="cursos,dicionario_cursos"
+API_INDEX_PATTERN="*"
+BULKER_INDEX_PATTERN="*"
 
 # URL usada pelo PRÓPRIO script (host). O .env continua com a URL interna.
 ES_HOST_URL="${ES_HOST_URL:-http://localhost:9200}"
@@ -572,6 +572,7 @@ build_index_names_json() {
   fi
 
   local IFS=',' name json="[" first=true
+  set -f
   for name in $pattern; do
     name="${name#"${name%%[![:space:]]*}"}"
     name="${name%"${name##*[![:space:]]}"}"
@@ -583,6 +584,7 @@ build_index_names_json() {
     fi
     json+="\"$(escape_quoted "$name")\""
   done
+  set +f
   json+="]"
   printf '%s' "$json"
 }

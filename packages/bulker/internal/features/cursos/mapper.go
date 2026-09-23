@@ -1,18 +1,17 @@
-package mapper
+package cursos
 
-import "bulker/internal/model"
-
-// ToDocument converte um registro achatado da origem no documento indexado.
-func ToDocument(src model.SourceRecord) model.Document {
-	return model.Document{
+// ToDocument converte um registro achatado da origem no documento indexado,
+// enriquecendo a instituição com os dados da IES correspondente.
+func ToDocument(src SourceRecord, info InstituicaoInfo) Document {
+	return Document{
 		Sequencial:  src.Sequencial,
 		NuAnoCenso:  src.NuAnoCenso,
 		Edicao:      intToStr(src.NuAnoCenso),
 		DtCarga:     src.DtCarga,
-		Instituicao: mapInstituicao(src),
+		Instituicao: mapInstituicao(src, info),
 		Curso:       mapCurso(src),
 		Localizacao: mapLocalizacao(src),
-		CensoMetricas: model.CensoMetricas{
+		CensoMetricas: CensoMetricas{
 			QtVgTotal:                src.CursoQtVgTotal,
 			QtVgTotalDiurno:          src.CursoQtVgTotalDiurno,
 			QtVgTotalNoturno:         src.CursoQtVgTotalNoturno,
@@ -30,31 +29,37 @@ func ToDocument(src model.SourceRecord) model.Document {
 			QtAtivExtracurricular:    src.CursoQtAtivExtracurricular,
 			QtMatAtivExtracurricular: src.CursoQtMatAtivExtracurricular,
 		},
-		Enade: model.Enade{
+		Enade: Enade{
 			AnoEnade:              src.EnadeAnoEnade,
 			ConceitoContinuoEnade: src.EnadeConceitoContinuoEnade,
 			ConceitoFaixaEnade:    src.EnadeConceitoFaixaEnade,
 		},
-		Tda: model.Tda{
+		Tda: Tda{
 			NuAnoIngressoTda:   src.TdaNuAnoIngressoTda,
 			NuAnoReferenciaTda: src.TdaNuAnoReferenciaTda,
 			TAP:                src.TdaTap,
 			TCA:                src.TdaTca,
 			TDA:                src.TdaTda,
 		},
-		Sisu: model.Sisu{
+		Sisu: Sisu{
 			TemSisu: intToBool(src.SisuTemSisu),
 			Ofertas: mapOfertas(src.SisuOfertas),
 		},
 	}
 }
 
-func mapInstituicao(src model.SourceRecord) model.Instituicao {
-	return model.Instituicao{CoIES: intToStr(src.IESCoIES)}
+func mapInstituicao(src SourceRecord, info InstituicaoInfo) Instituicao {
+	return Instituicao{
+		CoIES:                   intToStr(src.IESCoIES),
+		NoIES:                   info.NoIES,
+		SgIES:                   info.SgIES,
+		CategoriaAdministrativa: info.CategoriaAdministrativa,
+		OrganizacaoAcademica:    info.OrganizacaoAcademica,
+	}
 }
 
-func mapCurso(src model.SourceRecord) model.Curso {
-	return model.Curso{
+func mapCurso(src SourceRecord) Curso {
+	return Curso{
 		CoCurso:            intToStr(src.CursoCoCurso),
 		NoCurso:            src.CursoNoCurso,
 		TpDimensao:         src.CursoTpDimensao,
@@ -65,7 +70,7 @@ func mapCurso(src model.SourceRecord) model.Curso {
 		NoModalidadeEnsino: src.CursoNoModalidadeEnsino,
 		TpNivelAcademico:   intToStr(src.CursoTpNivelAcademico),
 		NoNivelAcademico:   src.CursoNoNivelAcademico,
-		Cine: model.Cine{
+		Cine: Cine{
 			CoCineRotulo:         src.CursoCoCineRotulo,
 			NoCineRotulo:         src.CursoNoCineRotulo,
 			CoCineAreaGeral:      intToStr(src.CursoCoCineAreaGeral),
@@ -78,8 +83,8 @@ func mapCurso(src model.SourceRecord) model.Curso {
 	}
 }
 
-func mapLocalizacao(src model.SourceRecord) model.Localizacao {
-	return model.Localizacao{
+func mapLocalizacao(src SourceRecord) Localizacao {
+	return Localizacao{
 		CoRegiao:    intToStr(src.CursoCoRegiao),
 		NoRegiao:    src.CursoNoRegiao,
 		CoUF:        intToStr(src.CursoCoUF),
@@ -91,10 +96,10 @@ func mapLocalizacao(src model.SourceRecord) model.Localizacao {
 	}
 }
 
-func mapOfertas(src []model.OfertaSource) []model.Oferta {
-	ofertas := make([]model.Oferta, 0, len(src))
+func mapOfertas(src []OfertaSource) []Oferta {
+	ofertas := make([]Oferta, 0, len(src))
 	for _, oferta := range src {
-		ofertas = append(ofertas, model.Oferta{
+		ofertas = append(ofertas, Oferta{
 			Municipio:       intToStr(oferta.Municipio),
 			NomeMunicipio:   oferta.NomeMunicipio,
 			Turno:           oferta.Turno,

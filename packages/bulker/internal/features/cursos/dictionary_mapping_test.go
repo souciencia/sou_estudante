@@ -1,14 +1,13 @@
-package dictionary
+package cursos
 
 import (
 	"encoding/json"
 	"testing"
 )
 
-// TestIndexMappingUsesBrazilianAnalyzer garante que o campo no_curso do índice
-// de dicionário use o analyzer brazilian_search (lowercase + asciifolding),
-// tornando o autocomplete insensível a acentos e caixa.
-func TestIndexMappingUsesBrazilianAnalyzer(t *testing.T) {
+// TestDictionaryMappingUsesBrazilianAnalyzer garante que o campo no_curso do
+// dicionário de cursos use o analyzer brazilian_search (lowercase + asciifolding).
+func TestDictionaryMappingUsesBrazilianAnalyzer(t *testing.T) {
 	var mapping struct {
 		Settings struct {
 			Analysis struct {
@@ -27,7 +26,7 @@ func TestIndexMappingUsesBrazilianAnalyzer(t *testing.T) {
 		} `json:"mappings"`
 	}
 
-	if err := json.Unmarshal(IndexMapping, &mapping); err != nil {
+	if err := json.Unmarshal(DictionaryMapping, &mapping); err != nil {
 		t.Fatalf("mapping deve ser JSON válido: %v", err)
 	}
 
@@ -43,18 +42,20 @@ func TestIndexMappingUsesBrazilianAnalyzer(t *testing.T) {
 	if !ok {
 		t.Fatal("esperado analyzer brazilian_search definido em settings")
 	}
-
-	hasLowercase := false
-	hasAsciifolding := false
-	for _, filter := range analyzer.Filter {
-		switch filter {
-		case "lowercase":
-			hasLowercase = true
-		case "asciifolding":
-			hasAsciifolding = true
-		}
-	}
-	if !hasLowercase || !hasAsciifolding {
+	if !hasFilters(analyzer.Filter, "lowercase", "asciifolding") {
 		t.Errorf("esperado filtros lowercase e asciifolding no brazilian_search, recebido %v", analyzer.Filter)
 	}
+}
+
+func hasFilters(filters []string, wanted ...string) bool {
+	set := make(map[string]struct{}, len(filters))
+	for _, filter := range filters {
+		set[filter] = struct{}{}
+	}
+	for _, want := range wanted {
+		if _, ok := set[want]; !ok {
+			return false
+		}
+	}
+	return true
 }

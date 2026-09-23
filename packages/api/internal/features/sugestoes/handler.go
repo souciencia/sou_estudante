@@ -37,7 +37,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	// 4. Chamar service
-	sugestoes, err := h.Service.SugerirCursos(ctx, termo, limit)
+	sugestoes, err := h.Service.Sugerir(ctx, termo, limit)
 	if err != nil {
 		slog.Error("Erro ao buscar sugestões", "error", err, "termo", termo)
 		http.Error(w, "Erro interno ao buscar sugestões", http.StatusInternalServerError)

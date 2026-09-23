@@ -1,0 +1,40 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "analysis": {
+      "normalizer": {
+        "ascii_lower": {
+          "type": "custom",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      },
+      "analyzer": {
+        "brazilian_search": {
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "co_ies": { "type": "keyword" },
+      "no_ies": {
+        "type": "text",
+        "analyzer": "brazilian_search",
+        "fields": {
+          "keyword": { "type": "keyword" },
+          "exato": { "type": "keyword", "normalizer": "ascii_lower" }
+        }
+      },
+      "sg_ies": { "type": "keyword" },
+      "categoria_administrativa": { "type": "keyword" },
+      "organizacao_academica": { "type": "keyword" },
+      "municipio": { "type": "keyword" },
+      "uf": { "type": "keyword" },
+      "regiao": { "type": "keyword" }
+    }
+  }
+}

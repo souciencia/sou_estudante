@@ -1,10 +1,6 @@
-package mapper
+package cursos
 
-import (
-	"testing"
-
-	"bulker/internal/model"
-)
+import "testing"
 
 func intPtr(value int) *int {
 	return &value
@@ -15,7 +11,7 @@ func int64Ptr(value int64) *int64 {
 }
 
 func TestToDocumentConvertsFlattenedRecordIntoIndexedDocument(t *testing.T) {
-	src := model.SourceRecord{
+	src := SourceRecord{
 		Sequencial:      int64Ptr(10),
 		NuAnoCenso:      intPtr(2024),
 		IESCoIES:        intPtr(42),
@@ -27,12 +23,12 @@ func TestToDocumentConvertsFlattenedRecordIntoIndexedDocument(t *testing.T) {
 		CursoNoUF:       "MATO GROSSO",
 		CursoSgUF:       "MT",
 		SisuTemSisu:     intPtr(1),
-		SisuOfertas: []model.OfertaSource{
+		SisuOfertas: []OfertaSource{
 			{Municipio: intPtr(5103403), NomeMunicipio: "CUIABÁ", Vagas: intPtr(10)},
 		},
 	}
 
-	doc := ToDocument(src)
+	doc := ToDocument(src, InstituicaoInfo{})
 
 	if doc.Edicao != "2024" {
 		t.Errorf("edicao = %q, esperado %q", doc.Edicao, "2024")
@@ -57,5 +53,33 @@ func TestToDocumentConvertsFlattenedRecordIntoIndexedDocument(t *testing.T) {
 	}
 	if len(doc.Sisu.Ofertas) != 1 || doc.Sisu.Ofertas[0].Municipio != "5103403" {
 		t.Errorf("sisu.ofertas mapeadas incorretamente: %+v", doc.Sisu.Ofertas)
+	}
+}
+
+func TestToDocumentEnrichesInstituicaoWithIESData(t *testing.T) {
+	src := SourceRecord{IESCoIES: intPtr(376)}
+	info := InstituicaoInfo{
+		NoIES:                   "UNIVERSIDADE DA AMAZÔNIA",
+		SgIES:                   "UNAMA",
+		CategoriaAdministrativa: "Privada com fins lucrativos",
+		OrganizacaoAcademica:    "Universidade",
+	}
+
+	doc := ToDocument(src, info)
+
+	if doc.Instituicao.CoIES != "376" {
+		t.Errorf("instituicao.co_ies = %q, esperado %q", doc.Instituicao.CoIES, "376")
+	}
+	if doc.Instituicao.NoIES != info.NoIES {
+		t.Errorf("instituicao.no_ies = %q, esperado %q", doc.Instituicao.NoIES, info.NoIES)
+	}
+	if doc.Instituicao.SgIES != info.SgIES {
+		t.Errorf("instituicao.sg_ies = %q, esperado %q", doc.Instituicao.SgIES, info.SgIES)
+	}
+	if doc.Instituicao.CategoriaAdministrativa != info.CategoriaAdministrativa {
+		t.Errorf("instituicao.categoria_administrativa = %q, esperado %q", doc.Instituicao.CategoriaAdministrativa, info.CategoriaAdministrativa)
+	}
+	if doc.Instituicao.OrganizacaoAcademica != info.OrganizacaoAcademica {
+		t.Errorf("instituicao.organizacao_academica = %q, esperado %q", doc.Instituicao.OrganizacaoAcademica, info.OrganizacaoAcademica)
 	}
 }
