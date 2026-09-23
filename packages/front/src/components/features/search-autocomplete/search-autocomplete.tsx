@@ -20,9 +20,16 @@ export interface SearchAutocompleteProps {
   debounceMs?: number
   module?: Module
   className?: string
+  /** Hook de sugestões (default: cursos). Permite reuso por outros domínios. */
+  useSuggestions?: (termo: string) => {
+    sugestoes: string[]
+    isLoading: boolean
+  }
+  placeholder?: string
+  searchLabel?: string
+  listLabel?: string
+  minChars?: number
 }
-
-const MIN_CHARS = API_CONFIG.SUGGEST_MIN_CHARS
 
 export function SearchAutocomplete({
   defaultValue = '',
@@ -30,6 +37,11 @@ export function SearchAutocomplete({
   debounceMs = API_CONFIG.SEARCH_DEBOUNCE_MS,
   module,
   className,
+  useSuggestions = useSugestoesCursos,
+  placeholder = 'Busque pelo nome do curso',
+  searchLabel = 'Buscar curso pelo nome',
+  listLabel = 'Sugestões de cursos',
+  minChars = API_CONFIG.SUGGEST_MIN_CHARS,
 }: SearchAutocompleteProps) {
   const inputId = useId()
   const listboxId = `${inputId}-listbox`
@@ -41,9 +53,9 @@ export function SearchAutocomplete({
   const [focused, setFocused] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
 
-  const { sugestoes } = useSugestoesCursos(termo)
+  const { sugestoes } = useSuggestions(termo)
 
-  const hasTermo = termo.trim().length >= MIN_CHARS
+  const hasTermo = termo.trim().length >= minChars
   const isOpen = open && focused && hasTermo && sugestoes.length > 0
 
   useEffect(() => {
@@ -159,7 +171,7 @@ export function SearchAutocomplete({
   return (
     <div data-module={module} className={cn('relative', className)}>
       <label htmlFor={inputId} className="sr-only">
-        Buscar curso pelo nome
+        {searchLabel}
       </label>
 
       <Search
@@ -185,7 +197,7 @@ export function SearchAutocomplete({
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
-        placeholder="Busque pelo nome do curso"
+        placeholder={placeholder}
         className={cn(
           'w-full rounded-full border border-gray-300 bg-white py-3 pl-11 pr-4',
           'font-protagonist text-protagonist text-fg-protagonist placeholder:text-fg-muted',
@@ -198,7 +210,7 @@ export function SearchAutocomplete({
         <div
           id={listboxId}
           role="listbox"
-          aria-label="Sugestões de cursos"
+          aria-label={listLabel}
           className="absolute z-20 mt-2 max-h-72 w-full overflow-auto rounded-2xl border border-gray-200 bg-white py-1 shadow-lg"
         >
           {sugestoes.map((sugestao, index) => (

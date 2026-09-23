@@ -1,28 +1,35 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
+import {
+  type ActiveFilterChip,
+  ActiveFiltersBar,
+} from '@/components/features/active-filters/active-filters-bar'
 import type { Module } from '@/lib/module'
-import { useSearchCursos } from '@/services/api/use-search-cursos'
-import { type ActiveFilterChip, ActiveFiltersBar } from './active-filters-bar'
+import { ufLabel } from '@/lib/uf'
+import { useSearchIes } from '@/services/api/use-search-ies'
 
-const FILTER_KEYS = [
-  'uf',
-  'turno',
-  'grau',
-  'categoria',
-  'modalidade',
-  'enade',
-  'sort',
-]
+const FILTER_KEYS = ['uf', 'regiao', 'categoria', 'organizacao', 'sort']
 
-interface ActiveFiltersProps {
+const SORT_LABELS: Record<string, string> = {
+  az: 'A Z',
+  relevancia: 'Relevância',
+}
+
+function chipLabel(key: string, value: string): string {
+  if (key === 'uf') return ufLabel(value)
+  if (key === 'sort') return SORT_LABELS[value] ?? value
+  return value
+}
+
+interface IesActiveFiltersProps {
   module?: Module
   className?: string
 }
 
-export function ActiveFilters({ module, className }: ActiveFiltersProps) {
+export function IesActiveFilters({ module, className }: IesActiveFiltersProps) {
   const searchParams = useSearchParams()
-  const { updateParams, resetFilters } = useSearchCursos()
+  const { updateParams, resetFilters } = useSearchIes()
 
   if (!searchParams) return null
 
@@ -37,11 +44,7 @@ export function ActiveFilters({ module, className }: ActiveFiltersProps) {
       .map((v) => v.trim())
       .filter(Boolean)
     for (const value of values) {
-      filters.push({
-        key,
-        value,
-        label: value,
-      })
+      filters.push({ key, value, label: chipLabel(key, value) })
     }
   }
 

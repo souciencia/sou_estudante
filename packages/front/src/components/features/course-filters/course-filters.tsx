@@ -1,13 +1,12 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import { Typo } from '@/components/atoms/typo'
-import { FilterGroup } from '@/components/features/filter-group'
+import {
+  type FilterSectionDefinition,
+  FiltersPanel,
+} from '@/components/features/filters-panel/filters-panel'
 import type { Module } from '@/lib/module'
-import type { SearchAggregations } from '@/services/api/types'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
-import { cn } from '@/utils/cn'
 
 const ESTADOS_PRINCIPAIS = [
   { label: 'São Paulo', value: 'SP' },
@@ -59,6 +58,48 @@ const CONCEITOS_ENADE = [
   { label: 'Conceito 1', value: '1' },
 ]
 
+const SECTIONS: FilterSectionDefinition[] = [
+  {
+    key: 'uf',
+    title: 'Estado',
+    aggregationKey: 'ufs',
+    options: [...ESTADOS_PRINCIPAIS, ...OUTROS_ESTADOS],
+    visibleCount: ESTADOS_PRINCIPAIS.length,
+    moreLabel: (hidden) => `+ ${hidden} estados`,
+    lessLabel: 'Ver menos estados',
+  },
+  {
+    key: 'turno',
+    title: 'Turno · Censo',
+    aggregationKey: 'turnos',
+    options: TURNOS,
+  },
+  {
+    key: 'grau',
+    title: 'Grau acadêmico',
+    aggregationKey: 'graus',
+    options: GRAUS_ACADEMICOS,
+  },
+  {
+    key: 'categoria',
+    title: 'Categoria',
+    aggregationKey: 'categorias',
+    options: CATEGORIAS,
+  },
+  {
+    key: 'modalidade',
+    title: 'Modalidade',
+    aggregationKey: 'modalidades',
+    options: MODALIDADES,
+  },
+  {
+    key: 'enade',
+    title: 'Conceito Enade',
+    aggregationKey: 'enades',
+    options: CONCEITOS_ENADE,
+  },
+]
+
 interface CourseFiltersProps {
   module?: Module
   className?: string
@@ -67,7 +108,6 @@ interface CourseFiltersProps {
 export function CourseFilters({ module, className }: CourseFiltersProps) {
   const searchParams = useSearchParams()
   const { updateParams, aggregations } = useSearchCursos()
-  const [showAllEstados, setShowAllEstados] = useState(false)
 
   const getActiveValues = (key: string): string[] => {
     const raw = searchParams?.get(key)
@@ -76,10 +116,6 @@ export function CourseFilters({ module, className }: CourseFiltersProps) {
       .split(',')
       .map((item) => item.trim())
       .filter(Boolean)
-  }
-
-  const isChecked = (key: string, value: string) => {
-    return getActiveValues(key).includes(value)
   }
 
   const handleToggle = (key: string, value: string) => {
@@ -95,150 +131,14 @@ export function CourseFilters({ module, className }: CourseFiltersProps) {
     })
   }
 
-  const normalize = (str: string) =>
-    str
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toUpperCase()
-      .trim()
-
-  const getCount = (
-    group: keyof SearchAggregations,
-    matchValue: string,
-  ): number | undefined => {
-    if (!aggregations?.[group]) return undefined
-    const normMatch = normalize(matchValue)
-    const bucket = aggregations[group]?.find((b) => {
-      const normKey = normalize(b.key)
-      return (
-        normKey === normMatch ||
-        normKey.includes(normMatch) ||
-        normMatch.includes(normKey)
-      )
-    })
-    return bucket ? bucket.count : 0
-  }
-
-  const estados = showAllEstados
-    ? [...ESTADOS_PRINCIPAIS, ...OUTROS_ESTADOS]
-    : ESTADOS_PRINCIPAIS
-
   return (
-    <div
-      data-module={module}
-      className={cn(
-        'flex flex-col gap-6 font-coadjuvant text-fg-coadjuvant',
-        className,
-      )}
-    >
-      <FilterGroup>
-        <FilterGroup.Title>Estado</FilterGroup.Title>
-        <FilterGroup.List>
-          {estados.map((item) => (
-            <FilterGroup.Option
-              key={item.value}
-              label={item.label}
-              value={item.value}
-              resultCount={getCount('ufs', item.value)}
-              checked={isChecked('uf', item.value)}
-              onChange={() => handleToggle('uf', item.value)}
-            />
-          ))}
-        </FilterGroup.List>
-        <button
-          type="button"
-          onClick={() => setShowAllEstados(!showAllEstados)}
-          className={cn(
-            'mt-2 text-left text-coadjuvant text-accent-deep hover:underline cursor-pointer',
-          )}
-        >
-          <Typo s="sm" className={cn('text-accent-deep')}>
-            {showAllEstados
-              ? 'Ver menos estados'
-              : `+ ${OUTROS_ESTADOS.length} estados`}
-          </Typo>
-        </button>
-      </FilterGroup>
-
-      <FilterGroup>
-        <FilterGroup.Title>Turno · Censo</FilterGroup.Title>
-        <FilterGroup.List>
-          {TURNOS.map((item) => (
-            <FilterGroup.Option
-              key={item.value}
-              label={item.label}
-              value={item.value}
-              resultCount={getCount('turnos', item.value)}
-              checked={isChecked('turno', item.value)}
-              onChange={() => handleToggle('turno', item.value)}
-            />
-          ))}
-        </FilterGroup.List>
-      </FilterGroup>
-
-      <FilterGroup>
-        <FilterGroup.Title>Grau acadêmico</FilterGroup.Title>
-        <FilterGroup.List>
-          {GRAUS_ACADEMICOS.map((item) => (
-            <FilterGroup.Option
-              key={item.value}
-              label={item.label}
-              value={item.value}
-              resultCount={getCount('graus', item.value)}
-              checked={isChecked('grau', item.value)}
-              onChange={() => handleToggle('grau', item.value)}
-            />
-          ))}
-        </FilterGroup.List>
-      </FilterGroup>
-
-      <FilterGroup>
-        <FilterGroup.Title>Categoria</FilterGroup.Title>
-        <FilterGroup.List>
-          {CATEGORIAS.map((item) => (
-            <FilterGroup.Option
-              key={item.value}
-              label={item.label}
-              value={item.value}
-              resultCount={getCount('categorias', item.value)}
-              checked={isChecked('categoria', item.value)}
-              onChange={() => handleToggle('categoria', item.value)}
-            />
-          ))}
-        </FilterGroup.List>
-      </FilterGroup>
-
-      <FilterGroup>
-        <FilterGroup.Title>Modalidade</FilterGroup.Title>
-        <FilterGroup.List>
-          {MODALIDADES.map((item) => (
-            <FilterGroup.Option
-              key={item.value}
-              label={item.label}
-              value={item.value}
-              resultCount={getCount('modalidades', item.value)}
-              checked={isChecked('modalidade', item.value)}
-              onChange={() => handleToggle('modalidade', item.value)}
-            />
-          ))}
-        </FilterGroup.List>
-      </FilterGroup>
-
-      <FilterGroup>
-        <FilterGroup.Title>Conceito Enade</FilterGroup.Title>
-        <FilterGroup.List>
-          {CONCEITOS_ENADE.map((item) => (
-            <FilterGroup.Option
-              key={item.value}
-              label={item.label}
-              value={item.value}
-              resultCount={getCount('enades', item.value)}
-              checked={isChecked('enade', item.value)}
-              onChange={() => handleToggle('enade', item.value)}
-            />
-          ))}
-        </FilterGroup.List>
-      </FilterGroup>
-    </div>
+    <FiltersPanel
+      sections={SECTIONS}
+      aggregations={aggregations}
+      activeValues={getActiveValues}
+      onToggle={handleToggle}
+      module={module}
+      className={className}
+    />
   )
 }
