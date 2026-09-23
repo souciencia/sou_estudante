@@ -1,3 +1,4 @@
+import { CardFields } from './card-fields'
 import { CardHeader } from './card-header'
 import { CardIconEnade } from './card-icon-enade'
 import { CardProgressBar } from './card-progress-bar'
@@ -9,4 +10,5 @@ export const Card = Object.assign(CardRoot, {
   IconEnade: CardIconEnade,
   Tags: CardTags,
   ProgressBar: CardProgressBar,
+  Fields: CardFields,
 })

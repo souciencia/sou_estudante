@@ -1,8 +1,14 @@
 'use client'
 
-import { Button } from '@/components/atoms/button'
 import type { Module } from '@/lib/module'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
+import { SortingOptions, type SortOption } from './sorting-options'
+
+const CURSOS_SORT_OPTIONS: SortOption[] = [
+  { label: 'Maior Enade', value: 'enade' },
+  { label: 'Menor desistência', value: 'desistencia' },
+  { label: 'A Z', value: 'az' },
+]
 
 interface SearchSortingOptionsProps {
   module?: Module
@@ -11,21 +17,11 @@ interface SearchSortingOptionsProps {
 export function SearchSortignOptions({ module }: SearchSortingOptionsProps) {
   const { updateParams } = useSearchCursos()
 
-  const handleSort = (sortOption: string) => {
-    updateParams({ sort: sortOption })
-  }
-
   return (
-    <div className="flex gap-2">
-      <Button module={module} onClick={() => handleSort('enade')}>
-        Maior Enade
-      </Button>
-      <Button module={module} onClick={() => handleSort('desistencia')}>
-        Menor desistência
-      </Button>
-      <Button module={module} onClick={() => handleSort('az')}>
-        A Z
-      </Button>
-    </div>
+    <SortingOptions
+      options={CURSOS_SORT_OPTIONS}
+      onSelect={(sort) => updateParams({ sort })}
+      module={module}
+    />
   )
 }
