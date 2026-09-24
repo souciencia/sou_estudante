@@ -43,3 +43,38 @@ export const Module5: Story = {
     module: '5',
   },
 }
+
+export const Module1_List: Story = {
+  args: {
+    module: '1',
+    variant: 'list',
+  },
+}
+
+export const Module2_List: Story = {
+  args: {
+    module: '2',
+    variant: 'list',
+  },
+}
+
+export const Module3_List: Story = {
+  args: {
+    module: '3',
+    variant: 'list',
+  },
+}
+
+export const Module4_List: Story = {
+  args: {
+    module: '4',
+    variant: 'list',
+  },
+}
+
+export const Module5_List: Story = {
+  args: {
+    module: '5',
+    variant: 'list',
+  },
+}
