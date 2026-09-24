@@ -69,7 +69,6 @@ services:
     image: sou_estudante/front:${IMAGE_TAG:-latest}
     container_name: se_front
     environment:
-      - NODE_ENV=production
       - API_URL=${API_URL:-http://se_api:8080}
     ports:
       - "3000:3000"

@@ -79,7 +79,6 @@ services:
       dockerfile: Dockerfile.dev
     container_name: se_front
     environment:
-      - NODE_ENV=development
       - API_URL=${API_URL}
       - FORCE_COLOR=1
       - WATCHPACK_POLLING=true
