@@ -13,12 +13,11 @@
 
 ⚠️​ Whenever your write code, format it according to the rules in the `.editorconfig` file and `biome.json`.
 
-### Components organization
-- Organize (UI) components using this division:
-
-- **components/atoms:** Elementos visuais essenciais e indivisíveis da UI. Ex.: `Button`, `Input`, `Icon`, `Typography`. 
-- **components/features:** Estruturas complexas que desempenham um papel definido e que utilizam mais componentes em sua composição. Ex.: `Card`, `FilterGroup`, `ActiveFilters`. 
-- **components/site-blocks**: Apenas por organização, aqui ficam os  componentes como `Header`, `Footer`, `Hero`, etc. 
+### Organização de componentes
+O padrão completo (Compound Component Pattern + Componentes Agnósticos com Wrappers de Especialização) está em [`docs/guidelines-2.md`](../../docs/guidelines-2.md). Resumo:
+- Agrupar por domínio em `src/components/`: `ui`, `layout`, `search`, `profile`, `enade`, `home`.
+- Subcomponentes na pasta do pai, expostos por namespace (ex.: `<Profile.Header>`), com Contexto e validação de uso.
+- Especializações de domínio em `<agnóstico>/wrappers/<wrapper>/` (ex.: `profile/wrappers/profile-cursos`), nomeadas `<Agnóstico><Domínio>` (ex.: `ProfileCursos`, `SearchHeaderIes`).
 
 ### Compound Components para componentes robustos
 
