@@ -52,6 +52,20 @@
   --color-card-border: oklch(0.92 0 0);
 
   /* ------------------------------------------------------------------------
+     Cores · Página inicial
+     ------------------------------------------------------------------------ */
+  --color-navy-950: #16263A;
+  --color-navy-900: #1C2B3A;
+  --color-plum-100: #efe6f5;
+  --color-surface: #fff;
+
+  /* ------------------------------------------------------------------------
+     Cores · Texto
+     ------------------------------------------------------------------------ */
+  --color-text: #1a0e23;
+  --color-text-muted: #5b5266;
+
+  /* ------------------------------------------------------------------------
      Tipografia · Famílias
      ------------------------------------------------------------------------ */
   /* Protagonista — conteúdo principal (card, callout, textos principais) */
@@ -64,6 +78,8 @@
   --font-title-coadjuvant: "Source Sans 3", system-ui, sans-serif;
 
   --font-mono: "DM Mono", ui-monospace, monospace; /* dados numéricos */
+
+  --font-display: "Playfair Display", Georgia, serif;
 
   /* ------------------------------------------------------------------------
      Tipografia · Escala
@@ -121,6 +137,58 @@
 body {
   font-family: var(--font-protagonist);
   color: var(--color-fg-protagonist);
+}
+
+/* ==========================================================================
+   Bússola da Hero da Página Inicial
+   ========================================================================== */
+.hero-bussola {
+  position: absolute;
+  top: 50%;
+  right: -80px;
+  transform: translateY(-50%);
+  width: 188px;
+  height: 188px;
+  opacity: 0.34;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-bussola .contorno,
+.hero-bussola .seta {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.hero-bussola .contorno {
+  animation: bussola-contorno 10s ease-in-out infinite;
+}
+.hero-bussola .seta {
+  animation: bussola-seta 5.6s ease-in-out infinite;
+}
+@keyframes bussola-contorno {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+@keyframes bussola-seta {
+  0%,
+  100% {
+    transform: rotate(12deg);
+  }
+  50% {
+    transform: rotate(-14deg);
+  }
+}
+@media (min-width: 860px) {
+  .hero-bussola {
+    width: 312px;
+    height: 312px;
+    right: 16px;
+    opacity: 1;
+  }
 }
 
 /* Todo movimento respeita prefers-reduced-motion */
