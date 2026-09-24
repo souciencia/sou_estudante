@@ -1,7 +1,11 @@
-// src/services/api/ies.service.ts
 import { apiClient } from './client'
 import { API_CONFIG } from './config'
-import type { IesListResponse, SugestoesIesResponse } from './types'
+import type {
+  IES,
+  IesListResponse,
+  Result,
+  SugestoesIesResponse,
+} from './types'
 
 /**
  * Serviço de IES - encapsula as operações do índice de instituições
@@ -59,6 +63,27 @@ export const iesService = {
     )
 
     return result.success ? result.data : emptyResponse
+  },
+
+  /**
+   * Busca uma IES específica pelo seu co_ies.
+   * @param coIes - Código da IES (mesmo `_id` do documento no índice)
+   * @returns Result com a IES; em falha, distingue 404 de erro
+   */
+  async getIes(coIes: string): Promise<Result<IES>> {
+    const normalized = coIes?.trim()
+
+    if (!normalized) {
+      return {
+        success: false,
+        error: {
+          type: 'validation',
+          message: 'Identificador da IES é obrigatório',
+        },
+      }
+    }
+
+    return apiClient<IES>(API_CONFIG.ENDPOINTS.DETAIL_IES(normalized))
   },
 
   /**

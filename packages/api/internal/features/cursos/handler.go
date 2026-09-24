@@ -3,6 +3,7 @@ package cursos
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -82,6 +83,45 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
+		slog.Error("Erro ao serializar JSON", "error", err)
+	}
+}
+
+// DetailHandler gerencia a busca de um curso específico.
+type DetailHandler struct {
+	Service Service
+}
+
+// ServeHTTP implementa http.Handler para GET /cursos/{id}.
+func (h *DetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	id := r.PathValue("id")
+	if id == "" {
+		http.Error(w, "Parâmetro 'id' é obrigatório", http.StatusBadRequest)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+	defer cancel()
+
+	item, err := h.Service.BuscarCursoPorID(ctx, id)
+	if errors.Is(err, ErrNotFound) {
+		http.Error(w, "Curso não encontrado", http.StatusNotFound)
+		return
+	}
+	if err != nil {
+		slog.Error("Erro ao buscar curso por id", "error", err, "id", id)
+		http.Error(w, "Erro interno ao buscar curso", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(item); err != nil {
 		slog.Error("Erro ao serializar JSON", "error", err)
 	}
 }

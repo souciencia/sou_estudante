@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/elastic/go-elasticsearch/v8"
@@ -12,9 +14,13 @@ import (
 	"api_estudante/internal/shared"
 )
 
+// ErrNotFound indica que o curso solicitado não existe no índice.
+var ErrNotFound = errors.New("curso não encontrado")
+
 // Repository define contrato de acesso a cursos
 type Repository interface {
 	Search(ctx context.Context, query string, filters SearchFilterParams, page, limit int) (*SearchResult, error)
+	GetByID(ctx context.Context, id string) (*Curso, error)
 }
 
 // ElasticsearchRepository implementa Repository usando Elasticsearch
@@ -500,4 +506,33 @@ func (r *ElasticsearchRepository) Search(
 		Hits:         hits,
 		Aggregations: searchAggs,
 	}, nil
+}
+
+// GetByID busca um curso pelo seu sequencial (que também é o _id do documento).
+func (r *ElasticsearchRepository) GetByID(ctx context.Context, id string) (*Curso, error) {
+	res, err := r.client.Get(
+		r.index,
+		id,
+		r.client.Get.WithContext(ctx),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao buscar curso: %w", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode == http.StatusNotFound {
+		return nil, ErrNotFound
+	}
+	if res.IsError() {
+		return nil, fmt.Errorf("erro ES [%s]", res.Status())
+	}
+
+	var parsed struct {
+		Source Curso `json:"_source"`
+	}
+	if err := json.NewDecoder(res.Body).Decode(&parsed); err != nil {
+		return nil, fmt.Errorf("erro ao decodificar curso: %w", err)
+	}
+
+	return &parsed.Source, nil
 }

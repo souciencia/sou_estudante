@@ -1,4 +1,3 @@
-// src/services/api/use-sugestoes-ies.ts
 'use client'
 
 import { iesService } from '@/services/api/ies.service'

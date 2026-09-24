@@ -63,3 +63,54 @@ describe('cursoService.sugerirCursos', () => {
     expect(url).toContain('q=medicina')
   })
 })
+
+describe('cursoService.getCurso', () => {
+  beforeEach(() => {
+    global.fetch = vi.fn()
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('consulta o endpoint do curso pelo id', async () => {
+    const curso = { sequencial: 123, curso: { no_curso: 'MEDICINA' } }
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => curso,
+    })
+    global.fetch = mockFetch
+
+    const result = await cursoService.getCurso('123')
+
+    const [url] = mockFetch.mock.calls[0] as [string]
+    expect(url).toContain('/cursos/123')
+    expect(result).toEqual({ success: true, data: curso })
+  })
+
+  it('falha sem chamar a API quando o id é vazio', async () => {
+    const mockFetch = vi.fn()
+    global.fetch = mockFetch
+
+    const result = await cursoService.getCurso('   ')
+
+    expect(result.success).toBe(false)
+    expect(mockFetch).not.toHaveBeenCalled()
+  })
+
+  it('preserva o status 404 do erro da API', async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+    })
+
+    const result = await cursoService.getCurso('999')
+
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(result.error.statusCode).toBe(404)
+    }
+  })
+})
