@@ -93,6 +93,7 @@ export type CursoListResponse = SearchListResponse<Curso, SearchAggregations>
 // Tipos da estrutura do índice de cursos
 
 export interface Curso {
+  _id?: string
   sequencial?: number
   nu_ano_censo?: number
   edicao?: string
@@ -108,6 +109,10 @@ export interface Curso {
 
 export interface Instituicao {
   co_ies?: string
+  no_ies?: string
+  sg_ies?: string
+  categoria_administrativa?: string
+  organizacao_academica?: string
 }
 
 export interface DadosCurso {

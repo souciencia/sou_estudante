@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Card } from '@/components/features/card'
 import { ENADE_FAIXAS, type EnadeFaixa } from '@/lib/enade'
 import type { Module } from '@/lib/module'
@@ -45,7 +46,7 @@ export default function SearchResultItem({
       ? (conceitoEnade.toString() as EnadeFaixa)
       : undefined
 
-  return (
+  const card = (
     <Card module={module}>
       <Card.Header
         title={nomeCurso}
@@ -63,5 +64,19 @@ export default function SearchResultItem({
         />
       )}
     </Card>
+  )
+
+  const id = curso.sequencial ?? curso._id
+  if (id === undefined) {
+    return card
+  }
+
+  return (
+    <Link
+      href={`/cursos/${id}`}
+      className="block rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
+    >
+      {card}
+    </Link>
   )
 }

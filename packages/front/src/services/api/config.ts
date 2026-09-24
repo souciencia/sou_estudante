@@ -15,10 +15,11 @@ export const API_CONFIG = {
   ENDPOINTS: {
     SEARCH_CURSOS: '/cursos',
     SUGESTOES_CURSOS: '/cursos/sugestoes',
+    DETAIL_CURSO: (id: string) => `/cursos/${encodeURIComponent(id)}`,
     SEARCH_IES: '/ies',
+    DETAIL_IES: (id: string) => `/ies/${encodeURIComponent(id)}`,
     SUGESTOES_IES: '/ies/sugestoes',
     // Futuros endpoints dos 5 módulos:
-    // GET_CURSO: '/cursos/:id',
     // COMO_INGRESSAR: '/ingresso',
     // COMO_PERMANECER: '/permanencia',
     // CONHECER_INSTITUICAO: '/instituicoes/:id',
