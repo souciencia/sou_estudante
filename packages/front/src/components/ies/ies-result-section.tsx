@@ -1,6 +1,6 @@
 'use client'
 
-import { SearchResults } from '@/components/search-results/search-results'
+import { SearchResults } from '@/components/search/search-results/search-results'
 import type { Module } from '@/lib/module'
 import type { IES } from '@/services/api/types'
 import { useSearchIes } from '@/services/api/use-search-ies'

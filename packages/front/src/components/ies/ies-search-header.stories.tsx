@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { IesSearchHeader } from './ies-search-header'
 
 const meta = {
-  title: 'Organisms/IesSearchHeader',
+  title: 'Components/Ies/IesSearchHeader',
   component: IesSearchHeader,
   parameters: {
     nextjs: {

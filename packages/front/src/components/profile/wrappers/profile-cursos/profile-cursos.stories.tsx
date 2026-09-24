@@ -3,7 +3,7 @@ import type { Curso } from '@/services/api/types'
 import { ProfileCursos } from './profile-cursos'
 
 const meta = {
-  title: 'Components/ProfileCursos',
+  title: 'Components/Profile/Wrappers/ProfileCursos',
   component: ProfileCursos,
   tags: ['autodocs'],
 } satisfies Meta<typeof ProfileCursos>

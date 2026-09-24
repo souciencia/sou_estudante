@@ -1,6 +1,6 @@
-import { Hero } from '@/components/hero'
-import { HomeSearch } from '@/components/home-search/home-search'
-import { Route } from '@/components/route/route'
+import { HomeSearch } from '@/components/home/home-search/home-search'
+import { Hero } from '@/components/layout/hero'
+import { Route } from '@/components/ui/route/route'
 
 export default function Home() {
   return (

@@ -1,10 +1,10 @@
 'use client'
 
-import { SearchAutocomplete } from '@/components/search-autocomplete/search-autocomplete'
+import { SearchAutocomplete } from '@/components/search/search-autocomplete/search-autocomplete'
 import {
   SortingOptions,
   type SortOption,
-} from '@/components/search-sorting-options/sorting-options'
+} from '@/components/search/sorting-options/sorting-options'
 import type { Module } from '@/lib/module'
 import { useSearchIes } from '@/services/api/use-search-ies'
 import { useSugestoesIes } from '@/services/api/use-sugestoes-ies'

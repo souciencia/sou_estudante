@@ -5,7 +5,7 @@ import {
   type FilterOptionDefinition,
   type FilterSectionDefinition,
   FiltersPanel,
-} from '@/components/filters-panel/filters-panel'
+} from '@/components/search/filters-panel/filters-panel'
 import type { Module } from '@/lib/module'
 import { ufLabel } from '@/lib/uf'
 import type { AggregationBucket } from '@/services/api/types'

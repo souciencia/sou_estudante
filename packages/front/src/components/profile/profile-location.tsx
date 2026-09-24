@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { IconTile } from '@/components/icon-tile/icon-tile'
+import { IconTile } from '@/components/ui/icon-tile/icon-tile'
 import type { Module } from '@/lib/module'
 import { cn } from '@/utils/cn'
 import { useProfileContext } from './profile-context'

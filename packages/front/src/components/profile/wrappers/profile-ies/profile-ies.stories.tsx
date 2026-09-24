@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ProfileIES } from './profile-ies'
 
 const meta = {
-  title: 'Components/ProfileIES',
+  title: 'Components/Profile/Wrappers/ProfileIES',
   component: ProfileIES,
   tags: ['autodocs'],
 } satisfies Meta<typeof ProfileIES>

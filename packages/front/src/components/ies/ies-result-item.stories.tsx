@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import IesResultItem from './ies-result-item'
 
 const meta = {
-  title: 'Organisms/IesResultItem',
+  title: 'Components/Ies/IesResultItem',
   component: IesResultItem,
 } satisfies Meta<typeof IesResultItem>
 

@@ -1,7 +1,7 @@
 import { MapPin } from 'lucide-react'
 import { Profile } from '@/components/profile'
-import { Route } from '@/components/route/route'
-import { Tag } from '@/components/tag/tag'
+import { Route } from '@/components/ui/route/route'
+import { Tag } from '@/components/ui/tag/tag'
 import { MODULE_META, type Module } from '@/lib/module'
 import type { IES } from '@/services/api/types'
 

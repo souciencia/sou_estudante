@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { IesFilters } from './ies-filters'
 
 const meta = {
-  title: 'Organisms/IesFilters',
+  title: 'Components/Ies/IesFilters',
   component: IesFilters,
   parameters: {
     nextjs: {

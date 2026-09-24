@@ -3,7 +3,7 @@ import { IesActiveFilters } from '@/components/ies/ies-active-filters'
 import { IesFilters } from '@/components/ies/ies-filters'
 import IesResultSection from '@/components/ies/ies-result-section'
 import { IesSearchHeader } from '@/components/ies/ies-search-header'
-import { Typo } from '@/components/typo'
+import { Typo } from '@/components/ui/typo'
 
 export default function IesPage() {
   return (

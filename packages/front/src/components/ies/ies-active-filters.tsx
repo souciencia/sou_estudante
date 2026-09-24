@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import {
   type ActiveFilterChip,
   ActiveFiltersBar,
-} from '@/components/active-filters/active-filters-bar'
+} from '@/components/search/active-filters-bar/active-filters-bar'
 import type { Module } from '@/lib/module'
 import { ufLabel } from '@/lib/uf'
 import { useSearchIes } from '@/services/api/use-search-ies'

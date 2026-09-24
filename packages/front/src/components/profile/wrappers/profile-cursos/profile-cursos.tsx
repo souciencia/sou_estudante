@@ -2,9 +2,9 @@
 
 import { Info, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/button/button'
 import { Profile } from '@/components/profile'
-import { Route } from '@/components/route/route'
+import { Button } from '@/components/ui/button/button'
+import { Route } from '@/components/ui/route/route'
 import { MODULE_META, type Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
 import { buildOverviewItems } from './profile-cursos-overview-items'

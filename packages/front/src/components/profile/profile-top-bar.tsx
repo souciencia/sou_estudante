@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { BackLink } from '@/components/back-link/back-link'
+import { BackLink } from '@/components/ui/back-link/back-link'
 import { cn } from '@/utils/cn'
 
 export interface ProfileTopBarProps {

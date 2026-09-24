@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react'
-import { Button } from '@/components/button/button'
+import { Button } from '@/components/ui/button/button'
 import { cn } from '@/utils/cn'
 
 export interface ProfileCursosRetentionCardProps {

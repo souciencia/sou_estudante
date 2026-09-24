@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { ErrorMessage } from '@/components/error-message'
-import { Spinner } from '@/components/spinner'
-import { Typo } from '@/components/typo'
+import { ErrorMessage } from '@/components/ui/error-message'
+import { Spinner } from '@/components/ui/spinner'
+import { Typo } from '@/components/ui/typo'
 import { useIes } from '@/services/api/use-ies'
 import { ProfileIES } from './profile-ies'
 

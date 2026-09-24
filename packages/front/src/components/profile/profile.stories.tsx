@@ -3,7 +3,7 @@ import { MapPin } from 'lucide-react'
 import { Profile } from './index'
 
 const meta = {
-  title: 'Components/Profile',
+  title: 'Components/Profile/Profile',
   component: Profile,
   tags: ['autodocs'],
 } satisfies Meta<typeof Profile>

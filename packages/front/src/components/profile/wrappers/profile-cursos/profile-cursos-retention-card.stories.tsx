@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ProfileCursosRetentionCard } from './profile-cursos-retention-card'
 
 const meta = {
-  title: 'Components/ProfileCursos/RetentionCard',
+  title: 'Components/Profile/Wrappers/ProfileCursos/RetentionCard',
   component: ProfileCursosRetentionCard,
   tags: ['autodocs'],
 } satisfies Meta<typeof ProfileCursosRetentionCard>

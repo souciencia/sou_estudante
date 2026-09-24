@@ -3,7 +3,7 @@ import type { Curso } from '@/services/api/types'
 import { ProfileCursosQuality } from './profile-cursos-quality'
 
 const meta = {
-  title: 'Components/ProfileCursos/Quality',
+  title: 'Components/Profile/Wrappers/ProfileCursos/Quality',
   component: ProfileCursosQuality,
   tags: ['autodocs'],
 } satisfies Meta<typeof ProfileCursosQuality>

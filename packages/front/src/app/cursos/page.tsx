@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
-import { ActiveFilters } from '@/components/active-filters/active-filters'
-import { CourseFilters } from '@/components/course-filters/course-filters'
-import { SearchHeaderBlock } from '@/components/search-header/search-header'
-import SearchResultSection from '@/components/search-result/search-result-section'
-import { Typo } from '@/components/typo'
+import { ActiveFilters } from '@/components/cursos/active-filters/active-filters'
+import { CourseFilters } from '@/components/cursos/course-filters/course-filters'
+import { SearchHeaderBlock } from '@/components/cursos/search-header/search-header'
+import SearchResultSection from '@/components/cursos/search-result/search-result-section'
+import { Typo } from '@/components/ui/typo'
 
 export default function CursosPage() {
   return (
