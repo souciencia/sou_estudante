@@ -1,4 +1,4 @@
-import { ProfileCursosLoader } from '@/components/profile-cursos/profile-cursos-loader'
+import { ProfileCursosLoader } from '@/components/profile/wrappers/profile-cursos/profile-cursos-loader'
 
 interface CursoDetalhePageProps {
   params: Promise<{ id: string }>
