@@ -1,8 +1,6 @@
-// app/page.tsx
-
-import { HomeSearch } from '@/components/features/home-search/home-search'
-import { Route } from '@/components/features/route/route'
-import { Hero } from '@/components/site-blocks/hero'
+import { Hero } from '@/components/hero'
+import { HomeSearch } from '@/components/home-search/home-search'
+import { Route } from '@/components/route/route'
 
 export default function Home() {
   return (

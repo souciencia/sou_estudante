@@ -1,10 +1,9 @@
-// src/app/ies/page.tsx
 import { Suspense } from 'react'
-import { Typo } from '@/components/atoms/typo'
-import { IesActiveFilters } from '@/components/features/ies/ies-active-filters'
-import { IesFilters } from '@/components/features/ies/ies-filters'
-import IesResultSection from '@/components/features/ies/ies-result-section'
-import { IesSearchHeader } from '@/components/features/ies/ies-search-header'
+import { IesActiveFilters } from '@/components/ies/ies-active-filters'
+import { IesFilters } from '@/components/ies/ies-filters'
+import IesResultSection from '@/components/ies/ies-result-section'
+import { IesSearchHeader } from '@/components/ies/ies-search-header'
+import { Typo } from '@/components/typo'
 
 export default function IesPage() {
   return (

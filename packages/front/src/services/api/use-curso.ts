@@ -1,4 +1,3 @@
-// src/services/api/use-curso.ts
 'use client'
 
 import { useEffect, useState } from 'react'

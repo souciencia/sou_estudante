@@ -1,4 +1,4 @@
-import { ProfileIESLoader } from '@/components/features/profile-ies/profile-ies-loader'
+import { ProfileIESLoader } from '@/components/profile-ies/profile-ies-loader'
 
 interface IesDetalhePageProps {
   params: Promise<{ id: string }>

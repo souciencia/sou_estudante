@@ -1,4 +1,3 @@
-// src/services/api/use-sugestoes.ts
 'use client'
 
 import { useEffect, useState } from 'react'

@@ -1,4 +1,3 @@
-// src/services/api/curso.service.ts
 import { apiClient } from './client'
 import { API_CONFIG } from './config'
 import type {

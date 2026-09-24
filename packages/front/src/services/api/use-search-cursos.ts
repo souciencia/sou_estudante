@@ -1,4 +1,3 @@
-// src/services/api/use-search-cursos.ts
 'use client'
 
 import { cursoService } from '@/services/api/curso.service'
