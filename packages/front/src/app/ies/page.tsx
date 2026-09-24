@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
-import { IesActiveFilters } from '@/components/ies/ies-active-filters'
-import { IesFilters } from '@/components/ies/ies-filters'
-import IesResultSection from '@/components/ies/ies-result-section'
-import { IesSearchHeader } from '@/components/ies/ies-search-header'
+import { ActiveFiltersIes } from '@/components/search/active-filters/wrappers/active-filters-ies/active-filters-ies'
+import { FiltersPanelIes } from '@/components/search/filters-panel/wrappers/filters-panel-ies/filters-panel-ies'
+import { SearchHeaderIes } from '@/components/search/search-header/wrappers/search-header-ies/search-header-ies'
+import SearchResultSectionIes from '@/components/search/search-result-section/wrappers/search-result-section-ies/search-result-section-ies'
 import { Typo } from '@/components/ui/typo'
 
 export default function IesPage() {
@@ -19,7 +19,7 @@ export default function IesPage() {
           </Typo>
         }
       >
-        <IesSearchHeader module="4" />
+        <SearchHeaderIes module="4" />
       </Suspense>
 
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -31,13 +31,13 @@ export default function IesPage() {
               </Typo>
             }
           >
-            <IesFilters module="4" />
+            <FiltersPanelIes module="4" />
           </Suspense>
         </aside>
 
         <main className="md:col-span-3 space-y-4">
           <Suspense fallback={null}>
-            <IesActiveFilters module="4" />
+            <ActiveFiltersIes module="4" />
           </Suspense>
 
           <Suspense
@@ -47,7 +47,7 @@ export default function IesPage() {
               </Typo>
             }
           >
-            <IesResultSection module="4" />
+            <SearchResultSectionIes module="4" />
           </Suspense>
         </main>
       </div>

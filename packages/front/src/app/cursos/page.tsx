@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
-import { ActiveFilters } from '@/components/cursos/active-filters/active-filters'
-import { CourseFilters } from '@/components/cursos/course-filters/course-filters'
-import { SearchHeaderBlock } from '@/components/cursos/search-header/search-header'
-import SearchResultSection from '@/components/cursos/search-result/search-result-section'
+import { ActiveFiltersCursos } from '@/components/search/active-filters/wrappers/active-filters-cursos/active-filters-cursos'
+import { FiltersPanelCursos } from '@/components/search/filters-panel/wrappers/filters-panel-cursos/filters-panel-cursos'
+import { SearchHeaderCursos } from '@/components/search/search-header/wrappers/search-header-cursos/search-header-cursos'
+import SearchResultSectionCursos from '@/components/search/search-result-section/wrappers/search-result-section-cursos/search-result-section-cursos'
 import { Typo } from '@/components/ui/typo'
 
 export default function CursosPage() {
@@ -19,7 +19,7 @@ export default function CursosPage() {
           </Typo>
         }
       >
-        <SearchHeaderBlock />
+        <SearchHeaderCursos />
       </Suspense>
 
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -31,13 +31,13 @@ export default function CursosPage() {
               </Typo>
             }
           >
-            <CourseFilters />
+            <FiltersPanelCursos />
           </Suspense>
         </aside>
 
         <main className="md:col-span-3 space-y-4">
           <Suspense fallback={null}>
-            <ActiveFilters />
+            <ActiveFiltersCursos />
           </Suspense>
 
           <Suspense
@@ -47,7 +47,7 @@ export default function CursosPage() {
               </Typo>
             }
           >
-            <SearchResultSection />
+            <SearchResultSectionCursos />
           </Suspense>
         </main>
       </div>
