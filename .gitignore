@@ -25,6 +25,9 @@ front/node_modules/
 bulker/data
 tasks
 
+# api: artefato de build do air
+packages/api/tmp/
+
 # testing
 coverage/
 
