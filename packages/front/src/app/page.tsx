@@ -1,4 +1,4 @@
-import { HomeSearch } from '@/components/home/home-search/home-search'
+import { HomeSearch } from '@/components/layout/home-search/home-search'
 import { Hero } from '@/components/layout/hero'
 import { Route } from '@/components/ui/route/route'
 
