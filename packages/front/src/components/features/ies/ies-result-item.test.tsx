@@ -41,4 +41,10 @@ describe('IesResultItem', () => {
       '4',
     )
   })
+
+  it('linka para a página de detalhes da IES', () => {
+    render(<IesResultItem ies={ies} module="4" />)
+
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/ies/376')
+  })
 })

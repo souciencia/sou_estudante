@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Card } from '@/components/features/card'
 import type { Module } from '@/lib/module'
 import type { IES } from '@/services/api/types'
@@ -18,7 +19,7 @@ export default function IesResultItem({ ies, module }: IesResultItemProps) {
     ies.regiao,
   ].filter(Boolean) as string[]
 
-  return (
+  const card = (
     <Card module={module}>
       <Card.Header title={nome} subtitle={sigla ? `• ${sigla}` : ''} />
       {tags.length > 0 && <Card.Tags source={tags} className="ml-11" />}
@@ -27,5 +28,18 @@ export default function IesResultItem({ ies, module }: IesResultItemProps) {
         items={[{ label: 'Localização', value: localizacao }]}
       />
     </Card>
+  )
+
+  if (!ies.co_ies) {
+    return card
+  }
+
+  return (
+    <Link
+      href={`/ies/${ies.co_ies}`}
+      className="block rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
+    >
+      {card}
+    </Link>
   )
 }

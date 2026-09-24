@@ -118,3 +118,54 @@ describe('iesService.sugerirIes', () => {
     expect(mockFetch).not.toHaveBeenCalled()
   })
 })
+
+describe('iesService.getIes', () => {
+  beforeEach(() => {
+    global.fetch = vi.fn()
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('consulta o endpoint da IES pelo id', async () => {
+    const ies = { co_ies: '376', no_ies: 'ANHANGUERA' }
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ies,
+    })
+    global.fetch = mockFetch
+
+    const result = await iesService.getIes('376')
+
+    const [url] = mockFetch.mock.calls[0] as [string]
+    expect(url).toContain('/ies/376')
+    expect(result).toEqual({ success: true, data: ies })
+  })
+
+  it('falha sem chamar a API quando o id é vazio', async () => {
+    const mockFetch = vi.fn()
+    global.fetch = mockFetch
+
+    const result = await iesService.getIes('   ')
+
+    expect(result.success).toBe(false)
+    expect(mockFetch).not.toHaveBeenCalled()
+  })
+
+  it('preserva o status 404 do erro da API', async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+    })
+
+    const result = await iesService.getIes('999')
+
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(result.error.statusCode).toBe(404)
+    }
+  })
+})
