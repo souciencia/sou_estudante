@@ -32,14 +32,16 @@ func main() {
 	cursoRepo := cursos.NewElasticsearchRepository(esClient)
 	cursoService := cursos.NewService(cursoRepo)
 	cursoHandler := &cursos.Handler{Service: cursoService}
+	cursoDetailHandler := &cursos.DetailHandler{Service: cursoService}
 
-	mux.Handle("/cursos", cursoHandler)
+	mux.Handle("GET /cursos", cursoHandler)
+	mux.Handle("GET /cursos/{id}", cursoDetailHandler)
 
 	sugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, cfg.ESDictIndexName, "no_curso")
 	sugestaoService := sugestoes.NewService(sugestaoRepo)
 	sugestaoHandler := &sugestoes.Handler{Service: sugestaoService}
 
-	mux.Handle("/cursos/sugestoes", sugestaoHandler)
+	mux.Handle("GET /cursos/sugestoes", sugestaoHandler)
 
 	iesRepo := ies.NewElasticsearchRepository(esClient)
 	iesService := ies.NewService(iesRepo)

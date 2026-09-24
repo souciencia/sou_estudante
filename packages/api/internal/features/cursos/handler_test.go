@@ -2,6 +2,7 @@ package cursos
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,6 +16,10 @@ type MockService struct {
 	CapturedLimit   int
 	ReturnResponse  *CursoListResponse
 	ReturnErr       error
+
+	CapturedID   string
+	ReturnCurso  *Curso
+	ReturnGetErr error
 }
 
 func (m *MockService) BuscarCursos(
@@ -28,6 +33,11 @@ func (m *MockService) BuscarCursos(
 	m.CapturedPage = page
 	m.CapturedLimit = limit
 	return m.ReturnResponse, m.ReturnErr
+}
+
+func (m *MockService) BuscarCursoPorID(_ context.Context, id string) (*Curso, error) {
+	m.CapturedID = id
+	return m.ReturnCurso, m.ReturnGetErr
 }
 
 func TestHandlerExtraiFiltrosCumulativos(t *testing.T) {
@@ -112,5 +122,68 @@ func TestHandlerExtraiExactComDefaultTrue(t *testing.T) {
 
 	if mockService.CapturedFilters.Exact {
 		t.Errorf("esperado Exact=false quando exact=false, recebido true")
+	}
+}
+
+func TestDetailHandlerRejeitaMetodoNaoGET(t *testing.T) {
+	handler := &DetailHandler{Service: &MockService{}}
+
+	req := httptest.NewRequest(http.MethodDelete, "/cursos/123", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusMethodNotAllowed {
+		t.Fatalf("esperado 405, recebido %d", rec.Code)
+	}
+}
+
+func TestDetailHandlerRejeitaIDVazio(t *testing.T) {
+	handler := &DetailHandler{Service: &MockService{}}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos/", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("esperado 400, recebido %d", rec.Code)
+	}
+}
+
+func TestDetailHandlerRetornaCurso(t *testing.T) {
+	mockService := &MockService{ReturnCurso: &Curso{Edicao: "2024", Curso: DadosCurso{NoCurso: "MEDICINA"}}}
+	handler := &DetailHandler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos/123", nil)
+	req.SetPathValue("id", "123")
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("esperado 200, recebido %d", rec.Code)
+	}
+	if mockService.CapturedID != "123" {
+		t.Errorf("id não repassado: %s", mockService.CapturedID)
+	}
+
+	var decoded Curso
+	if err := json.NewDecoder(rec.Body).Decode(&decoded); err != nil {
+		t.Fatalf("resposta não é JSON válido: %v", err)
+	}
+	if decoded.Curso.NoCurso != "MEDICINA" {
+		t.Errorf("curso inesperado: %+v", decoded)
+	}
+}
+
+func TestDetailHandlerRetorna404QuandoNaoEncontrado(t *testing.T) {
+	mockService := &MockService{ReturnGetErr: ErrNotFound}
+	handler := &DetailHandler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos/999", nil)
+	req.SetPathValue("id", "999")
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusNotFound {
+		t.Fatalf("esperado 404, recebido %d", rec.Code)
 	}
 }
