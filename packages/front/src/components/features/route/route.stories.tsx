@@ -43,3 +43,12 @@ export const Module5: Story = {
     module: '5',
   },
 }
+
+export const Inline: Story = {
+  args: {
+    module: '3',
+    v: 'inline',
+    title: 'Vou conseguir me manter?',
+    description: 'Bolsas, cotas e apoios à permanência — Âncora',
+  },
+}

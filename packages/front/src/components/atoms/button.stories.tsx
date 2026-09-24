@@ -58,3 +58,27 @@ export const Module5: Story = {
     module: '5',
   },
 }
+
+export const Solid: Story = {
+  args: {
+    children: 'Escolher curso',
+    module: '1',
+    v: 'solid',
+  },
+}
+
+export const Outline: Story = {
+  args: {
+    children: 'Como interpretar?',
+    module: '1',
+    v: 'outline',
+  },
+}
+
+export const OutlineCompare: Story = {
+  args: {
+    children: 'Comparar com outros cursos',
+    module: '5',
+    v: 'outline',
+  },
+}

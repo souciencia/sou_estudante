@@ -93,4 +93,36 @@ describe('Route', () => {
       expect(route?.querySelector('svg')).toBeInTheDocument()
     })
   })
+
+  describe('inline variant', () => {
+    it('links to the module destination using the given copy', () => {
+      render(
+        <Route
+          module="4"
+          v="inline"
+          title="Conheça a instituição"
+          description="Indicadores oficiais e perfil da IES — Telescópio"
+        />,
+      )
+
+      expect(screen.getByRole('link')).toHaveAttribute('href', '/ies')
+      expect(screen.getByText('Conheça a instituição')).toBeInTheDocument()
+      expect(
+        screen.getByText('Indicadores oficiais e perfil da IES — Telescópio'),
+      ).toBeInTheDocument()
+    })
+
+    it('does not render the module badge', () => {
+      render(
+        <Route
+          module="3"
+          v="inline"
+          title="Vou conseguir me manter?"
+          description="Bolsas, cotas e apoios à permanência — Âncora"
+        />,
+      )
+
+      expect(screen.queryByText('ÂNCORA')).not.toBeInTheDocument()
+    })
+  })
 })
