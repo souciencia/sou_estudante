@@ -104,7 +104,15 @@ const icons = {
 
 export default function IconModule({ module }: IconModuleProps) {
   return (
-    <svg viewBox="0 0 13 13" fill="none" width="14" height="14" aria-hidden>
+    <svg
+      viewBox="0 0 13 13"
+      fill="none"
+      width="14"
+      height="14"
+      role="img"
+      aria-label="Ícone"
+      aria-hidden
+    >
       {icons[module]}
     </svg>
   )

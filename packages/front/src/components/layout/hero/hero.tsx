@@ -47,6 +47,8 @@ export const Hero = () => {
             fill="none"
             width="15"
             height="15"
+            role="img"
+            aria-label="Ícone de busca"
             aria-hidden
           >
             <circle
@@ -77,6 +79,8 @@ export const Hero = () => {
             fill="none"
             width="15"
             height="15"
+            role="img"
+            aria-label="Ícone de informação"
             aria-hidden
           >
             <circle
@@ -101,6 +105,8 @@ export const Hero = () => {
         viewBox="0 0 1440 36"
         fill="none"
         preserveAspectRatio="none"
+        role="img"
+        aria-label="Hero"
         aria-hidden
       >
         <path

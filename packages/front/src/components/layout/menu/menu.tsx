@@ -103,7 +103,15 @@ export default function Menu({ mode = 'light' }: MenuProps) {
             : 'bg-plum-100 hover:bg-plum-100/70'
         }`}
       >
-        <svg viewBox="0 0 16 16" fill="none" width="16" height="16" aria-hidden>
+        <svg
+          viewBox="0 0 16 16"
+          fill="none"
+          width="16"
+          height="16"
+          role="img"
+          aria-label="Ícone do menu"
+          aria-hidden
+        >
           <path
             d="M2 4H14M2 8H14M2 12H14"
             stroke="currentColor"
@@ -149,6 +157,8 @@ export default function Menu({ mode = 'light' }: MenuProps) {
               fill="none"
               width="16"
               height="16"
+              role="img"
+              aria-label="Ícone para fechar"
               aria-hidden
             >
               <path

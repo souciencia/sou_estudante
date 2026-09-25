@@ -51,6 +51,8 @@ export default function Home() {
                   viewBox="0 0 12 12"
                   fill="none"
                   className="h-[10px] w-[10px]"
+                  role="img"
+                  aria-label="Ícone de iniciar passo a passo guiado"
                   aria-hidden
                 >
                   <path d="M3 2L10 6L3 10Z" fill="currentColor" />
