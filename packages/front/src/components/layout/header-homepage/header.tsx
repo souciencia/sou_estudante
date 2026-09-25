@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import Menu from '../menu/menu'
 import { NauticalIcon } from '../../ui/route/icons/NauticalIcon'
+import Menu from '../menu/menu'
 
 export const Header = () => {
   return (

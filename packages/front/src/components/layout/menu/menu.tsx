@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 
 interface MenuProps {
   mode?: 'light' | 'dark'
@@ -92,6 +92,7 @@ export default function Menu({ mode = 'light' }: MenuProps) {
   return (
     <>
       <button
+        type="button"
         ref={botaoRef}
         aria-label="Menu"
         aria-expanded={opened}

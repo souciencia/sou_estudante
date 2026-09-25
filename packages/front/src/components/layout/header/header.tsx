@@ -2,10 +2,10 @@
 
 import { Compass } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { SiteMenu } from '@/components/layout/site-menu/site-menu'
 import { SITE_MENU_LINKS } from '@/components/layout/site-menu/site-menu-links'
 import { cn } from '@/utils/cn'
-import { usePathname } from 'next/navigation'
 
 interface HeaderProps {
   className?: string

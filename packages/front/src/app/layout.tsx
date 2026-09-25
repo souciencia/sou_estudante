@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Source_Sans_3, DM_Mono, Playfair_Display } from 'next/font/google'
+import { DM_Mono, Playfair_Display, Source_Sans_3 } from 'next/font/google'
 import { Header } from '@/components/layout/header/header'
 import './globals.css'
 

@@ -5,12 +5,12 @@ import Link from 'next/link'
 import { Tag } from '@/components/ui/tag/tag'
 import { MODULE_META, type Module } from '@/lib/module'
 import { cn } from '@/utils/cn'
+import IconModule from '../icon-module/iconModule'
 import { AnchorIcon } from './icons/AnchorIcon'
 import { CompassIcon } from './icons/CompassIcon'
 import { NauticalIcon } from './icons/NauticalIcon'
 import { SextantIcon } from './icons/SextantIcon'
 import { TelescopeIcon } from './icons/TelescopeIcon'
-import IconModule from '../icon-module/iconModule'
 
 export type RouteVariant = 'card' | 'inline' | 'list'
 
