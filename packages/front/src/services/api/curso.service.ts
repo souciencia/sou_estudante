@@ -1,7 +1,11 @@
-// src/services/api/curso.service.ts
 import { apiClient } from './client'
 import { API_CONFIG } from './config'
-import type { CursoListResponse, SugestoesCursosResponse } from './types'
+import type {
+  Curso,
+  CursoListResponse,
+  Result,
+  SugestoesCursosResponse,
+} from './types'
 
 /**
  * Serviço de cursos - encapsula todas as operações relacionadas a cursos
@@ -60,6 +64,27 @@ export const cursoService = {
     )
 
     return result.success ? result.data : emptyResponse
+  },
+
+  /**
+   * Busca um curso específico pelo seu sequencial.
+   * @param id - Sequencial do curso (mesmo `_id` do documento no índice)
+   * @returns Result com o curso detalhado; em falha, distingue 404 de erro
+   */
+  async getCurso(id: string): Promise<Result<Curso>> {
+    const normalized = id?.trim()
+
+    if (!normalized) {
+      return {
+        success: false,
+        error: {
+          type: 'validation',
+          message: 'Identificador do curso é obrigatório',
+        },
+      }
+    }
+
+    return apiClient<Curso>(API_CONFIG.ENDPOINTS.DETAIL_CURSO(normalized))
   },
 
   /**

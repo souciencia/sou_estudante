@@ -3,30 +3,18 @@ package cursos
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
+
+	"api_estudante/internal/shared"
 )
 
 // Handler gerencia requisições de busca de cursos
 type Handler struct {
 	Service Service
-}
-
-// parseSliceParam divide valores separados por vírgula e múltiplos parâmetros em slice de strings
-func parseSliceParam(values []string) []string {
-	var result []string
-	for _, v := range values {
-		for _, part := range strings.Split(v, ",") {
-			trimmed := strings.TrimSpace(part)
-			if trimmed != "" {
-				result = append(result, trimmed)
-			}
-		}
-	}
-	return result
 }
 
 // parseExactParam interpreta o parâmetro "exact". Ausente ou inválido = true.
@@ -68,12 +56,12 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	filters := SearchFilterParams{
-		UF:         parseSliceParam(r.URL.Query()["uf"]),
-		Turno:      parseSliceParam(r.URL.Query()["turno"]),
-		Grau:       parseSliceParam(r.URL.Query()["grau"]),
-		Categoria:  parseSliceParam(r.URL.Query()["categoria"]),
-		Modalidade: parseSliceParam(r.URL.Query()["modalidade"]),
-		Enade:      parseSliceParam(r.URL.Query()["enade"]),
+		UF:         shared.SplitCSV(r.URL.Query()["uf"]),
+		Turno:      shared.SplitCSV(r.URL.Query()["turno"]),
+		Grau:       shared.SplitCSV(r.URL.Query()["grau"]),
+		Categoria:  shared.SplitCSV(r.URL.Query()["categoria"]),
+		Modalidade: shared.SplitCSV(r.URL.Query()["modalidade"]),
+		Enade:      shared.SplitCSV(r.URL.Query()["enade"]),
 		Sort:       r.URL.Query().Get("sort"),
 		Exact:      parseExactParam(r.URL.Query().Get("exact")),
 	}
@@ -95,6 +83,45 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
+		slog.Error("Erro ao serializar JSON", "error", err)
+	}
+}
+
+// DetailHandler gerencia a busca de um curso específico.
+type DetailHandler struct {
+	Service Service
+}
+
+// ServeHTTP implementa http.Handler para GET /cursos/{id}.
+func (h *DetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	id := r.PathValue("id")
+	if id == "" {
+		http.Error(w, "Parâmetro 'id' é obrigatório", http.StatusBadRequest)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+	defer cancel()
+
+	item, err := h.Service.BuscarCursoPorID(ctx, id)
+	if errors.Is(err, ErrNotFound) {
+		http.Error(w, "Curso não encontrado", http.StatusNotFound)
+		return
+	}
+	if err != nil {
+		slog.Error("Erro ao buscar curso por id", "error", err, "id", id)
+		http.Error(w, "Erro interno ao buscar curso", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(item); err != nil {
 		slog.Error("Erro ao serializar JSON", "error", err)
 	}
 }

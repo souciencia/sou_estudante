@@ -2,6 +2,7 @@ package cursos
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"testing"
 )
@@ -14,6 +15,10 @@ type MockRepository struct {
 	CapturedLimit   int
 	ReturnResult    *SearchResult
 	ReturnErr       error
+
+	CapturedID   string
+	ReturnCurso  *Curso
+	ReturnGetErr error
 }
 
 func (m *MockRepository) Search(
@@ -27,6 +32,11 @@ func (m *MockRepository) Search(
 	m.CapturedPage = page
 	m.CapturedLimit = limit
 	return m.ReturnResult, m.ReturnErr
+}
+
+func (m *MockRepository) GetByID(_ context.Context, id string) (*Curso, error) {
+	m.CapturedID = id
+	return m.ReturnCurso, m.ReturnGetErr
 }
 
 func TestBuscarCursosComFiltrosCumulativos(t *testing.T) {
@@ -98,5 +108,39 @@ func TestBuscarCursosRetornaAgregacoes(t *testing.T) {
 	}
 	if len(resp.Aggregations.UFs) != 2 || resp.Aggregations.UFs[0].Key != "SP" || resp.Aggregations.UFs[0].Count != 7 {
 		t.Errorf("agregacao de UF incorreta: %v", resp.Aggregations.UFs)
+	}
+}
+
+func TestBuscarCursoPorIDRejeitaIDVazio(t *testing.T) {
+	service := NewService(&MockRepository{})
+
+	if _, err := service.BuscarCursoPorID(context.Background(), "   "); err == nil {
+		t.Fatal("esperado erro para id vazio")
+	}
+}
+
+func TestBuscarCursoPorIDPropagaNaoEncontrado(t *testing.T) {
+	mockRepo := &MockRepository{ReturnGetErr: ErrNotFound}
+	service := NewService(mockRepo)
+
+	_, err := service.BuscarCursoPorID(context.Background(), "999")
+	if !errors.Is(err, ErrNotFound) {
+		t.Fatalf("esperado ErrNotFound, recebido %v", err)
+	}
+}
+
+func TestBuscarCursoPorIDRetornaCurso(t *testing.T) {
+	mockRepo := &MockRepository{ReturnCurso: &Curso{Edicao: "2024", Curso: DadosCurso{NoCurso: "MEDICINA"}}}
+	service := NewService(mockRepo)
+
+	item, err := service.BuscarCursoPorID(context.Background(), "123")
+	if err != nil {
+		t.Fatalf("erro inesperado: %v", err)
+	}
+	if item == nil || item.Curso.NoCurso != "MEDICINA" {
+		t.Errorf("curso retornado incorretamente: %+v", item)
+	}
+	if mockRepo.CapturedID != "123" {
+		t.Errorf("esperado id '123', recebido '%s'", mockRepo.CapturedID)
 	}
 }

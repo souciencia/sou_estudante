@@ -17,7 +17,7 @@ type MockService struct {
 	ReturnErr       error
 }
 
-func (m *MockService) SugerirCursos(_ context.Context, termo string, limit int) ([]string, error) {
+func (m *MockService) Sugerir(_ context.Context, termo string, limit int) ([]string, error) {
 	m.Called = true
 	m.CapturedTermo = termo
 	m.CapturedLimit = limit

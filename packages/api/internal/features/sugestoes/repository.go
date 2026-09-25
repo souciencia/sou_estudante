@@ -19,21 +19,23 @@ type Repository interface {
 type ElasticsearchRepository struct {
 	client *elasticsearch.Client
 	index  string
+	field  string
 }
 
-// NewElasticsearchRepository cria nova instância do repository
-func NewElasticsearchRepository(client *elasticsearch.Client, index string) Repository {
+// NewElasticsearchRepository cria nova instância do repository.
+// index é o índice de dicionário e field é o campo de texto do documento
+// (ex.: "no_curso" para dicionario_cursos, "no_ies" para dicionario_ies).
+func NewElasticsearchRepository(client *elasticsearch.Client, index, field string) Repository {
 	return &ElasticsearchRepository{
 		client: client,
 		index:  index,
+		field:  field,
 	}
 }
 
-// sugestaoHit representa um documento do índice de dicionário de cursos
+// sugestaoHit representa um documento do índice de dicionário.
 type sugestaoHit struct {
-	Source struct {
-		NoCurso string `json:"no_curso"`
-	} `json:"_source"`
+	Source map[string]string `json:"_source"`
 }
 
 // sugestoesESResponse é a resposta mínima decodificada do Elasticsearch
@@ -43,7 +45,7 @@ type sugestoesESResponse struct {
 	} `json:"hits"`
 }
 
-// BuscarSugestoes consulta nomes de cursos no índice de dicionário usando prefixo
+// BuscarSugestoes consulta nomes no índice de dicionário usando prefixo
 func (r *ElasticsearchRepository) BuscarSugestoes(ctx context.Context, termo string, limit int) ([]string, error) {
 	queryBody := map[string]interface{}{
 		"size": limit,
@@ -51,7 +53,7 @@ func (r *ElasticsearchRepository) BuscarSugestoes(ctx context.Context, termo str
 			"multi_match": map[string]interface{}{
 				"query":  termo,
 				"type":   "bool_prefix",
-				"fields": []string{"no_curso"},
+				"fields": []string{r.field},
 			},
 		},
 	}
@@ -84,7 +86,7 @@ func (r *ElasticsearchRepository) BuscarSugestoes(ctx context.Context, termo str
 	seen := make(map[string]struct{}, len(parsed.Hits.Hits))
 	sugestoes := make([]string, 0, len(parsed.Hits.Hits))
 	for _, hit := range parsed.Hits.Hits {
-		nome := strings.TrimSpace(hit.Source.NoCurso)
+		nome := strings.TrimSpace(hit.Source[r.field])
 		if nome == "" {
 			continue
 		}

@@ -1,7 +1,7 @@
-import { Button } from '@/components/atoms/button'
-import { Route } from '@/components/features/route/route'
-import { Header } from '@/components/site-blocks/header'
-import { Hero } from '@/components/site-blocks/hero'
+import { Header } from '@/components/layout/header-homepage/header'
+import { Hero } from '@/components/layout/hero/hero'
+import { Button } from '@/components/ui/button/button'
+import { Route } from '@/components/ui/route/route'
 import { MODULES } from '@/lib/module'
 
 export default function Home() {

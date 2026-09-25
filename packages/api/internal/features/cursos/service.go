@@ -11,6 +11,7 @@ import (
 // Service define a interface de negócio para cursos
 type Service interface {
 	BuscarCursos(ctx context.Context, query string, filters SearchFilterParams, page, limit int) (*CursoListResponse, error)
+	BuscarCursoPorID(ctx context.Context, id string) (*Curso, error)
 }
 
 // ServiceImpl implementa Service com validação e transformação
@@ -72,6 +73,20 @@ func (s *ServiceImpl) BuscarCursos(
 		Links:        links,
 		Aggregations: result.Aggregations,
 	}, nil
+}
+
+// BuscarCursoPorID retorna um curso específico pelo seu sequencial.
+func (s *ServiceImpl) BuscarCursoPorID(ctx context.Context, id string) (*Curso, error) {
+	id = strings.TrimSpace(id)
+	if id == "" {
+		return nil, fmt.Errorf("id não pode ser vazio")
+	}
+
+	item, err := s.Repository.GetByID(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao buscar curso: %w", err)
+	}
+	return item, nil
 }
 
 // transformHitToCurso converte documento ES em Curso usando JSON marshaling

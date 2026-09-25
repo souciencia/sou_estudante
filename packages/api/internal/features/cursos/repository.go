@@ -4,15 +4,23 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/elastic/go-elasticsearch/v8"
+
+	"api_estudante/internal/shared"
 )
+
+// ErrNotFound indica que o curso solicitado não existe no índice.
+var ErrNotFound = errors.New("curso não encontrado")
 
 // Repository define contrato de acesso a cursos
 type Repository interface {
 	Search(ctx context.Context, query string, filters SearchFilterParams, page, limit int) (*SearchResult, error)
+	GetByID(ctx context.Context, id string) (*Curso, error)
 }
 
 // ElasticsearchRepository implementa Repository usando Elasticsearch
@@ -63,6 +71,25 @@ func buildExactNameQuery(name string) map[string]interface{} {
 	return map[string]interface{}{
 		"term": map[string]interface{}{
 			"curso.no_curso.exato": name,
+		},
+	}
+}
+
+// categoriaTerms traduz o rótulo de categoria exibido na UI para os valores de
+// categoria_administrativa indexados a partir dos dados da IES.
+func categoriaTerms(categoria string) []string {
+	return shared.CategoriaTerms(categoria)
+}
+
+// categoriaFilter monta a cláusula de filtro por categoria administrativa.
+func categoriaFilter(categoria string) map[string]interface{} {
+	terms := categoriaTerms(categoria)
+	if len(terms) == 0 {
+		return nil
+	}
+	return map[string]interface{}{
+		"terms": map[string]interface{}{
+			"instituicao.categoria_administrativa": terms,
 		},
 	}
 }
@@ -185,33 +212,8 @@ func (r *ElasticsearchRepository) Search(
 	if len(filters.Categoria) > 0 {
 		shouldCategorias := []map[string]interface{}{}
 		for _, cat := range filters.Categoria {
-			switch strings.ToLower(cat) {
-			case "privada":
-				shouldCategorias = append(shouldCategorias, map[string]interface{}{
-					"term": map[string]interface{}{"curso.in_gratuito": false},
-				})
-			case "federal":
-				shouldCategorias = append(shouldCategorias, map[string]interface{}{
-					"bool": map[string]interface{}{
-						"must": []map[string]interface{}{
-							{"term": map[string]interface{}{"curso.in_gratuito": true}},
-							{"term": map[string]interface{}{"sisu.tem_sisu": true}},
-						},
-					},
-				})
-			case "estadual":
-				shouldCategorias = append(shouldCategorias, map[string]interface{}{
-					"bool": map[string]interface{}{
-						"must": []map[string]interface{}{
-							{"term": map[string]interface{}{"curso.in_gratuito": true}},
-							{"term": map[string]interface{}{"sisu.tem_sisu": false}},
-						},
-					},
-				})
-			case "municipal":
-				shouldCategorias = append(shouldCategorias, map[string]interface{}{
-					"term": map[string]interface{}{"curso.in_gratuito": true},
-				})
+			if clause := categoriaFilter(cat); clause != nil {
+				shouldCategorias = append(shouldCategorias, clause)
 			}
 		}
 		if len(shouldCategorias) > 0 {
@@ -354,28 +356,10 @@ func (r *ElasticsearchRepository) Search(
 			"categorias": map[string]interface{}{
 				"filters": map[string]interface{}{
 					"filters": map[string]interface{}{
-						"Privada": map[string]interface{}{
-							"term": map[string]interface{}{"curso.in_gratuito": false},
-						},
-						"Federal": map[string]interface{}{
-							"bool": map[string]interface{}{
-								"must": []map[string]interface{}{
-									{"term": map[string]interface{}{"curso.in_gratuito": true}},
-									{"term": map[string]interface{}{"sisu.tem_sisu": true}},
-								},
-							},
-						},
-						"Estadual": map[string]interface{}{
-							"bool": map[string]interface{}{
-								"must": []map[string]interface{}{
-									{"term": map[string]interface{}{"curso.in_gratuito": true}},
-									{"term": map[string]interface{}{"sisu.tem_sisu": false}},
-								},
-							},
-						},
-						"Municipal": map[string]interface{}{
-							"term": map[string]interface{}{"curso.in_gratuito": true},
-						},
+						"Privada":   categoriaFilter("privada"),
+						"Federal":   categoriaFilter("federal"),
+						"Estadual":  categoriaFilter("estadual"),
+						"Municipal": categoriaFilter("municipal"),
 					},
 				},
 			},
@@ -522,4 +506,33 @@ func (r *ElasticsearchRepository) Search(
 		Hits:         hits,
 		Aggregations: searchAggs,
 	}, nil
+}
+
+// GetByID busca um curso pelo seu sequencial (que também é o _id do documento).
+func (r *ElasticsearchRepository) GetByID(ctx context.Context, id string) (*Curso, error) {
+	res, err := r.client.Get(
+		r.index,
+		id,
+		r.client.Get.WithContext(ctx),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao buscar curso: %w", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode == http.StatusNotFound {
+		return nil, ErrNotFound
+	}
+	if res.IsError() {
+		return nil, fmt.Errorf("erro ES [%s]", res.Status())
+	}
+
+	var parsed struct {
+		Source Curso `json:"_source"`
+	}
+	if err := json.NewDecoder(res.Body).Decode(&parsed); err != nil {
+		return nil, fmt.Errorf("erro ao decodificar curso: %w", err)
+	}
+
+	return &parsed.Source, nil
 }

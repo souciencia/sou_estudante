@@ -59,6 +59,12 @@ export interface AggregationBucket {
   count: number
 }
 
+/**
+ * Mapa aberto de agregações, usado por componentes genéricos de filtro que não
+ * conhecem os nomes dos grupos de cada módulo.
+ */
+export type AggregationsMap = Record<string, AggregationBucket[] | undefined>
+
 export interface SearchAggregations {
   ufs?: AggregationBucket[]
   turnos?: AggregationBucket[]
@@ -66,20 +72,28 @@ export interface SearchAggregations {
   categorias?: AggregationBucket[]
   modalidades?: AggregationBucket[]
   enades?: AggregationBucket[]
+  [key: string]: AggregationBucket[] | undefined
 }
 
-export interface CursoListResponse {
+/**
+ * Envelope genérico de uma busca paginada retornada pela API.
+ * Reutilizado pelos módulos de cursos e de IES.
+ */
+export interface SearchListResponse<TItem, TAgg> {
   total: number
   page: number
   limit: number
-  results: Curso[]
+  results: TItem[]
   links: PaginationLinks
-  aggregations?: SearchAggregations
+  aggregations?: TAgg
 }
+
+export type CursoListResponse = SearchListResponse<Curso, SearchAggregations>
 
 // Tipos da estrutura do índice de cursos
 
 export interface Curso {
+  _id?: string
   sequencial?: number
   nu_ano_censo?: number
   edicao?: string
@@ -95,6 +109,10 @@ export interface Curso {
 
 export interface Instituicao {
   co_ies?: string
+  no_ies?: string
+  sg_ies?: string
+  categoria_administrativa?: string
+  organizacao_academica?: string
 }
 
 export interface DadosCurso {
@@ -182,4 +200,34 @@ export interface Oferta {
   vagas?: number
   nota_corte?: number
   inscricoes?: number
+}
+
+// ---------------------------------------------------------------------------
+// IES (Instituições de Educação Superior)
+// ---------------------------------------------------------------------------
+
+export interface IES {
+  co_ies?: string
+  no_ies?: string
+  sg_ies?: string
+  categoria_administrativa?: string
+  organizacao_academica?: string
+  municipio?: string
+  uf?: string
+  regiao?: string
+}
+
+export interface IesSearchAggregations {
+  ufs?: AggregationBucket[]
+  regioes?: AggregationBucket[]
+  categorias?: AggregationBucket[]
+  organizacoes?: AggregationBucket[]
+  [key: string]: AggregationBucket[] | undefined
+}
+
+export type IesListResponse = SearchListResponse<IES, IesSearchAggregations>
+
+// Resposta do endpoint de sugestões de nomes de IES (autocomplete)
+export interface SugestoesIesResponse {
+  results: string[]
 }

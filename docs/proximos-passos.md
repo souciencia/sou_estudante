@@ -70,7 +70,10 @@ coisas do callout
 
 
 ## Situação e objetivo:
-Seguinte, está complicado demais resolver esses problemas de operations. Então, vamos voltar a um estágio mais simples: Operations deve voltar a ser Bulker. Ele deve subir somente com a flag `--profile`, adicionar os dados ao banco, caso não existam e morrer. 
-- Aproveite as estrururas de modelagem existentes
-- Separe melhor o código com base nas responsabilidades. Use arquivos pequenos e funções com uma única responsabilidade. Use também uma separação em pastas, para que seja mais dar manutenção.
-- Adote `docs/guidelines.md` como referência para refatorar o código.
+Novos dados referentges às IES (Instituições de Ensino Superior) será adicionado ao banco e precisamos implementar os endpoints. O objetivo é fazer com que `bulker` também faça a ingestão desses dados que virão de `packages/bulker/dados/dados_ies.json`. Existe um arquivo menor chamado `amostra_ies.json`que lhe servirá como exemplod e como são os dados completos. 
+
+Essa tarefa consiste em:
+- Reorganizar a estrutura de `packages/bulker/internal` para separar os arquvivos referentes à `cursos` e os arquivos referntes à `ies`( assim como foi feito em `packages/api/internal/feaures/`)
+- Criar toda a estrutura necessária para ingestão dos dados de ies (você pode copiar a estrutura feita para `cursos`)
+- fazer com que o container `bulker` também faça a indestão de ies assim que subir.
+- Me apresentar sugestões caso tenha alguma

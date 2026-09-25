@@ -1,4 +1,3 @@
-// src/services/api/use-search-cursos.test.ts
 import { act, renderHook, waitFor } from '@testing-library/react'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import type { ReadonlyURLSearchParams } from 'next/navigation'
