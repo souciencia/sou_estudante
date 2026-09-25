@@ -11,7 +11,7 @@ vi.mock('next/navigation', () => ({
 describe('Header', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    vi.mocked(usePathname).mockReturnValue('/')
+    vi.mocked(usePathname).mockReturnValue('/ies')
   })
 
   it('renders a banner landmark', () => {

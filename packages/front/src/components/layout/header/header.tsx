@@ -2,6 +2,7 @@
 
 import { Compass } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { SiteMenu } from '@/components/layout/site-menu/site-menu'
 import { SITE_MENU_LINKS } from '@/components/layout/site-menu/site-menu-links'
 import { cn } from '@/utils/cn'
@@ -11,6 +12,13 @@ interface HeaderProps {
 }
 
 export const Header = ({ className }: HeaderProps) => {
+  const pathname = usePathname()
+  const isHomePage = pathname === '/'
+
+  if (isHomePage) {
+    return
+  }
+
   return (
     <header
       className={cn(
