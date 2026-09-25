@@ -7,7 +7,10 @@ describe('Menu', () => {
   it('starts with the menu closed', () => {
     render(<Menu />)
 
-    expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute('aria-expanded', 'false')
+    expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
   })
 
   it('opens the menu when the menu button is clicked', async () => {

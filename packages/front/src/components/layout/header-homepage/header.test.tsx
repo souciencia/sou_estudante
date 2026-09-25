@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest'
 import { Header } from './header'
 
 describe('Header', () => {
-
   it('links the application logo to the home page', () => {
     render(<Header />)
 
@@ -21,10 +20,7 @@ describe('Header', () => {
       name: 'SoU_Ciência',
     })
 
-    expect(cienciaLink).toHaveAttribute(
-      'href',
-      'https://souciencia.unifesp.br',
-    )
+    expect(cienciaLink).toHaveAttribute('href', 'https://souciencia.unifesp.br')
   })
 
   it('opens SoU_Ciência in a new tab', () => {
@@ -35,17 +31,12 @@ describe('Header', () => {
     })
 
     expect(cienciaLink).toHaveAttribute('target', '_blank')
-    expect(cienciaLink).toHaveAttribute(
-      'rel',
-      'noopener noreferrer',
-    )
+    expect(cienciaLink).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
   it('renders the menu', () => {
     render(<Header />)
 
-    expect(
-      screen.getByRole('button', { name: 'Menu' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Menu' })).toBeInTheDocument()
   })
 })

@@ -15,13 +15,14 @@ const dmMono = DM_Mono({
 })
 
 const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-display",
-});
+  subsets: ['latin'],
+  variable: '--font-display',
+})
 
 export const metadata: Metadata = {
   title: 'SoU_Estudante',
-  description: 'Plataforma de dados públicos do ensino superior para estudantes de primeira geração — SoU_Ciência (Unifesp).',
+  description:
+    'Plataforma de dados públicos do ensino superior para estudantes de primeira geração — SoU_Ciência (Unifesp).',
 }
 
 export default function RootLayout({

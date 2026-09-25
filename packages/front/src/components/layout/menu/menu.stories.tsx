@@ -24,11 +24,11 @@ export const Dark: Story = {
   args: {
     mode: 'dark',
   },
-  decorators: [ 
-    (Story) => ( 
+  decorators: [
+    (Story) => (
       <div className="bg-navy-900 p-8">
         <Story />
-      </div> 
-    ), 
+      </div>
+    ),
   ],
 }

@@ -66,58 +66,55 @@ const routes = [
 ] as const
 
 describe('Route', () => {
-  describe.each(routes)('Módulo $module - $title', ({
-    module,
-    title,
-    description,
-    badge,
-    href,
-  }) => {
-    const setup = () =>
-      render(
-        <div>
-          <Route module={module} />
-        </div>,
-      )
+  describe.each(routes)(
+    'Módulo $module - $title',
+    ({ module, title, description, badge, href }) => {
+      const setup = () =>
+        render(
+          <div>
+            <Route module={module} />
+          </div>,
+        )
 
-    it('renders the correct heading title', () => {
-      setup()
-      expect(
-        screen.getByRole('heading', {
-          level: 3,
-          name: title,
-        }),
-      ).toBeInTheDocument()
-    })
+      it('renders the correct heading title', () => {
+        setup()
+        expect(
+          screen.getByRole('heading', {
+            level: 3,
+            name: title,
+          }),
+        ).toBeInTheDocument()
+      })
 
-    it('renders the correct description text', () => {
-      setup()
-      expect(screen.getByText(description)).toBeInTheDocument()
-    })
+      it('renders the correct description text', () => {
+        setup()
+        expect(screen.getByText(description)).toBeInTheDocument()
+      })
 
-    it('renders the correct badge text', () => {
-      setup()
-      expect(screen.getByText(badge)).toBeInTheDocument()
-    })
+      it('renders the correct badge text', () => {
+        setup()
+        expect(screen.getByText(badge)).toBeInTheDocument()
+      })
 
-    it(`renders a link pointing to '${href}'`, () => {
-      setup()
-      const link = screen.getByRole('link')
-      expect(link).toHaveAttribute('href', href)
-    })
+      it(`renders a link pointing to '${href}'`, () => {
+        setup()
+        const link = screen.getByRole('link')
+        expect(link).toHaveAttribute('href', href)
+      })
 
-    it('contains the correct data-module attribute', () => {
-      const { container } = setup()
-      const route = container.querySelector(`[data-module="${module}"]`)
-      expect(route).toBeInTheDocument()
-    })
+      it('contains the correct data-module attribute', () => {
+        const { container } = setup()
+        const route = container.querySelector(`[data-module="${module}"]`)
+        expect(route).toBeInTheDocument()
+      })
 
-    it('renders an SVG icon inside the route component', () => {
-      const { container } = setup()
-      const route = container.querySelector(`[data-module="${module}"]`)
-      expect(route?.querySelector('svg')).toBeInTheDocument()
-    })
-  })
+      it('renders an SVG icon inside the route component', () => {
+        const { container } = setup()
+        const route = container.querySelector(`[data-module="${module}"]`)
+        expect(route?.querySelector('svg')).toBeInTheDocument()
+      })
+    },
+  )
 
   describe.each(routes)(
     'Módulo $module - variante list',
@@ -155,10 +152,7 @@ describe('Route', () => {
       it('contains the correct data-module attribute', () => {
         setup()
 
-        expect(screen.getByRole('link')).toHaveAttribute(
-          'data-module',
-          module,
-        )
+        expect(screen.getByRole('link')).toHaveAttribute('data-module', module)
       })
     },
   )

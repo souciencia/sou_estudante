@@ -27,9 +27,10 @@ describe('Hero', () => {
   it('provides a link to search for courses', () => {
     render(<Hero />)
 
-    expect(
-      screen.getByRole('link', { name: /buscar curso/i }),
-    ).toHaveAttribute('href', '/cursos')
+    expect(screen.getByRole('link', { name: /buscar curso/i })).toHaveAttribute(
+      'href',
+      '/cursos',
+    )
   })
 
   it('provides a link to the how-to section', () => {

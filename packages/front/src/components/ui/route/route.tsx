@@ -89,9 +89,9 @@ export function Route({
         ],
 
         !isCard && [
-          'flex items-start gap-3 rounded-[14px] transition-transform hover:translate-x-0.5 shadow-[inset_3px_0_0_var(--color-accent)] px-4 py-3'
+          'flex items-start gap-3 rounded-[14px] transition-transform hover:translate-x-0.5 shadow-[inset_3px_0_0_var(--color-accent)] px-4 py-3',
         ],
-        
+
         className,
       )}
     >
@@ -114,13 +114,16 @@ export function Route({
 
       {!isCard && (
         <>
-          <span aria-hidden className='flex h-6 w-6 items-center justify-center rounded-full bg-accent'>
+          <span
+            aria-hidden
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-accent"
+          >
             <IconModule module={module} />
           </span>
 
-          <span className='min-w-0'>
-            <span className='block mb-[2px] font-bold text-coadjuvant-xs text-accent-deep tracking-[0.6px]'>
-                {meta.badge}
+          <span className="min-w-0">
+            <span className="block mb-[2px] font-bold text-coadjuvant-xs text-accent-deep tracking-[0.6px]">
+              {meta.badge}
             </span>
             <h3 className="block font-semibold text-protagonist-sm">
               {meta.list.title}

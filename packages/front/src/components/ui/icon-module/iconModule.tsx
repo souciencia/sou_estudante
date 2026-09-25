@@ -13,14 +13,42 @@ const icons = {
         strokeWidth="1.2"
         strokeLinecap="round"
       />
-      <circle cx="6.5" cy="6.5" r="1.3" stroke="currentColor" strokeWidth="1.2" />
+      <circle
+        cx="6.5"
+        cy="6.5"
+        r="1.3"
+        stroke="currentColor"
+        strokeWidth="1.2"
+      />
     </>
   ),
   '2': (
     <>
-      <circle cx="6.5" cy="6.5" r="5.2" stroke="currentColor" strokeWidth="1.2" />
-      <line x1="6.5" y1="1.8" x2="6.5" y2="4.8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="6.5" y1="6.5" x2="9.2" y2="5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <circle
+        cx="6.5"
+        cy="6.5"
+        r="5.2"
+        stroke="currentColor"
+        strokeWidth="1.2"
+      />
+      <line
+        x1="6.5"
+        y1="1.8"
+        x2="6.5"
+        y2="4.8"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="6.5"
+        y1="6.5"
+        x2="9.2"
+        y2="5.5"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
       <circle cx="6.5" cy="6.5" r="1.2" fill="currentColor" />
     </>
   ),
@@ -32,12 +60,24 @@ const icons = {
         strokeWidth="1.2"
         strokeLinecap="round"
       />
-      <circle cx="6.5" cy="2.2" r="1.2" stroke="currentColor" strokeWidth="1.1" />
+      <circle
+        cx="6.5"
+        cy="2.2"
+        r="1.2"
+        stroke="currentColor"
+        strokeWidth="1.1"
+      />
     </>
   ),
   '4': (
     <>
-      <circle cx="5.2" cy="5.2" r="3.5" stroke="currentColor" strokeWidth="1.2" />
+      <circle
+        cx="5.2"
+        cy="5.2"
+        r="3.5"
+        stroke="currentColor"
+        strokeWidth="1.2"
+      />
       <line
         x1="7.8"
         y1="7.8"
@@ -60,18 +100,12 @@ const icons = {
       <circle cx="2.2" cy="10.8" r="1" fill="currentColor" />
     </>
   ),
-};
+}
 
 export default function IconModule({ module }: IconModuleProps) {
   return (
-    <svg
-      viewBox="0 0 13 13"
-      fill="none"
-      width="14"
-      height="14"
-      aria-hidden
-    >
+    <svg viewBox="0 0 13 13" fill="none" width="14" height="14" aria-hidden>
       {icons[module]}
     </svg>
-  );
+  )
 }

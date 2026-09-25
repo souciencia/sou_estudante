@@ -12,11 +12,11 @@ interface HeaderProps {
 }
 
 export const Header = ({ className }: HeaderProps) => {
-  const pathname = usePathname();
-  const isHomePage = pathname === '/';
+  const pathname = usePathname()
+  const isHomePage = pathname === '/'
 
-  if(isHomePage) {
-    return;
+  if (isHomePage) {
+    return
   }
 
   return (
