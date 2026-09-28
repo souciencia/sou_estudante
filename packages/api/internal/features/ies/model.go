@@ -1,5 +1,7 @@
 package ies
 
+import "api_estudante/internal/shared"
+
 // IES representa uma Instituição de Educação Superior no índice "ies".
 // O _id do documento é o próprio co_ies.
 type IES struct {
@@ -23,10 +25,8 @@ type SearchFilterParams struct {
 }
 
 // AggregationBucket representa um item de contagem de uma agregação.
-type AggregationBucket struct {
-	Key   string `json:"key"`
-	Count int    `json:"count"`
-}
+// Aliás do tipo compartilhado, mantido para preservar a API do pacote.
+type AggregationBucket = shared.AggregationBucket
 
 // SearchAggregations mapeia as agregações por grupo de filtro.
 type SearchAggregations struct {
