@@ -1,12 +1,9 @@
 package ies
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/elastic/go-elasticsearch/v8"
@@ -174,55 +171,11 @@ func parseAggregations(raw map[string]json.RawMessage) *SearchAggregations {
 		return nil
 	}
 
-	parseBuckets := func(name string) []AggregationBucket {
-		payload, ok := raw[name]
-		if !ok {
-			return nil
-		}
-
-		// 1. Tentar array buckets (terms aggregation).
-		var arrayAgg struct {
-			Buckets []struct {
-				Key      interface{} `json:"key"`
-				DocCount int         `json:"doc_count"`
-			} `json:"buckets"`
-		}
-		if err := json.Unmarshal(payload, &arrayAgg); err == nil && len(arrayAgg.Buckets) > 0 {
-			buckets := make([]AggregationBucket, 0, len(arrayAgg.Buckets))
-			for _, b := range arrayAgg.Buckets {
-				buckets = append(buckets, AggregationBucket{
-					Key:   fmt.Sprintf("%v", b.Key),
-					Count: b.DocCount,
-				})
-			}
-			return buckets
-		}
-
-		// 2. Tentar map buckets (filters aggregation).
-		var mapAgg struct {
-			Buckets map[string]struct {
-				DocCount int `json:"doc_count"`
-			} `json:"buckets"`
-		}
-		if err := json.Unmarshal(payload, &mapAgg); err == nil && len(mapAgg.Buckets) > 0 {
-			buckets := make([]AggregationBucket, 0, len(mapAgg.Buckets))
-			for key, b := range mapAgg.Buckets {
-				buckets = append(buckets, AggregationBucket{
-					Key:   key,
-					Count: b.DocCount,
-				})
-			}
-			return buckets
-		}
-
-		return nil
-	}
-
 	return &SearchAggregations{
-		UFs:          parseBuckets("ufs"),
-		Regioes:      parseBuckets("regioes"),
-		Categorias:   parseBuckets("categorias"),
-		Organizacoes: parseBuckets("organizacoes"),
+		UFs:          shared.ParseBuckets(raw, "ufs"),
+		Regioes:      shared.ParseBuckets(raw, "regioes"),
+		Categorias:   shared.ParseBuckets(raw, "categorias"),
+		Organizacoes: shared.ParseBuckets(raw, "organizacoes"),
 	}
 }
 
@@ -252,82 +205,19 @@ func (r *ElasticsearchRepository) Search(
 		"aggs": buildAggregations(),
 	}
 
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(esQuery); err != nil {
-		return nil, fmt.Errorf("erro ao montar query: %w", err)
-	}
-
-	res, err := r.client.Search(
-		r.client.Search.WithContext(ctx),
-		r.client.Search.WithIndex(r.index),
-		r.client.Search.WithBody(&buf),
-		r.client.Search.WithTrackTotalHits(true),
-	)
+	resp, err := shared.ExecuteSearch(ctx, r.client, r.index, esQuery)
 	if err != nil {
-		return nil, fmt.Errorf("erro ao executar search: %w", err)
-	}
-	defer res.Body.Close()
-
-	if res.IsError() {
-		var errResp map[string]interface{}
-		json.NewDecoder(res.Body).Decode(&errResp)
-		return nil, fmt.Errorf("erro ES [%s]: %v", res.Status(), errResp)
-	}
-
-	var esResp struct {
-		Hits struct {
-			Total struct {
-				Value int `json:"value"`
-			} `json:"total"`
-			Hits []struct {
-				ID     string                 `json:"_id"`
-				Source map[string]interface{} `json:"_source"`
-			} `json:"hits"`
-		} `json:"hits"`
-		Aggregations map[string]json.RawMessage `json:"aggregations"`
-	}
-	if err := json.NewDecoder(res.Body).Decode(&esResp); err != nil {
-		return nil, fmt.Errorf("erro ao decodificar resposta: %w", err)
-	}
-
-	hits := make([]map[string]interface{}, 0, len(esResp.Hits.Hits))
-	for _, hit := range esResp.Hits.Hits {
-		hit.Source["_id"] = hit.ID
-		hits = append(hits, hit.Source)
+		return nil, err
 	}
 
 	return &SearchResult{
-		Total:        esResp.Hits.Total.Value,
-		Hits:         hits,
-		Aggregations: parseAggregations(esResp.Aggregations),
+		Total:        resp.Total,
+		Hits:         resp.Hits,
+		Aggregations: parseAggregations(resp.Aggregations),
 	}, nil
 }
 
 // GetByID busca uma IES pelo seu co_ies (que também é o _id do documento).
 func (r *ElasticsearchRepository) GetByID(ctx context.Context, coIES string) (*IES, error) {
-	res, err := r.client.Get(
-		r.index,
-		coIES,
-		r.client.Get.WithContext(ctx),
-	)
-	if err != nil {
-		return nil, fmt.Errorf("erro ao buscar ies: %w", err)
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode == http.StatusNotFound {
-		return nil, ErrNotFound
-	}
-	if res.IsError() {
-		return nil, fmt.Errorf("erro ES [%s]", res.Status())
-	}
-
-	var parsed struct {
-		Source IES `json:"_source"`
-	}
-	if err := json.NewDecoder(res.Body).Decode(&parsed); err != nil {
-		return nil, fmt.Errorf("erro ao decodificar ies: %w", err)
-	}
-
-	return &parsed.Source, nil
+	return shared.GetByID[IES](ctx, r.client, r.index, coIES, "ies", ErrNotFound)
 }

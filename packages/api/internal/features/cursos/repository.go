@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/elastic/go-elasticsearch/v8"
@@ -395,144 +394,33 @@ func (r *ElasticsearchRepository) Search(
 		},
 	}
 
-	// 6. Serializar para JSON
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(esQuery); err != nil {
-		return nil, fmt.Errorf("erro ao montar query: %w", err)
-	}
-
-	// 7. Executar search no Elasticsearch
-	res, err := r.client.Search(
-		r.client.Search.WithContext(ctx),
-		r.client.Search.WithIndex(r.index),
-		r.client.Search.WithBody(&buf),
-		r.client.Search.WithTrackTotalHits(true),
-	)
+	// 6. Executar search no Elasticsearch
+	resp, err := shared.ExecuteSearch(ctx, r.client, r.index, esQuery)
 	if err != nil {
-		return nil, fmt.Errorf("erro ao executar search: %w", err)
-	}
-	defer res.Body.Close()
-
-	// 8. Verificar erro HTTP
-	if res.IsError() {
-		var errResp map[string]interface{}
-		json.NewDecoder(res.Body).Decode(&errResp)
-		return nil, fmt.Errorf("erro ES [%s]: %v", res.Status(), errResp)
+		return nil, err
 	}
 
-	// 9. Parse da resposta
-	var esResp struct {
-		Hits struct {
-			Total struct {
-				Value int `json:"value"`
-			} `json:"total"`
-			Hits []struct {
-				ID     string                 `json:"_id"`
-				Source map[string]interface{} `json:"_source"`
-			} `json:"hits"`
-		} `json:"hits"`
-		Aggregations map[string]json.RawMessage `json:"aggregations"`
-	}
-
-	if err := json.NewDecoder(res.Body).Decode(&esResp); err != nil {
-		return nil, fmt.Errorf("erro ao decodificar resposta: %w", err)
-	}
-
-	// 10. Montar resultado
-	hits := make([]map[string]interface{}, 0, len(esResp.Hits.Hits))
-	for _, hit := range esResp.Hits.Hits {
-		hit.Source["_id"] = hit.ID
-		hits = append(hits, hit.Source)
-	}
-
+	// 7. Montar resultado
 	var searchAggs *SearchAggregations
-	if len(esResp.Aggregations) > 0 {
-		parseBuckets := func(name string) []AggregationBucket {
-			raw, ok := esResp.Aggregations[name]
-			if !ok {
-				return nil
-			}
-
-			// 1. Tentar array buckets (ex: terms aggregation)
-			var arrayAgg struct {
-				Buckets []struct {
-					Key      interface{} `json:"key"`
-					DocCount int         `json:"doc_count"`
-				} `json:"buckets"`
-			}
-			if err := json.Unmarshal(raw, &arrayAgg); err == nil && len(arrayAgg.Buckets) > 0 {
-				buckets := make([]AggregationBucket, 0, len(arrayAgg.Buckets))
-				for _, b := range arrayAgg.Buckets {
-					buckets = append(buckets, AggregationBucket{
-						Key:   fmt.Sprintf("%v", b.Key),
-						Count: b.DocCount,
-					})
-				}
-				return buckets
-			}
-
-			// 2. Tentar map buckets (ex: filters aggregation)
-			var mapAgg struct {
-				Buckets map[string]struct {
-					DocCount int `json:"doc_count"`
-				} `json:"buckets"`
-			}
-			if err := json.Unmarshal(raw, &mapAgg); err == nil && len(mapAgg.Buckets) > 0 {
-				buckets := make([]AggregationBucket, 0, len(mapAgg.Buckets))
-				for key, b := range mapAgg.Buckets {
-					buckets = append(buckets, AggregationBucket{
-						Key:   key,
-						Count: b.DocCount,
-					})
-				}
-				return buckets
-			}
-
-			return nil
-		}
-
+	if len(resp.Aggregations) > 0 {
 		searchAggs = &SearchAggregations{
-			UFs:         parseBuckets("ufs"),
-			Turnos:      parseBuckets("turnos"),
-			Graus:       parseBuckets("graus"),
-			Categorias:  parseBuckets("categorias"),
-			Modalidades: parseBuckets("modalidades"),
-			Enades:      parseBuckets("enades"),
+			UFs:         shared.ParseBuckets(resp.Aggregations, "ufs"),
+			Turnos:      shared.ParseBuckets(resp.Aggregations, "turnos"),
+			Graus:       shared.ParseBuckets(resp.Aggregations, "graus"),
+			Categorias:  shared.ParseBuckets(resp.Aggregations, "categorias"),
+			Modalidades: shared.ParseBuckets(resp.Aggregations, "modalidades"),
+			Enades:      shared.ParseBuckets(resp.Aggregations, "enades"),
 		}
 	}
 
 	return &SearchResult{
-		Total:        esResp.Hits.Total.Value,
-		Hits:         hits,
+		Total:        resp.Total,
+		Hits:         resp.Hits,
 		Aggregations: searchAggs,
 	}, nil
 }
 
 // GetByID busca um curso pelo seu sequencial (que também é o _id do documento).
 func (r *ElasticsearchRepository) GetByID(ctx context.Context, id string) (*Curso, error) {
-	res, err := r.client.Get(
-		r.index,
-		id,
-		r.client.Get.WithContext(ctx),
-	)
-	if err != nil {
-		return nil, fmt.Errorf("erro ao buscar curso: %w", err)
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode == http.StatusNotFound {
-		return nil, ErrNotFound
-	}
-	if res.IsError() {
-		return nil, fmt.Errorf("erro ES [%s]", res.Status())
-	}
-
-	var parsed struct {
-		Source Curso `json:"_source"`
-	}
-	if err := json.NewDecoder(res.Body).Decode(&parsed); err != nil {
-		return nil, fmt.Errorf("erro ao decodificar curso: %w", err)
-	}
-
-	return &parsed.Source, nil
+	return shared.GetByID[Curso](ctx, r.client, r.index, id, "curso", ErrNotFound)
 }

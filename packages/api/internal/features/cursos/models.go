@@ -1,5 +1,7 @@
 package cursos
 
+import "api_estudante/internal/shared"
+
 // SearchFilterParams contém parâmetros opcionais de filtragem e ordenação
 type SearchFilterParams struct {
 	UF         []string `json:"uf,omitempty"`
@@ -12,11 +14,9 @@ type SearchFilterParams struct {
 	Exact      bool     `json:"exact,omitempty"`
 }
 
-// AggregationBucket representa um item de contagem de uma agregação
-type AggregationBucket struct {
-	Key   string `json:"key"`
-	Count int    `json:"count"`
-}
+// AggregationBucket representa um item de contagem de uma agregação.
+// Aliás do tipo compartilhado, mantido para preservar a API do pacote.
+type AggregationBucket = shared.AggregationBucket
 
 // SearchAggregations mapeia as agregações por grupo de filtro
 type SearchAggregations struct {
