@@ -1,53 +1,38 @@
-'use client'
-
-import { Compass } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { SiteMenu } from '@/components/layout/site-menu/site-menu'
-import { SITE_MENU_LINKS } from '@/components/layout/site-menu/site-menu-links'
 import { cn } from '@/utils/cn'
+import { NauticalIcon } from '../../ui/route/icons/NauticalIcon'
+import Menu from '../menu/menu'
 
 interface HeaderProps {
   className?: string
 }
 
 export const Header = ({ className }: HeaderProps) => {
-  const pathname = usePathname()
-  const isHomePage = pathname === '/'
-
-  if (isHomePage) {
-    return
-  }
-
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 w-full border-b border-card-border bg-card-surface',
+        'sticky top-0 z-[600] flex h-[52px] items-center justify-between bg-navy-900 px-5',
         className,
       )}
     >
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-3 sm:px-8">
-        <Link
-          href="/"
-          className={cn(
-            'flex items-center gap-2 rounded-full font-title-protagonist text-protagonist-lg font-bold text-fg-protagonist',
-            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
-          )}
+      <Link href="/" className="flex items-center gap-2.5">
+        <span aria-hidden className="block h-7 w-7">
+          <NauticalIcon className="w-7 h-7" />
+        </span>
+        <span className="text-sm font-semibold tracking-[-0.2px] text-white">
+          So<span className="text-m1-accent">U</span>_Estudante
+        </span>
+      </Link>
+      <div className="flex items-center gap-3 text-coadjuvant-sm text-white/[.45]">
+        <a
+          href="https://souciencia.unifesp.br"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors duration-fast hover:text-white/80"
         >
-          <Compass className="size-6 text-accent-deep" aria-hidden="true" />
-          <span>Sou Estudante</span>
-        </Link>
-
-        <SiteMenu>
-          <SiteMenu.Trigger />
-          <SiteMenu.List>
-            {SITE_MENU_LINKS.map(({ href, label }) => (
-              <SiteMenu.Item key={href} href={href}>
-                {label}
-              </SiteMenu.Item>
-            ))}
-          </SiteMenu.List>
-        </SiteMenu>
+          SoU_Ciência
+        </a>
+        <Menu mode="dark" />
       </div>
     </header>
   )

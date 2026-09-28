@@ -1,42 +1,42 @@
 import { render, screen } from '@testing-library/react'
-import { usePathname } from 'next/navigation'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { SITE_MENU_LINKS } from '../site-menu/site-menu-links'
+import { describe, expect, it } from 'vitest'
 import { Header } from './header'
 
-vi.mock('next/navigation', () => ({
-  usePathname: vi.fn(),
-}))
-
 describe('Header', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-    vi.mocked(usePathname).mockReturnValue('/ies')
-  })
-
-  it('renders a banner landmark', () => {
+  it('links the application logo to the home page', () => {
     render(<Header />)
 
-    expect(screen.getByRole('banner')).toBeInTheDocument()
+    const homeLink = screen.getByRole('link', {
+      name: /SoU_Estudante/,
+    })
+
+    expect(homeLink).toHaveAttribute('href', '/')
   })
 
-  it('links the brand to the home page', () => {
+  it('links to SoU_Ciência', () => {
     render(<Header />)
 
-    expect(
-      screen.getByRole('link', { name: /sou estudante/i }),
-    ).toHaveAttribute('href', '/')
+    const cienciaLink = screen.getByRole('link', {
+      name: 'SoU_Ciência',
+    })
+
+    expect(cienciaLink).toHaveAttribute('href', 'https://souciencia.unifesp.br')
   })
 
-  it('renders the site navigation with every page link', () => {
+  it('opens SoU_Ciência in a new tab', () => {
     render(<Header />)
 
-    expect(
-      screen.getByRole('navigation', { name: 'Navegação principal' }),
-    ).toBeInTheDocument()
+    const cienciaLink = screen.getByRole('link', {
+      name: 'SoU_Ciência',
+    })
 
-    for (const { label } of SITE_MENU_LINKS) {
-      expect(screen.getByRole('link', { name: label })).toBeInTheDocument()
-    }
+    expect(cienciaLink).toHaveAttribute('target', '_blank')
+    expect(cienciaLink).toHaveAttribute('rel', 'noopener noreferrer')
+  })
+
+  it('renders the menu', () => {
+    render(<Header />)
+
+    expect(screen.getByRole('button', { name: 'Menu' })).toBeInTheDocument()
   })
 })

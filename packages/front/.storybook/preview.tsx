@@ -2,7 +2,23 @@ import type { Preview } from '@storybook/nextjs-vite'
 import '../src/app/globals.css'
 
 const preview: Preview = {
+  initialGlobals: {
+    backgrounds: { value: 'app', grid: false },
+  },
+
   parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+
+    backgrounds: {
+      default: 'app',
+      options: {
+        app: { name: 'App', value: '#f5f5f5' },
+        light: { name: 'Light', value: '#ffffff' },
+      },
+    },
+
     controls: {
       matchers: {
         color: /(background|color)$/i,
