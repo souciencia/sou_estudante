@@ -12,6 +12,7 @@ export const Header = ({ className }: HeaderProps) => {
     <header
       className={cn(
         'sticky top-0 z-[600] flex h-[52px] items-center justify-between bg-navy-900 px-5',
+        'mx-auto w-full',
         className,
       )}
     >

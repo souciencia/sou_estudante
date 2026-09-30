@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SiteShell } from './site-shell'
+import { LayoutSite } from '.'
 
 const meta = {
-  title: 'Components/Layout/SiteShell',
-  component: SiteShell,
+  title: 'Components/Layout/LayoutSite',
+  component: LayoutSite,
   parameters: {
     layout: 'fullscreen',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof SiteShell>
+} satisfies Meta<typeof LayoutSite>
 
 export default meta
 

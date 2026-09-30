@@ -1,17 +1,14 @@
 import type { ReactNode } from 'react'
 import { Footer } from '@/components/layout/footer/footer'
+import { ShellHeader } from '@/components/layout/header'
 import { cn } from '@/utils/cn'
-import { ShellHeader } from './shell-header'
 
-interface SiteShellProps {
+interface LayoutSiteProps {
   children: ReactNode
   className?: string
 }
 
-/**
- * Moldura global do site
- */
-export const SiteShell = ({ children, className }: SiteShellProps) => {
+export const LayoutSite = ({ children, className }: LayoutSiteProps) => {
   return (
     <div
       className={cn('flex min-h-screen flex-col bg-site-background', className)}

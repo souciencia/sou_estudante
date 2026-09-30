@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DM_Mono, Playfair_Display, Source_Sans_3 } from 'next/font/google'
-import { SiteShell } from '@/components/layout/site-shell/site-shell'
+import { LayoutSite } from '@/components/layout/layout-site'
 import './globals.css'
 
 const sourceSans = Source_Sans_3({
@@ -35,7 +35,7 @@ export default function RootLayout({
       <body
         className={`${sourceSans.variable} ${dmMono.variable} ${playfair.variable} antialiased`}
       >
-        <SiteShell>{children}</SiteShell>
+        <LayoutSite>{children}</LayoutSite>
       </body>
     </html>
   )
