@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { usePathname } from 'next/navigation'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { SiteShell } from './site-shell'
+import { LayoutSite } from '.'
 
 vi.mock('next/navigation', () => ({
   usePathname: vi.fn(),
@@ -9,12 +9,12 @@ vi.mock('next/navigation', () => ({
 
 const renderShell = () =>
   render(
-    <SiteShell>
+    <LayoutSite>
       <p>conteúdo da página</p>
-    </SiteShell>,
+    </LayoutSite>,
   )
 
-describe('SiteShell', () => {
+describe('LayoutSite', () => {
   beforeEach(() => {
     vi.mocked(usePathname).mockReturnValue('/')
   })
