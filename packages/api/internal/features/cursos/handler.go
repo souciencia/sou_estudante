@@ -2,14 +2,14 @@ package cursos
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"log/slog"
 	"net/http"
 	"strconv"
-	"time"
+	"strings"
 
-	"api_estudante/internal/shared"
+	"api_estudante/internal/apperr"
+	"api_estudante/internal/httpx"
 )
 
 // Handler gerencia requisições de busca de cursos
@@ -32,16 +32,9 @@ func parseExactParam(raw string) bool {
 // ServeHTTP implementa http.Handler
 // GET /cursos?q={termo}&page={page}&limit={limit}&uf={uf}&turno={turno}&grau={grau}&categoria={categoria}&modalidade={modalidade}&enade={enade}&sort={sort}
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// 1. Validar método HTTP
-	if r.Method != http.MethodGet {
-		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// 2. Parse query params
-	query := r.URL.Query().Get("q")
+	query := strings.TrimSpace(r.URL.Query().Get("q"))
 	if query == "" {
-		http.Error(w, "Parâmetro 'q' é obrigatório", http.StatusBadRequest)
+		httpx.WriteError(w, http.StatusBadRequest, "Parâmetro 'q' é obrigatório")
 		return
 	}
 
@@ -51,40 +44,36 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
-	if limit < 1 || limit > 100 {
-		limit = 20
+	if limit < 1 || limit > httpx.MaxPageSize {
+		limit = httpx.DefaultPageSize
 	}
 
 	filters := SearchFilterParams{
-		UF:         shared.SplitCSV(r.URL.Query()["uf"]),
-		Turno:      shared.SplitCSV(r.URL.Query()["turno"]),
-		Grau:       shared.SplitCSV(r.URL.Query()["grau"]),
-		Categoria:  shared.SplitCSV(r.URL.Query()["categoria"]),
-		Modalidade: shared.SplitCSV(r.URL.Query()["modalidade"]),
-		Enade:      shared.SplitCSV(r.URL.Query()["enade"]),
+		UF:         httpx.SplitCSV(r.URL.Query()["uf"]),
+		Turno:      httpx.SplitCSV(r.URL.Query()["turno"]),
+		Grau:       httpx.SplitCSV(r.URL.Query()["grau"]),
+		Categoria:  httpx.SplitCSV(r.URL.Query()["categoria"]),
+		Modalidade: httpx.SplitCSV(r.URL.Query()["modalidade"]),
+		Enade:      httpx.SplitCSV(r.URL.Query()["enade"]),
 		Sort:       r.URL.Query().Get("sort"),
 		Exact:      parseExactParam(r.URL.Query().Get("exact")),
 	}
 
-	// 3. Criar contexto com timeout
-	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), httpx.RequestTimeout)
 	defer cancel()
 
-	// 4. Chamar service
 	response, err := h.Service.BuscarCursos(ctx, query, filters, page, limit)
+	if errors.Is(err, apperr.ErrInvalidInput) {
+		httpx.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 	if err != nil {
 		slog.Error("Erro ao buscar cursos", "error", err, "query", query)
-		http.Error(w, "Erro interno ao buscar cursos", http.StatusInternalServerError)
+		httpx.WriteError(w, http.StatusInternalServerError, "Erro interno ao buscar cursos")
 		return
 	}
 
-	// 5. Retornar JSON
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		slog.Error("Erro ao serializar JSON", "error", err)
-	}
+	httpx.WriteJSON(w, http.StatusOK, response)
 }
 
 // DetailHandler gerencia a busca de um curso específico.
@@ -94,34 +83,29 @@ type DetailHandler struct {
 
 // ServeHTTP implementa http.Handler para GET /cursos/{id}.
 func (h *DetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
-		return
-	}
-
 	id := r.PathValue("id")
 	if id == "" {
-		http.Error(w, "Parâmetro 'id' é obrigatório", http.StatusBadRequest)
+		httpx.WriteError(w, http.StatusBadRequest, "Parâmetro 'id' é obrigatório")
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), httpx.RequestTimeout)
 	defer cancel()
 
 	item, err := h.Service.BuscarCursoPorID(ctx, id)
+	if errors.Is(err, apperr.ErrInvalidInput) {
+		httpx.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 	if errors.Is(err, ErrNotFound) {
-		http.Error(w, "Curso não encontrado", http.StatusNotFound)
+		httpx.WriteError(w, http.StatusNotFound, "Curso não encontrado")
 		return
 	}
 	if err != nil {
 		slog.Error("Erro ao buscar curso por id", "error", err, "id", id)
-		http.Error(w, "Erro interno ao buscar curso", http.StatusInternalServerError)
+		httpx.WriteError(w, http.StatusInternalServerError, "Erro interno ao buscar curso")
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(item); err != nil {
-		slog.Error("Erro ao serializar JSON", "error", err)
-	}
+	httpx.WriteJSON(w, http.StatusOK, item)
 }

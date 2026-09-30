@@ -6,15 +6,16 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/elastic/go-elasticsearch/v8"
+	es "github.com/elastic/go-elasticsearch/v8"
 
-	"api_estudante/internal/shared"
+	"api_estudante/internal/domain"
+	"api_estudante/internal/elasticsearch"
 )
 
 // ErrNotFound indica que a IES solicitada não existe no índice.
 var ErrNotFound = errors.New("ies não encontrada")
 
-// indexName é o índice estático de IES populado pelo bulker.
+// indexName é o índice estático de IES populado pelo bulk.
 const indexName = "ies"
 
 // Repository define o contrato de acesso às IES.
@@ -25,19 +26,19 @@ type Repository interface {
 
 // ElasticsearchRepository implementa Repository usando Elasticsearch.
 type ElasticsearchRepository struct {
-	client *elasticsearch.Client
+	client *es.Client
 	index  string
 }
 
 // SearchResult encapsula a resposta do Elasticsearch.
 type SearchResult struct {
 	Total        int
-	Hits         []map[string]interface{}
+	Hits         []IES
 	Aggregations *SearchAggregations
 }
 
 // NewElasticsearchRepository cria uma nova instância do repository.
-func NewElasticsearchRepository(client *elasticsearch.Client) Repository {
+func NewElasticsearchRepository(client *es.Client) Repository {
 	return &ElasticsearchRepository{
 		client: client,
 		index:  indexName,
@@ -69,7 +70,7 @@ func buildTextQuery(query string) map[string]interface{} {
 // categoriaFilter monta a cláusula de filtro por categoria administrativa.
 // Os campos do índice ies já são keyword, portanto não levam sufixo ".keyword".
 func categoriaFilter(categoria string) map[string]interface{} {
-	terms := shared.CategoriaTerms(categoria)
+	terms := domain.CategoriaTerms(categoria)
 	if len(terms) == 0 {
 		return nil
 	}
@@ -172,10 +173,10 @@ func parseAggregations(raw map[string]json.RawMessage) *SearchAggregations {
 	}
 
 	return &SearchAggregations{
-		UFs:          shared.ParseBuckets(raw, "ufs"),
-		Regioes:      shared.ParseBuckets(raw, "regioes"),
-		Categorias:   shared.ParseBuckets(raw, "categorias"),
-		Organizacoes: shared.ParseBuckets(raw, "organizacoes"),
+		UFs:          elasticsearch.ParseBuckets(raw, "ufs"),
+		Regioes:      elasticsearch.ParseBuckets(raw, "regioes"),
+		Categorias:   elasticsearch.ParseBuckets(raw, "categorias"),
+		Organizacoes: elasticsearch.ParseBuckets(raw, "organizacoes"),
 	}
 }
 
@@ -205,7 +206,7 @@ func (r *ElasticsearchRepository) Search(
 		"aggs": buildAggregations(),
 	}
 
-	resp, err := shared.ExecuteSearch(ctx, r.client, r.index, esQuery)
+	resp, err := elasticsearch.ExecuteSearch[IES](ctx, r.client, r.index, esQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -219,5 +220,5 @@ func (r *ElasticsearchRepository) Search(
 
 // GetByID busca uma IES pelo seu co_ies (que também é o _id do documento).
 func (r *ElasticsearchRepository) GetByID(ctx context.Context, coIES string) (*IES, error) {
-	return shared.GetByID[IES](ctx, r.client, r.index, coIES, "ies", ErrNotFound)
+	return elasticsearch.GetByID[IES](ctx, r.client, r.index, coIES, "ies", ErrNotFound)
 }

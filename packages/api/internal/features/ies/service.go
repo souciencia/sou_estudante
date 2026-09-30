@@ -2,16 +2,18 @@ package ies
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"strings"
+
+	"api_estudante/internal/apperr"
+	"api_estudante/internal/httpx"
 )
 
 // Regras de paginação da busca de IES.
 const (
-	defaultPageSize = 20
-	maxPageSize     = 100
+	defaultPageSize = httpx.DefaultPageSize
+	maxPageSize     = httpx.MaxPageSize
 )
 
 // Service define a interface de negócio para IES.
@@ -37,6 +39,10 @@ func (s *ServiceImpl) BuscarIES(
 	filters SearchFilterParams,
 	page, limit int,
 ) (*IESListResponse, error) {
+	query = strings.TrimSpace(query)
+	if query == "" {
+		return nil, fmt.Errorf("%w: query não pode ser vazio", apperr.ErrInvalidInput)
+	}
 	if page < 1 {
 		page = 1
 	}
@@ -49,21 +55,12 @@ func (s *ServiceImpl) BuscarIES(
 		return nil, fmt.Errorf("erro ao buscar ies: %w", err)
 	}
 
-	items := make([]IES, 0, len(result.Hits))
-	for _, hit := range result.Hits {
-		item, err := transformHitToIES(hit)
-		if err != nil {
-			continue
-		}
-		items = append(items, item)
-	}
-
 	return &IESListResponse{
 		Total:        result.Total,
 		Page:         page,
 		Limit:        limit,
-		Results:      items,
-		Links:        buildPaginationLinks(query, filters, page, limit, result.Total),
+		Results:      result.Hits,
+		Links:        httpx.BuildPaginationLinks("/ies", iesFilterValues(query, filters), page, limit, result.Total),
 		Aggregations: result.Aggregations,
 	}, nil
 }
@@ -72,7 +69,7 @@ func (s *ServiceImpl) BuscarIES(
 func (s *ServiceImpl) BuscarIESPorID(ctx context.Context, coIES string) (*IES, error) {
 	coIES = strings.TrimSpace(coIES)
 	if coIES == "" {
-		return nil, fmt.Errorf("co_ies não pode ser vazio")
+		return nil, fmt.Errorf("%w: co_ies não pode ser vazio", apperr.ErrInvalidInput)
 	}
 
 	item, err := s.Repository.GetByID(ctx, coIES)
@@ -82,68 +79,27 @@ func (s *ServiceImpl) BuscarIESPorID(ctx context.Context, coIES string) (*IES, e
 	return item, nil
 }
 
-// transformHitToIES converte um documento do ES em IES via JSON.
-func transformHitToIES(hit map[string]interface{}) (IES, error) {
-	jsonBytes, err := json.Marshal(hit)
-	if err != nil {
-		return IES{}, fmt.Errorf("erro ao serializar hit: %w", err)
+// iesFilterValues serializa os filtros aplicados para preservá-los nos links
+// de paginação HATEOAS.
+func iesFilterValues(query string, filters SearchFilterParams) url.Values {
+	values := url.Values{}
+	if query != "" {
+		values.Set("q", query)
 	}
-
-	var item IES
-	if err := json.Unmarshal(jsonBytes, &item); err != nil {
-		return IES{}, fmt.Errorf("erro ao deserializar para IES: %w", err)
+	if len(filters.UF) > 0 {
+		values.Set("uf", strings.Join(filters.UF, ","))
 	}
-	return item, nil
-}
-
-// buildPaginationLinks gera links HATEOAS preservando os filtros aplicados.
-func buildPaginationLinks(query string, filters SearchFilterParams, page, limit, total int) PaginationLinks {
-	lastPage := (total + limit - 1) / limit
-	if lastPage < 1 {
-		lastPage = 1
+	if len(filters.Regiao) > 0 {
+		values.Set("regiao", strings.Join(filters.Regiao, ","))
 	}
-
-	buildURL := func(p int) string {
-		values := url.Values{}
-		if query != "" {
-			values.Set("q", query)
-		}
-		values.Set("page", fmt.Sprintf("%d", p))
-		values.Set("limit", fmt.Sprintf("%d", limit))
-
-		if len(filters.UF) > 0 {
-			values.Set("uf", strings.Join(filters.UF, ","))
-		}
-		if len(filters.Regiao) > 0 {
-			values.Set("regiao", strings.Join(filters.Regiao, ","))
-		}
-		if len(filters.Categoria) > 0 {
-			values.Set("categoria", strings.Join(filters.Categoria, ","))
-		}
-		if len(filters.Organizacao) > 0 {
-			values.Set("organizacao", strings.Join(filters.Organizacao, ","))
-		}
-		if filters.Sort != "" {
-			values.Set("sort", filters.Sort)
-		}
-
-		return fmt.Sprintf("/ies?%s", values.Encode())
+	if len(filters.Categoria) > 0 {
+		values.Set("categoria", strings.Join(filters.Categoria, ","))
 	}
-
-	links := PaginationLinks{
-		Self:  buildURL(page),
-		First: buildURL(1),
-		Last:  buildURL(lastPage),
+	if len(filters.Organizacao) > 0 {
+		values.Set("organizacao", strings.Join(filters.Organizacao, ","))
 	}
-
-	if page > 1 {
-		prevURL := buildURL(page - 1)
-		links.Prev = &prevURL
+	if filters.Sort != "" {
+		values.Set("sort", filters.Sort)
 	}
-	if page < lastPage {
-		nextURL := buildURL(page + 1)
-		links.Next = &nextURL
-	}
-
-	return links
+	return values
 }

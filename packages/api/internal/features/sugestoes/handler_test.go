@@ -24,23 +24,6 @@ func (m *MockService) Sugerir(_ context.Context, termo string, limit int) ([]str
 	return m.ReturnSugestoes, m.ReturnErr
 }
 
-func TestSugestoesHandlerRejeitaMetodoNaoGET(t *testing.T) {
-	mockService := &MockService{}
-	handler := &Handler{Service: mockService}
-
-	req := httptest.NewRequest(http.MethodPost, "/cursos/sugestoes?q=medicina", nil)
-	rec := httptest.NewRecorder()
-
-	handler.ServeHTTP(rec, req)
-
-	if rec.Code != http.StatusMethodNotAllowed {
-		t.Fatalf("esperado status 405, recebido %d", rec.Code)
-	}
-	if mockService.Called {
-		t.Error("service não deveria ser chamado para método não permitido")
-	}
-}
-
 func TestSugestoesHandlerRequerParametroQ(t *testing.T) {
 	mockService := &MockService{}
 	handler := &Handler{Service: mockService}
