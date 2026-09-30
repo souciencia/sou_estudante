@@ -1,14 +1,12 @@
 import type { ReactNode } from 'react'
 import { Footer } from '@/components/layout/footer/footer'
-import { cn } from '@/utils/cn'
 import { ShellHeader } from '@/components/layout/header'
+import { cn } from '@/utils/cn'
 
 interface LayoutSiteProps {
   children: ReactNode
   className?: string
 }
-
-
 
 export const LayoutSite = ({ children, className }: LayoutSiteProps) => {
   return (
