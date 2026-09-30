@@ -9,11 +9,14 @@ import (
 	"syscall"
 	"time"
 
+	es "github.com/elastic/go-elasticsearch/v8"
+
 	"api_estudante/internal/config"
-	"api_estudante/internal/database"
+	"api_estudante/internal/elasticsearch"
 	"api_estudante/internal/features/cursos"
 	"api_estudante/internal/features/ies"
 	"api_estudante/internal/features/sugestoes"
+	"api_estudante/internal/httpx"
 	"api_estudante/internal/middlewares"
 )
 
@@ -21,49 +24,15 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 	cfg := config.Load()
-	esClient, err := database.NewElasticsearchClient(cfg)
+	esClient, err := elasticsearch.NewClient(cfg.ESURL, cfg.ESAPIKey)
 	if err != nil {
 		slog.Error("Falha ao conectar no Elasticsearch", "error", err)
 		os.Exit(1)
 	}
 
-	mux := http.NewServeMux()
-
-	cursoRepo := cursos.NewElasticsearchRepository(esClient)
-	cursoService := cursos.NewService(cursoRepo)
-	cursoHandler := &cursos.Handler{Service: cursoService}
-	cursoDetailHandler := &cursos.DetailHandler{Service: cursoService}
-
-	mux.Handle("GET /cursos", cursoHandler)
-	mux.Handle("GET /cursos/{id}", cursoDetailHandler)
-
-	sugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, cfg.ESDictIndexName, "no_curso")
-	sugestaoService := sugestoes.NewService(sugestaoRepo)
-	sugestaoHandler := &sugestoes.Handler{Service: sugestaoService}
-
-	mux.Handle("GET /cursos/sugestoes", sugestaoHandler)
-
-	iesRepo := ies.NewElasticsearchRepository(esClient)
-	iesService := ies.NewService(iesRepo)
-	iesHandler := &ies.Handler{Service: iesService}
-	iesDetailHandler := &ies.DetailHandler{Service: iesService}
-
-	iesSugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, cfg.IESDictIndexName, "no_ies")
-	iesSugestaoService := sugestoes.NewService(iesSugestaoRepo)
-	iesSugestaoHandler := &sugestoes.Handler{Service: iesSugestaoService}
-
-	mux.Handle("GET /ies", iesHandler)
-	mux.Handle("GET /ies/sugestoes", iesSugestaoHandler)
-	mux.Handle("GET /ies/{co_ies}", iesDetailHandler)
-
-	// Cadeia de Middlewares
-	// Você pode encadear mais middlewares aqui (Logging, Auth, etc)
-	finalHandler := middlewares.CorsMiddleware(mux)
-
-	// Configuração do Servidor
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,
-		Handler:      finalHandler,
+		Handler:      newRouter(esClient, cfg),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,
@@ -91,4 +60,34 @@ func main() {
 		slog.Error("Erro ao desligar servidor", "error", err)
 	}
 	slog.Info("Servidor encerrado com sucesso.")
+}
+
+// newRouter monta o roteador HTTP somente leitura da API.
+func newRouter(esClient *es.Client, cfg *config.Config) http.Handler {
+	mux := http.NewServeMux()
+
+	cursoRepo := cursos.NewElasticsearchRepository(esClient)
+	cursoService := cursos.NewService(cursoRepo)
+	mux.Handle("GET /cursos", &cursos.Handler{Service: cursoService})
+	mux.Handle("GET /cursos/{id}", &cursos.DetailHandler{Service: cursoService})
+
+	sugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, cfg.DictIndexName, "no_curso")
+	mux.Handle("GET /cursos/sugestoes", &sugestoes.Handler{Service: sugestoes.NewService(sugestaoRepo)})
+
+	iesRepo := ies.NewElasticsearchRepository(esClient)
+	iesService := ies.NewService(iesRepo)
+	mux.Handle("GET /ies", &ies.Handler{Service: iesService})
+	mux.Handle("GET /ies/{co_ies}", &ies.DetailHandler{Service: iesService})
+
+	iesSugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, cfg.IESDictIndexName, "no_ies")
+	mux.Handle("GET /ies/sugestoes", &sugestoes.Handler{Service: sugestoes.NewService(iesSugestaoRepo)})
+
+	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
+		httpx.WriteJSON(w, http.StatusOK, map[string]string{"status": "ok"})
+	})
+
+	handler := middlewares.Recover(mux)
+	handler = middlewares.AccessLog(handler)
+	handler = middlewares.RequestID(handler)
+	return middlewares.CorsMiddleware(handler)
 }

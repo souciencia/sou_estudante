@@ -37,8 +37,8 @@ services:
       - ES_USERNAME=${ELASTICSEARCH_USERNAME}
       - ES_PASSWORD=${ELASTIC_PASSWORD}
       - ES_APIKEY=${ELASTICSEARCH_APIKEY}
-      - ES_DICT_INDEX_NAME=dicionario_cursos
-      - IES_DICT_INDEX_NAME=dicionario_ies
+      - ES_DICT_INDEX_NAME=${ES_DICT_INDEX_NAME}
+      - IES_DICT_INDEX_NAME=${IES_DICT_INDEX_NAME}
     ports:
       - "8080:8080"
     volumes:
@@ -51,27 +51,28 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  se_bulker:
+  se_bulk:
     build:
-      context: ./packages/bulker
-    container_name: se_bulker
+      context: ./packages/api
+      dockerfile: Dockerfile.seed
+    container_name: se_bulk
     environment:
-      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
-      - ELASTICSEARCH_APIKEY=${ELASTICSEARCH_BULKER_APIKEY}
-      - ES_INDEX_NAME=cursos
-      - ES_DICT_INDEX_NAME=dicionario_cursos
-      - JSON_FILE_PATH=/data/dados_curso_completo.json
-      - IES_INDEX_NAME=ies
-      - IES_JSON_FILE_PATH=/data/dados_ies.json
-      - IES_DICT_INDEX_NAME=dicionario_ies
+      - ES_URL=${ELASTICSEARCH_URL}
+      - ES_INGEST_APIKEY=${ELASTICSEARCH_BULK_APIKEY}
+      - ES_INDEX_NAME=${ES_INDEX_NAME}
+      - ES_DICT_INDEX_NAME=${ES_DICT_INDEX_NAME}
+      - JSON_FILE_PATH=${JSON_FILE_PATH}
+      - IES_INDEX_NAME=${IES_INDEX_NAME}
+      - IES_JSON_FILE_PATH=${IES_JSON_FILE_PATH}
+      - IES_DICT_INDEX_NAME=${IES_DICT_INDEX_NAME}
     volumes:
-      - ./packages/bulker/data:/data:ro
+      - ./data:/data:ro
     networks:
       - data_net
     depends_on:
       se_es01:
         condition: service_healthy
-    profiles: ["bulker"]
+    profiles: ["bulk"]
 
   se_front:
     build:

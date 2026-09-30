@@ -2,11 +2,12 @@ package sugestoes
 
 import (
 	"context"
-	"encoding/json"
 	"log/slog"
 	"net/http"
 	"strconv"
-	"time"
+	"strings"
+
+	"api_estudante/internal/httpx"
 )
 
 // Handler gerencia requisições de sugestões de cursos
@@ -17,38 +18,23 @@ type Handler struct {
 // ServeHTTP implementa http.Handler
 // GET /cursos/sugestoes?q={termo}&limit={limit}
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// 1. Validar método HTTP
-	if r.Method != http.MethodGet {
-		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// 2. Parse query params
-	termo := r.URL.Query().Get("q")
+	termo := strings.TrimSpace(r.URL.Query().Get("q"))
 	if termo == "" {
-		http.Error(w, "Parâmetro 'q' é obrigatório", http.StatusBadRequest)
+		httpx.WriteError(w, http.StatusBadRequest, "Parâmetro 'q' é obrigatório")
 		return
 	}
 
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 
-	// 3. Criar contexto com timeout
-	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), httpx.RequestTimeout)
 	defer cancel()
 
-	// 4. Chamar service
 	sugestoes, err := h.Service.Sugerir(ctx, termo, limit)
 	if err != nil {
 		slog.Error("Erro ao buscar sugestões", "error", err, "termo", termo)
-		http.Error(w, "Erro interno ao buscar sugestões", http.StatusInternalServerError)
+		httpx.WriteError(w, http.StatusInternalServerError, "Erro interno ao buscar sugestões")
 		return
 	}
 
-	// 5. Retornar JSON
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-
-	if err := json.NewEncoder(w).Encode(SugestoesResponse{Results: sugestoes}); err != nil {
-		slog.Error("Erro ao serializar JSON", "error", err)
-	}
+	httpx.WriteJSON(w, http.StatusOK, SugestoesResponse{Results: sugestoes})
 }

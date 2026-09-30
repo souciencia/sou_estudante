@@ -2,10 +2,12 @@ package cursos
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"strings"
+
+	"api_estudante/internal/apperr"
+	"api_estudante/internal/httpx"
 )
 
 // Service define a interface de negócio para cursos
@@ -33,44 +35,28 @@ func (s *ServiceImpl) BuscarCursos(
 	filters SearchFilterParams,
 	page, limit int,
 ) (*CursoListResponse, error) {
-	// 1. Validar parâmetros
+	query = strings.TrimSpace(query)
 	if query == "" {
-		return nil, fmt.Errorf("query não pode ser vazio")
+		return nil, fmt.Errorf("%w: query não pode ser vazio", apperr.ErrInvalidInput)
 	}
 	if page < 1 {
 		page = 1
 	}
-	if limit < 1 || limit > 100 {
-		limit = 20 // default
+	if limit < 1 || limit > httpx.MaxPageSize {
+		limit = httpx.DefaultPageSize
 	}
 
-	// 2. Buscar no repositório
 	result, err := s.Repository.Search(ctx, query, filters, page, limit)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao buscar cursos: %w", err)
 	}
 
-	// 3. Transformar hits em Curso
-	items := make([]Curso, 0, len(result.Hits))
-	for _, hit := range result.Hits {
-		item, err := transformHitToCurso(hit)
-		if err != nil {
-			// Log do erro mas continua processando
-			continue
-		}
-		items = append(items, item)
-	}
-
-	// 4. Gerar links de paginação
-	links := buildPaginationLinks(query, filters, page, limit, result.Total)
-
-	// 5. Montar response
 	return &CursoListResponse{
 		Total:        result.Total,
 		Page:         page,
 		Limit:        limit,
-		Results:      items,
-		Links:        links,
+		Results:      result.Hits,
+		Links:        httpx.BuildPaginationLinks("/cursos", cursosFilterValues(query, filters), page, limit, result.Total),
 		Aggregations: result.Aggregations,
 	}, nil
 }
@@ -79,7 +65,7 @@ func (s *ServiceImpl) BuscarCursos(
 func (s *ServiceImpl) BuscarCursoPorID(ctx context.Context, id string) (*Curso, error) {
 	id = strings.TrimSpace(id)
 	if id == "" {
-		return nil, fmt.Errorf("id não pode ser vazio")
+		return nil, fmt.Errorf("%w: id não pode ser vazio", apperr.ErrInvalidInput)
 	}
 
 	item, err := s.Repository.GetByID(ctx, id)
@@ -89,80 +75,31 @@ func (s *ServiceImpl) BuscarCursoPorID(ctx context.Context, id string) (*Curso, 
 	return item, nil
 }
 
-// transformHitToCurso converte documento ES em Curso usando JSON marshaling
-func transformHitToCurso(hit map[string]interface{}) (Curso, error) {
-	// Converter map para JSON e depois para struct
-	// Isso garante que todos os campos nested sejam mapeados corretamente
-	jsonBytes, err := json.Marshal(hit)
-	if err != nil {
-		return Curso{}, fmt.Errorf("erro ao serializar hit: %w", err)
+// cursosFilterValues serializa os filtros aplicados para preservá-los nos
+// links de paginação HATEOAS.
+func cursosFilterValues(query string, filters SearchFilterParams) url.Values {
+	values := url.Values{}
+	values.Set("q", query)
+	if len(filters.UF) > 0 {
+		values.Set("uf", strings.Join(filters.UF, ","))
 	}
-
-	var curso Curso
-	if err := json.Unmarshal(jsonBytes, &curso); err != nil {
-		return Curso{}, fmt.Errorf("erro ao deserializar para Curso: %w", err)
+	if len(filters.Turno) > 0 {
+		values.Set("turno", strings.Join(filters.Turno, ","))
 	}
-
-	return curso, nil
-}
-
-// buildPaginationLinks gera links HATEOAS para navegação de páginas preservando filtros
-func buildPaginationLinks(query string, filters SearchFilterParams, page, limit, total int) PaginationLinks {
-	// Calcular última página
-	lastPage := (total + limit - 1) / limit
-	if lastPage < 1 {
-		lastPage = 1
+	if len(filters.Grau) > 0 {
+		values.Set("grau", strings.Join(filters.Grau, ","))
 	}
-
-	// Função helper para construir URL com query params
-	buildURL := func(p int) string {
-		values := url.Values{}
-		values.Set("q", query)
-		values.Set("page", fmt.Sprintf("%d", p))
-		values.Set("limit", fmt.Sprintf("%d", limit))
-
-		if len(filters.UF) > 0 {
-			values.Set("uf", strings.Join(filters.UF, ","))
-		}
-		if len(filters.Turno) > 0 {
-			values.Set("turno", strings.Join(filters.Turno, ","))
-		}
-		if len(filters.Grau) > 0 {
-			values.Set("grau", strings.Join(filters.Grau, ","))
-		}
-		if len(filters.Categoria) > 0 {
-			values.Set("categoria", strings.Join(filters.Categoria, ","))
-		}
-		if len(filters.Modalidade) > 0 {
-			values.Set("modalidade", strings.Join(filters.Modalidade, ","))
-		}
-		if len(filters.Enade) > 0 {
-			values.Set("enade", strings.Join(filters.Enade, ","))
-		}
-		if filters.Sort != "" {
-			values.Set("sort", filters.Sort)
-		}
-
-		return fmt.Sprintf("/cursos?%s", values.Encode())
+	if len(filters.Categoria) > 0 {
+		values.Set("categoria", strings.Join(filters.Categoria, ","))
 	}
-
-	links := PaginationLinks{
-		Self:  buildURL(page),
-		First: buildURL(1),
-		Last:  buildURL(lastPage),
+	if len(filters.Modalidade) > 0 {
+		values.Set("modalidade", strings.Join(filters.Modalidade, ","))
 	}
-
-	// Adicionar prev se não estamos na primeira página
-	if page > 1 {
-		prevURL := buildURL(page - 1)
-		links.Prev = &prevURL
+	if len(filters.Enade) > 0 {
+		values.Set("enade", strings.Join(filters.Enade, ","))
 	}
-
-	// Adicionar next se não estamos na última página
-	if page < lastPage {
-		nextURL := buildURL(page + 1)
-		links.Next = &nextURL
+	if filters.Sort != "" {
+		values.Set("sort", filters.Sort)
 	}
-
-	return links
+	return values
 }

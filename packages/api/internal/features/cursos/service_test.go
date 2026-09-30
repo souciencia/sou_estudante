@@ -3,8 +3,10 @@ package cursos
 import (
 	"context"
 	"errors"
-	"strings"
+	"net/url"
 	"testing"
+
+	"api_estudante/internal/apperr"
 )
 
 // MockRepository implementa Repository para testes
@@ -43,7 +45,7 @@ func TestBuscarCursosComFiltrosCumulativos(t *testing.T) {
 	mockRepo := &MockRepository{
 		ReturnResult: &SearchResult{
 			Total: 25,
-			Hits:  []map[string]interface{}{},
+			Hits:  []Curso{},
 		},
 	}
 
@@ -72,9 +74,68 @@ func TestBuscarCursosComFiltrosCumulativos(t *testing.T) {
 		t.Errorf("esperado 2 turnos, recebido '%v'", mockRepo.CapturedFilters.Turno)
 	}
 
-	// Verificar se os links HATEOAS contêm múltiplos valores preservados
-	if !strings.Contains(resp.Links.Self, "uf=SP%2CRJ") && !strings.Contains(resp.Links.Self, "uf=SP,RJ") && !strings.Contains(resp.Links.Self, "uf=SP") {
-		t.Errorf("link Self deveria conter parâmetros de UF, obtido: %s", resp.Links.Self)
+	// Os links HATEOAS devem preservar exatamente os filtros aplicados.
+	parsed, err := url.Parse(resp.Links.Self)
+	if err != nil {
+		t.Fatalf("link Self inválido %q: %v", resp.Links.Self, err)
+	}
+	query := parsed.Query()
+	want := map[string]string{
+		"q":          "engenharia",
+		"uf":         "SP,RJ",
+		"turno":      "Noturno,Diurno",
+		"grau":       "Bacharelado",
+		"categoria":  "Federal",
+		"modalidade": "Presencial",
+		"enade":      "5,4",
+		"sort":       "enade",
+		"page":       "1",
+		"limit":      "10",
+	}
+	for key, value := range want {
+		if got := query.Get(key); got != value {
+			t.Errorf("link Self %s = %q, esperado %q", key, got, value)
+		}
+	}
+}
+
+func TestBuscarCursosAplicaDefaultsDePaginacao(t *testing.T) {
+	mockRepo := &MockRepository{ReturnResult: &SearchResult{}}
+	service := NewService(mockRepo)
+
+	if _, err := service.BuscarCursos(context.Background(), "medicina", SearchFilterParams{}, 0, 0); err != nil {
+		t.Fatalf("erro inesperado: %v", err)
+	}
+	if mockRepo.CapturedPage != 1 || mockRepo.CapturedLimit != 20 {
+		t.Errorf("page/limit = %d/%d, esperado 1/20", mockRepo.CapturedPage, mockRepo.CapturedLimit)
+	}
+
+	if _, err := service.BuscarCursos(context.Background(), "medicina", SearchFilterParams{}, 1, 500); err != nil {
+		t.Fatalf("erro inesperado: %v", err)
+	}
+	if mockRepo.CapturedLimit != 20 {
+		t.Errorf("limit = %d, esperado 20 (acima do teto)", mockRepo.CapturedLimit)
+	}
+}
+
+func TestBuscarCursosPropagaErroDoRepository(t *testing.T) {
+	mockRepo := &MockRepository{ReturnErr: errors.New("indisponível")}
+	service := NewService(mockRepo)
+
+	_, err := service.BuscarCursos(context.Background(), "medicina", SearchFilterParams{}, 1, 20)
+	if err == nil || !errors.Is(err, mockRepo.ReturnErr) {
+		t.Fatalf("esperado erro embrulhado do repository, obtido %v", err)
+	}
+}
+
+func TestBuscarCursoPorIDPropagaErroGenerico(t *testing.T) {
+	origem := errors.New("indisponível")
+	mockRepo := &MockRepository{ReturnGetErr: origem}
+	service := NewService(mockRepo)
+
+	_, err := service.BuscarCursoPorID(context.Background(), "123")
+	if err == nil || !errors.Is(err, origem) {
+		t.Fatalf("esperado erro embrulhado, obtido %v", err)
 	}
 }
 
@@ -82,7 +143,7 @@ func TestBuscarCursosRetornaAgregacoes(t *testing.T) {
 	mockRepo := &MockRepository{
 		ReturnResult: &SearchResult{
 			Total: 10,
-			Hits:  []map[string]interface{}{},
+			Hits:  []Curso{},
 			Aggregations: &SearchAggregations{
 				UFs: []AggregationBucket{
 					{Key: "SP", Count: 7},
@@ -114,8 +175,16 @@ func TestBuscarCursosRetornaAgregacoes(t *testing.T) {
 func TestBuscarCursoPorIDRejeitaIDVazio(t *testing.T) {
 	service := NewService(&MockRepository{})
 
-	if _, err := service.BuscarCursoPorID(context.Background(), "   "); err == nil {
-		t.Fatal("esperado erro para id vazio")
+	if _, err := service.BuscarCursoPorID(context.Background(), "   "); !errors.Is(err, apperr.ErrInvalidInput) {
+		t.Fatalf("esperado ErrInvalidInput, recebido %v", err)
+	}
+}
+
+func TestBuscarCursosRejeitaQueryVazia(t *testing.T) {
+	service := NewService(&MockRepository{})
+
+	if _, err := service.BuscarCursos(context.Background(), "   ", SearchFilterParams{}, 1, 20); !errors.Is(err, apperr.ErrInvalidInput) {
+		t.Fatalf("esperado ErrInvalidInput, recebido %v", err)
 	}
 }
 
