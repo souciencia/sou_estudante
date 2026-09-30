@@ -25,7 +25,7 @@ export function LayoutSearchPage({
   results,
 }: LayoutSearchPageProps) {
   return (
-    <div className="container mx-auto py-8 max-w-[900px]" data-module={module}>
+    <div className="container mx-auto py-8 max-w-pages" data-module={module}>
       <Typo v="title" s="2xl" t="h1" className="mb-6 block">
         {title}
       </Typo>

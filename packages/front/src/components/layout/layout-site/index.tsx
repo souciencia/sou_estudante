@@ -1,16 +1,15 @@
 import type { ReactNode } from 'react'
 import { Footer } from '@/components/layout/footer/footer'
 import { cn } from '@/utils/cn'
-import { ShellHeader } from './shell-header'
+import { ShellHeader } from '@/components/layout/header'
 
 interface LayoutSiteProps {
   children: ReactNode
   className?: string
 }
 
-/**
- * Moldura global do site
- */
+
+
 export const LayoutSite = ({ children, className }: LayoutSiteProps) => {
   return (
     <div
