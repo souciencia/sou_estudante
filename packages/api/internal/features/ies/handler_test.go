@@ -3,9 +3,13 @@ package ies
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"api_estudante/internal/apperr"
 )
 
 // MockService implementa Service para os testes de handler.
@@ -40,33 +44,15 @@ func (m *MockService) BuscarIESPorID(_ context.Context, coIES string) (*IES, err
 	return m.ReturnIES, m.ReturnGetErr
 }
 
-func TestHandlerRejeitaMetodoNaoGET(t *testing.T) {
+func TestHandlerRejeitaBuscaSemTermo(t *testing.T) {
 	handler := &Handler{Service: &MockService{}}
-
-	req := httptest.NewRequest(http.MethodPost, "/ies?q=federal", nil)
-	rec := httptest.NewRecorder()
-	handler.ServeHTTP(rec, req)
-
-	if rec.Code != http.StatusMethodNotAllowed {
-		t.Fatalf("esperado 405, recebido %d", rec.Code)
-	}
-}
-
-func TestHandlerAceitaBuscaSemTermo(t *testing.T) {
-	mockService := &MockService{
-		ReturnResponse: &IESListResponse{Results: []IES{}, Links: PaginationLinks{Self: "/ies"}},
-	}
-	handler := &Handler{Service: mockService}
 
 	req := httptest.NewRequest(http.MethodGet, "/ies", nil)
 	rec := httptest.NewRecorder()
 	handler.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusOK {
-		t.Fatalf("esperado 200 sem q, recebido %d", rec.Code)
-	}
-	if mockService.CapturedQuery != "" {
-		t.Errorf("esperado query vazia, recebido '%s'", mockService.CapturedQuery)
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("esperado 400 sem q, recebido %d", rec.Code)
 	}
 }
 
@@ -119,7 +105,7 @@ func TestHandlerSerializaRespostaJSON(t *testing.T) {
 	}
 	handler := &Handler{Service: mockService}
 
-	req := httptest.NewRequest(http.MethodGet, "/ies", nil)
+	req := httptest.NewRequest(http.MethodGet, "/ies?q=anhanguera", nil)
 	rec := httptest.NewRecorder()
 	handler.ServeHTTP(rec, req)
 
@@ -140,24 +126,12 @@ func TestHandlerRetornaErro500QuandoServiceFalha(t *testing.T) {
 	mockService := &MockService{ReturnErr: context.DeadlineExceeded}
 	handler := &Handler{Service: mockService}
 
-	req := httptest.NewRequest(http.MethodGet, "/ies", nil)
+	req := httptest.NewRequest(http.MethodGet, "/ies?q=federal", nil)
 	rec := httptest.NewRecorder()
 	handler.ServeHTTP(rec, req)
 
 	if rec.Code != http.StatusInternalServerError {
 		t.Fatalf("esperado 500, recebido %d", rec.Code)
-	}
-}
-
-func TestDetailHandlerRejeitaMetodoNaoGET(t *testing.T) {
-	handler := &DetailHandler{Service: &MockService{}}
-
-	req := httptest.NewRequest(http.MethodDelete, "/ies/376", nil)
-	rec := httptest.NewRecorder()
-	handler.ServeHTTP(rec, req)
-
-	if rec.Code != http.StatusMethodNotAllowed {
-		t.Fatalf("esperado 405, recebido %d", rec.Code)
 	}
 }
 
@@ -197,5 +171,87 @@ func TestDetailHandlerRetorna404QuandoNaoEncontrado(t *testing.T) {
 
 	if rec.Code != http.StatusNotFound {
 		t.Fatalf("esperado 404, recebido %d", rec.Code)
+	}
+}
+
+func TestHandlerAplicaDefaultsDePaginacao(t *testing.T) {
+	casos := []struct {
+		nome      string
+		url       string
+		wantPage  int
+		wantLimit int
+	}{
+		{"sem parâmetros", "/ies?q=federal", 1, 20},
+		{"limit acima do teto", "/ies?q=federal&page=0&limit=500", 1, 20},
+		{"valores válidos", "/ies?q=federal&page=3&limit=5", 3, 5},
+	}
+
+	for _, caso := range casos {
+		t.Run(caso.nome, func(t *testing.T) {
+			mockService := &MockService{ReturnResponse: &IESListResponse{Results: []IES{}}}
+			handler := &Handler{Service: mockService}
+
+			req := httptest.NewRequest(http.MethodGet, caso.url, nil)
+			rec := httptest.NewRecorder()
+			handler.ServeHTTP(rec, req)
+
+			if mockService.CapturedPage != caso.wantPage || mockService.CapturedLimit != caso.wantLimit {
+				t.Errorf("page/limit = %d/%d, esperado %d/%d",
+					mockService.CapturedPage, mockService.CapturedLimit, caso.wantPage, caso.wantLimit)
+			}
+		})
+	}
+}
+
+func TestHandlerRetorna400ParaErrInvalidInput(t *testing.T) {
+	mockService := &MockService{ReturnErr: fmt.Errorf("%w: query ruim", apperr.ErrInvalidInput)}
+	handler := &Handler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/ies?q=federal", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("esperado 400, recebido %d", rec.Code)
+	}
+}
+
+func TestDetailHandlerRejeitaCoIESVazio(t *testing.T) {
+	handler := &DetailHandler{Service: &MockService{}}
+
+	req := httptest.NewRequest(http.MethodGet, "/ies/", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("esperado 400, recebido %d", rec.Code)
+	}
+}
+
+func TestDetailHandlerRetorna400ParaErrInvalidInput(t *testing.T) {
+	mockService := &MockService{ReturnGetErr: fmt.Errorf("%w: id ruim", apperr.ErrInvalidInput)}
+	handler := &DetailHandler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/ies/x", nil)
+	req.SetPathValue("co_ies", "x")
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("esperado 400, recebido %d", rec.Code)
+	}
+}
+
+func TestDetailHandlerRetorna500ParaErroGenerico(t *testing.T) {
+	mockService := &MockService{ReturnGetErr: errors.New("boom")}
+	handler := &DetailHandler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/ies/x", nil)
+	req.SetPathValue("co_ies", "x")
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusInternalServerError {
+		t.Fatalf("esperado 500, recebido %d", rec.Code)
 	}
 }

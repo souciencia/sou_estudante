@@ -1,6 +1,9 @@
 package ies
 
-import "api_estudante/internal/shared"
+import (
+	"api_estudante/internal/elasticsearch"
+	"api_estudante/internal/httpx"
+)
 
 // IES representa uma Instituição de Educação Superior no índice "ies".
 // O _id do documento é o próprio co_ies.
@@ -26,7 +29,7 @@ type SearchFilterParams struct {
 
 // AggregationBucket representa um item de contagem de uma agregação.
 // Aliás do tipo compartilhado, mantido para preservar a API do pacote.
-type AggregationBucket = shared.AggregationBucket
+type AggregationBucket = elasticsearch.AggregationBucket
 
 // SearchAggregations mapeia as agregações por grupo de filtro.
 type SearchAggregations struct {
@@ -37,13 +40,8 @@ type SearchAggregations struct {
 }
 
 // PaginationLinks contém URLs HATEOAS para navegação de páginas.
-type PaginationLinks struct {
-	Self  string  `json:"self"`
-	First string  `json:"first"`
-	Prev  *string `json:"prev,omitempty"`
-	Next  *string `json:"next,omitempty"`
-	Last  string  `json:"last"`
-}
+// Aliás do tipo compartilhado, mantido para preservar a API do pacote.
+type PaginationLinks = httpx.PaginationLinks
 
 // IESListResponse é a resposta paginada de busca de IES.
 type IESListResponse struct {

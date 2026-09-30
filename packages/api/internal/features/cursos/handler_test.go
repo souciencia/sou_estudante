@@ -3,9 +3,13 @@ package cursos
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"api_estudante/internal/apperr"
 )
 
 // MockService implementa Service para teste de handler
@@ -79,6 +83,18 @@ func TestHandlerExtraiFiltrosCumulativos(t *testing.T) {
 	}
 }
 
+func TestHandlerRejeitaQueryVazia(t *testing.T) {
+	handler := &Handler{Service: &MockService{}}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("esperado 400 sem q, recebido %d", rec.Code)
+	}
+}
+
 func TestParseExactParam(t *testing.T) {
 	cases := map[string]bool{
 		"":      true,
@@ -122,18 +138,6 @@ func TestHandlerExtraiExactComDefaultTrue(t *testing.T) {
 
 	if mockService.CapturedFilters.Exact {
 		t.Errorf("esperado Exact=false quando exact=false, recebido true")
-	}
-}
-
-func TestDetailHandlerRejeitaMetodoNaoGET(t *testing.T) {
-	handler := &DetailHandler{Service: &MockService{}}
-
-	req := httptest.NewRequest(http.MethodDelete, "/cursos/123", nil)
-	rec := httptest.NewRecorder()
-	handler.ServeHTTP(rec, req)
-
-	if rec.Code != http.StatusMethodNotAllowed {
-		t.Fatalf("esperado 405, recebido %d", rec.Code)
 	}
 }
 
@@ -185,5 +189,88 @@ func TestDetailHandlerRetorna404QuandoNaoEncontrado(t *testing.T) {
 
 	if rec.Code != http.StatusNotFound {
 		t.Fatalf("esperado 404, recebido %d", rec.Code)
+	}
+}
+
+func TestHandlerAplicaDefaultsDePaginacao(t *testing.T) {
+	casos := []struct {
+		nome      string
+		url       string
+		wantPage  int
+		wantLimit int
+	}{
+		{"sem parâmetros", "/cursos?q=medicina", 1, 20},
+		{"page e limit inválidos", "/cursos?q=medicina&page=0&limit=500", 1, 20},
+		{"limite no teto", "/cursos?q=medicina&page=2&limit=100", 2, 100},
+	}
+
+	for _, caso := range casos {
+		t.Run(caso.nome, func(t *testing.T) {
+			mockService := &MockService{ReturnResponse: &CursoListResponse{}}
+			handler := &Handler{Service: mockService}
+
+			req := httptest.NewRequest(http.MethodGet, caso.url, nil)
+			rec := httptest.NewRecorder()
+			handler.ServeHTTP(rec, req)
+
+			if mockService.CapturedPage != caso.wantPage || mockService.CapturedLimit != caso.wantLimit {
+				t.Errorf("page/limit = %d/%d, esperado %d/%d",
+					mockService.CapturedPage, mockService.CapturedLimit, caso.wantPage, caso.wantLimit)
+			}
+		})
+	}
+}
+
+func TestHandlerRetorna400ParaErrInvalidInput(t *testing.T) {
+	mockService := &MockService{ReturnErr: fmt.Errorf("%w: query ruim", apperr.ErrInvalidInput)}
+	handler := &Handler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos?q=medicina", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("esperado 400, recebido %d", rec.Code)
+	}
+}
+
+func TestHandlerRetorna500ParaErroGenerico(t *testing.T) {
+	mockService := &MockService{ReturnErr: errors.New("boom")}
+	handler := &Handler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos?q=medicina", nil)
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusInternalServerError {
+		t.Fatalf("esperado 500, recebido %d", rec.Code)
+	}
+}
+
+func TestDetailHandlerRetorna400ParaErrInvalidInput(t *testing.T) {
+	mockService := &MockService{ReturnGetErr: fmt.Errorf("%w: id ruim", apperr.ErrInvalidInput)}
+	handler := &DetailHandler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos/x", nil)
+	req.SetPathValue("id", "x")
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("esperado 400, recebido %d", rec.Code)
+	}
+}
+
+func TestDetailHandlerRetorna500ParaErroGenerico(t *testing.T) {
+	mockService := &MockService{ReturnGetErr: errors.New("boom")}
+	handler := &DetailHandler{Service: mockService}
+
+	req := httptest.NewRequest(http.MethodGet, "/cursos/x", nil)
+	req.SetPathValue("id", "x")
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusInternalServerError {
+		t.Fatalf("esperado 500, recebido %d", rec.Code)
 	}
 }

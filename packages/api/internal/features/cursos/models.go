@@ -1,6 +1,9 @@
 package cursos
 
-import "api_estudante/internal/shared"
+import (
+	"api_estudante/internal/elasticsearch"
+	"api_estudante/internal/httpx"
+)
 
 // SearchFilterParams contém parâmetros opcionais de filtragem e ordenação
 type SearchFilterParams struct {
@@ -16,7 +19,7 @@ type SearchFilterParams struct {
 
 // AggregationBucket representa um item de contagem de uma agregação.
 // Aliás do tipo compartilhado, mantido para preservar a API do pacote.
-type AggregationBucket = shared.AggregationBucket
+type AggregationBucket = elasticsearch.AggregationBucket
 
 // SearchAggregations mapeia as agregações por grupo de filtro
 type SearchAggregations struct {
@@ -38,14 +41,9 @@ type CursoListResponse struct {
 	Aggregations *SearchAggregations `json:"aggregations,omitempty"`
 }
 
-// PaginationLinks contém URLs HATEOAS para navegação de páginas
-type PaginationLinks struct {
-	Self  string  `json:"self"`
-	First string  `json:"first"`
-	Prev  *string `json:"prev,omitempty"`
-	Next  *string `json:"next,omitempty"`
-	Last  string  `json:"last"`
-}
+// PaginationLinks contém URLs HATEOAS para navegação de páginas.
+// Aliás do tipo compartilhado, mantido para preservar a API do pacote.
+type PaginationLinks = httpx.PaginationLinks
 
 // Curso representa um curso completo no índice de cursos
 type Curso struct {
