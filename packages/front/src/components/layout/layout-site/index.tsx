@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Footer } from '@/components/layout/footer/footer'
 import { ShellHeader } from '@/components/layout/header'
+import { WavesShape } from '@/components/shapes/waves'
 import { cn } from '@/utils/cn'
 
 interface LayoutSiteProps {
@@ -26,6 +27,7 @@ export const LayoutSite = ({ children, className }: LayoutSiteProps) => {
         {children}
       </main>
 
+      <WavesShape />
       <Footer />
     </div>
   )

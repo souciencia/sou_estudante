@@ -24,8 +24,9 @@ export const Default: Story = {
   args: {
     title: 'Busca de Cursos',
     searchHeader: slot('Cabeçalho de busca'),
-    filtersPanel: slot('Painel de filtros'),
     activeFilters: slot('Filtros ativos'),
+    filtersPanel: slot('Painel de filtros'),
+    toolbar: slot('Ordenação'),
     results: slot('Resultados'),
   },
 }

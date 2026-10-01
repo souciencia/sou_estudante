@@ -30,10 +30,13 @@ export function FilterGroupOption({
   const hasResultCount = typeof resultCount === 'number'
 
   return (
-    <li className={cn('flex items-center justify-between', className)}>
+    <li className={cn('flex items-center justify-between gap-3', className)}>
       <label
         htmlFor={optionInputId}
-        className="group flex cursor-pointer items-center gap-4"
+        className={cn(
+          'group flex items-center gap-4',
+          disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+        )}
       >
         <Checkbox
           id={optionInputId}
@@ -43,12 +46,23 @@ export function FilterGroupOption({
           disabled={disabled}
           readOnly={!onChange && checked !== undefined}
           onChange={onChange}
-          className="group-hover:border-fg-muted"
+          className={cn(
+            'border-fg-muted/40',
+            !disabled && 'group-hover:border-fg-muted',
+          )}
         />
-        <Typo s="sm">{label}</Typo>
+        <Typo s="sm" className={cn(disabled && 'text-fg-muted')}>
+          {label}
+        </Typo>
       </label>
       {hasResultCount && (
-        <Typo s="xs" className="tabular-nums text-fg-muted">
+        <Typo
+          s="sm"
+          className={cn(
+            'tabular-nums',
+            disabled ? 'text-fg-muted' : 'text-fg-protagonist',
+          )}
+        >
           {resultCount}
         </Typo>
       )}

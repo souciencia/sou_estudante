@@ -24,5 +24,3 @@ coisas do callout
 - [] Script que pega a Api-Key e atualiza o `.env`
 
 ---
-
-

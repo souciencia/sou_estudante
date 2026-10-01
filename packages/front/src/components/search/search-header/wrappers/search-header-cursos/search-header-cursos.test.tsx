@@ -37,13 +37,9 @@ describe('SearchHeaderCursos', () => {
     })
   })
 
-  it('propaga o módulo para os controles temáticos', () => {
+  it('propaga o módulo para os controles do cabeçalho', () => {
     render(<SearchHeaderCursos module="4" />)
 
     expect(screen.getByRole('switch')).toHaveAttribute('data-module', '4')
-    expect(screen.getByRole('button', { name: 'A Z' })).toHaveAttribute(
-      'data-module',
-      '4',
-    )
   })
 })

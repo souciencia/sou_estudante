@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { FilterGroup } from '@/components/search/filter-group'
 import { Typo } from '@/components/ui/typo'
 import { getAggregationCount } from '@/lib/aggregations'
@@ -33,6 +33,8 @@ export interface FiltersPanelProps {
   aggregations?: AggregationsMap | null
   activeValues: (key: string) => string[]
   onToggle: (key: string, value: string) => void
+  /** Limpa todos os filtros ativos. Sem ele, desmarca cada valor ativo. */
+  onClear?: () => void
   module?: Module
   className?: string
 }
@@ -46,25 +48,73 @@ export function FiltersPanel({
   aggregations,
   activeValues,
   onToggle,
+  onClear,
   module,
   className,
 }: FiltersPanelProps) {
+  const hasActiveFilters = sections.some(
+    (section) => activeValues(section.key).length > 0,
+  )
+
+  const handleClear = () => {
+    if (onClear) {
+      onClear()
+      return
+    }
+
+    for (const section of sections) {
+      for (const value of activeValues(section.key)) {
+        onToggle(section.key, value)
+      }
+    }
+  }
+
   return (
     <div
       data-module={module}
       className={cn(
-        'flex flex-col gap-6 font-coadjuvant text-fg-coadjuvant',
+        'flex flex-col gap-6 rounded-card border border-card-border bg-card-surface p-6 font-coadjuvant text-fg-coadjuvant shadow-sm',
         className,
       )}
     >
-      {sections.map((section) => (
-        <FilterSection
-          key={section.key}
-          section={section}
-          aggregations={aggregations}
-          activeValues={activeValues}
-          onToggle={onToggle}
-        />
+      <header className="flex items-center justify-between">
+        <Typo
+          t="h2"
+          s="sm"
+          className={cn(
+            'font-title-coadjuvant font-bold uppercase tracking-[0.14em] text-fg-protagonist',
+          )}
+        >
+          Filtros
+        </Typo>
+
+        <button
+          type="button"
+          onClick={handleClear}
+          disabled={!hasActiveFilters}
+          className={cn(
+            'rounded-sm uppercase tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
+            hasActiveFilters
+              ? 'cursor-pointer text-accent-deep hover:underline'
+              : 'cursor-not-allowed text-fg-muted',
+          )}
+        >
+          <Typo s="sm">Limpar tudo</Typo>
+        </button>
+      </header>
+
+      {sections.map((section, index) => (
+        <Fragment key={section.key}>
+          {index > 0 && (
+            <hr className={cn('m-0 h-px w-full border-0 bg-card-border')} />
+          )}
+          <FilterSection
+            section={section}
+            aggregations={aggregations}
+            activeValues={activeValues}
+            onToggle={onToggle}
+          />
+        </Fragment>
       ))}
     </div>
   )
@@ -96,23 +146,29 @@ function FilterSection({
   const active = activeValues(section.key)
 
   return (
-    <FilterGroup>
+    <FilterGroup className="w-full">
       <FilterGroup.Title>{section.title}</FilterGroup.Title>
       <FilterGroup.List>
-        {visibleOptions.map((item) => (
-          <FilterGroup.Option
-            key={item.value}
-            label={item.label}
-            value={item.value}
-            resultCount={getAggregationCount(
-              aggregations,
-              section.aggregationKey,
-              item.value,
-            )}
-            checked={active.includes(item.value)}
-            onChange={() => onToggle(section.key, item.value)}
-          />
-        ))}
+        {visibleOptions.map((item) => {
+          const resultCount = getAggregationCount(
+            aggregations,
+            section.aggregationKey,
+            item.value,
+          )
+          const isActive = active.includes(item.value)
+
+          return (
+            <FilterGroup.Option
+              key={item.value}
+              label={item.label}
+              value={item.value}
+              resultCount={resultCount}
+              checked={isActive}
+              disabled={resultCount === 0 && !isActive}
+              onChange={() => onToggle(section.key, item.value)}
+            />
+          )
+        })}
       </FilterGroup.List>
       {hasMore && (
         <button
