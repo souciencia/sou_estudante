@@ -77,7 +77,7 @@ describe('Menu', () => {
 
     expect(
       screen.getByRole('link', { name: 'Conhecer instituição' }),
-    ).toHaveAttribute('href', '/instituicao')
+    ).toHaveAttribute('href', '/ies')
 
     expect(
       screen.getByRole('link', { name: 'Comparar cursos' }),
