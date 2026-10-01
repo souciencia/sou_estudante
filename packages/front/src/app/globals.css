@@ -15,7 +15,7 @@
   --color-m4-deep: #5b21a8;
   --color-m5-deep: #a34a00;
 
-   /* Cores · Feedback (faixas do Enade e progresso) */
+  /* Cores · Feedback (faixas do Enade e progresso) */
   --color-enade-ok: #1b8a5a;
   --color-enade-ok-surface: #e8f7f0;
   --color-enade-warn: #b06000;
@@ -86,11 +86,6 @@
   --container-home: 900px;
   --container-pages: 1100px;
 
-  /* Keyframes */
-  --keyframes-move-forever: {
-    0%: { transform: translate3d(-90px, 0, 0); }
-    100%: { transform: translate3d(85px, 0, 0); }
-  };
   --ease-wave: cubic-bezier(0.55, 0.5, 0.45, 0.5);
 }
 
@@ -152,8 +147,12 @@ body {
 }
 
 @keyframes move-forever {
-  0%   { transform: translate3d(-90px, 0, 0); }
-  100% { transform: translate3d(85px, 0, 0); }
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
 }
 
 @keyframes bussola-contorno {
