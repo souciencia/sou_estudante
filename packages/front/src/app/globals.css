@@ -58,12 +58,13 @@
   /* Coadjuvante — apoio (button, tag, filtros, tips) */
   --font-coadjuvant: "Source Sans 3", system-ui, sans-serif;
 
-  /* Títulos — exceção */
-  --font-title-protagonist: "Source Sans 3", system-ui, sans-serif;
-  --font-title-coadjuvant: "Source Sans 3", system-ui, sans-serif;
+  /* Títulos — display (Playfair Display) */
+  --font-title-protagonist: var(--font-display);
+  --font-title-coadjuvant: var(--font-display);
 
   --font-mono: "DM Mono", ui-monospace, monospace; /* dados numéricos */
 
+  /* Display — títulos de destaque (Playfair Display) */
   --font-display: "Playfair Display", Georgia, serif;
 
   /* Tipografia · Escala */
@@ -120,6 +121,12 @@
 body {
   font-family: var(--font-protagonist);
   color: var(--color-fg-protagonist);
+
+  /* Aliases re-declarados aqui para herdarem as fontes do `next/font` (com o
+     fallback métrico) aplicadas no próprio `<body>`. */
+  --font-coadjuvant: var(--font-protagonist);
+  --font-title-protagonist: var(--font-display);
+  --font-title-coadjuvant: var(--font-display);
 }
 
 /*  Bússola da Hero da Página Inicial */

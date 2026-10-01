@@ -14,11 +14,13 @@ interface LayoutSearchPageCursosProps {
  * Especialização de `LayoutSearchPage` para a busca de cursos.
  */
 export function LayoutSearchPageCursos({
-  module,
+  module = '1',
 }: LayoutSearchPageCursosProps) {
   return (
     <LayoutSearchPage
-      title="Busca de Cursos"
+      title="Descobrir cursos"
+      subtitle="Cursos do ensino superior no Brasil — fonte: Censo."
+      searchLabel="Buscar curso"
       module={module}
       searchHeader={<SearchHeaderCursos module={module} />}
       activeFilters={<ActiveFiltersCursos module={module} />}

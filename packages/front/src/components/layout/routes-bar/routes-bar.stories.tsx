@@ -1,24 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Header } from './header'
+import { RoutesBar } from './routes-bar'
 
 const meta = {
-  title: 'Components/Layout/Header HomePage',
-  component: Header,
+  title: 'Components/Layout/RoutesBar',
+  component: RoutesBar,
   parameters: {
     layout: 'fullscreen',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof Header>
+} satisfies Meta<typeof RoutesBar>
 
 export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
-
-export const Inner: Story = {
+export const Default: Story = {
   args: {
-    variant: 'inner',
     module: '1',
   },
 }

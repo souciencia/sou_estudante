@@ -54,6 +54,6 @@ describe('LayoutSearchPage', () => {
   it('omits the module attribute when not provided', () => {
     const { container } = renderLayout()
 
-    expect(container.querySelector('[data-module]')).not.toBeInTheDocument()
+    expect(container.firstElementChild).not.toHaveAttribute('data-module')
   })
 })

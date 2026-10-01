@@ -13,7 +13,7 @@ const routes = [
       description:
         'A carta náutica mapeia as rotas possíveis: explore os cursos por área, local e modalidade.',
     },
-    href: '#',
+    href: '/cursos',
   },
   {
     module: '2',
@@ -25,7 +25,7 @@ const routes = [
       description:
         'A bússola aponta o caminho da entrada: notas de corte, vagas e cotas no Sisu.',
     },
-    href: '#',
+    href: '/ingresso',
   },
   {
     module: '3',
@@ -37,7 +37,7 @@ const routes = [
       description:
         'A âncora segura você no percurso: bolsas, cotas e apoios para chegar até a formatura.',
     },
-    href: '#',
+    href: '/permanencia',
   },
   {
     module: '4',
@@ -61,7 +61,7 @@ const routes = [
       description:
         'O sextante mede posições para orientar a escolha: até quatro cursos comparados pelos mesmos critérios, sem ranking.',
     },
-    href: '#',
+    href: '/comparar',
   },
 ] as const
 

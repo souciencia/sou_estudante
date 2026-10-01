@@ -33,6 +33,8 @@ export function SearchHeaderCursos({ module }: SearchHeaderCursosProps) {
       <SearchHeader.Autocomplete
         defaultValue={query}
         onSearchSubmit={setQuery}
+        placeholder="Ex.: Pedagogia, Enfermagem, Engenharia Civil…"
+        submitLabel="Buscar"
       />
 
       <SearchHeader.Actions>
