@@ -8,8 +8,9 @@ const renderLayout = (module?: '1' | '4') =>
       title="Busca de Cursos"
       module={module}
       searchHeader={<p>cabeçalho</p>}
-      filtersPanel={<p>filtros</p>}
       activeFilters={<p>filtros ativos</p>}
+      filtersPanel={<p>filtros</p>}
+      toolbar={<p>ordenação</p>}
       results={<p>resultados</p>}
     />,
   )
@@ -29,6 +30,7 @@ describe('LayoutSearchPage', () => {
     expect(screen.getByText('cabeçalho')).toBeInTheDocument()
     expect(screen.getByText('filtros')).toBeInTheDocument()
     expect(screen.getByText('filtros ativos')).toBeInTheDocument()
+    expect(screen.getByText('ordenação')).toBeInTheDocument()
     expect(screen.getByText('resultados')).toBeInTheDocument()
   })
 

@@ -25,4 +25,7 @@ coisas do callout
 
 ---
 
+Veja o arquivo docs/imgs/2026-09-30T18:19:58,155400049-03:00.png, ele mostra como seria o `FiltersPanel`estilizado. Aplique esta estilização no componente. Você deve alterar somente os arquivos que estão em `front/src/components/search/filters-panel/` e se necessário, em `front/src/app/globals.css/`. Não precisa ler outros arquivos. 
 
+
+`docs/imgs/`

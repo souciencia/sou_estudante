@@ -6,22 +6,25 @@ interface LayoutSearchPageProps {
   title: string
   module?: Module
   searchHeader: ReactNode
-  filtersPanel: ReactNode
   activeFilters: ReactNode
+  filtersPanel: ReactNode
+  toolbar: ReactNode
   results: ReactNode
 }
 
 /**
- * Moldura agnóstica das páginas de busca: título, cabeçalho de busca, painel
- * de filtros, filtros ativos e resultados. As partes de domínio entram por
- * slots, preenchidos pelos wrappers `LayoutSearchPageCursos`/`LayoutSearchPageIes`.
+ * Moldura agnóstica das páginas de busca: título, cabeçalho de busca, filtros
+ * ativos, painel de filtros, barra de ferramentas dos resultados e resultados.
+ * As partes de domínio entram por slots, preenchidos pelos wrappers
+ * `LayoutSearchPageCursos`/`LayoutSearchPageIes`.
  */
 export function LayoutSearchPage({
   title,
   module,
   searchHeader,
-  filtersPanel,
   activeFilters,
+  filtersPanel,
+  toolbar,
   results,
 }: LayoutSearchPageProps) {
   return (
@@ -40,6 +43,8 @@ export function LayoutSearchPage({
         {searchHeader}
       </Suspense>
 
+      <Suspense fallback={null}>{activeFilters}</Suspense>
+
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4">
         <aside className="md:col-span-1">
           <Suspense
@@ -54,7 +59,7 @@ export function LayoutSearchPage({
         </aside>
 
         <main className="md:col-span-3 space-y-4">
-          <Suspense fallback={null}>{activeFilters}</Suspense>
+          <Suspense fallback={null}>{toolbar}</Suspense>
 
           <Suspense
             fallback={
