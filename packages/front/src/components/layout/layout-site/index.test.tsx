@@ -5,6 +5,7 @@ import { LayoutSite } from '.'
 
 vi.mock('next/navigation', () => ({
   usePathname: vi.fn(),
+  useRouter: vi.fn(() => ({ back: vi.fn(), push: vi.fn() })),
 }))
 
 const renderShell = () =>
@@ -51,7 +52,7 @@ describe('LayoutSite', () => {
 
     renderShell()
 
-    expect(screen.getByRole('banner')).toHaveClass('min-[860px]:max-w-[900px]')
+    expect(screen.getByRole('banner')).toHaveClass('max-w-home')
   })
 
   it('keeps the header full width on other pages', () => {
@@ -59,8 +60,6 @@ describe('LayoutSite', () => {
 
     renderShell()
 
-    expect(screen.getByRole('banner')).not.toHaveClass(
-      'min-[860px]:max-w-[900px]',
-    )
+    expect(screen.getByRole('banner')).not.toHaveClass('max-w-home')
   })
 })

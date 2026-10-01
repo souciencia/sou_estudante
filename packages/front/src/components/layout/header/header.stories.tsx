@@ -15,3 +15,10 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
+
+export const Inner: Story = {
+  args: {
+    variant: 'inner',
+    module: '1',
+  },
+}
