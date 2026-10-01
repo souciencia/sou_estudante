@@ -47,6 +47,10 @@
   --color-plum-100: #efe6f5;
   --color-surface: #fff;
 
+  /* Cores · Rodapé */
+  --color-footer-background: hsla(186, 83%, 60%, 1);
+  --color-footer-text: #fff;
+
   /* Cores · Texto */
   --color-text: #1a0e23;
   --color-text-muted: #5b5266;
