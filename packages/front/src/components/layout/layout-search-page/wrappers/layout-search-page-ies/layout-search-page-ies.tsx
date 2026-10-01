@@ -18,7 +18,9 @@ export function LayoutSearchPageIes({
 }: LayoutSearchPageIesProps) {
   return (
     <LayoutSearchPage
-      title="Busca de Instituições"
+      title="Conhecer instituições"
+      subtitle="Instituições de ensino superior no Brasil — fonte: Censo."
+      searchLabel="Buscar instituição"
       module={module}
       searchHeader={<SearchHeaderIes module={module} />}
       activeFilters={<ActiveFiltersIes module={module} />}

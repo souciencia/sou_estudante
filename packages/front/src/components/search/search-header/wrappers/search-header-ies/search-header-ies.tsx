@@ -18,9 +18,10 @@ export function SearchHeaderIes({ module }: SearchHeaderIesProps) {
         defaultValue={query}
         onSearchSubmit={setQuery}
         useSuggestions={useSugestoesIes}
-        placeholder="Busque pelo nome da instituição"
+        placeholder="Ex.: USP, Unifesp, UNICAMP…"
         searchLabel="Buscar instituição pelo nome"
         listLabel="Sugestões de instituições"
+        submitLabel="Buscar"
       />
     </SearchHeader>
   )

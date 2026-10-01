@@ -29,6 +29,8 @@ export interface SearchAutocompleteProps {
   searchLabel?: string
   listLabel?: string
   minChars?: number
+  /** Quando informado, exibe um botão de envio com este rótulo. */
+  submitLabel?: string
 }
 
 export function SearchAutocomplete({
@@ -42,6 +44,7 @@ export function SearchAutocomplete({
   searchLabel = 'Buscar curso pelo nome',
   listLabel = 'Sugestões de cursos',
   minChars = API_CONFIG.SUGGEST_MIN_CHARS,
+  submitLabel,
 }: SearchAutocompleteProps) {
   const inputId = useId()
   const listboxId = `${inputId}-listbox`
@@ -199,12 +202,28 @@ export function SearchAutocomplete({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className={cn(
-          'w-full rounded-full border border-gray-300 bg-white py-3 pl-11 pr-4',
+          'w-full rounded-full border border-gray-300 bg-white py-3.5 pl-11',
+          submitLabel ? 'pr-28' : 'pr-4',
           'font-protagonist text-protagonist text-fg-protagonist placeholder:text-fg-muted',
           'focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20',
           'transition-colors duration-200',
         )}
       />
+
+      {submitLabel && (
+        <button
+          type="button"
+          onClick={submitCurrentValue}
+          className={cn(
+            'absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-navy-900 px-5 py-2.5',
+            'font-coadjuvant text-coadjuvant-sm font-semibold text-white',
+            'transition-colors duration-200 hover:bg-navy-950',
+            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
+          )}
+        >
+          {submitLabel}
+        </button>
+      )}
 
       {isOpen && (
         <div

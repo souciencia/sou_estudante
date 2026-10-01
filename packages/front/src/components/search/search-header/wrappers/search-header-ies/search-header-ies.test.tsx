@@ -30,7 +30,7 @@ describe('SearchHeaderIes', () => {
     render(<SearchHeaderIes module="4" />)
 
     expect(
-      screen.getByPlaceholderText('Busque pelo nome da instituição'),
+      screen.getByPlaceholderText('Ex.: USP, Unifesp, UNICAMP…'),
     ).toBeInTheDocument()
   })
 })
