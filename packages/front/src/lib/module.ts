@@ -29,7 +29,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       description:
         'A carta náutica mapeia as rotas possíveis: explore os cursos por área, local e modalidade.',
     },
-    href: '#',
+    href: '/cursos',
   },
   '2': {
     badge: 'BÚSSOLA',
@@ -40,7 +40,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       description:
         'A bússola aponta o caminho da entrada: notas de corte, vagas e cotas no Sisu.',
     },
-    href: '#',
+    href: '/ingresso',
   },
   '3': {
     badge: 'ÂNCORA',
@@ -51,7 +51,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       description:
         'A âncora segura você no percurso: bolsas, cotas e apoios para chegar até a formatura.',
     },
-    href: '#',
+    href: '/permanencia',
   },
   '4': {
     badge: 'TELESCÓPIO',
@@ -73,6 +73,17 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       description:
         'O sextante mede posições para orientar a escolha: até quatro cursos comparados pelos mesmos critérios, sem ranking.',
     },
-    href: '#',
+    href: '/comparar',
   },
+}
+
+/**
+ * Módulo correspondente a um caminho da aplicação (ex.: `/cursos` → `'1'`).
+ * Usado para destacar a rota ativa no `RoutesBar` e no cabeçalho interno.
+ */
+export function moduleFromPathname(pathname: string): Module | undefined {
+  return MODULES.find((module) => {
+    const { href } = MODULE_META[module]
+    return pathname === href || pathname.startsWith(`${href}/`)
+  })
 }

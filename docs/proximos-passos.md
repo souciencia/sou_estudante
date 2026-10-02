@@ -1,37 +1,16 @@
 # PRÓXIMOS PASSOS
 
 ### evolução da busca
-- incluir a instituição
-- filtro por local de oferta
 - algoritmo de relevância (aproximação e ordenação) no dicionário de cursos
-- busca pro município já na página do curso
- 
-
-### Página de Detalhes do Curso (`/cursos/[id]`) *(Recomendado para avanço funcional)*
-- **Contexto**: Atualmente, a listagem e os filtros estão completos, mas clicar em um card não leva a uma página com os detalhes aprofundados do curso.
-- **Escopo**:
-  - **Backend Go**: Implementar endpoint `GET /cursos/{id}` no módulo de cursos.
-  - **Frontend**: Criar a rota dinâmica `src/app/cursos/[id]/page.tsx` exibindo:
-    - Dados completos da Instituição e do Curso.
-    - Métricas do Censo (vagas, ingressantes, matriculados, apoio social).
-    - Selo e histórico do ENADE.
-    - Taxas de Desistência e Conclusão (TDA).
-    - Ofertas e notas de corte do SISU.
+- incluir na instituição
+  - filtro por local de oferta
+  - busca por município já na página do curso
 
 ### callout (compoud)
 coisas do callout
 - LeftAccent
 - Icon
 - Footer
-
-### variantes do button
-- variantes de formato
-  - arredondado
-  - cantos suavizados
-- variantes de tamanho
-  - sm
-  - md
-  - lg
 
 ### Drawer / Modal de Filtros para Mobile (UX & Responsividade)
 - **Contexto**: Em telas grandes (`md+`), os filtros ocupam 1 coluna lateral. Em telas mobile (`< 768px`), eles ficam empilhados antes dos resultados, empurrando a lista de cursos para baixo.
@@ -44,36 +23,4 @@ coisas do callout
 - [] **Atualização/Criação de Stories no Storybook**
 - [] Script que pega a Api-Key e atualiza o `.env`
 
-
 ---
-## anotações
-- como mostrar locais de ofertas
-
-
----
-
-## Template de tarefa
-
-```md
-# Tarefa 
-
-## Situação
-
-## Objetivo
-
-## Instruções
-
-- `/packages/front/src/components/...`
-- `/packages/api/internal/features/...`
-
-```
-
-
-## Situação e objetivo:
-Novos dados referentges às IES (Instituições de Ensino Superior) será adicionado ao banco e precisamos implementar os endpoints. O objetivo é fazer com que `bulker` também faça a ingestão desses dados que virão de `packages/bulker/dados/dados_ies.json`. Existe um arquivo menor chamado `amostra_ies.json`que lhe servirá como exemplod e como são os dados completos. 
-
-Essa tarefa consiste em:
-- Reorganizar a estrutura de `packages/bulker/internal` para separar os arquvivos referentes à `cursos` e os arquivos referntes à `ies`( assim como foi feito em `packages/api/internal/feaures/`)
-- Criar toda a estrutura necessária para ingestão dos dados de ies (você pode copiar a estrutura feita para `cursos`)
-- fazer com que o container `bulker` também faça a indestão de ies assim que subir.
-- Me apresentar sugestões caso tenha alguma

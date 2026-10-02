@@ -3,7 +3,6 @@
 import { useSearchParams } from 'next/navigation'
 import { useId } from 'react'
 import { SearchHeader } from '@/components/search/search-header'
-import { SortingOptionsCursos } from '@/components/search/sorting-options/wrappers/sorting-options-cursos/sorting-options-cursos'
 import { Switch } from '@/components/ui/switch/switch'
 import { Typo } from '@/components/ui/typo'
 import type { Module } from '@/lib/module'
@@ -34,6 +33,8 @@ export function SearchHeaderCursos({ module }: SearchHeaderCursosProps) {
       <SearchHeader.Autocomplete
         defaultValue={query}
         onSearchSubmit={setQuery}
+        placeholder="Ex.: Pedagogia, Enfermagem, Engenharia Civil…"
+        submitLabel="Buscar"
       />
 
       <SearchHeader.Actions>
@@ -61,10 +62,6 @@ export function SearchHeaderCursos({ module }: SearchHeaderCursosProps) {
             : 'Também inclui cursos com nome parecido'}
         </Typo>
       </SearchHeader.Actions>
-
-      <SearchHeader.Sorting>
-        <SortingOptionsCursos module={module} />
-      </SearchHeader.Sorting>
     </SearchHeader>
   )
 }

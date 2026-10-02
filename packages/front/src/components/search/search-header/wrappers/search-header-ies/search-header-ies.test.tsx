@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSearchIes } from '@/services/api/use-search-ies'
 import { useSugestoesIes } from '@/services/api/use-sugestoes-ies'
@@ -13,14 +13,12 @@ vi.mock('@/services/api/use-sugestoes-ies', () => ({
 }))
 
 describe('SearchHeaderIes', () => {
-  const updateParams = vi.fn()
-
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(useSearchIes).mockReturnValue({
       query: '',
       setQuery: vi.fn(),
-      updateParams,
+      updateParams: vi.fn(),
     } as unknown as ReturnType<typeof useSearchIes>)
     vi.mocked(useSugestoesIes).mockReturnValue({
       sugestoes: [],
@@ -28,23 +26,11 @@ describe('SearchHeaderIes', () => {
     })
   })
 
-  it('renderiza o autocomplete de instituições e a ordenação', () => {
+  it('renderiza o autocomplete de instituições', () => {
     render(<SearchHeaderIes module="4" />)
 
     expect(
-      screen.getByPlaceholderText('Busque pelo nome da instituição'),
+      screen.getByPlaceholderText('Ex.: USP, Unifesp, UNICAMP…'),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'A Z' })).toHaveAttribute(
-      'data-module',
-      '4',
-    )
-  })
-
-  it('atualiza o parâmetro sort ao selecionar uma ordenação', () => {
-    render(<SearchHeaderIes />)
-
-    fireEvent.click(screen.getByRole('button', { name: 'Relevância' }))
-
-    expect(updateParams).toHaveBeenCalledWith({ sort: 'relevancia' })
   })
 })

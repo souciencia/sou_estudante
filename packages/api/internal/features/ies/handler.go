@@ -2,14 +2,14 @@ package ies
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"log/slog"
 	"net/http"
 	"strconv"
-	"time"
+	"strings"
 
-	"api_estudante/internal/shared"
+	"api_estudante/internal/apperr"
+	"api_estudante/internal/httpx"
 )
 
 // Handler gerencia a listagem/busca de IES.
@@ -19,13 +19,12 @@ type Handler struct {
 
 // ServeHTTP implementa http.Handler para GET /ies.
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+	params := r.URL.Query()
+	query := strings.TrimSpace(params.Get("q"))
+	if query == "" {
+		httpx.WriteError(w, http.StatusBadRequest, "Parâmetro 'q' é obrigatório")
 		return
 	}
-
-	params := r.URL.Query()
-	query := params.Get("q")
 
 	page, _ := strconv.Atoi(params.Get("page"))
 	if page < 1 {
@@ -38,24 +37,28 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	filters := SearchFilterParams{
-		UF:          shared.SplitCSV(params["uf"]),
-		Regiao:      shared.SplitCSV(params["regiao"]),
-		Categoria:   shared.SplitCSV(params["categoria"]),
-		Organizacao: shared.SplitCSV(params["organizacao"]),
+		UF:          httpx.SplitCSV(params["uf"]),
+		Regiao:      httpx.SplitCSV(params["regiao"]),
+		Categoria:   httpx.SplitCSV(params["categoria"]),
+		Organizacao: httpx.SplitCSV(params["organizacao"]),
 		Sort:        params.Get("sort"),
 	}
 
-	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), httpx.RequestTimeout)
 	defer cancel()
 
 	response, err := h.Service.BuscarIES(ctx, query, filters, page, limit)
+	if errors.Is(err, apperr.ErrInvalidInput) {
+		httpx.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 	if err != nil {
 		slog.Error("Erro ao buscar ies", "error", err, "query", query)
-		http.Error(w, "Erro interno ao buscar ies", http.StatusInternalServerError)
+		httpx.WriteError(w, http.StatusInternalServerError, "Erro interno ao buscar ies")
 		return
 	}
 
-	writeJSON(w, http.StatusOK, response)
+	httpx.WriteJSON(w, http.StatusOK, response)
 }
 
 // DetailHandler gerencia a busca de uma IES específica.
@@ -65,39 +68,29 @@ type DetailHandler struct {
 
 // ServeHTTP implementa http.Handler para GET /ies/{co_ies}.
 func (h *DetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
-		return
-	}
-
 	coIES := r.PathValue("co_ies")
 	if coIES == "" {
-		http.Error(w, "Parâmetro 'co_ies' é obrigatório", http.StatusBadRequest)
+		httpx.WriteError(w, http.StatusBadRequest, "Parâmetro 'co_ies' é obrigatório")
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), httpx.RequestTimeout)
 	defer cancel()
 
 	item, err := h.Service.BuscarIESPorID(ctx, coIES)
+	if errors.Is(err, apperr.ErrInvalidInput) {
+		httpx.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 	if errors.Is(err, ErrNotFound) {
-		http.Error(w, "IES não encontrada", http.StatusNotFound)
+		httpx.WriteError(w, http.StatusNotFound, "IES não encontrada")
 		return
 	}
 	if err != nil {
 		slog.Error("Erro ao buscar ies por id", "error", err, "co_ies", coIES)
-		http.Error(w, "Erro interno ao buscar ies", http.StatusInternalServerError)
+		httpx.WriteError(w, http.StatusInternalServerError, "Erro interno ao buscar ies")
 		return
 	}
 
-	writeJSON(w, http.StatusOK, item)
-}
-
-// writeJSON serializa payload como JSON com o status informado.
-func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	if err := json.NewEncoder(w).Encode(payload); err != nil {
-		slog.Error("Erro ao serializar JSON", "error", err)
-	}
+	httpx.WriteJSON(w, http.StatusOK, item)
 }

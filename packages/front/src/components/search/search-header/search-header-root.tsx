@@ -20,10 +20,7 @@ export function SearchHeaderRoot({
     <SearchHeaderContext.Provider value={{ module }}>
       <div
         data-module={module}
-        className={cn(
-          'rounded-md border p-2 font-coadjuvant text-fg-coadjuvant',
-          className,
-        )}
+        className={cn('font-coadjuvant text-fg-coadjuvant', className)}
       >
         {children}
       </div>

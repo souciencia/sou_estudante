@@ -24,7 +24,7 @@ interface FiltersPanelIesProps {
 }
 
 export function FiltersPanelIes({ module, className }: FiltersPanelIesProps) {
-  const { updateParams, aggregations } = useSearchIes()
+  const { updateParams, aggregations, resetFilters } = useSearchIes()
   const { getActiveValues, toggle } = useFilterPanel(updateParams)
 
   const sections: FilterSectionDefinition[] = [
@@ -60,6 +60,7 @@ export function FiltersPanelIes({ module, className }: FiltersPanelIesProps) {
       aggregations={aggregations}
       activeValues={getActiveValues}
       onToggle={toggle}
+      onClear={resetFilters}
       module={module}
       className={className}
     />

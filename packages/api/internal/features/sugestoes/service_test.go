@@ -2,6 +2,7 @@ package sugestoes
 
 import (
 	"context"
+	"errors"
 	"testing"
 )
 
@@ -94,5 +95,89 @@ func TestSugerirCursosNormalizaTermo(t *testing.T) {
 
 	if mockRepo.CapturedTermo != "medicina" {
 		t.Errorf("esperado termo sem espaços 'medicina', recebido '%s'", mockRepo.CapturedTermo)
+	}
+}
+
+// O comprimento mínimo é contado em runes: "á" tem 1 rune (2 bytes) e não deve
+// consultar o índice, enquanto "ab" (2 runes) deve.
+func TestSugerirAplicaMinimoDeRunes(t *testing.T) {
+	casos := []struct {
+		termo      string
+		wantChamar bool
+	}{
+		{"", false},
+		{"   ", false},
+		{"a", false},
+		{"á", false},
+		{"ab", true},
+	}
+
+	for _, caso := range casos {
+		t.Run(caso.termo, func(t *testing.T) {
+			mockRepo := &MockRepository{ReturnSugestoes: []string{}}
+			service := NewService(mockRepo)
+
+			result, err := service.Sugerir(context.Background(), caso.termo, 8)
+			if err != nil {
+				t.Fatalf("erro inesperado: %v", err)
+			}
+			if mockRepo.Called != caso.wantChamar {
+				t.Errorf("repositório chamado = %v, esperado %v", mockRepo.Called, caso.wantChamar)
+			}
+			if result == nil {
+				t.Error("resultado nunca deveria ser nil")
+			}
+		})
+	}
+}
+
+func TestSugerirAplicaLimites(t *testing.T) {
+	casos := []struct {
+		limit int
+		want  int
+	}{
+		{0, defaultSugestoesLimit},
+		{-5, defaultSugestoesLimit},
+		{5, 5},
+		{999, maxSugestoesLimit},
+	}
+
+	for _, caso := range casos {
+		mockRepo := &MockRepository{ReturnSugestoes: []string{}}
+		service := NewService(mockRepo)
+
+		if _, err := service.Sugerir(context.Background(), "medicina", caso.limit); err != nil {
+			t.Fatalf("erro inesperado: %v", err)
+		}
+		if mockRepo.CapturedLimit != caso.want {
+			t.Errorf("limit %d: repositório recebeu %d, esperado %d", caso.limit, mockRepo.CapturedLimit, caso.want)
+		}
+	}
+}
+
+func TestSugerirConverteNilEmSliceVazio(t *testing.T) {
+	mockRepo := &MockRepository{ReturnSugestoes: nil}
+	service := NewService(mockRepo)
+
+	result, err := service.Sugerir(context.Background(), "medicina", 8)
+	if err != nil {
+		t.Fatalf("erro inesperado: %v", err)
+	}
+	if result == nil {
+		t.Fatal("resultado deveria ser slice vazio, não nil (evita 'null' no JSON)")
+	}
+	if len(result) != 0 {
+		t.Errorf("resultado = %v, esperado vazio", result)
+	}
+}
+
+func TestSugerirPropagaErroDoRepository(t *testing.T) {
+	origem := errors.New("indisponível")
+	mockRepo := &MockRepository{ReturnErr: origem}
+	service := NewService(mockRepo)
+
+	_, err := service.Sugerir(context.Background(), "medicina", 8)
+	if err == nil || !errors.Is(err, origem) {
+		t.Fatalf("esperado erro embrulhado, obtido %v", err)
 	}
 }

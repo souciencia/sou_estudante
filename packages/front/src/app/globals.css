@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* ------------------------------------------------------------------------
-     Cores · Acentos por módulo
-     ------------------------------------------------------------------------ */
+  /* Cores · Acentos por módulo */
   --color-m1-accent: #d4ff00; /* M1 Carta Náutica — neon-lime  */
   --color-m2-accent: #00e5ff; /* M2 Bússola      — cyan        */
   --color-m3-accent: #ff67be; /* M3 Âncora       — neon-pink   */
@@ -17,9 +15,7 @@
   --color-m4-deep: #5b21a8;
   --color-m5-deep: #a34a00;
 
-  /* ------------------------------------------------------------------------
-    Cores · Feedback (faixas do Enade e progresso)
-    ------------------------------------------------------------------------ */
+  /* Cores · Feedback (faixas do Enade e progresso) */
   --color-enade-ok: #1b8a5a;
   --color-enade-ok-surface: #e8f7f0;
   --color-enade-warn: #b06000;
@@ -29,61 +25,50 @@
   --color-progress-bar-foreground: oklch(0.48 0.03 240);
   --color-progress-bar-background: oklch(0.94 0.01 75);
 
-  /* ------------------------------------------------------------------------
-     Cores · Acento escopado (sobrescrito por [data-module])
-     ------------------------------------------------------------------------ */
+  /* Cores · Acento escopado (sobrescrito por [data-module]) */
   --color-accent: var(--color-m1-accent);
   --color-accent-deep: var(--color-m1-deep);
   --color-accent-fg: var(--color-m1-deep);
 
-  /* ------------------------------------------------------------------------
-     Cores · Texto por papel
-     ------------------------------------------------------------------------ */
+  /* Cores · Texto por papel */
   --color-fg-protagonist: oklch(0.15 0 0);
   --color-fg-coadjuvant: oklch(0.15 0 0);
   --color-fg-muted: oklch(0.55 0 0);
 
-  /* ------------------------------------------------------------------------
-     Cores · Neutros semânticos
-     ------------------------------------------------------------------------ */
+  /* Cores · Neutros semânticos */
   --color-muted: var(--color-gray-100);
   --color-site-background: #f8f4fb;
   --color-card-surface: oklch(1 0 0);
   --color-card-border: oklch(0.92 0 0);
 
-  /* ------------------------------------------------------------------------
-     Cores · Página inicial
-     ------------------------------------------------------------------------ */
+  /* Cores · Página inicial */
   --color-navy-950: #16263a;
   --color-navy-900: #1c2b3a;
   --color-plum-100: #efe6f5;
   --color-surface: #fff;
 
-  /* ------------------------------------------------------------------------
-     Cores · Texto
-     ------------------------------------------------------------------------ */
+  /* Cores · Texto */
   --color-text: #1a0e23;
   --color-text-muted: #5b5266;
 
-  /* ------------------------------------------------------------------------
-     Tipografia · Famílias
-     ------------------------------------------------------------------------ */
+  /*  Tipografia · Famílias */
+
   /* Protagonista — conteúdo principal (card, callout, textos principais) */
   --font-protagonist: "Source Sans 3", system-ui, sans-serif;
   /* Coadjuvante — apoio (button, tag, filtros, tips) */
   --font-coadjuvant: "Source Sans 3", system-ui, sans-serif;
 
-  /* Títulos — exceção */
-  --font-title-protagonist: "Source Sans 3", system-ui, sans-serif;
-  --font-title-coadjuvant: "Source Sans 3", system-ui, sans-serif;
+  /* Títulos — display (Playfair Display) */
+  --font-title-protagonist: var(--font-display);
+  --font-title-coadjuvant: var(--font-display);
 
   --font-mono: "DM Mono", ui-monospace, monospace; /* dados numéricos */
 
+  /* Display — títulos de destaque (Playfair Display) */
   --font-display: "Playfair Display", Georgia, serif;
 
-  /* ------------------------------------------------------------------------
-     Tipografia · Escala
-     ------------------------------------------------------------------------ */
+  /* Tipografia · Escala */
+
   /* Protagonista — conteúdo principal (card, callout, textos principais) */
   --text-protagonist-sm: 0.875rem; /* 14px */
   --text-protagonist: 1rem; /* 16px */
@@ -96,15 +81,16 @@
   --text-coadjuvant: 0.875rem; /* 14px */
   --text-coadjuvant-lg: 1rem; /* 16px */
 
-  /* ------------------------------------------------------------------------
-     Formas
-     ------------------------------------------------------------------------ */
+  /* Formas */
   --radius-card: 26px;
+
+  --container-home: 900px;
+  --container-pages: 1100px;
+
+  --ease-wave: cubic-bezier(0.55, 0.5, 0.45, 0.5);
 }
 
-/* ==========================================================================
-   Temas por módulo
-   ========================================================================== */
+/* Temas por módulo */
 [data-module="1"] {
   --color-accent: var(--color-m1-accent);
   --color-accent-deep: var(--color-m1-deep);
@@ -131,17 +117,19 @@
   --color-accent-fg: var(--color-m5-deep);
 }
 
-/* ==========================================================================
-   Base
-   ========================================================================== */
+/* Base */
 body {
   font-family: var(--font-protagonist);
   color: var(--color-fg-protagonist);
+
+  /* Aliases re-declarados aqui para herdarem as fontes do `next/font` (com o
+     fallback métrico) aplicadas no próprio `<body>`. */
+  --font-coadjuvant: var(--font-protagonist);
+  --font-title-protagonist: var(--font-display);
+  --font-title-coadjuvant: var(--font-display);
 }
 
-/* ==========================================================================
-   Bússola da Hero da Página Inicial
-   ========================================================================== */
+/*  Bússola da Hero da Página Inicial */
 .hero-bussola {
   position: absolute;
   top: 50%;
@@ -164,6 +152,16 @@ body {
 .hero-bussola .seta {
   animation: bussola-seta 5.6s ease-in-out infinite;
 }
+
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+
 @keyframes bussola-contorno {
   0%,
   100% {

@@ -109,7 +109,7 @@ export function FiltersPanelCursos({
   module,
   className,
 }: FiltersPanelCursosProps) {
-  const { updateParams, aggregations } = useSearchCursos()
+  const { updateParams, aggregations, resetFilters } = useSearchCursos()
   const { getActiveValues, toggle } = useFilterPanel(updateParams)
 
   return (
@@ -118,6 +118,7 @@ export function FiltersPanelCursos({
       aggregations={aggregations}
       activeValues={getActiveValues}
       onToggle={toggle}
+      onClear={resetFilters}
       module={module}
       className={className}
     />

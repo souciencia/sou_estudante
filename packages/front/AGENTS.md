@@ -14,7 +14,7 @@
 ⚠️​ Whenever your write code, format it according to the rules in the `.editorconfig` file and `biome.json`.
 
 ### Organização de componentes
-O padrão completo (Compound Component Pattern + Componentes Agnósticos com Wrappers de Especialização) está em [`docs/guidelines-2.md`](../../docs/guidelines-2.md). Resumo:
+O padrão completo (Compound Component Pattern + Componentes Agnósticos com Wrappers de Especialização) está em [`docs/03.frontend.md`](../../docs/03.frontend.md). Resumo:
 - Agrupar por domínio em `src/components/`: `ui`, `layout`, `search`, `profile`, `enade`, `home`.
 - Subcomponentes na pasta do pai, expostos por namespace (ex.: `<Profile.Header>`), com Contexto e validação de uso.
 - Especializações de domínio em `<agnóstico>/wrappers/<wrapper>/` (ex.: `profile/wrappers/profile-cursos`), nomeadas `<Agnóstico><Domínio>` (ex.: `ProfileCursos`, `SearchHeaderIes`).

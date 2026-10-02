@@ -2,43 +2,11 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { MODULE_META, MODULES } from '@/lib/module'
 
 interface MenuProps {
   mode?: 'light' | 'dark'
 }
-
-const MODULOS = [
-  {
-    modulo: 'm1',
-    href: '/cursos/',
-    rotulo: 'Escolher curso',
-    cor: 'bg-m1-accent',
-  },
-  {
-    modulo: 'm2',
-    href: '/ingresso/',
-    rotulo: 'Como ingressar',
-    cor: 'bg-m2-accent',
-  },
-  {
-    modulo: 'm3',
-    href: '/permanencia/',
-    rotulo: 'Como permanecer',
-    cor: 'bg-m3-accent',
-  },
-  {
-    modulo: 'm4',
-    href: '/instituicao/',
-    rotulo: 'Conhecer instituição',
-    cor: 'bg-m4-accent',
-  },
-  {
-    modulo: 'm5',
-    href: '/comparar/',
-    rotulo: 'Comparar cursos',
-    cor: 'bg-m5-accent',
-  },
-]
 
 const ITEM =
   'flex w-full items-center gap-[11px] px-5 py-[0.7rem] text-left text-sm text-text transition-colors duration-fast hover:bg-surface-alt'
@@ -196,15 +164,16 @@ export default function Menu({ mode = 'light' }: MenuProps) {
           Módulos
         </div>
 
-        {MODULOS.map((m) => (
+        {MODULES.map((module) => (
           <Link
-            key={m.modulo}
-            href={m.href}
+            key={module}
+            data-module={module}
+            href={MODULE_META[module].href}
             className={ITEM}
             onClick={() => setOpened(false)}
           >
-            <span aria-hidden className={`${PONTO} ${m.cor}`} />
-            {m.rotulo}
+            <span aria-hidden className={`${PONTO} bg-accent`} />
+            {MODULE_META[module].title}
           </Link>
         ))}
       </aside>
