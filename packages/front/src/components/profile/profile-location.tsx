@@ -33,11 +33,12 @@ export function ProfileLocation({
     <section
       data-module={theme}
       className={cn(
-        'flex items-center gap-4 rounded-2xl bg-accent/10 px-5 py-4',
+        'flex items-center justify-between gap-3 border-b-2 border-[#B3E0F0] bg-[#F0F9FF] px-5 py-[0.875rem]',
         className,
       )}
     >
-      <IconTile module={theme} className="size-14 rounded-2xl">
+
+      <IconTile module={theme}>
         {icon}
       </IconTile>
 
@@ -45,18 +46,18 @@ export function ProfileLocation({
         <span className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-accent-deep">
           {eyebrow}
         </span>
-        <span className="font-title-protagonist text-protagonist-lg font-bold text-fg-protagonist">
+        <span className="font-title-protagonist text-protagonist font-bold leading-[1.1] tracking-[-0.2px] text-accent-deep">
           {value}
         </span>
         {source && (
-          <span className="font-coadjuvant text-coadjuvant-sm text-fg-muted">
+          <span className="font-coadjuvant text-coadjuvant-xs text-accent-deep/60">
             {source}
           </span>
         )}
       </div>
 
       {tag && (
-        <span className="rounded-full bg-accent-deep px-3 py-1 font-coadjuvant text-coadjuvant font-bold text-card-surface">
+        <span className="rounded-full bg-accent-deep px-[9px] py-[2px] font-coadjuvant text-xs font-bold text-card-surface">
           {tag}
         </span>
       )}

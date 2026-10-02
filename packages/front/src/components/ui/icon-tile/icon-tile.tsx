@@ -14,7 +14,7 @@ export const IconTile = ({ module, children, className }: IconTileProps) => {
       data-module={module}
       aria-hidden="true"
       className={cn(
-        'inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/20 text-accent-deep',
+        'flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-accent/10 text-accent-deep',
         className,
       )}
     >

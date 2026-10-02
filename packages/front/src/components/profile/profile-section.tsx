@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/utils/cn'
+import { Signpost } from 'lucide-react'
 
 export interface ProfileSectionProps {
   title: string
@@ -16,10 +17,13 @@ export function ProfileSection({
   className,
 }: ProfileSectionProps) {
   return (
-    <section className={cn('flex flex-col gap-3', className)}>
-      <h2 className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-fg-muted">
-        {title}
-      </h2>
+    <section className={cn('flex flex-col gap-2 p-4', className)}>
+      <div className='mb-2 flex items-center gap-[5px]'>
+        <Signpost className="size-3" aria-hidden="true"/>
+        <h2 className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-text-muted">
+          {title}
+        </h2>
+      </div>
       {children}
     </section>
   )

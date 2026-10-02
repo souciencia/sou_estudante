@@ -65,11 +65,11 @@ export const ProfileIES = ({ ies, module = '4' }: ProfileIESProps) => {
       <Profile.Section title="Continue sua rota" className="mt-4">
         <Route
           module="5"
-          v="inline"
+          variant="inline"
           title="Comparar cursos entre instituições"
           description="Lado a lado pelos mesmos indicadores — Sextante"
         />
-        <Route module="1" v="inline" />
+        <Route module="1" variant="inline" />
       </Profile.Section>
     </Profile>
   )

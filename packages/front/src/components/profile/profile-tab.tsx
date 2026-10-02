@@ -26,7 +26,7 @@ export function ProfileTab({ value, children, className }: ProfileTabProps) {
       data-tab-value={value}
       onClick={() => setActiveTab(value)}
       className={cn(
-        'flex-1 rounded-[18px] px-4 py-3 font-coadjuvant text-coadjuvant font-bold transition-colors',
+        'h-[38px] flex-1 cursor-pointer whitespace-nowrap rounded-[10px] font-coadjuvant text-coadjuvant-sm font-semibold transition-colors',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
         selected
           ? 'bg-card-surface text-accent-deep shadow-sm'

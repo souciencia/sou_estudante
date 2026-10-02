@@ -55,17 +55,17 @@ export function Route({
           className,
         )}
       >
-        <Icon className="size-12 shrink-0" />
+        <Icon className="size-9 shrink-0" />
         <span className="flex flex-1 flex-col">
-          <span className="font-title-protagonist font-bold text-protagonist">
+          <span className="font-title-protagonist font-bold text-protagonist-sm">
             {routeTitle}
           </span>
-          <span className="text-coadjuvant text-fg-muted">
+          <span className="text-coadjuvant-sm text-text-muted">
             {routeDescription}
           </span>
         </span>
         <ArrowRight
-          className="size-5 text-fg-muted transition-transform group-hover:translate-x-1"
+          className="size-4 text-fg-muted transition-transform group-hover:translate-x-1"
           aria-hidden="true"
         />
       </Link>

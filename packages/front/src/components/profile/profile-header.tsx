@@ -4,6 +4,7 @@ import { Asterisk } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/utils/cn'
 import { useProfileContext } from './profile-context'
+import IconModule from '../ui/icon-module/iconModule'
 
 export interface ProfileHeaderProps {
   badge: string
@@ -25,29 +26,29 @@ export function ProfileHeader({
   const { module } = useProfileContext('Profile.Header')
 
   return (
-    <header
+    <section
       data-module={module}
-      className={cn('flex flex-col gap-1', className)}
+      className={cn('p-4 pb-3', className)}
     >
-      <span className="inline-flex items-center gap-1 font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-accent-deep">
-        <Asterisk className="size-4" aria-hidden="true" />
+      <span className="mb-[6px] flex items-center gap-[6px] text-coadjuvant-xs font-bold uppercase tracking-[0.7px] text-accent-deep">
+        <IconModule module={module ?? '1'} />
         {badge}
       </span>
 
       <div className="flex items-start justify-between gap-4">
-        <h1 className="font-title-protagonist text-protagonist-xl font-bold leading-tight text-fg-protagonist">
+        <h1 className="mb-1 font-display text-xl font-bold leading-tight tracking-[-0.2px] text-text">
           {title}
         </h1>
         {aside}
       </div>
 
       {subtitle && (
-        <p className="font-protagonist text-protagonist-lg text-fg-muted">
+        <p className="mb-2 text-coadjuvant-sm text-text-muted">
           {subtitle}
         </p>
       )}
 
-      {children && <div className="mt-1 flex flex-col gap-3">{children}</div>}
-    </header>
+      {children && <>{children}</>}
+    </section>
   )
 }
