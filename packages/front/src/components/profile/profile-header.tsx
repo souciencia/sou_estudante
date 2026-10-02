@@ -43,7 +43,7 @@ export function ProfileHeader({
       </div>
 
       {subtitle && (
-        <p className="mb-2 text-coadjuvant-sm text-text-muted">
+        <p className="mb-2 text-coadjuvant text-text-muted">
           {subtitle}
         </p>
       )}

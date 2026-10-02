@@ -46,7 +46,7 @@ export function ProfileLocation({
         <span className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-accent-deep">
           {eyebrow}
         </span>
-        <span className="font-title-protagonist text-protagonist font-bold leading-[1.1] tracking-[-0.2px] text-accent-deep">
+        <span className="font-protagonist text-protagonist font-bold leading-[1.1] tracking-[-0.2px] text-accent-deep">
           {value}
         </span>
         {source && (

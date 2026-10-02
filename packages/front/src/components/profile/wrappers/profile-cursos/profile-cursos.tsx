@@ -73,7 +73,7 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
             <Button
               v="outline"
               module={module}
-              className="inline-flex cursor-pointer items-center gap-[5px] rounded-[10px] border-[1.5px] px-3 py-[6px] font-protagonist text-coadjuvant-xs font-semibold transition-transform duration-fast ease-prow active:scale-[0.97] mt-3"
+              className="inline-flex cursor-pointer items-center gap-[5px] rounded-[10px] border-[1.5px] px-3 py-[6px] font-protagonist text-coadjuvant-xs font-semibold transition-transform duration-fast ease-prow active:scale-[0.97] mt-1"
             >
               <Info className="size-3" aria-hidden="true" />
               Como interpretar?
@@ -86,7 +86,7 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
         </Profile.TabPanel>
       </Profile.Tabs>
 
-      <Profile.Section title="Continue sua rota" className="mt-5">
+      <Profile.Section title="Continue sua rota" className="mt-1">
         <Route
           module="3"
           variant="inline"

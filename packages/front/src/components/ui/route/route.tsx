@@ -57,7 +57,7 @@ export function Route({
       >
         <Icon className="size-9 shrink-0" />
         <span className="flex flex-1 flex-col">
-          <span className="font-title-protagonist font-bold text-protagonist-sm">
+          <span className="font-protagonist font-bold text-protagonist-sm">
             {routeTitle}
           </span>
           <span className="text-coadjuvant-sm text-text-muted">
@@ -98,7 +98,7 @@ export function Route({
       {isCard && (
         <>
           <Icon className="mb-3" />
-          <h3 className="font-title-protagonist font-bold text-coadjuvant-sm mb-[3px] leading-[1.3]">
+          <h3 className="font-protagonist font-bold text-coadjuvant-sm mb-[3px] leading-[1.3]">
             {routeTitle}
           </h3>
           <p className="text-coadjuvant-xs text-fg-muted leading-[1.35]">

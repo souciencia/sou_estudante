@@ -10,7 +10,7 @@ interface CalloutProps {
 }
 
 const variantStyles: Record<CalloutVariant, string> = {
-  info: 'border border-enade-warn/40 bg-enade-warn-surface text-fg-protagonist',
+  info: 'border border-enade-warn/30 bg-enade-warn-surface/50 text-enade-warn',
   future: 'border-2 border-dashed border-accent bg-accent/10 text-accent-deep',
 }
 
@@ -18,7 +18,7 @@ export const Callout = ({ v = 'info', children, className }: CalloutProps) => {
   return (
     <div
       className={cn(
-        'rounded-[18px] px-5 py-4 font-protagonist text-protagonist leading-relaxed',
+        'rounded-[10px] p-3 font-protagonist text-xs leading-relaxed',
         variantStyles[v],
         className,
       )}

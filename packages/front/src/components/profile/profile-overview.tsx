@@ -30,7 +30,7 @@ export function ProfileOverview({ items, className }: ProfileOverviewProps) {
           <dt className="font-protagonist text-xs text-text-muted">
             {item.label}
           </dt>
-          <dd className="text-right font-title-protagonist text-coadjuvant font-semibold text-text">
+          <dd className="text-right font-protagonist text-coadjuvant font-semibold text-text">
             {item.value}
             {item.note && (
               <span className="ml-1 font-coadjuvant text-coadjuvant-xs text-text-muted">
