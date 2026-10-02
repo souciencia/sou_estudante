@@ -20,13 +20,20 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Cursos: Story = {
   args: {
-    title: 'Busca de Cursos',
+    module: '1',
+    searchLabel: 'Buscar curso',
     searchHeader: slot('Cabeçalho de busca'),
     activeFilters: slot('Filtros ativos'),
     filtersPanel: slot('Painel de filtros'),
     toolbar: slot('Ordenação'),
     results: slot('Resultados'),
+  },
+}
+
+export const SomenteHero: Story = {
+  args: {
+    module: '3',
   },
 }

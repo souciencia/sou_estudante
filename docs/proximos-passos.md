@@ -24,3 +24,13 @@ coisas do callout
 - [] Script que pega a Api-Key e atualiza o `.env`
 
 ---
+
+
+### callout (compoud)
+coisas do callout
+- LeftAccent
+- Icon
+- Footer
+
+
+Veja a imagem `docs/2026-10-01T16:52:42,893459520-03:00.png`, ela mostra dois componentes visuais que nós vamos implementar, mas estou pensando em implementar um componente só que é capaz de assumir as duas formas (quero sua opinião sobre isso). Quero que você discuta sobre quais estratégias vamos usar para implementá-lo. Já tenho em mente, de antemão, que vamos fazer um compound-component (por causa dos diferentes detalhes que cdada componente possui). Primeira coisa que vamos decidir é o nome desse componente. Acha que "callout" é um nome paropriado?

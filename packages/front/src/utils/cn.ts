@@ -6,6 +6,7 @@ const FONT_SIZES = [
   'protagonist',
   'protagonist-lg',
   'protagonist-xl',
+  'protagonist-2xl',
   'coadjuvant-xs',
   'coadjuvant-sm',
   'coadjuvant',

@@ -16,12 +16,14 @@
 ### Organização de componentes
 O padrão completo (Compound Component Pattern + Componentes Agnósticos com Wrappers de Especialização) está em [`docs/03.frontend.md`](../../docs/03.frontend.md). Resumo:
 - Agrupar por domínio em `src/components/`: `ui`, `layout`, `search`, `profile`, `enade`, `home`.
-- Subcomponentes na pasta do pai, expostos por namespace (ex.: `<Profile.Header>`), com Contexto e validação de uso.
+- Subcomponentes na pasta do pai, expostos por namespace (ex.: `<Profile.Header>`). Use Contexto (com validação de uso) apenas quando houver estado compartilhado entre subcomponentes; para coordenação puramente visual, prefira o **Scoped-Variable Pattern**, sem Context.
 - Especializações de domínio em `<agnóstico>/wrappers/<wrapper>/` (ex.: `profile/wrappers/profile-cursos`), nomeadas `<Agnóstico><Domínio>` (ex.: `ProfileCursos`, `SearchHeaderIes`).
 
 ### Compound Components para componentes robustos
 
 Ao criar componentes robustos e expansíveis, utilize o **Compound Component Pattern**. Todos os subcomponentes pertencem estritamente ao diretório e ao *namespace* do seu componente pai (ex.: `<Select.Option>` reside na mesma pasta do `<Select>`). Exponha APIs flexíveis e expressivas onde os subcomponentes compartilham estado implícito via *React Context* (ex.: `<Select>`, `<Select.Trigger>`, `<Select.Option>`). Implemente de forma a dar controle total sobre a composição, o layout e a ordem de renderização.
+
+**Contexto é opcional.** Crie um `<componente>-context.ts` (com hook de validação) somente quando os subcomponentes precisarem **coordenar estado** que o CSS não consegue propagar. Quando o único eixo compartilhado for **visual/estilização** (variante, tema, tom), use o **Scoped-Variable Pattern**: o root define uma variável escopada (via `data-*` ou classe) e os subcomponentes a consomem — sem React Context. Ex.: `Callout`, que troca a variante por `.callout[data-variant]`.
 
 ### DRY (Don't Repeat Yourself)
 Cada fragmento de conhecimento, regra de negócio ou lógica de código deve ter uma representação única, inequívoca e oficial dentro do sistema.
