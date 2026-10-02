@@ -111,7 +111,7 @@ export const Hero = () => {
       >
         <path
           d="M0,18 C360,36 1080,0 1440,18 L1440,36 L0,36 Z"
-          fill="var(--color-site-background)"
+          fill="var(--color-surface"
         />
       </svg>
     </section>
