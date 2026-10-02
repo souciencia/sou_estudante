@@ -108,6 +108,66 @@ func TestDictionaryMappingsUseBrazilianAnalyzer(t *testing.T) {
 	}
 }
 
+func TestDictionaryMappingsExpoemCampoExato(t *testing.T) {
+	cases := []struct {
+		name  string
+		raw   []byte
+		field string
+	}{
+		{"cursos", CursosDictionary, "no_curso"},
+		{"ies", IESDictionary, "no_ies"},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			var mapping struct {
+				Settings struct {
+					Analysis struct {
+						Normalizer map[string]struct {
+							Filter []string `json:"filter"`
+						} `json:"normalizer"`
+					} `json:"analysis"`
+				} `json:"settings"`
+				Mappings struct {
+					Properties map[string]struct {
+						Fields map[string]struct {
+							Type       string `json:"type"`
+							Normalizer string `json:"normalizer"`
+						} `json:"fields"`
+					} `json:"properties"`
+				} `json:"mappings"`
+			}
+
+			if err := json.Unmarshal(tc.raw, &mapping); err != nil {
+				t.Fatalf("mapping de dicionário deve ser JSON válido: %v", err)
+			}
+
+			field, ok := mapping.Mappings.Properties[tc.field]
+			if !ok {
+				t.Fatalf("mapping não declara o campo %q", tc.field)
+			}
+			exato, ok := field.Fields["exato"]
+			if !ok {
+				t.Fatalf("campo %q não declara subcampo exato", tc.field)
+			}
+			if exato.Type != "keyword" {
+				t.Errorf("tipo de %s.exato = %q, esperado keyword", tc.field, exato.Type)
+			}
+			if exato.Normalizer != "ascii_lower" {
+				t.Errorf("normalizer de %s.exato = %q, esperado ascii_lower", tc.field, exato.Normalizer)
+			}
+
+			normalizer, ok := mapping.Settings.Analysis.Normalizer["ascii_lower"]
+			if !ok {
+				t.Fatal("esperado normalizer ascii_lower definido em settings")
+			}
+			if !hasFilters(normalizer.Filter, "lowercase", "asciifolding") {
+				t.Errorf("esperado filtros lowercase e asciifolding, recebido %v", normalizer.Filter)
+			}
+		})
+	}
+}
+
 // Com dynamic: "strict", todo campo emitido pelo documento precisa existir no
 // mapping; caso contrário a ingestão falha em runtime. Estes testes comparam as
 // tags JSON dos structs de documento com as properties do mapping, incluindo
