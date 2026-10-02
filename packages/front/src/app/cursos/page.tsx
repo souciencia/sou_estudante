@@ -6,20 +6,18 @@ import SearchResultSectionCursos from '@/components/search/search-result-section
 import { SortingOptionsCursos } from '@/components/search/sorting-options/wrappers/sorting-options-cursos/sorting-options-cursos'
 import type { Module } from '@/lib/module'
 
-interface LayoutSearchPageCursosProps {
-  module?: Module
-}
-
 const module: Module = '1'
 
 export default function CursosPage() {
-  return  <LayoutSearchPage
-        searchLabel="Buscar curso"
-        module={module}
-        searchHeader={<SearchHeaderCursos module={module} />}
-        activeFilters={<ActiveFiltersCursos module={module} />}
-        filtersPanel={<FiltersPanelCursos module={module} />}
-        toolbar={<SortingOptionsCursos module={module} />}
-        results={<SearchResultSectionCursos module={module} />}
-      />
+  return (
+    <LayoutSearchPage
+      searchLabel="Buscar curso"
+      module={module}
+      searchHeader={<SearchHeaderCursos module={module} />}
+      activeFilters={<ActiveFiltersCursos module={module} />}
+      filtersPanel={<FiltersPanelCursos module={module} />}
+      toolbar={<SortingOptionsCursos module={module} />}
+      results={<SearchResultSectionCursos module={module} />}
+    />
+  )
 }

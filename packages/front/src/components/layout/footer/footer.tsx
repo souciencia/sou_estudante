@@ -12,11 +12,13 @@ export const Footer = ({ className }: FooterProps) => {
         className,
       )}
     >
-      <p className={cn(
-        'inline-block',
-        'text-coadjuvant-xs leading-[1.6] text-footer-text', 
-        'bg-blue-900/50 rounded-2xl m-3 p-2'
-        )}>
+      <p
+        className={cn(
+          'inline-block',
+          'text-coadjuvant-xs leading-[1.6] text-footer-text',
+          'bg-blue-900/50 rounded-2xl m-3 p-2',
+        )}
+      >
         Um produto do <strong>SoU_Ciência · Unifesp</strong> · Dados públicos ·{' '}
         <a
           href="https://creativecommons.org/licenses/by/4.0/deed.pt-br"

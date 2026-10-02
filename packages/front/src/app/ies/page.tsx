@@ -6,20 +6,18 @@ import SearchResultSectionIes from '@/components/search/search-result-section/wr
 import { SortingOptionsIes } from '@/components/search/sorting-options/wrappers/sorting-options-ies/sorting-options-ies'
 import type { Module } from '@/lib/module'
 
-interface LayoutSearchPageCursosProps {
-  module?: Module
-}
-
-const module = '1'
+const module: Module = '1'
 
 export default function IesPage() {
-  return  <LayoutSearchPage
-        searchLabel="Buscar instituição"
-        module={module}
-        searchHeader={<SearchHeaderIes module={module} />}
-        activeFilters={<ActiveFiltersIes module={module} />}
-        filtersPanel={<FiltersPanelIes module={module} />}
-        toolbar={<SortingOptionsIes module={module} />}
-        results={<SearchResultSectionIes module={module} />}
-      />
+  return (
+    <LayoutSearchPage
+      searchLabel="Buscar instituição"
+      module={module}
+      searchHeader={<SearchHeaderIes module={module} />}
+      activeFilters={<ActiveFiltersIes module={module} />}
+      filtersPanel={<FiltersPanelIes module={module} />}
+      toolbar={<SortingOptionsIes module={module} />}
+      results={<SearchResultSectionIes module={module} />}
+    />
+  )
 }
