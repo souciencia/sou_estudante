@@ -6,6 +6,7 @@ import './globals.css'
 const sourceSans = Source_Sans_3({
   variable: '--font-protagonist',
   subsets: ['latin'],
+  style: ['normal', 'italic'],
 })
 
 const dmMono = DM_Mono({

@@ -11,6 +11,8 @@ scripts/
 .env
 .opencode/
 docs/imgs/
+random_curso.sh
+random_ies.sh
 
 # dependencies
 node_modules/
