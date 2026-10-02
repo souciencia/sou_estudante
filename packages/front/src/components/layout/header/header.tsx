@@ -27,7 +27,7 @@ export const Header = ({
           className,
         )}
       >
-        <BackLink label="Início" />
+        <BackLink label="Voltar" />
 
         <div className="flex items-center gap-3">
           {module && (
