@@ -191,6 +191,15 @@ body {
   }
 }
 
+/* ==========================================================================
+   Esqueleto de página profile de carregamento
+   ========================================================================== */
+.esqueleto {
+  animation: pulso-esqueleto 1.2s var(--ease-tide) infinite;
+  background: var(--color-plum-100);
+  border-radius: 10px;
+}
+
 /* Todo movimento respeita prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   *,
