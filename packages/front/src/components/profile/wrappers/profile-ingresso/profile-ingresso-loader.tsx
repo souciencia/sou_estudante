@@ -73,5 +73,5 @@ export const ProfileIngressoLoader = ({ id }: ProfileIngressoLoaderProps) => {
         )
     }
 
-    return <ProfileIngresso curso={curso} ofertas={curso.sisu.ofertas} />
+    return <ProfileIngresso curso={curso} />
 }
