@@ -3,13 +3,13 @@
 import { useRouter } from "next/navigation";
 import ProfileSkeleton, { ProfileSkeletonCard } from "../../profile-skeleton";
 import { useCurso } from "@/services/api/use-curso";
-import { ProfileIngressos } from "./profile-ingressos";
+import { ProfileIngresso } from "./profile-ingresso";
 
-interface ProfileIngressosLoaderProps {
+interface ProfileIngressoLoaderProps {
     id: string
 }
 
-export const ProfileIngressosLoader = ({ id }: ProfileIngressosLoaderProps) => {
+export const ProfileIngressoLoader = ({ id }: ProfileIngressoLoaderProps) => {
     const { curso, isLoading, error, notFound } = useCurso(id);
     const router = useRouter();
     const temSisu = curso?.sisu.tem_sisu
@@ -73,5 +73,5 @@ export const ProfileIngressosLoader = ({ id }: ProfileIngressosLoaderProps) => {
         )
     }
 
-    return <ProfileIngressos curso={curso} ofertas={curso.sisu.ofertas} />
+    return <ProfileIngresso curso={curso} ofertas={curso.sisu.ofertas} />
 }
