@@ -4,6 +4,8 @@ import { Profile } from "../..";
 import { Tag } from "@/components/ui/tag/tag";
 import Menu from "@/components/layout/menu/menu";
 import { MapPin } from "lucide-react";
+import { Route } from "@/components/ui/route/route";
+import { Callout } from "@/components/ui/callout/callout";
 
 interface ProfileIngressoProps {
     curso: Curso
@@ -47,6 +49,37 @@ export const ProfileIngresso = ({ curso, ofertas, module = '2' }: ProfileIngress
                 module="2"
                 />
             )}
+
+            {/* Card de ofertas */}
+
+            {/* Texto "“Escola pública” inclui..." */}
+
+            <Callout v="info" className="bg-accent/10 border-accent/50 text-accent-deep mt-5 mx-4">
+                A nota de corte que você está vendo é da plataforma Sisu — e é da <strong>primeira chamada</strong>. As universidades fazem várias chamadas e esta nota <strong>tende a cair</strong>: portanto, fique atento!
+                <br/>
+                Se sua nota estiver próxima, vale acompanhar até o fim: <strong>a lista de espera também resulta em matrículas.</strong>
+            </Callout>
+
+            <Callout v="info" className="mt-3 mx-4">
+                <strong>Prazos valem vaga.</strong> Inscrição, chamadas e matrícula têm datas definidas no edital de cada universidade — perder um prazo pode significar perder a vaga. Leia o edital e acompanhe o processo até o fim.
+            </Callout>
+
+            {/* Mesmo Curso em outros locais */}
+
+            <Profile.Section title="Continue sua rota" className="mt-1">
+                <Route
+                    module="3"
+                    variant="inline"
+                    title="Vou conseguir me manter?"
+                    description="Bolsas, cotas e apoios à permanência — Âncora"
+                />
+                <Route
+                    module="4"
+                    variant="inline"
+                    title="Conheça a instituição"
+                    description="Indicadores oficiais e perfil da IES — Telescópio"
+                />
+            </Profile.Section>
 
 
         </Profile>

@@ -31,7 +31,7 @@ export function ProfileHeader({
       className={cn('p-4 pb-3', className)}
     >
       <span className="mb-[6px] flex items-center gap-[6px] text-coadjuvant-xs font-bold uppercase tracking-[0.7px] text-accent-deep">
-        <IconModule module={module ?? '1'} />
+        {module !== '2' && <IconModule module={module ?? '1'} />}
         {badge}
       </span>
 
