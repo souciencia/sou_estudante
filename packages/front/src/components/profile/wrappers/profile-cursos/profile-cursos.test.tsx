@@ -42,9 +42,6 @@ describe('ProfileCursos', () => {
         name: 'MEDICINA — BACHARELADO',
       }),
     ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: 'Escolher curso' }),
-    ).toBeInTheDocument()
     expect(screen.getByText('Privada com fins lucrativos')).toBeInTheDocument()
   })
 

@@ -14,14 +14,15 @@ export interface ProfileRootProps {
 export function ProfileRoot({ children, module, className }: ProfileRootProps) {
   return (
     <ProfileContext.Provider value={{ module }}>
-      <div
+      <main
         data-module={module}
-        className={cn('flex w-full flex-col bg-card-surface', className)}
+        className={cn(
+          'mx-auto min-h-screen max-w-2xl bg-site-background pb-10',
+          className,
+        )}
       >
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6 sm:px-6">
-          {children}
-        </div>
-      </div>
+        {children}
+      </main>
     </ProfileContext.Provider>
   )
 }

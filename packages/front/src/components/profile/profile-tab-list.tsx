@@ -55,7 +55,7 @@ export function ProfileTabList({ children, className }: ProfileTabListProps) {
       role="tablist"
       onKeyDown={handleKeyDown}
       className={cn(
-        'flex w-full gap-1 rounded-[22px] border border-card-border bg-muted/60 p-1',
+        'mx-4 mt-3 flex gap-1 rounded-[14px] border border-plum-100 bg-site-background p-1',
         className,
       )}
     >
