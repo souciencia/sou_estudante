@@ -7,16 +7,24 @@ import { moduleFromPathname } from '@/lib/module'
 export const ShellHeader = () => {
   const pathname = usePathname()
   const isHome = pathname === '/'
+  const isInner =
+    pathname === '/cursos' ||
+    pathname === '/ies' ||
+    pathname === '/ingresso' ||
+    pathname === '/comparar' ||
+    pathname === '/permanencia'
 
   if (isHome) {
     return <Header variant="home" className="max-w-home" />
   }
 
-  return (
-    <Header
-      variant="inner"
-      module={moduleFromPathname(pathname)}
-      className="max-w-pages"
-    />
-  )
+  if (isInner) {
+    return (
+      <Header
+        variant="inner"
+        module={moduleFromPathname(pathname)}
+        className="max-w-pages"
+      />
+    )
+  }
 }

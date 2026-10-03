@@ -30,13 +30,13 @@ export const BackLink = ({
       type="button"
       onClick={handleClick}
       className={cn(
-        'inline-flex items-center gap-1 font-coadjuvant text-coadjuvant font-semibold text-fg-protagonist',
+        'cursor-pointer inline-flex items-center gap-[5px] text-coadjuvant-sm font-medium text-text-muted',
         'transition-colors hover:text-accent-deep',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
         className,
       )}
     >
-      <ChevronLeft className="size-5" aria-hidden="true" />
+      <ChevronLeft className="size-3.5 scale-125" aria-hidden="true" />
       {label}
     </button>
   )

@@ -1,5 +1,3 @@
-import { cn } from '@/utils/cn'
-
 export interface OverviewItem {
   label: string
   value?: string
@@ -21,19 +19,19 @@ export function ProfileOverview({ items, className }: ProfileOverviewProps) {
   }
 
   return (
-    <dl className={cn('flex flex-col gap-3', className)}>
+    <dl className={className}>
       {visible.map((item) => (
         <div
           key={item.label}
-          className="flex items-center justify-between gap-4 rounded-[20px] border border-card-border bg-card-surface px-5 py-4"
+          className="mb-2 flex items-center justify-between rounded-[14px] border border-plum-100 bg-card-surface px-4 py-3"
         >
-          <dt className="font-protagonist text-protagonist text-fg-muted">
+          <dt className="font-protagonist text-xs text-text-muted">
             {item.label}
           </dt>
-          <dd className="text-right font-title-protagonist text-protagonist font-bold text-fg-protagonist">
+          <dd className="text-right font-protagonist text-coadjuvant font-semibold text-text">
             {item.value}
             {item.note && (
-              <span className="ml-1 font-coadjuvant text-coadjuvant font-normal text-fg-muted">
+              <span className="ml-1 font-coadjuvant text-coadjuvant-xs text-text-muted">
                 · {item.note}
               </span>
             )}

@@ -38,7 +38,10 @@ export const ProfileCursosQuality = ({
   const ano = curso.enade?.ano_enade
 
   return (
-    <div data-module={module} className={cn('flex flex-col gap-6', className)}>
+    <div
+      data-module={module}
+      className={cn('flex flex-col gap-6 p-4', className)}
+    >
       <section className="flex flex-col gap-3">
         <span className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-fg-muted">
           Conceito Enade
@@ -50,13 +53,13 @@ export const ProfileCursosQuality = ({
             <span className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-fg-muted">
               Ciclo avaliativo
             </span>
-            <span className="font-title-protagonist text-protagonist-lg font-bold text-fg-protagonist">
+            <span className="font-protagonist text-protagonist font-bold text-fg-protagonist">
               {ano ?? '—'}
             </span>
-            <p className="font-protagonist text-protagonist text-fg-protagonist">
+            <p className="font-protagonist text-coadjuvant-sm text-text-muted">
               Nota oficial mais recente para este curso, na escala de 1 a 5.
             </p>
-            <span className="font-coadjuvant text-coadjuvant-sm text-fg-muted">
+            <span className="font-coadjuvant text-coadjuvant-xs text-fg-muted">
               Fonte: Inep · Enade {ano ?? '—'}
             </span>
           </div>
@@ -72,8 +75,11 @@ export const ProfileCursosQuality = ({
       </Callout>
 
       <Callout v="future">
-        <span className="inline-flex items-center gap-2">
-          <TrendingUp className="size-5 shrink-0" aria-hidden="true" />
+        <span className="inline-flex gap-2">
+          <TrendingUp
+            className="size-3 scale-125 translate-y-0.5"
+            aria-hidden="true"
+          />
           Em versões futuras: a progressão das notas ao longo dos ciclos, para
           ler tendências de avaliação.
         </span>

@@ -20,7 +20,7 @@ export function ProfileTabs({
 
   return (
     <ProfileTabsContext.Provider value={{ activeTab, setActiveTab, idBase }}>
-      <div className={cn('flex flex-col gap-6', className)}>{children}</div>
+      <div className={cn('', className)}>{children}</div>
     </ProfileTabsContext.Provider>
   )
 }

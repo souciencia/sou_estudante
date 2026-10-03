@@ -44,10 +44,10 @@ export const ProfileCursosRetentionCard = ({
       )}
     >
       <div className="flex items-end justify-between gap-4">
-        <span className="font-coadjuvant text-coadjuvant font-bold uppercase tracking-wide text-fg-coadjuvant">
+        <span className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-fg-muted">
           Desistência acumulada — 5 anos
         </span>
-        <span className="font-title-protagonist text-protagonist-xl font-bold leading-none text-fg-protagonist">
+        <span className="font-mono text-protagonist-lg font-bold leading-none text-fg-protagonist">
           {hasTaxa ? formatPercent(taxa) : '—'}
         </span>
       </div>
@@ -68,10 +68,10 @@ export const ProfileCursosRetentionCard = ({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-x-6 gap-y-1 font-protagonist text-protagonist-sm text-fg-protagonist">
+      <div className="flex flex-wrap gap-x-6 gap-y-1 font-protagonist text-coadjuvant-xs text-fg-muted">
         <span>
           Este curso:{' '}
-          <strong className="font-bold">
+          <strong className="font-bold text-text">
             {hasTaxa ? formatPercent(taxa) : '—'}
           </strong>
         </span>
@@ -92,14 +92,14 @@ export const ProfileCursosRetentionCard = ({
       </div>
 
       {coorte && (
-        <p className="font-coadjuvant text-coadjuvant-sm text-fg-muted">
-          Base de Fluxo/INEP, coorte {anoInicio}–{anoFim}
+        <p className="font-coadjuvant text-coadjuvant-xs text-fg-muted">
+          Base de Fluxo/INEP, coorte {anoInicio}-{anoFim}
         </p>
       )}
 
       <hr className="border-dashed border-card-border" />
 
-      <p className="font-protagonist text-protagonist text-fg-protagonist">
+      <p className="font-protagonist text-coadjuvant-xs text-fg-muted">
         A taxa varia muito conforme a área. Ela ganha sentido lado a lado com
         cursos parecidos — Pedagogia com Pedagogia, Medicina com Medicina.
       </p>
@@ -108,10 +108,10 @@ export const ProfileCursosRetentionCard = ({
         v="outline"
         module="5"
         onClick={onComparar}
-        className="self-start px-5 py-2"
+        className="cursor-pointer self-start px-3 py-[6px] rounded-[10px] text-coadjuvant-xs bg-accent/10 border-accent/70 font-semibold"
       >
         Comparar com outros cursos
-        <ArrowRight className="size-4" aria-hidden="true" />
+        <ArrowRight className="size-3 -translate-y-0.2" aria-hidden="true" />
       </Button>
     </section>
   )
