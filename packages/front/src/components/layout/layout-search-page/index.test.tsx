@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { MODULE_META } from '@/lib/module'
 import { LayoutSearchPage } from '.'
 
 const renderLayout = (module?: '1' | '4') =>
   render(
     <LayoutSearchPage
-      title="Busca de Cursos"
       module={module}
       searchHeader={<p>cabeçalho</p>}
       activeFilters={<p>filtros ativos</p>}
@@ -16,11 +16,16 @@ const renderLayout = (module?: '1' | '4') =>
   )
 
 describe('LayoutSearchPage', () => {
-  it('renders the title as the page heading', () => {
-    renderLayout()
+  it('renders the module hero as the page heading', () => {
+    renderLayout('1')
+
+    const { lead, accent } = MODULE_META['1'].page
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Busca de Cursos' }),
+      screen.getByRole('heading', {
+        level: 1,
+        name: `${lead} ${accent}`,
+      }),
     ).toBeInTheDocument()
   })
 
@@ -55,5 +60,17 @@ describe('LayoutSearchPage', () => {
     const { container } = renderLayout()
 
     expect(container.firstElementChild).not.toHaveAttribute('data-module')
+  })
+
+  it('renders only the hero when no domain slots are provided', () => {
+    render(<LayoutSearchPage module="2" />)
+
+    const { lead, accent } = MODULE_META['2'].page
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: `${lead} ${accent}` }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+    expect(screen.queryByText('Buscar')).not.toBeInTheDocument()
   })
 })

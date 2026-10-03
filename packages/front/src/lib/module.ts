@@ -7,10 +7,21 @@ export interface ModuleText {
   description: string
 }
 
+/**
+ * Copy do hero das páginas de módulo: título em duas partes (`lead` em destaque
+ * forte e `accent` em itálico colorido) + subtítulo.
+ */
+export interface ModulePageCopy {
+  lead: string
+  accent: string
+  subtitle: string
+}
+
 export interface ModuleMeta {
   badge: string
   title: string
   description: string
+  page: ModulePageCopy
   list: ModuleText
   href: string
 }
@@ -24,6 +35,11 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     badge: 'CARTA NÁUTICA',
     title: 'Escolher curso',
     description: 'Explore por área, localização e modalidade',
+    page: {
+      lead: 'Descobrir cursos',
+      accent: 'é traçar a rota.',
+      subtitle: 'Cursos do ensino superior no Brasil — fonte: Censo.',
+    },
     list: {
       title: 'Escolha um curso',
       description:
@@ -35,6 +51,12 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     badge: 'BÚSSOLA',
     title: 'Como ingressar',
     description: 'Notas de corte, vagas e cotas no Sisu',
+    page: {
+      lead: 'Ingresso',
+      accent: 'via Sisu',
+      subtitle:
+        'Notas de corte, vagas e modalidades de cota — tudo pelo Enem. Dados da edição mais recente do Sisu.',
+    },
     list: {
       title: 'Veja como ingressar',
       description:
@@ -46,6 +68,12 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     badge: 'ÂNCORA',
     title: 'Como permanecer',
     description: 'Cotas, assistência e apoios estudantis',
+    page: {
+      lead: 'Entrar é só o começo.',
+      accent: 'Permanecer também conta.',
+      subtitle:
+        'Bolsas, cotas e apoios que ajudam a chegar até a formatura. Veja, por curso, quantos estudantes contaram com cada apoio — com o ano de referência sempre à vista.',
+    },
     list: {
       title: 'Encontre apoio para permanecer',
       description:
@@ -57,6 +85,12 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     badge: 'TELESCÓPIO',
     title: 'Conhecer instituição',
     description: 'Indicadores, docentes e qualidade',
+    page: {
+      lead: 'Antes de embarcar,',
+      accent: 'olhe de perto.',
+      subtitle:
+        'Os indicadores oficiais da instituição — porte, cursos e corpo docente — traduzidos. O conceito de qualidade se lê no curso.',
+    },
     list: {
       title: 'Conheça a instituição',
       description:
@@ -68,6 +102,12 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     badge: 'SEXTANTE',
     title: 'Comparar cursos',
     description: 'Analise até 4 cursos lado a lado',
+    page: {
+      lead: 'Lado a lado,',
+      accent: 'a escolha fica mais clara.',
+      subtitle:
+        'Compare até quatro cursos pelos mesmos critérios. Cada linha mostra de onde vem o dado e em que ano — sem somar tudo numa nota única, porque o que pesa mais é decisão sua.',
+    },
     list: {
       title: 'Compare lado a lado',
       description:

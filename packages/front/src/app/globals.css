@@ -25,6 +25,11 @@
   --color-progress-bar-foreground: oklch(0.48 0.03 240);
   --color-progress-bar-background: oklch(0.94 0.01 75);
 
+  /* Cores · Callout (sobrescritas por [data-variant] em .callout) */
+  --color-callout-accent: var(--color-enade-warn);
+  --color-callout-surface: var(--color-enade-warn-surface);
+  --color-callout-accent-deep: var(--color-enade-warn);
+
   /* Cores · Acento escopado (sobrescrito por [data-module]) */
   --color-accent: var(--color-m1-accent);
   --color-accent-deep: var(--color-m1-deep);
@@ -46,6 +51,10 @@
   --color-navy-900: #1c2b3a;
   --color-plum-100: #efe6f5;
   --color-surface: #fff;
+
+  /* Cores · Rodapé */
+  --color-footer-background: hsla(186, 83%, 60%, 1);
+  --color-footer-text: #fff;
 
   /* Cores · Texto */
   --color-text: #1a0e23;
@@ -74,8 +83,14 @@
   --text-protagonist: 1rem; /* 16px */
   --text-protagonist-lg: 1.25rem; /* 20px */
   --text-protagonist-xl: 2.25rem; /* 36px — números de destaque (selo) */
+  --text-protagonist-2xl: clamp(
+    2rem,
+    4vw,
+    2.75rem
+  ); /* hero das páginas de módulo */
 
   /* Coadjuvante — apoio (button, tag, filtros, tips) */
+  --text-coadjuvant-xxs: 6px; /* 10px */
   --text-coadjuvant-xs: 0.625rem; /* 10px */
   --text-coadjuvant-sm: 0.75rem; /* 12px */
   --text-coadjuvant: 0.875rem; /* 14px */
@@ -83,6 +98,7 @@
 
   /* Formas */
   --radius-card: 20px;
+  --radius-callout: 18px;
 
   --container-home: 900px;
   --container-pages: 1100px;
@@ -115,6 +131,17 @@
   --color-accent: var(--color-m5-accent);
   --color-accent-deep: var(--color-m5-deep);
   --color-accent-fg: var(--color-m5-deep);
+}
+
+/* Temas do Callout (Scoped-Variable Pattern, sem React Context) */
+.callout[data-variant="future"] {
+  --color-callout-accent: var(--color-accent);
+  --color-callout-surface: color-mix(
+    in oklab,
+    var(--color-accent) 12%,
+    transparent
+  );
+  --color-callout-accent-deep: var(--color-accent-deep);
 }
 
 /* Base */

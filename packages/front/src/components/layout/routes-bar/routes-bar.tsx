@@ -30,7 +30,8 @@ function RouteLineIcon({ className }: { className?: string }) {
 
 /**
  * Barra de rotas exibida abaixo do cabeçalho nas páginas internas: replica os
- * módulos de navegação e destaca a rota ativa.
+ * módulos de navegação e destaca a rota ativa. A borda inferior atravessa a
+ * largura total; o conteúdo respeita o container das páginas.
  */
 export function RoutesBar({ module, className }: RoutesBarProps) {
   return (
@@ -38,43 +39,46 @@ export function RoutesBar({ module, className }: RoutesBarProps) {
       aria-label="Rotas"
       data-module={module}
       className={cn(
-        'flex items-center gap-5 overflow-x-auto border-b border-card-border bg-site-background px-5',
-        'mx-auto w-full max-w-pages',
+        'border-b border-card-border bg-site-background',
         className,
       )}
     >
-      <span className="flex shrink-0 items-center gap-[7px] py-3 text-coadjuvant-xs font-bold uppercase tracking-[0.9px] text-fg-muted">
-        <RouteLineIcon className="size-[14px]" />
-        Rota
-      </span>
+      <div className="mx-auto flex w-full max-w-pages items-center gap-5 overflow-x-auto px-5">
+        <span className="flex shrink-0 items-center gap-[7px] py-3 text-coadjuvant-xs font-bold uppercase tracking-[0.9px] text-fg-muted">
+          <RouteLineIcon className="size-[14px]" />
+          Rota
+        </span>
 
-      <ul className="flex items-center gap-6">
-        {MODULES.map((item) => {
-          const meta = MODULE_META[item]
-          const isActive = item === module
+        <span aria-hidden className="h-4 w-px shrink-0 bg-card-border" />
 
-          return (
-            <li key={item} data-module={item} className="shrink-0">
-              <Link
-                href={meta.href}
-                aria-current={isActive ? 'page' : undefined}
-                className={cn(
-                  'flex items-center gap-2 border-b-2 py-3 text-coadjuvant-sm transition-colors duration-fast',
-                  isActive
-                    ? 'border-accent font-semibold text-fg-protagonist'
-                    : 'border-transparent text-fg-muted hover:text-fg-protagonist',
-                )}
-              >
-                <span
-                  aria-hidden
-                  className="size-2 shrink-0 rounded-full bg-accent"
-                />
-                {meta.title}
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
+        <ul className="flex items-center gap-6">
+          {MODULES.map((item) => {
+            const meta = MODULE_META[item]
+            const isActive = item === module
+
+            return (
+              <li key={item} data-module={item} className="shrink-0">
+                <Link
+                  href={meta.href}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={cn(
+                    'flex items-center gap-2 border-b-2 py-3 text-coadjuvant-sm transition-colors duration-fast',
+                    isActive
+                      ? 'border-accent font-semibold text-accent-deep'
+                      : 'border-transparent text-fg-muted hover:text-fg-protagonist',
+                  )}
+                >
+                  <span
+                    aria-hidden
+                    className="size-2 shrink-0 rounded-full bg-accent"
+                  />
+                  {meta.title}
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
     </nav>
   )
 }

@@ -5,10 +5,10 @@ import { MODULES } from '@/lib/module'
 
 export default function Home() {
   return (
-    <div className="mx-auto w-full bg-site-background min-[860px]:max-w-home">
+    <div className="bg-surface rounded-b-lg mx-auto w-full min-[860px]:max-w-home">
       <Hero />
 
-      <div className="bg-site-background px-5 pb-8 pt-10">
+      <div className="px-5 pb-8 pt-10">
         <section>
           <div className="mb-2.5 text-center text-coadjuvant-xs font-bold uppercase tracking-[0.9px] text-text-muted">
             Por onde você quer começar?

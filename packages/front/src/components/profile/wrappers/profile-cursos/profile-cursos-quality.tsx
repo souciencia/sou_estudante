@@ -1,7 +1,7 @@
 import { TrendingUp } from 'lucide-react'
 import MarLegenda from '@/components/enade/formas-enade/mar-jegenda'
 import SeloEnade from '@/components/enade/selo-enade/selo-enade'
-import { Callout } from '@/components/ui/callout/callout'
+import { Callout } from '@/components/ui/callout'
 import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
 import { cn } from '@/utils/cn'

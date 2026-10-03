@@ -3,6 +3,12 @@
     "number_of_shards": 1,
     "number_of_replicas": 0,
     "analysis": {
+      "normalizer": {
+        "ascii_lower": {
+          "type": "custom",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      },
       "analyzer": {
         "brazilian_search": {
           "tokenizer": "standard",
@@ -15,7 +21,10 @@
     "properties": {
       "no_curso": {
         "type": "search_as_you_type",
-        "analyzer": "brazilian_search"
+        "analyzer": "brazilian_search",
+        "fields": {
+          "exato": { "type": "keyword", "normalizer": "ascii_lower" }
+        }
       }
     }
   }

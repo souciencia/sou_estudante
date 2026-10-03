@@ -33,17 +33,43 @@ func NewElasticsearchRepository(client *es.Client, index, field string) Reposito
 	}
 }
 
-// BuscarSugestoes consulta nomes no índice de dicionário usando prefixo
+// exactMatchBoost eleva o match exato do termo digitado ao topo das sugestões,
+// fazendo com que nomes idênticos (ignorando caixa e acentos) venham primeiro.
+const exactMatchBoost = 100
+
+// buildSugestoesQuery monta a query de sugestões: match exato com boost alto
+// seguido do match por prefixo (bool_prefix) como fallback.
+func buildSugestoesQuery(termo, field string) map[string]interface{} {
+	return map[string]interface{}{
+		"bool": map[string]interface{}{
+			"should": []map[string]interface{}{
+				{
+					"term": map[string]interface{}{
+						field + ".exato": map[string]interface{}{
+							"value": termo,
+							"boost": exactMatchBoost,
+						},
+					},
+				},
+				{
+					"multi_match": map[string]interface{}{
+						"query":  termo,
+						"type":   "bool_prefix",
+						"fields": []string{field},
+					},
+				},
+			},
+			"minimum_should_match": 1,
+		},
+	}
+}
+
+// BuscarSugestoes consulta nomes no índice de dicionário priorizando o match
+// exato e, em seguida, o match por prefixo.
 func (r *ElasticsearchRepository) BuscarSugestoes(ctx context.Context, termo string, limit int) ([]string, error) {
 	queryBody := map[string]interface{}{
-		"size": limit,
-		"query": map[string]interface{}{
-			"multi_match": map[string]interface{}{
-				"query":  termo,
-				"type":   "bool_prefix",
-				"fields": []string{r.field},
-			},
-		},
+		"size":  limit,
+		"query": buildSugestoesQuery(termo, r.field),
 	}
 
 	resp, err := elasticsearch.ExecuteSearch[map[string]string](ctx, r.client, r.index, queryBody)
