@@ -1,10 +1,9 @@
 'use client'
 
-import { Asterisk } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/utils/cn'
-import { useProfileContext } from './profile-context'
 import IconModule from '../ui/icon-module/iconModule'
+import { useProfileContext } from './profile-context'
 
 export interface ProfileHeaderProps {
   badge: string
@@ -26,10 +25,7 @@ export function ProfileHeader({
   const { module } = useProfileContext('Profile.Header')
 
   return (
-    <section
-      data-module={module}
-      className={cn('p-4 pb-3', className)}
-    >
+    <section data-module={module} className={cn('p-4 pb-3', className)}>
       <span className="mb-[6px] flex items-center gap-[6px] text-coadjuvant-xs font-bold uppercase tracking-[0.7px] text-accent-deep">
         {module !== '2' && <IconModule module={module ?? '1'} />}
         {badge}
@@ -43,9 +39,7 @@ export function ProfileHeader({
       </div>
 
       {subtitle && (
-        <p className="mb-2 text-coadjuvant text-text-muted">
-          {subtitle}
-        </p>
+        <p className="mb-2 text-coadjuvant text-text-muted">{subtitle}</p>
       )}
 
       {children && <>{children}</>}

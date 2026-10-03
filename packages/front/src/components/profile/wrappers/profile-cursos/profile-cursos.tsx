@@ -1,16 +1,15 @@
 'use client'
 
 import { Info, MapPin } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import Menu from '@/components/layout/menu/menu'
 import { Profile } from '@/components/profile'
 import { Button } from '@/components/ui/button/button'
 import { Route } from '@/components/ui/route/route'
+import { Tag } from '@/components/ui/tag/tag'
 import { MODULE_META, type Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
 import { buildOverviewItems } from './profile-cursos-overview-items'
 import { ProfileCursosQuality } from './profile-cursos-quality'
-import { Tag } from '@/components/ui/tag/tag'
-import Menu from '@/components/layout/menu/menu'
 
 interface ProfileCursosProps {
   curso: Curso
@@ -22,8 +21,6 @@ interface ProfileCursosProps {
  * específicos de curso (visão geral, qualidade e próximos passos).
  */
 export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
-  const router = useRouter()
-
   const nomeCurso = curso.curso?.no_curso ?? 'Curso não especificado'
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
@@ -37,7 +34,11 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
     <Profile module={module}>
       <Profile.TopBar backLabel="Resultados" backHref="/cursos">
         <div className="flex items-center gap-2">
-          <Tag label={'Escolher curso'} module={'1'} className='font-semibold px-[10px] py-[3px] tracking-[0.5px] mr-0' />
+          <Tag
+            label={'Escolher curso'}
+            module={'1'}
+            className="font-semibold px-[10px] py-[3px] tracking-[0.5px] mr-0"
+          />
           <Menu />
         </div>
       </Profile.TopBar>
@@ -47,7 +48,9 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
         title={titulo}
         subtitle={subtitulo}
       >
-        {temSisu && <Tag label={'Tem Sisu'} module={'2'} className='py-[2px]' />}
+        {temSisu && (
+          <Tag label={'Tem Sisu'} module={'2'} className="py-[2px]" />
+        )}
       </Profile.Header>
 
       {cidade && (

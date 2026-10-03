@@ -1,9 +1,9 @@
 interface Props {
-  className?: string;
+  className?: string
 }
 
-export default function ProfileSkeleton({ className = "" }: Props) {
-  return <div aria-hidden className={`esqueleto ${className}`} />;
+export default function ProfileSkeleton({ className = '' }: Props) {
+  return <div aria-hidden className={`esqueleto ${className}`} />
 }
 
 export function ProfileSkeletonCard() {
@@ -17,5 +17,5 @@ export function ProfileSkeletonCard() {
         <ProfileSkeleton className="h-5 w-24" />
       </div>
     </div>
-  );
+  )
 }

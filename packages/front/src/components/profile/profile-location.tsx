@@ -40,12 +40,16 @@ export function ProfileLocation({
       data-module={theme}
       className={cn(
         'flex items-center justify-between gap-3 border-b-2',
-        variant ? 'rounded-[14px] bg-[rgba(0,229,255,.06)] p-[0.875rem] border-accent' : 'border-[#B3E0F0] bg-[#F0F9FF] px-5 py-[0.875rem]',
+        variant
+          ? 'rounded-[14px] bg-[rgba(0,229,255,.06)] p-[0.875rem] border-accent'
+          : 'border-[#B3E0F0] bg-[#F0F9FF] px-5 py-[0.875rem]',
         className,
       )}
     >
-
-      <IconTile module={theme} className={variant ? 'h-[34px] w-[34px]' : undefined}>
+      <IconTile
+        module={theme}
+        className={variant ? 'h-[34px] w-[34px]' : undefined}
+      >
         {icon}
       </IconTile>
 
@@ -53,7 +57,12 @@ export function ProfileLocation({
         <span className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-accent-deep">
           {eyebrow}
         </span>
-        <span className={cn('font-protagonist text-protagonist font-bold leading-[1.1] tracking-[-0.2px]', variant ? 'text-text' : 'text-accent-deep')}>
+        <span
+          className={cn(
+            'font-protagonist text-protagonist font-bold leading-[1.1] tracking-[-0.2px]',
+            variant ? 'text-text' : 'text-accent-deep',
+          )}
+        >
           {value}
         </span>
         {campus && (
@@ -62,7 +71,12 @@ export function ProfileLocation({
           </span>
         )}
         {source && (
-          <span className={cn('font-coadjuvant text-coadjuvant-xs', variant ? 'text-text-muted' : 'text-accent-deep/60')}>
+          <span
+            className={cn(
+              'font-coadjuvant text-coadjuvant-xs',
+              variant ? 'text-text-muted' : 'text-accent-deep/60',
+            )}
+          >
             {source}
           </span>
         )}

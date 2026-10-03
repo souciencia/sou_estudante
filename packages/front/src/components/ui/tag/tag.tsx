@@ -8,7 +8,7 @@ type TagProps = HTMLAttributes<HTMLSpanElement> & {
 }
 
 export const Tag = ({ label, module, className, ...props }: TagProps) => {
-  if(module) {
+  if (module) {
     return (
       <span
         data-module={module}
@@ -25,17 +25,17 @@ export const Tag = ({ label, module, className, ...props }: TagProps) => {
     )
   }
 
-    return (
-      <span
-        {...props}
-        className={cn(
-          'mr-1 rounded-2xl border border-plum-100 px-2 py-1',
-          'bg-site-background font-coadjuvant text-text-muted text-coadjuvant-xs font-semibold',
-          'transition duration-300',
-          className,
-        )}
-      >
-        {label}
-      </span>
-    )
+  return (
+    <span
+      {...props}
+      className={cn(
+        'mr-1 rounded-2xl border border-plum-100 px-2 py-1',
+        'bg-site-background font-coadjuvant text-text-muted text-coadjuvant-xs font-semibold',
+        'transition duration-300',
+        className,
+      )}
+    >
+      {label}
+    </span>
+  )
 }

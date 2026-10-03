@@ -38,7 +38,10 @@ export const ProfileCursosQuality = ({
   const ano = curso.enade?.ano_enade
 
   return (
-    <div data-module={module} className={cn('flex flex-col gap-6 p-4', className)}>
+    <div
+      data-module={module}
+      className={cn('flex flex-col gap-6 p-4', className)}
+    >
       <section className="flex flex-col gap-3">
         <span className="font-coadjuvant text-coadjuvant-xs font-bold uppercase tracking-wide text-fg-muted">
           Conceito Enade
@@ -73,7 +76,10 @@ export const ProfileCursosQuality = ({
 
       <Callout v="future">
         <span className="inline-flex gap-2">
-          <TrendingUp className="size-3 scale-125 translate-y-0.5" aria-hidden="true" />
+          <TrendingUp
+            className="size-3 scale-125 translate-y-0.5"
+            aria-hidden="true"
+          />
           Em versões futuras: a progressão das notas ao longo dos ciclos, para
           ler tendências de avaliação.
         </span>

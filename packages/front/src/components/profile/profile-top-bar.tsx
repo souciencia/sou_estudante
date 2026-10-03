@@ -18,7 +18,9 @@ export function ProfileTopBar({
   className,
 }: ProfileTopBarProps) {
   return (
-    <header className={cn('flex items-center justify-between p-4 pb-0', className)}>
+    <header
+      className={cn('flex items-center justify-between p-4 pb-0', className)}
+    >
       <BackLink label={backLabel} fallbackHref={backHref} />
       {children}
     </header>
