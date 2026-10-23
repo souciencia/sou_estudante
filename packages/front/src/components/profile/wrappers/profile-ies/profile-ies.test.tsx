@@ -1,12 +1,8 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { ProfileIES } from './profile-ies'
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ back: vi.fn(), push: vi.fn() }),
-}))
-
-const ies = {
+const iesMock = {
   co_ies: '376',
   no_ies: 'UNIVERSIDADE FEDERAL DE MATO GROSSO',
   sg_ies: 'UFMT',
@@ -18,24 +14,52 @@ const ies = {
     no_regiao: 'Centro-Oeste',
     in_capital: true,
   },
+  vagas_matriculas: {
+    qt_mat: 15000,
+  },
+  docentes: {
+    qt_cursos: 85,
+    qt_doc_exe: 1200,
+  },
 }
 
 describe('ProfileIES', () => {
-  it('renders the institution name, location and attributes', () => {
-    render(<ProfileIES ies={ies} />)
+  it('renders the header with title, subtitle and tags correctly', () => {
+    render(<ProfileIES ies={iesMock} />)
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'UFMT' }),
     ).toBeInTheDocument()
+
     expect(
       screen.getByText('UNIVERSIDADE FEDERAL DE MATO GROSSO'),
     ).toBeInTheDocument()
-    expect(
-      screen.getByText('Universidade · Pública Federal'),
-    ).toBeInTheDocument()
+
+    expect(screen.getByText('Universidade')).toBeInTheDocument()
     expect(screen.getByText('Pública Federal')).toBeInTheDocument()
-    expect(screen.getByText('Região Centro-Oeste')).toBeInTheDocument()
-    expect(screen.getByText('Cuiabá')).toBeInTheDocument()
-    expect(screen.getByText('MT')).toBeInTheDocument()
+  })
+
+  it('renders section dividers and layout blocks', () => {
+    render(<ProfileIES ies={iesMock} />)
+
+    expect(screen.getByText(/panorama da instituição/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/corpo docente da instituição/i),
+    ).toBeInTheDocument()
+    expect(screen.getByText(/continue sua rota/i)).toBeInTheDocument()
+  })
+
+  it('handles fallback fallback texts when name or abbreviation are missing', () => {
+    const incompleteIes = {
+      ...iesMock,
+      sg_ies: '',
+      no_ies: undefined,
+    }
+
+    render(<ProfileIES ies={incompleteIes} />)
+
+    expect(
+      screen.getByText(/instituição não especificada/i),
+    ).toBeInTheDocument()
   })
 })

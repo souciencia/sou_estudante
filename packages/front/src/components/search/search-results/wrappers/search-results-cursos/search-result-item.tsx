@@ -93,11 +93,11 @@ export function SearchResultItem({
           subtitle={`${instituicao} • ${localizacaoCompleta}`}
         />
       </Card.Header>
-      <hr className="border-t-[1px] border-plum-100 my-2 relative -z-20" />
+      <hr className="border-t-[1px] border-border-secondary my-2 relative -z-20" />
 
       {tags.length > 0 && <Card.Tags source={tags} />}
 
-      <hr className="border-t-[1px] border-plum-100 my-2 relative -z-20" />
+      <hr className="border-t-[1px] border-border-secondary my-2 relative -z-20" />
       <Card.ProgressBar
         title="Taxa de desistência acumulada (5 anos)"
         percentage={
@@ -108,7 +108,7 @@ export function SearchResultItem({
         emptyHint="sem dados"
       />
 
-      <hr className="border-t-[1px] border-plum-100 my-2 relative -z-20" />
+      <hr className="border-t-[1px] border-border-secondary my-2 relative -z-20" />
       {tagsBottom.length > 0 && <Card.Tags source={tagsBottom} />}
     </>
   )

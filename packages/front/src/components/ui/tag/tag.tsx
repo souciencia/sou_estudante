@@ -32,7 +32,7 @@ export const Tag = ({
     curso: 'bg-tag-curso-surface border-tag-curso-border text-tag-curso-deep',
     blue: 'bg-sky-100 border-sky-600 text-sky-800',
     green: 'bg-green-100 border-green-600 text-green-800',
-    none: 'bg-site-background border-plum-100 text-fg-muted',
+    none: 'bg-surface-deep/30 border-border-secondary text-fg-muted',
   }
 
   return (
