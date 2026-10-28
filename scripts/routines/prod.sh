@@ -75,6 +75,7 @@ run_prod() {
   # 401 indica que o Elasticsearch está no ar (a autenticação está habilitada).
   wait_http "Elasticsearch" "http://localhost:9200/" "200 401"
   wait_http "API" "http://localhost:8080/healthz" "200"
+  wait_http "API (ES)" "http://localhost:8080/readyz" "200"
   wait_http "Frontend" "http://localhost:3000/" "200"
 
   print_step "Status dos containers"
