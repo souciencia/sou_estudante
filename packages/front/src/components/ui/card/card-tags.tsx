@@ -25,7 +25,7 @@ const isCardTag = (item: unknown): item is CardTag =>
 
 export const CardTags = ({ className, source }: Props) => {
   return (
-    <div className={cn('flex flex-wrap gap-y-1 py-1 my-2', className)}>
+    <div className={cn('flex flex-wrap gap-y-1  my-2', className)}>
       {source.map((item, index) => {
         if (isValidElement(item)) {
           return <Fragment key={item.key ?? index}>{item}</Fragment>
