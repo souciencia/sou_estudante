@@ -9,6 +9,7 @@ services:
       - xpack.security.enabled=true
       - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ES_JAVA_OPTS=${ES_JAVA_OPTS:--Xms1g -Xmx1g}
     volumes:
       - elsou-data:/usr/share/elasticsearch/data
     networks:
