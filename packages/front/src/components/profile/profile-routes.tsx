@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Module } from '@/lib/module'
 import { buildIesHref } from '@/lib/profile-links'
 import { cn } from '@/utils/cn'
+import { Signpost } from 'lucide-react'
 
 /**
  * Rotas do perfil com nomes enxutos: apenas o texto exibido e o href de cada
@@ -55,40 +56,40 @@ export function ProfileRoutes({
       aria-label="Rotas"
       data-module={module}
       className={cn(
-        'border-b border-border-primary bg-surface-lv2-lv2-lv1',
+        'border-b border-border-primary bg-surface-lv2-lv2-lv1 flex flex-wrap items-center w-full gap-2 sm:gap-4 px-4',
         className,
       )}
     >
-      <div className="mx-auto flex w-full max-w-pages items-center gap-6 overflow-x-auto px-5">
-        <ul className="flex items-center gap-6">
-          {(Object.keys(MODULE_META) as RouteKey[]).map((item) => {
-            const meta = MODULE_META[item]
-            const isActive = item === module
-            const href = routeHref(item, courseId, iesId)
+      <span className='flex items-center gap-1 border-r border-border-primary text-2xs font-bold text-fg-muted pr-4 shrink-0'>
+        <Signpost className='size-3'/>
+        ROTA
+      </span>
 
-            return (
-              <li key={item} data-module={item} className="shrink-0">
-                <Link
-                  href={href}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={cn(
-                    'flex items-center gap-2 border-b-2 py-3 text-xs transition-colors duration-fast',
-                    isActive
-                      ? 'border-accent font-semibold text-accent-deep'
-                      : 'border-transparent text-fg-muted hover:text-fg',
-                  )}
-                >
-                  <span
-                    aria-hidden
-                    className="size-2 shrink-0 rounded-full bg-accent"
-                  />
-                  {meta.title}
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
+      {(Object.keys(MODULE_META) as RouteKey[]).map((item) => {
+        const meta = MODULE_META[item]
+        const isActive = item === module
+        const href = routeHref(item, courseId, iesId)
+
+        return (
+          <Link
+            href={href}
+            aria-current={isActive ? 'page' : undefined}
+            key={item} data-module={item}
+            className={cn(
+              'flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-xs transition-colors duration-fast text-center',
+              isActive
+                ? 'border-accent font-semibold text-accent-deep'
+                : 'border-transparent text-fg-muted hover:text-fg',
+            )}
+          >
+            <span
+              aria-hidden
+              className="size-2 shrink-0 rounded-full bg-accent"
+            />
+            {meta.title}
+          </Link>
+        )
+      })}
     </nav>
   )
 }
