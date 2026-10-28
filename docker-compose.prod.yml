@@ -121,9 +121,27 @@ services:
         condition: service_healthy
     profiles: ["bulk"]
 
+  caddy:
+    image: caddy:2
+    container_name: se_caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - web_net
+    depends_on:
+      - se_front
+    restart: unless-stopped
+
 volumes:
   elsou-data:
     driver: local
+  caddy_data:
+  caddy_config:
 
 networks:
   web_net:
