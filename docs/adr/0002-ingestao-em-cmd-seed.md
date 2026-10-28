@@ -17,8 +17,9 @@ dentro da API.
 
 - A API pode rodar com credencial somente leitura; a escrita fica isolada no job.
 - Um teste (`cmd/api/deps_test.go`) impede que a API passe a depender da ingestão.
-- O seed só carrega índices inexistentes ou vazios; reingerir exige apagar o
-  índice, e uma falha no meio pode deixar dados parciais (ver seção 9 de
-  [analise-sonnet.md](../analise-sonnet.md)).
+- O seed sempre reingere por troca atômica (blue/green): indexa num índice novo
+  datado e troca o alias `-latest`, apagando o anterior. Uma falha no meio deixa
+  o alias no índice antigo, sem dados parciais dados como completos (ver seção 9
+  de [analise-sonnet.md](../analise-sonnet.md)).
 - O modelo de documento (`cursos.Curso`, `ies.IES`) é compartilhado entre os
   dois lados.
