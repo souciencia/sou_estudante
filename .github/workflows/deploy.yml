@@ -1,0 +1,89 @@
+name: Deploy na VM
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-vm
+  cancel-in-progress: false
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  test:
+    uses: ./.github/workflows/test.yml
+
+  deploy:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Configura a chave SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for var in SSH_HOST SSH_USER DEPLOY_PATH SSH_PRIVATE_KEY SSH_KNOWN_HOSTS; do
+            if [ -z "${!var}" ]; then
+              echo "ERRO: secret ${var} não configurado" >&2
+              exit 1
+            fi
+          done
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<EOF
+          Host deploy
+            HostName ${SSH_HOST}
+            User ${SSH_USER}
+            Port ${SSH_PORT}
+            IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+            ServerAliveInterval 30
+          EOF
+          chmod 600 ~/.ssh/config
+      - name: Sincroniza o código (rsync)
+        run: |
+          set -euo pipefail
+          # --delete não remove caminhos excluídos: .env, data/ e .git do
+          # servidor são preservados.
+          rsync -az --delete \
+            --rsync-path="mkdir -p '${DEPLOY_PATH}' && rsync" \
+            --include='/.env.example' \
+            --exclude='/.env*' \
+            --exclude='/data/' \
+            --exclude='.git/' \
+            --exclude='/.github/' \
+            --exclude='node_modules/' \
+            --exclude='.next/' \
+            --exclude='coverage/' \
+            --exclude='packages/api/tmp/' \
+            ./ "deploy:${DEPLOY_PATH}/"
+      - name: Publica e verifica a saúde
+        run: |
+          set -euo pipefail
+          # O setup.sh --prod orquestra: sobe o ES, gera as API keys dentro do
+          # container, constrói as imagens, sobe os serviços e verifica /readyz.
+          ssh deploy "cd '${DEPLOY_PATH}' && IMAGE_TAG='${GITHUB_SHA}' bash setup.sh --prod"
+      - name: Remove a chave SSH
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
