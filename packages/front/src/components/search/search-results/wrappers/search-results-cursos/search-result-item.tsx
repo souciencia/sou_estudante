@@ -123,24 +123,26 @@ export function SearchResultItem({
   return (
     <div className="space-y-2" data-module={module}>
       <Card module={module}>
-        <div className="flex flex-col items-start gap-3">
-          {comparing && (
-            <Checkbox
-              module={module}
-              checked={selected}
-              disabled={disabled}
-              onChange={() => onToggle?.(String(id))}
-              aria-label={`Comparar ${nomeCurso}`}
-              className="size-6"
-            />
-          )}
-          <Link
-            href={detailHref}
-            aria-label={`Ver detalhes do curso ${nomeCurso}`}
-            className="block min-w-0 flex-1 rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
-          >
-            {cardContent}
-          </Link>
+        <div className="flex flex-col items-start gap-2">
+          <div className='flex gap-4'>
+            {comparing && (
+              <Checkbox
+                module={module}
+                checked={selected}
+                disabled={disabled}
+                onChange={() => onToggle?.(String(id))}
+                aria-label={`Comparar ${nomeCurso}`}
+                className="size-6 mt-3"
+              />
+            )}
+            <Link
+              href={detailHref}
+              aria-label={`Ver detalhes do curso ${nomeCurso}`}
+              className="block min-w-0 flex-1 rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
+            >
+              {cardContent}
+            </Link>
+          </div>
           {temSisu && to !== 'ingresso' && (
             <Link
               href={`/ingresso/${id}`}
