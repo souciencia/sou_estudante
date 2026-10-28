@@ -72,8 +72,9 @@ run_prod() {
   esac
 
   print_step "Verificando a saúde dos serviços"
-  # 401 indica que o Elasticsearch está no ar (a autenticação está habilitada).
-  wait_http "Elasticsearch" "http://localhost:9200/" "200 401"
+  # O Elasticsearch não publica porta no host: já foi validado acima, dentro do
+  # container (wait_for_elasticsearch_in_container). A API confirma a conexão
+  # com o ES via /readyz.
   wait_http "API" "http://localhost:8080/healthz" "200"
   wait_http "API (ES)" "http://localhost:8080/readyz" "200"
   wait_http "Frontend" "http://localhost:3000/" "200"
