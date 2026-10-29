@@ -9,6 +9,7 @@ services:
       - xpack.security.enabled=true
       - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ES_JAVA_OPTS=${ES_JAVA_OPTS:--Xms1g -Xmx1g}
     volumes:
       - elsou-data:/usr/share/elasticsearch/data
     networks:
@@ -93,6 +94,12 @@ services:
     depends_on:
       se_api:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/ || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
     restart: unless-stopped
 
 volumes:

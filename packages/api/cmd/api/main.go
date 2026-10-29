@@ -90,6 +90,30 @@ func newRouter(esClient *es.Client, cfg *config.Config) http.Handler {
 		httpx.WriteJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})
 
+	// /readyz valida a comunicação com o Elasticsearch (health check semântico).
+	mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) {
+		if esClient == nil {
+			httpx.WriteJSON(w, http.StatusServiceUnavailable, map[string]string{"status": "unavailable"})
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+		defer cancel()
+
+		res, err := esClient.Ping(esClient.Ping.WithContext(ctx))
+		if err != nil {
+			httpx.WriteJSON(w, http.StatusServiceUnavailable, map[string]string{"status": "unavailable"})
+			return
+		}
+		defer res.Body.Close()
+
+		if res.IsError() {
+			httpx.WriteJSON(w, http.StatusServiceUnavailable, map[string]string{"status": "unavailable"})
+			return
+		}
+		httpx.WriteJSON(w, http.StatusOK, map[string]string{"status": "ok"})
+	})
+
 	handler := middlewares.Recover(mux)
 	handler = middlewares.AccessLog(handler)
 	handler = middlewares.RequestID(handler)

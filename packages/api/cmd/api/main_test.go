@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"api_estudante/internal/config"
+	"api_estudante/internal/testutil"
 )
 
 // newTestRouter monta o roteador com um cliente de Elasticsearch nil. Os testes
@@ -107,6 +108,42 @@ func TestRouterHealthz(t *testing.T) {
 	}
 	if body["status"] != "ok" {
 		t.Errorf("status = %q, esperado ok", body["status"])
+	}
+}
+
+func TestRouterReadyzIndisponivelComESFora(t *testing.T) {
+	esClient := testutil.NewESClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusServiceUnavailable)
+	})
+	router := newRouter(esClient, &config.Config{
+		DictIndexName:    "dicionario-cursos",
+		IESDictIndexName: "dicionario-ies",
+	})
+
+	req := httptest.NewRequest(http.MethodGet, "/readyz", nil)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusServiceUnavailable {
+		t.Fatalf("GET /readyz com ES fora = %d, esperado 503", rec.Code)
+	}
+}
+
+func TestRouterReadyzDisponivelComESSaudavel(t *testing.T) {
+	esClient := testutil.NewESClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	router := newRouter(esClient, &config.Config{
+		DictIndexName:    "dicionario-cursos",
+		IESDictIndexName: "dicionario-ies",
+	})
+
+	req := httptest.NewRequest(http.MethodGet, "/readyz", nil)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("GET /readyz com ES saudável = %d, esperado 200", rec.Code)
 	}
 }
 

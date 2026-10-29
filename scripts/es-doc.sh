@@ -11,27 +11,30 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPTS_DIR="$ROOT/scripts"
+
+# Variáveis exigidas pelas libs antes de carregá-las.
 ENV_FILE="${ENV_FILE:-$ROOT/.env}"
+ENV_EXAMPLE_FILE="$ROOT/.env.example"
+DRY_RUN=false
+
+source "$SCRIPTS_DIR/lib/log.sh"
+source "$SCRIPTS_DIR/lib/util.sh"
+source "$SCRIPTS_DIR/lib/env.sh"
+
 ES_HOST_URL="${ES_HOST_URL:-http://localhost:9200}"
-
-die() { printf 'erro: %s\n' "$*" >&2; exit 1; }
-
-env_value() {
-  # `|| true`: variável ausente devolve vazio em vez de abortar (set -e + pipefail).
-  { grep -E "^[[:space:]]*$1=" "$ENV_FILE" || true; } | tail -n1 | cut -d= -f2- | tr -d '\r"'"'"
-}
 
 [[ $# -ge 1 && $# -le 2 ]] || die "uso: $0 <cursos|ies> [id]"
 [[ -f "$ENV_FILE" ]] || die "$ENV_FILE não encontrado (rode ./setup.sh)"
-command -v curl >/dev/null || die "curl não encontrado"
+require_command curl
 
 case "$1" in
-  cursos) index="$(env_value CURSOS_INDEX_NAME)"; index="${index:-cursos}-latest" ;;
-  ies)    index="$(env_value IES_INDEX_NAME)"; index="${index:-ies}-latest" ;;
+  cursos) index="$(get_env_var CURSOS_INDEX_NAME)"; index="${index:-cursos}-latest" ;;
+  ies)    index="$(get_env_var IES_INDEX_NAME)"; index="${index:-ies}-latest" ;;
   *)      die "índice inválido: $1 (use cursos ou ies)" ;;
 esac
 
-api_key="$(env_value ELASTICSEARCH_APIKEY)"
+api_key="$(get_env_var ELASTICSEARCH_APIKEY)"
 [[ -n "$api_key" ]] || die "ELASTICSEARCH_APIKEY vazia em $ENV_FILE"
 
 # A chave vai por arquivo de config do curl para não aparecer em `ps`.
