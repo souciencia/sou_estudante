@@ -19,16 +19,15 @@ const VARIANTS: Record<
   { container: string; link: string; button: string }
 > = {
   neutral: {
-    container: 'border border-border-primary bg-surface-lv2',
+    container: 'border border-m5-accent bg-m5-accent/70 hover:bg-m5-accent/85',
     link: 'text-fg',
     button: 'text-fg-muted hover:bg-muted hover:text-fg',
   },
   accent: {
-    container: 'bg-m5-accent',
+    container: 'bg-m5-accent hover:bg-m5-accent/80',
     link: 'text-white',
     button: 'text-white',
   },
-  
 }
 
 /**
