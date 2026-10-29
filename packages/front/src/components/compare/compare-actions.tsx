@@ -19,15 +19,16 @@ const VARIANTS: Record<
   { container: string; link: string; button: string }
 > = {
   neutral: {
-    container: 'border-border-primary bg-surface-lv2',
+    container: 'border border-border-primary bg-surface-lv2',
     link: 'text-fg',
     button: 'text-fg-muted hover:bg-muted hover:text-fg',
   },
   accent: {
-    container: 'border-accent bg-accent/20',
-    link: 'text-accent-deep',
-    button: 'text-accent-deep hover:bg-accent/10',
+    container: 'bg-m5-accent',
+    link: 'text-white',
+    button: 'text-white',
   },
+  
 }
 
 /**
@@ -48,7 +49,7 @@ export function CompareActions({
     <div
       data-module={module}
       className={cn(
-        'flex items-center gap-1 rounded-full border py-1 pl-[1.15rem] pr-1',
+        'flex items-center gap-1 rounded-control py-1 pl-[1.15rem] pr-1',
         colors.container,
         className,
       )}
