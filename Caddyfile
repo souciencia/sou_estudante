@@ -5,13 +5,13 @@
 #      para o IP da VM). O Caddy emite o certificado TLS automaticamente, desde
 #      que as portas 80 e 443 estejam liberadas.
 #   2. Gere o hash da senha do basic auth e substitua HASH_AQUI:
-#        docker run --rm -it caddy:2 caddy hash-caddy-pass-7070
+#        podman run --rm -it docker.io/library/caddy:2 caddy hash-password
 #
 # Sem domínio: use <IP-com-hífens>.sslip.io ou um subdomínio DuckDNS.
 # Evite http://<IP> puro, pois a senha do basic auth trafegaria em claro.
 
 http://45.159.173.16.nip.io/ {
-	basicauth {
+	basic_auth {
 		testador HASH_AQUI
 	}
 	reverse_proxy se_front:3000

@@ -2,7 +2,7 @@
 
 O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e universidades, feita para ajudar estudantes e pesquisadores.
 
-> Documentação técnica na pasta [docs/](docs/): [diretrizes](docs/00.guidelines.md), [arquitetura](docs/00.arquitetura.md), [banco de dados](docs/10.database.md), [API](docs/20.api.md), [front-end](docs/30.frontend.md), [operação/deploy](docs/40.operacao.md), [glossário](docs/glossario.md) e [decisões (ADR)](docs/adr/README.md). Cada pacote tem seu README: [api](packages/api/README.md) e [front](packages/front/README.md).
+> Documentação técnica na pasta [docs/](docs/): [diretrizes](docs/00.guidelines.md), [arquitetura](docs/00.arquitetura.md), [banco de dados](docs/10.database.md), [API](docs/20.api.md), [front-end](docs/30.frontend.md), [deploy](docs/40.deploy.md), [glossário](docs/glossario.md) e [decisões (ADR)](docs/adr/README.md). Cada pacote tem seu README: [api](packages/api/README.md) e [front](packages/front/README.md).
 
 ## Arquitetura
 
