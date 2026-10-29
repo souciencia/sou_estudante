@@ -7,15 +7,10 @@ services:
     environment:
       - node.name=${ESNODE01_NAME:-se_es01}
       - discovery.type=single-node
-      - bootstrap.memory_lock=true
       - xpack.security.enabled=true
       - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - ES_JAVA_OPTS=${ES_JAVA_OPTS:--Xms1g -Xmx1g}
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     volumes:
       - elsou-data:/usr/share/elasticsearch/data
     networks:
@@ -122,7 +117,7 @@ services:
     profiles: ["bulk"]
 
   caddy:
-    image: caddy:2
+    image: docker.io/library/caddy:2
     container_name: se_caddy
     ports:
       - "80:80"
