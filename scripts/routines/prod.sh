@@ -7,7 +7,7 @@
 validate_env_essentials() {
   local var value missing=0
 
-  for var in ELASTIC_PASSWORD; do
+  for var in ELASTIC_PASSWORD SE_HOST SE_AUTH_USER SE_AUTH_HASH; do
     value="$(get_env_var "$var")"
     if is_blank "$value"; then
       printf 'ERRO: variável %s vazia ou ausente no .env\n' "$var" >&2

@@ -52,7 +52,7 @@ O deploy não roda o seed automaticamente.
 
 ## Checklist antes de subir produção
 
-- [ ] `Caddyfile` com domínio real e hash de senha válido (sem `HASH_AQUI`).
+- [ ] `.env` com `SE_HOST` (domínio real) e `SE_AUTH_HASH` válido (o `Caddyfile` usa `{$VAR}` e não deve ser editado).
 - [ ] Portas 80/443 da VM liberadas e domínio com registro A correto.
 - [ ] `.env` criado em `DEPLOY_PATH`, com `ELASTIC_PASSWORD` coerente com o volume do ES.
 - [ ] `ELASTICSEARCH_APIKEY` e `ELASTICSEARCH_BULK_APIKEY` geradas contra o ES de produção (o `setup.sh --prod` faz isso automaticamente via `podman exec`).

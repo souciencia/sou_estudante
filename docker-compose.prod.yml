@@ -119,6 +119,10 @@ services:
   caddy:
     image: docker.io/library/caddy:2
     container_name: se_caddy
+    environment:
+      - SE_HOST=${SE_HOST}
+      - SE_AUTH_USER=${SE_AUTH_USER}
+      - SE_AUTH_HASH=${SE_AUTH_HASH}
     ports:
       - "80:80"
       - "443:443"
