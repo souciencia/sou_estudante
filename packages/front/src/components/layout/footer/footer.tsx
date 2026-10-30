@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { SouCienciaLogo } from '@/components/ui/sou-ciencia-logo'
 import { MODULE_META, MODULES } from '@/lib/module'
 import { PAGE_CONTAINER_CLASS, pageContainer } from '@/lib/page-container'
 import { cn } from '@/utils/cn'
@@ -23,19 +24,22 @@ export const Footer = ({ className }: FooterProps) => {
     <footer className={cn('mx-auto w-full my-4', width, className)}>
       <div className="bg-surface-footer text-on-dark px-5 py-10 rounded-panel shadw">
         <div className="grid gap-8 text-center md:grid-cols-2 md:text-left">
-          <p className="text-xs leading-[1.6] text-on-dark">
-            Um produto do <strong>SoU_Ciência · Unifesp</strong> · Dados
-            públicos ·{' '}
-            <a
-              href="https://creativecommons.org/licenses/by/4.0/deed.pt-br"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-dark"
-            >
-              Licença Creative Commons BY 4.0
-            </a>{' '}
-            · Censo da Educação Superior (INEP) · e-MEC · Sisu
-          </p>
+          <div className="flex flex-col items-center gap-5 md:items-start">
+            <SouCienciaLogo className="h-auto w-full max-w-xs" />
+            <p className="text-xs leading-[1.6] text-on-dark">
+              Um produto do <strong>SoU_Ciência · Unifesp</strong> · Dados
+              públicos ·{' '}
+              <a
+                href="https://creativecommons.org/licenses/by/4.0/deed.pt-br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-dark"
+              >
+                Licença Creative Commons BY 4.0
+              </a>{' '}
+              · Censo da Educação Superior (INEP) · e-MEC · Sisu
+            </p>
+          </div>
 
           <nav aria-label="Rodapé" className="grid gap-8 md:grid-cols-2">
             <section>
