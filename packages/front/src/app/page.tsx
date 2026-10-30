@@ -5,7 +5,7 @@ import { MODULES } from '@/lib/module'
 
 export default function Home() {
   return (
-    <div className="bg-surface-lv2 rounded-b-lg mx-auto w-full min-[860px]:max-w-home">
+    <div className="bg-surface-lv2 rounded-b-lg mx-auto w-full min-[860px]:max-w-home shadw">
       <Hero />
 
       <div className="px-5 pb-8 pt-10">

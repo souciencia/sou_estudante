@@ -21,7 +21,7 @@ export const Footer = ({ className }: FooterProps) => {
 
   return (
     <footer className={cn('mx-auto w-full my-4', width, className)}>
-      <div className="bg-surface-footer text-on-dark px-5 py-10 rounded-panel">
+      <div className="bg-surface-footer text-on-dark px-5 py-10 rounded-panel shadw">
         <div className="grid gap-8 text-center md:grid-cols-2 md:text-left">
           <p className="text-xs leading-[1.6] text-on-dark">
             Um produto do <strong>SoU_Ciência · Unifesp</strong> · Dados
