@@ -21,8 +21,8 @@ export function CompareBar({ module }: CompareBarProps) {
   }
 
   return (
-    <div className="mt-4 flex items-center justify-between gap-4 rounded-panel border border-accent/40 bg-accent/10 p-4">
-      <Typo v="accent" s="sm" t="p">
+    <div className="mt-4 flex items-center justify-between gap-4 rounded-panel border border-m5-accent/40 bg-m5-accent/10 p-4">
+      <Typo v="accent" s="sm" t="p" className="text-m5-deep">
         {ids.length} de {MAX_COMPARE} cursos selecionados para comparar
       </Typo>
       <CompareActions module={module} />
