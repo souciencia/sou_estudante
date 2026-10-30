@@ -23,7 +23,7 @@ describe('IesResultItem', () => {
     expect(
       screen.getByText('UNIVERSIDADE FEDERAL DO MATO GROSSO'),
     ).toBeInTheDocument()
-    expect(screen.getByText('• UFMT')).toBeInTheDocument()
+    expect(screen.getByText('UFMT')).toBeInTheDocument()
     expect(screen.getByText('Pública Federal')).toBeInTheDocument()
     expect(screen.getByText('Universidade')).toBeInTheDocument()
     expect(screen.getByText('Centro-Oeste')).toBeInTheDocument()
