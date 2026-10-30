@@ -23,13 +23,14 @@ describe('ShellHeader', () => {
     vi.mocked(usePathname).mockReset()
   })
 
-  it('shows the home header, without a back button, on the home page', () => {
+  it('shows the home header with the site name linking home', () => {
     renderAt('/')
 
     expect(screen.getByRole('banner')).toHaveClass('max-w-home')
-    expect(
-      screen.queryByRole('button', { name: /voltar/i }),
-    ).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /SoU_Estudante/ })).toHaveAttribute(
+      'href',
+      '/',
+    )
   })
 
   it.each([
@@ -40,11 +41,14 @@ describe('ShellHeader', () => {
     '/permanencia',
     '/metodologia',
     '/sobre',
-  ])('shows the inner header with a back button on %s', (pathname) => {
+  ])('shows the inner header with the site name on %s', (pathname) => {
     renderAt(pathname)
 
     expect(screen.getByRole('banner')).toHaveClass('max-w-pages')
-    expect(screen.getByRole('button', { name: /voltar/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /SoU_Estudante/ })).toHaveAttribute(
+      'href',
+      '/',
+    )
   })
 
   it('links the inner header to the module of the current route', () => {

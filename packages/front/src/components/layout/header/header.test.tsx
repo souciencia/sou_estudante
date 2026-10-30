@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import {
@@ -49,27 +49,6 @@ describe('Header', () => {
     expect(homeLink).toHaveAttribute('href', '/')
   })
 
-  it('links to SoU_Ciência', () => {
-    renderHeader(<Header />)
-
-    const cienciaLink = screen.getByRole('link', {
-      name: 'SoU_Ciência',
-    })
-
-    expect(cienciaLink).toHaveAttribute('href', 'https://souciencia.unifesp.br')
-  })
-
-  it('opens SoU_Ciência in a new tab', () => {
-    renderHeader(<Header />)
-
-    const cienciaLink = screen.getByRole('link', {
-      name: 'SoU_Ciência',
-    })
-
-    expect(cienciaLink).toHaveAttribute('target', '_blank')
-    expect(cienciaLink).toHaveAttribute('rel', 'noopener noreferrer')
-  })
-
   it('renders the menu', () => {
     renderHeader(<Header />)
 
@@ -77,21 +56,15 @@ describe('Header', () => {
   })
 
   describe('inner variant', () => {
-    it('renders a back link to home', () => {
+    it('links the site name to the home page', () => {
       renderHeader(<Header variant="inner" />)
 
-      expect(screen.getByRole('button', { name: 'Voltar' })).toBeInTheDocument()
-    })
-
-    it('renders the current module pill with its route', () => {
-      renderHeader(<Header variant="inner" module="1" />)
-
       expect(
-        screen.getAllByRole('link', { name: 'Escolher curso' })[0],
-      ).toHaveAttribute('href', '/cursos')
+        screen.getByRole('link', { name: /SoU_Estudante/ }),
+      ).toHaveAttribute('href', '/')
     })
 
-    it('renders a comparison pill linking to /comparar when courses are selected', () => {
+    it('renders a comparison count linking to /comparar when courses are selected', () => {
       renderHeaderWithIds(['101', '102'])
 
       fireEvent.click(screen.getByRole('button', { name: 'seed' }))
@@ -105,30 +78,17 @@ describe('Header', () => {
 
       fireEvent.click(screen.getByRole('button', { name: 'seed' }))
 
-      fireEvent.click(screen.getByRole('button', { name: 'Limpar comparação' }))
+      const nav = screen.getByRole('navigation', {
+        name: 'Navegação principal',
+      })
+      fireEvent.click(
+        within(nav).getByRole('button', { name: 'Limpar comparação' }),
+      )
 
       expect(
         screen.queryByRole('link', { name: 'Comparar (2)' }),
       ).not.toBeInTheDocument()
-      expect(
-        screen.getAllByRole('link', { name: 'Escolher curso' })[0],
-      ).toHaveAttribute('href', '/cursos')
-    })
-
-    it('keeps the module pill when no courses are selected', () => {
-      renderHeaderWithIds([])
-
-      expect(
-        screen.getAllByRole('link', { name: 'Escolher curso' })[0],
-      ).toHaveAttribute('href', '/cursos')
-    })
-
-    it('does not render the SoU_Ciência link', () => {
-      renderHeader(<Header variant="inner" module="1" />)
-
-      expect(
-        screen.queryByRole('link', { name: 'SoU_Ciência' }),
-      ).not.toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Comparar' })).toBeInTheDocument()
     })
   })
 })

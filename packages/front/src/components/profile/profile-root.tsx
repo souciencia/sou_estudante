@@ -28,7 +28,7 @@ export function ProfileRoot({
       <div
         data-module={module}
         className={cn(
-          'mx-auto min-h-screen max-w-2xl bg-surface-lv1 pb-10',
+          'mx-auto min-h-screen max-w-2xl bg-surface-lv1 pb-10 rounded-b-card shadw',
           className,
         )}
       >
