@@ -149,6 +149,11 @@ const NEUTRAL_COLORS = [
     value: 'oklch(93% 0.0222 312)',
   },
   {
+    token: '--color-surface-lv0-top',
+    name: 'surface lv0 top',
+    value: 'oklch(93% 0.03 250)',
+  },
+  {
     token: '--color-surface-lv1',
     name: 'surface lv1',
     value: 'oklch(97% 0.0102 311)',

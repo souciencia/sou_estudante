@@ -11,8 +11,8 @@ help: ## Lista os alvos
 build: ## Constrói as imagens de desenvolvimento
 	$(COMPOSE) build
 
-setup: ## Prepara .env, API keys e ingestão (./setup.sh)
-	./setup.sh
+setup: ## Prepara .env, API keys e ingestão (./setup.sh --dev)
+	./setup.sh --dev
 
 up: ## Sobe os serviços em segundo plano
 	$(COMPOSE) up -d

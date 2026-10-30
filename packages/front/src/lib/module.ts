@@ -20,6 +20,7 @@ export interface ModulePageCopy {
 export interface ModuleMeta {
   badge: string
   title: string
+  navTitle: string
   description: string
   page: ModulePageCopy
   list: ModuleText
@@ -34,6 +35,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
   '1': {
     badge: 'CARTA NÁUTICA',
     title: 'Escolher curso',
+    navTitle: 'Cursos',
     description: 'Explore por área, localização e modalidade',
     page: {
       lead: 'Descobrir cursos',
@@ -50,6 +52,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
   '2': {
     badge: 'BÚSSOLA',
     title: 'Como ingressar',
+    navTitle: 'Ingresso',
     description: 'Notas de corte, vagas e cotas no Sisu',
     page: {
       lead: 'Ingresso',
@@ -67,6 +70,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
   '3': {
     badge: 'ÂNCORA',
     title: 'Como permanecer',
+    navTitle: 'Permanência',
     description: 'Cotas, assistência e apoios estudantis',
     page: {
       lead: 'Entrar é só o começo.',
@@ -84,6 +88,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
   '4': {
     badge: 'TELESCÓPIO',
     title: 'Conhecer instituição',
+    navTitle: 'Instituições',
     description: 'Indicadores, docentes e qualidade',
     page: {
       lead: 'Antes de embarcar,',
@@ -101,6 +106,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
   '5': {
     badge: 'SEXTANTE',
     title: 'Comparar cursos',
+    navTitle: 'Comparar',
     description: 'Analise até 5 cursos lado a lado',
     page: {
       lead: 'Lado a lado,',

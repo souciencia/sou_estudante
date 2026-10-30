@@ -2,7 +2,7 @@
 
 O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e universidades, feita para ajudar estudantes e pesquisadores.
 
-> Documentação técnica na pasta [docs/](docs/): [diretrizes](docs/00.guidelines.md), [arquitetura](docs/00.arquitetura.md), [banco de dados](docs/10.database.md), [API](docs/20.api.md), [front-end](docs/30.frontend.md), [operação/deploy](docs/40.operacao.md), [glossário](docs/glossario.md) e [decisões (ADR)](docs/adr/README.md). Cada pacote tem seu README: [api](packages/api/README.md) e [front](packages/front/README.md).
+> Documentação técnica na pasta [docs/](docs/): [diretrizes](docs/00.guidelines.md), [arquitetura](docs/00.arquitetura.md), [banco de dados](docs/10.database.md), [API](docs/20.api.md), [front-end](docs/30.frontend.md), [deploy](docs/40.deploy.md), [glossário](docs/glossario.md) e [decisões (ADR)](docs/adr/README.md). Cada pacote tem seu README: [api](packages/api/README.md) e [front](packages/front/README.md).
 
 ## Arquitetura
 
@@ -41,9 +41,9 @@ Sem eles o `setup.sh` apenas avisa e pula a ingestão: a API sobe, mas sem dados
 
 1. `./setup.sh`
 
-O `./setup.sh` é executado no host e faz, em ordem: cria o `.env` a partir de `.env.example` (pede a senha do Elasticsearch se estiver em branco); constrói as imagens; sobe o Elasticsearch e aguarda; gera as API keys (leitura para a API, leitura/escrita para a ingestão) e grava no `.env`; roda o job de ingestão `se_bulk`; lista os índices existentes; sobe `se_api` e `se_front`; e abre o front no navegador. Veja `./setup.sh --help` para as opções (`--keep-env`, `--skip-build`, `--skip-bulk`, `--dry-run`, `--non-interactive`, ...).
+O `./setup.sh` é o orquestrador único: pergunta se o setup é para **desenvolvimento** ou **produção** (ou aceita `--dev`/`--prod`) e delega para a rotina em `scripts/routines/`. No modo desenvolvimento, faz, em ordem: cria o `.env` a partir de `.env.example` (pede a senha do Elasticsearch se estiver em branco); constrói as imagens; sobe o Elasticsearch e aguarda; gera as API keys (leitura para a API, leitura/escrita para a ingestão) e grava no `.env`; roda o job de ingestão `se_bulk`; lista os índices existentes; sobe `se_api` e `se_front`; e abre o front no navegador. No modo produção, gera as API keys **dentro do container do ES** (`podman exec`) e publica os serviços. Veja `./setup.sh --help` para as opções (`--keep-env`, `--skip-build`, `--skip-bulk`, `--dry-run`, `--non-interactive`, ...).
 
-Para reingerir os dados depois: `podman compose --profile bulk run --rm --no-deps se_bulk`. A ingestão só carrega índices que não existem ou estão vazios (ver [docs/10.database.md](docs/10.database.md)).
+Para reingerir os dados depois: `podman compose --profile bulk run --rm --no-deps se_bulk`. A ingestão sempre reingere por troca atômica (blue/green) (ver [docs/10.database.md](docs/10.database.md)).
 
 ## As coisas estão funcionando?
 

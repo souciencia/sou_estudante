@@ -25,7 +25,7 @@ export function CompareBar({ module }: CompareBarProps) {
       <Typo v="accent" s="sm" t="p" className='text-m5-deep'>
         {ids.length} de {MAX_COMPARE} cursos selecionados para comparar
       </Typo>
-      <CompareActions variant="accent" module={module} />
+      <CompareActions module={module} />
     </div>
   )
 }

@@ -1,11 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { CompareActions } from '@/components/compare/compare-actions'
-import { useCompareCursos } from '@/components/compare/compare-provider'
-import { BackLink } from '@/components/ui/back-link/back-link'
-import { Tag } from '@/components/ui/tag/tag'
-import { MODULE_META, type Module } from '@/lib/module'
+import type { Module } from '@/lib/module'
 import { cn } from '@/utils/cn'
 import { NauticalIcon } from '../../ui/route/icons/nautical-icon'
 import { Menu } from '../menu/menu'
@@ -18,14 +14,24 @@ interface HeaderProps {
   module?: Module
 }
 
+function SiteLogo({ className }: { className?: string }) {
+  return (
+    <Link href="/" className={cn('flex items-center gap-2.5', className)}>
+      <span aria-hidden className="block h-7 w-7">
+        <NauticalIcon className="w-7 h-7" />
+      </span>
+      <span className="text-sm font-semibold tracking-[-0.2px]">
+        So<span className="text-m1-accent">U</span>_Estudante
+      </span>
+    </Link>
+  )
+}
+
 export const Header = ({
   className,
   variant = 'home',
   module,
 }: HeaderProps) => {
-  const { ids } = useCompareCursos()
-  const comparing = ids.length > 0
-
   if (variant === 'inner') {
     return (
       <header
@@ -37,23 +43,9 @@ export const Header = ({
           className,
         )}
       >
-        <BackLink label="Voltar" />
+        <SiteLogo className="text-fg" />
 
-        <div className="flex items-center gap-3">
-          {module &&
-            (comparing ? (
-              <CompareActions variant="neutral" />
-            ) : (
-              <Link
-                data-module={module}
-                href={MODULE_META[module].href}
-                className="rounded-full bg-accent px-[1.15rem] py-2 text-xs font-semibold text-fg transition-transform duration-fast hover:-translate-y-px"
-              >
-                {MODULE_META[module].title}
-              </Link>
-            ))}
-          <Menu mode="light" module={module} />
-        </div>
+        <Menu mode="light" module={module} />
       </header>
     )
   }
@@ -69,19 +61,9 @@ export const Header = ({
             className,
           )}
         >
-          <BackLink label="Voltar" />
+          <SiteLogo className="text-fg" />
 
-          <div className="flex items-center gap-3">
-            {module && (
-              <Tag
-                label={MODULE_META[module].title}
-                module={module}
-                className="font-semibold px-[10px] py-[3px] tracking-[0.5px] mr-0 text-2xs"
-                variant="module"
-              />
-            )}
-            <Menu module={module} />
-          </div>
+          <Menu module={module} variant="profile" />
         </header>
       </div>
     )
@@ -95,25 +77,8 @@ export const Header = ({
         className,
       )}
     >
-      <Link href="/" className="flex items-center gap-2.5">
-        <span aria-hidden className="block h-7 w-7">
-          <NauticalIcon className="w-7 h-7" />
-        </span>
-        <span className="text-sm font-semibold tracking-[-0.2px] text-on-dark">
-          So<span className="text-m1-accent">U</span>_Estudante
-        </span>
-      </Link>
-      <div className="flex items-center gap-3 text-xs text-on-dark/[.45]">
-        <a
-          href="https://souciencia.unifesp.br"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transition-colors duration-fast hover:text-on-dark/80"
-        >
-          SoU_Ciência
-        </a>
-        <Menu mode="dark" />
-      </div>
+      <SiteLogo className="text-on-dark" />
+      <Menu mode="dark" />
     </header>
   )
 }

@@ -1,0 +1,22 @@
+# Caddyfile de produção do SoU_Estudante.
+#
+# Os valores são injetados via variáveis de ambiente (substituição nativa do
+# Caddy com {$VAR}), lidas do .env no servidor. Nada aqui deve ser editado à
+# mão — isso evita conflito de merge no deploy.
+#
+# Variáveis (ver .env.example):
+#   SE_HOST        domínio/subdomínio real (registro A apontando para o IP da
+#                  VM). O Caddy emite o certificado TLS automaticamente, desde
+#                  que as portas 80 e 443 estejam liberadas. Sem domínio, use
+#                  <IP-com-hífens>.sslip.io ou um subdomínio DuckDNS.
+#   SE_AUTH_USER   usuário do basic auth.
+#   SE_AUTH_HASH   hash bcrypt da senha, gerado com:
+#                    podman run --rm -it docker.io/library/caddy:2 caddy hash-password
+#   Evite http://<IP> puro, pois a senha do basic auth trafegaria em claro.
+
+{$SE_HOST} {
+	basic_auth {
+		{$SE_AUTH_USER} {$SE_AUTH_HASH}
+	}
+	reverse_proxy se_front:3000
+}

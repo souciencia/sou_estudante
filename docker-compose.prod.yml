@@ -7,14 +7,10 @@ services:
     environment:
       - node.name=${ESNODE01_NAME:-se_es01}
       - discovery.type=single-node
-      - bootstrap.memory_lock=true
       - xpack.security.enabled=true
       - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+      - ES_JAVA_OPTS=${ES_JAVA_OPTS:--Xms1g -Xmx1g}
     volumes:
       - elsou-data:/usr/share/elasticsearch/data
     networks:
@@ -83,6 +79,12 @@ services:
     depends_on:
       se_api:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/ || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
     logging:
       driver: "json-file"
@@ -114,9 +116,31 @@ services:
         condition: service_healthy
     profiles: ["bulk"]
 
+  caddy:
+    image: docker.io/library/caddy:2
+    container_name: se_caddy
+    environment:
+      - SE_HOST=${SE_HOST}
+      - SE_AUTH_USER=${SE_AUTH_USER}
+      - SE_AUTH_HASH=${SE_AUTH_HASH}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - web_net
+    depends_on:
+      - se_front
+    restart: unless-stopped
+
 volumes:
   elsou-data:
     driver: local
+  caddy_data:
+  caddy_config:
 
 networks:
   web_net:

@@ -27,7 +27,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={cn('bg-surface-lv0 relative antialiased', dmMono.variable)}
+        className={cn(
+          'relative antialiased bg-linear-15 from-surface-lv0 to-surface-lv0-top',
+          dmMono.variable,
+        )}
       >
         <Providers>
           <LayoutSite className="z-10">{children}</LayoutSite>
