@@ -1,5 +1,5 @@
-import { cn } from '@/utils/cn'
 import Link from 'next/link'
+import { cn } from '@/utils/cn'
 
 const H2 = 'font-display text-lg font-bold text-fg'
 
@@ -10,7 +10,9 @@ export default function MetodologiaPage() {
     <div className="mx-auto w-full max-w-pages px-4 py-6 bg-surface-lv1 rounded-b-callout">
       <article className="mx-auto max-w-3xl">
         <div>
-          <span className='text-2xs text-fg-muted font-bold tracking-[0.7px]'>SoU_Estudante</span>
+          <span className="text-2xs text-fg-muted font-bold tracking-[0.7px]">
+            SoU_Estudante
+          </span>
           <h1 className="font-sans text-display font-bold leading-[1.08] tracking-[-0.02em] text-fg mt-4">
             Metodologia
           </h1>
@@ -34,15 +36,15 @@ export default function MetodologiaPage() {
           <section>
             <h2 className={H2}>Fontes e anos de referência</h2>
             <p className={P}>Nesta edição, a plataforma usa:</p>
-            <div className='mt-3 mb-3 bg-white rounded-panel p-4 border border-border-primary mr-8'>
-              <ul className='list-disc space-y-1.5 pl-5'>
+            <div className="mt-3 mb-3 bg-white rounded-panel p-4 border border-border-primary mr-8">
+              <ul className="list-disc space-y-1.5 pl-5">
                 <li>
                   <strong className="font-semibold text-fg">
                     Censo da Educação Superior 2024
                   </strong>{' '}
-                  (Inep): cursos, vagas, matrículas, modalidade, local de oferta,
-                  polos de EaD, corpo docente, bolsas, financiamento e apoios aos
-                  estudantes.
+                  (Inep): cursos, vagas, matrículas, modalidade, local de
+                  oferta, polos de EaD, corpo docente, bolsas, financiamento e
+                  apoios aos estudantes.
                 </li>
                 <li>
                   <strong className="font-semibold text-fg">Sisu 2026</strong>{' '}
@@ -164,21 +166,21 @@ export default function MetodologiaPage() {
 
           <section>
             <h2 className={H2}>Limitações conhecidas</h2>
-            <div className='mt-3 bg-white rounded-panel p-4 border border-border-primary mr-8'>
-              <ul className='list-disc space-y-1.5 pl-5'>
+            <div className="mt-3 bg-white rounded-panel p-4 border border-border-primary mr-8">
+              <ul className="list-disc space-y-1.5 pl-5">
                 <li className={P}>
                   O endereço exato dos polos de EaD não está nas bases públicas;
                   mostramos apenas os municípios.
                 </li>
                 <li className={P}>
-                  Cursos a distância com polos em mais de um estado podem aparecer
-                  mais de uma vez na lista de cursos, uma por estado. Esse
-                  comportamento está em correção.
+                  Cursos a distância com polos em mais de um estado podem
+                  aparecer mais de uma vez na lista de cursos, uma por estado.
+                  Esse comportamento está em correção.
                 </li>
                 <li className={P}>
-                  A unidade dos dados de apoio social e atividade extracurricular
-                  está em conferência com a equipe de dados; os cartões mostram
-                  números absolutos.
+                  A unidade dos dados de apoio social e atividade
+                  extracurricular está em conferência com a equipe de dados; os
+                  cartões mostram números absolutos.
                 </li>
                 <li className={P}>
                   A nota de corte do Sisu refere-se à chamada regular; chamadas
@@ -198,12 +200,14 @@ export default function MetodologiaPage() {
               dos usuários.
             </p>
             <p className={cn('mt-3 mb-4', P)}>
-              Quem faz a plataforma e sob que licenças está na página {" "}
-              <Link 
+              Quem faz a plataforma e sob que licenças está na página{' '}
+              <Link
                 href="/sobre"
-                className="text-accent-deep underline underline-offset-2 transition-colors hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep">
-              Sobre
-              </Link>.
+                className="text-accent-deep underline underline-offset-2 transition-colors hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
+              >
+                Sobre
+              </Link>
+              .
             </p>
           </section>
         </div>

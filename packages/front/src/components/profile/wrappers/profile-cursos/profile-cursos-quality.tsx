@@ -1,6 +1,11 @@
-'use client';
+'use client'
 
 import { TrendingUp } from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
+import {
+  MAX_COMPARE,
+  useCompareCursos,
+} from '@/components/compare/compare-provider'
 import { MarLegenda } from '@/components/enade/formas-enade/mar-legenda'
 import { SeloEnade } from '@/components/enade/selo-enade/selo-enade'
 import { Callout } from '@/components/ui/callout'
@@ -9,8 +14,6 @@ import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
 import { cn } from '@/utils/cn'
 import { ProfileCursosRetentionCard } from './profile-cursos-retention-card'
-import { useParams, useRouter } from 'next/navigation'
-import { MAX_COMPARE, useCompareCursos } from '@/components/compare/compare-provider'
 
 interface ProfileCursosQualityProps {
   curso: Curso
@@ -30,19 +33,20 @@ export const ProfileCursosQuality = ({
   const faixa = parseEnadeLevel(curso.enade?.conceito_faixa_enade)
   const ano = curso.enade?.ano_enade
 
-  const { ids, isComparing, isSelected, toggle, setComparing } = useCompareCursos()
+  const { ids, isComparing, isSelected, toggle, setComparing } =
+    useCompareCursos()
   const selectionFull = ids.length >= MAX_COMPARE
 
-  const params = useParams();
+  const params = useParams()
   const id = String(params.id)
-  
+
   const router = useRouter()
-  
+
   const handleSubmit = (value: string) => {
-    if(!isSelected(id) && !selectionFull){
+    if (!isSelected(id) && !selectionFull) {
       toggle(id)
-      
-      if(!isComparing) {
+
+      if (!isComparing) {
         setComparing(true)
       }
     }
@@ -50,7 +54,6 @@ export const ProfileCursosQuality = ({
     const params = new URLSearchParams({ q: value })
     router.push(`/cursos?${params.toString()}`)
   }
-
 
   return (
     <div
@@ -104,7 +107,7 @@ export const ProfileCursosQuality = ({
         taxa={curso.tda?.tda}
         anoInicio={curso.tda?.nu_ano_ingresso_tda}
         anoFim={curso.tda?.nu_ano_referencia_tda}
-        onComparar={() => handleSubmit(curso.curso.no_curso ?? "")}
+        onComparar={() => handleSubmit(curso.curso.no_curso ?? '')}
       />
     </div>
   )

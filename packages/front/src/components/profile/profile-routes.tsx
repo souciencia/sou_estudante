@@ -1,8 +1,8 @@
+import { Signpost } from 'lucide-react'
 import Link from 'next/link'
 import type { Module } from '@/lib/module'
 import { buildIesHref } from '@/lib/profile-links'
 import { cn } from '@/utils/cn'
-import { Signpost } from 'lucide-react'
 
 /**
  * Rotas do perfil com nomes enxutos: apenas o texto exibido e o href de cada
@@ -60,8 +60,8 @@ export function ProfileRoutes({
         className,
       )}
     >
-      <span className='flex items-center gap-1 border-r border-border-primary text-2xs font-bold text-fg-muted pr-4 shrink-0'>
-        <Signpost className='size-3'/>
+      <span className="flex items-center gap-1 border-r border-border-primary text-2xs font-bold text-fg-muted pr-4 shrink-0">
+        <Signpost className="size-3" />
         ROTA
       </span>
 
@@ -74,7 +74,8 @@ export function ProfileRoutes({
           <Link
             href={href}
             aria-current={isActive ? 'page' : undefined}
-            key={item} data-module={item}
+            key={item}
+            data-module={item}
             className={cn(
               'flex flex-1 items-center justify-center gap-2 border-b-2 py-3 text-xs transition-colors duration-fast text-center',
               isActive

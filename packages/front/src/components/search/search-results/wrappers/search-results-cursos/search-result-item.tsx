@@ -92,7 +92,7 @@ export function SearchResultItem({
         />
       </Card.Header>
 
-      {tags.length > 0 && <Card.Tags source={tags} className='pb-3' />}
+      {tags.length > 0 && <Card.Tags source={tags} className="pb-3" />}
 
       <Card.ProgressBar
         title="Taxa de desistência acumulada (5 anos)"
@@ -124,7 +124,7 @@ export function SearchResultItem({
     <div className="space-y-2" data-module={module}>
       <Card module={module}>
         <div className="flex flex-col items-start gap-2">
-          <div className='flex gap-4'>
+          <div className="flex gap-4">
             {comparing && (
               <Checkbox
                 module={module}
