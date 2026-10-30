@@ -204,7 +204,8 @@
 }
 
 /* Base */
-html, body {
+html,
+body {
   overscroll-behavior-y: none;
 }
 
@@ -320,6 +321,8 @@ body {
   }
 
   .shadw {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05), 0 4px 10px rgba(0, 0, 0, 0.09);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.05),
+      0 4px 10px rgba(0, 0, 0, 0.09);
   }
 }
