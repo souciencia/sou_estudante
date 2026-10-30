@@ -40,6 +40,7 @@
   --color-m5-deep: oklch(51% 0.1368 049);
 
   --color-surface-lv0: oklch(93% 0.0222 312);
+  --color-surface-lv0-top: oklch(93% 0.03 250);
   --color-surface-lv1: oklch(97% 0.0102 311);
   --color-surface-lv2: oklch(100% 0 0);
 
