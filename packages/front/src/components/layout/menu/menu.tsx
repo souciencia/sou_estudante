@@ -73,7 +73,7 @@ export function Menu({ mode = 'light', module }: MenuProps) {
           mode === 'dark'
             ? 'bg-on-dark/10 text-on-dark hover:bg-on-dark/[.18]'
             : module
-              ? 'border border-accent-deep/50 bg-accent text-accent-fg hover:bg-accent/80'
+              ? 'border border-accent-deep/10 bg-accent/40 text-accent-fg hover:bg-accent/80'
               : 'bg-fg text-on-dark hover:bg-fg/80',
         )}
       >

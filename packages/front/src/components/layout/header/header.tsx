@@ -71,7 +71,7 @@ export const Header = ({
         >
           <BackLink label="Voltar" />
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {module && (
               <Tag
                 label={MODULE_META[module].title}
