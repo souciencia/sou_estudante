@@ -10,7 +10,7 @@
 # Sem domínio: use <IP-com-hífens>.sslip.io ou um subdomínio DuckDNS.
 # Evite http://<IP> puro, pois a senha do basic auth trafegaria em claro.
 
-http://45.159.173.16.nip.io/ {
+http://172.22.29.229.nip.io/ {
 	basic_auth {
 		testador HASH_AQUI
 	}
