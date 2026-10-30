@@ -204,6 +204,10 @@
 }
 
 /* Base */
+html, body {
+  overscroll-behavior-y: none;
+}
+
 body {
   font-family: var(--font-sans);
   color: var(--color-fg);
