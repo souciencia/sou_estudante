@@ -64,7 +64,7 @@ func TestHandlerExtraiFiltrosEPaginacao(t *testing.T) {
 
 	req := httptest.NewRequest(
 		http.MethodGet,
-		"/ies?q=federal&uf=SP,RJ&regiao=Sudeste&categoria=Federal&organizacao=Universidade&page=2&limit=5&sort=az",
+		"/ies?q=federal&uf=SP,RJ&regiao=Sudeste&categoria=P%C3%BAblica%20Federal&organizacao=Universidade&page=2&limit=5&sort=az",
 		nil,
 	)
 	rec := httptest.NewRecorder()
@@ -79,7 +79,7 @@ func TestHandlerExtraiFiltrosEPaginacao(t *testing.T) {
 	if len(mockService.CapturedFilters.Regiao) != 1 || mockService.CapturedFilters.Regiao[0] != "Sudeste" {
 		t.Errorf("Regiao não extraída: %v", mockService.CapturedFilters.Regiao)
 	}
-	if len(mockService.CapturedFilters.Categoria) != 1 || mockService.CapturedFilters.Categoria[0] != "Federal" {
+	if len(mockService.CapturedFilters.Categoria) != 1 || mockService.CapturedFilters.Categoria[0] != "Pública Federal" {
 		t.Errorf("Categoria não extraída: %v", mockService.CapturedFilters.Categoria)
 	}
 	if len(mockService.CapturedFilters.Organizacao) != 1 || mockService.CapturedFilters.Organizacao[0] != "Universidade" {

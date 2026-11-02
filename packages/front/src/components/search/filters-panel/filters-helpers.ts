@@ -3,10 +3,17 @@ import type { FilterOptionDefinition } from './filters-panel'
 
 /** Categorias administrativas das IES, compartilhadas pelos painéis de cursos e IES. */
 export const CATEGORIAS_ADMINISTRATIVAS: FilterOptionDefinition[] = [
-  { label: 'Federal', value: 'Federal' },
-  { label: 'Estadual', value: 'Estadual' },
-  { label: 'Municipal', value: 'Municipal' },
-  { label: 'Privada', value: 'Privada' },
+  { label: 'Pública federal', value: 'Pública Federal' },
+  { label: 'Pública estadual', value: 'Pública Estadual' },
+  { label: 'Pública municipal', value: 'Pública Municipal' },
+  {
+    label: 'Privada sem fins lucrativos',
+    value: 'Privada Sem Fins Lucrativos',
+  },
+  {
+    label: 'Privada com fins lucrativos',
+    value: 'Privada Com Fins Lucrativos',
+  },
 ]
 
 /**

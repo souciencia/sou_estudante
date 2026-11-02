@@ -79,14 +79,14 @@ func TestBuildFilterClausesEhVazioSemFiltros(t *testing.T) {
 }
 
 func TestCategoriaFilterUsaCategoriaAdministrativa(t *testing.T) {
-	built := categoriaFilter("Privada")
+	built := categoriaFilter("Pública Federal")
 
 	terms, ok := built["terms"].(map[string]any)
 	if !ok {
 		t.Fatalf("esperado nó terms, obtido %T", built["terms"])
 	}
 
-	want := []string{"Privada Com Fins Lucrativos", "Privada Sem Fins Lucrativos"}
+	want := []string{"Pública Federal"}
 	if got := terms["categoria_administrativa.no_categoria_administrativa"]; !reflect.DeepEqual(got, want) {
 		t.Errorf("categoria_administrativa = %v, esperado %v", got, want)
 	}

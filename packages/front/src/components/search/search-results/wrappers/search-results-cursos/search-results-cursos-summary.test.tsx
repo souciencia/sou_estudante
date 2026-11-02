@@ -59,7 +59,7 @@ describe('SearchResultsCursosSummary', () => {
       buildHookReturn({
         results: [curso, curso],
         total: 30,
-        aggregations: { gratuitos: [{ key: 'Gratuito', count: 12 }] },
+        aggregations: { ingresso: [{ key: 'gratuito', count: 12 }] },
       }),
     )
 
@@ -73,7 +73,7 @@ describe('SearchResultsCursosSummary', () => {
       buildHookReturn({
         results: [curso, curso],
         total: 30,
-        aggregations: { gratuitos: [{ key: 'Gratuito', count: 1 }] },
+        aggregations: { ingresso: [{ key: 'gratuito', count: 1 }] },
       }),
     )
 

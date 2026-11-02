@@ -53,14 +53,14 @@ func TestBuildExactNameQueryCasaNomeIdêntico(t *testing.T) {
 // categoriaFilter tem que filtrar pela categoria_administrativa real vinda da
 // IES, e não mais pela heurística in_gratuito + sisu.
 func TestCategoriaFilterUsaCategoriaAdministrativaDaIES(t *testing.T) {
-	built := categoriaFilter("Privada")
+	built := categoriaFilter("Privada Sem Fins Lucrativos")
 
 	terms, ok := built["terms"].(map[string]any)
 	if !ok {
 		t.Fatalf("esperado nó terms, obtido %T", built["terms"])
 	}
 
-	want := []string{"Privada Com Fins Lucrativos", "Privada Sem Fins Lucrativos"}
+	want := []string{"Privada Sem Fins Lucrativos"}
 	if got := terms["instituicao.categoria_administrativa"]; !reflect.DeepEqual(got, want) {
 		t.Errorf("categoria_administrativa = %v, esperado %v", got, want)
 	}
@@ -82,7 +82,6 @@ func TestBuildAggregationsUsaCamposKeywordSemSufixo(t *testing.T) {
 		"ufs":         "localizacao.sg_uf",
 		"graus":       "curso.no_grau_academico",
 		"modalidades": "curso.no_modalidade_ensino",
-		"enades":      "enade.conceito_faixa_enade",
 	}
 	for group, field := range want {
 		if got := termsAggField(t, aggs, group); got != field {
@@ -94,29 +93,33 @@ func TestBuildAggregationsUsaCamposKeywordSemSufixo(t *testing.T) {
 func TestBuildAggregationsIncluiTodosOsGrupos(t *testing.T) {
 	aggs := buildAggregations()
 
-	for _, key := range []string{"ufs", "graus", "modalidades", "enades", "categorias", "turnos", "gratuitos", "sisu"} {
+	for _, key := range []string{"ufs", "graus", "modalidades", "enades", "categorias", "turnos", "ingresso"} {
 		if _, ok := aggs[key]; !ok {
 			t.Errorf("esperado agregação %q, obtido %v", key, aggs)
 		}
 	}
 }
 
-// A contagem de gratuitos deve usar o campo booleano curso.in_gratuito, e não
-// a heurística antiga baseada em categoria/IES.
-func TestBuildAggregationsGratuitosFiltraInGratuito(t *testing.T) {
+// O conceito Enade agrega faixas (1-5, SC) e a ausência de avaliação no ciclo.
+func TestBuildAggregationsEnadeIncluiFaixasEAusencia(t *testing.T) {
 	aggs := buildAggregations()
 
-	agg, ok := aggs["gratuitos"].(map[string]any)
-	if !ok {
-		t.Fatalf("agregação gratuitos ausente ou com tipo inesperado: %v", aggs["gratuitos"])
+	filters := filtersBuckets(t, aggs, "enades")
+	for _, key := range []string{"1", "2", "3", "4", "5", "SC", "Sem avaliação no Ciclo"} {
+		if _, ok := filters[key]; !ok {
+			t.Errorf("esperado bucket %q na agregação enades, obtido %v", key, filters)
+		}
 	}
-	filters, ok := agg["filters"].(map[string]any)["filters"].(map[string]any)
+}
+
+// A contagem de gratuito deve usar o campo booleano curso.in_gratuito.
+func TestBuildAggregationsIngressoGratuitoFiltraInGratuito(t *testing.T) {
+	aggs := buildAggregations()
+
+	filters := filtersBuckets(t, aggs, "ingresso")
+	gratuito, ok := filters["gratuito"].(map[string]any)
 	if !ok {
-		t.Fatalf("esperado nó filters.filters, obtido %v", agg["filters"])
-	}
-	gratuito, ok := filters["Gratuito"].(map[string]any)
-	if !ok {
-		t.Fatalf("esperado bucket Gratuito, obtido %v", filters)
+		t.Fatalf("esperado bucket gratuito, obtido %v", filters)
 	}
 	term, ok := gratuito["term"].(map[string]any)
 	if !ok {
@@ -127,21 +130,14 @@ func TestBuildAggregationsGratuitosFiltraInGratuito(t *testing.T) {
 	}
 }
 
-// A contagem de ingresso via Sisu deve usar o campo booleano sisu.tem_sisu.
-func TestBuildAggregationsSisuFiltraTemSisu(t *testing.T) {
+// A contagem de com vagas Sisu deve usar o campo booleano sisu.tem_sisu.
+func TestBuildAggregationsIngressoSisuFiltraTemSisu(t *testing.T) {
 	aggs := buildAggregations()
 
-	agg, ok := aggs["sisu"].(map[string]any)
+	filters := filtersBuckets(t, aggs, "ingresso")
+	viaSisu, ok := filters["sisu"].(map[string]any)
 	if !ok {
-		t.Fatalf("agregação sisu ausente ou com tipo inesperado: %v", aggs["sisu"])
-	}
-	filters, ok := agg["filters"].(map[string]any)["filters"].(map[string]any)
-	if !ok {
-		t.Fatalf("esperado nó filters.filters, obtido %v", agg["filters"])
-	}
-	viaSisu, ok := filters["Via Sisu"].(map[string]any)
-	if !ok {
-		t.Fatalf("esperado bucket Via Sisu, obtido %v", filters)
+		t.Fatalf("esperado bucket sisu, obtido %v", filters)
 	}
 	term, ok := viaSisu["term"].(map[string]any)
 	if !ok {
@@ -165,28 +161,75 @@ func TestBuildFilterClausesUFUsaCampoKeyword(t *testing.T) {
 }
 
 func TestBuildFilterClausesEnadeUsaCampoKeyword(t *testing.T) {
-	clauses := buildFilterClauses(SearchFilterParams{Enade: []string{"Conceito 5"}})
+	clauses := buildFilterClauses(SearchFilterParams{Enade: []string{"5"}})
 	if len(clauses) != 1 {
 		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
 	}
 
-	if _, ok := termsNodeFrom(t, clauses[0])["enade.conceito_faixa_enade"]; !ok {
-		t.Errorf("esperado campo enade.conceito_faixa_enade, obtido %v", clauses[0])
+	should := shouldClausesFrom(t, clauses[0])
+	if len(should) != 1 {
+		t.Fatalf("esperado 1 cláusula should, obtido %d", len(should))
+	}
+	if _, ok := termsNodeFrom(t, should[0])["enade.conceito_faixa_enade"]; !ok {
+		t.Errorf("esperado campo enade.conceito_faixa_enade, obtido %v", should[0])
 	}
 }
 
-func TestBuildFilterClausesSisuFiltraTemSisu(t *testing.T) {
-	clauses := buildFilterClauses(SearchFilterParams{Sisu: []string{"Via Sisu"}})
+// "Sem avaliação no Ciclo" filtra cursos cuja faixa do Enade está ausente.
+func TestBuildFilterClausesEnadeSemAvaliacaoNoCiclo(t *testing.T) {
+	clauses := buildFilterClauses(SearchFilterParams{Enade: []string{"Sem avaliação no Ciclo"}})
 	if len(clauses) != 1 {
 		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
 	}
 
-	term, ok := clauses[0]["term"].(map[string]any)
+	should := shouldClausesFrom(t, clauses[0])
+	if len(should) != 1 {
+		t.Fatalf("esperado 1 cláusula should, obtido %d", len(should))
+	}
+	boolNode, ok := should[0]["bool"].(map[string]any)
 	if !ok {
-		t.Fatalf("esperado nó term, obtido %T", clauses[0]["term"])
+		t.Fatalf("esperado nó bool, obtido %T", should[0]["bool"])
+	}
+	if mustNot, ok := boolNode["must_not"]; !ok || mustNot == nil {
+		t.Errorf("esperado must_not para ausência do Enade, obtido %v", boolNode)
+	}
+}
+
+func TestBuildFilterClausesIngressoSisuFiltraTemSisu(t *testing.T) {
+	clauses := buildFilterClauses(SearchFilterParams{Ingresso: []string{"sisu"}})
+	if len(clauses) != 1 {
+		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
+	}
+
+	should := shouldClausesFrom(t, clauses[0])
+	if len(should) != 1 {
+		t.Fatalf("esperado 1 cláusula should, obtido %d", len(should))
+	}
+	term, ok := should[0]["term"].(map[string]any)
+	if !ok {
+		t.Fatalf("esperado nó term, obtido %T", should[0]["term"])
 	}
 	if got := term["sisu.tem_sisu"]; got != true {
 		t.Errorf("sisu.tem_sisu = %v, esperado true", got)
+	}
+}
+
+func TestBuildFilterClausesIngressoGratuitoFiltraInGratuito(t *testing.T) {
+	clauses := buildFilterClauses(SearchFilterParams{Ingresso: []string{"gratuito"}})
+	if len(clauses) != 1 {
+		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
+	}
+
+	should := shouldClausesFrom(t, clauses[0])
+	if len(should) != 1 {
+		t.Fatalf("esperado 1 cláusula should, obtido %d", len(should))
+	}
+	term, ok := should[0]["term"].(map[string]any)
+	if !ok {
+		t.Fatalf("esperado nó term, obtido %T", should[0]["term"])
+	}
+	if got := term["curso.in_gratuito"]; got != true {
+		t.Errorf("curso.in_gratuito = %v, esperado true", got)
 	}
 }
 
@@ -243,6 +286,21 @@ func termsAggField(t *testing.T, aggs map[string]any, group string) string {
 	return field
 }
 
+// filtersBuckets devolve o mapa de buckets nomeados de uma agregação "filters".
+func filtersBuckets(t *testing.T, aggs map[string]any, group string) map[string]any {
+	t.Helper()
+
+	agg, ok := aggs[group].(map[string]any)
+	if !ok {
+		t.Fatalf("agregação %q ausente ou com tipo inesperado: %v", group, aggs[group])
+	}
+	filters, ok := agg["filters"].(map[string]any)["filters"].(map[string]any)
+	if !ok {
+		t.Fatalf("esperado nó filters.filters, obtido %v", agg["filters"])
+	}
+	return filters
+}
+
 func termsNodeFrom(t *testing.T, clause map[string]any) map[string]any {
 	t.Helper()
 
@@ -285,15 +343,29 @@ func TestBuildFilterClausesGrauCombinaValoresComOu(t *testing.T) {
 	}
 }
 
-func TestBuildFilterClausesCategoriaPrivadaIncluiComESemFinsLucrativos(t *testing.T) {
-	clauses := buildFilterClauses(SearchFilterParams{Categoria: []string{"privada"}})
+func TestBuildFilterClausesCategoriaPrivadaComFinsLucrativos(t *testing.T) {
+	clauses := buildFilterClauses(SearchFilterParams{Categoria: []string{"Privada Com Fins Lucrativos"}})
 	if len(clauses) != 1 {
 		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
 	}
 
 	should := shouldClausesFrom(t, clauses[0])
 	terms := should[0]["terms"].(map[string]any)["instituicao.categoria_administrativa"]
-	want := []string{"Privada Com Fins Lucrativos", "Privada Sem Fins Lucrativos"}
+	want := []string{"Privada Com Fins Lucrativos"}
+	if !reflect.DeepEqual(terms, want) {
+		t.Errorf("categorias = %v, esperado %v", terms, want)
+	}
+}
+
+func TestBuildFilterClausesCategoriaPrivadaSemFinsLucrativos(t *testing.T) {
+	clauses := buildFilterClauses(SearchFilterParams{Categoria: []string{"Privada Sem Fins Lucrativos"}})
+	if len(clauses) != 1 {
+		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
+	}
+
+	should := shouldClausesFrom(t, clauses[0])
+	terms := should[0]["terms"].(map[string]any)["instituicao.categoria_administrativa"]
+	want := []string{"Privada Sem Fins Lucrativos"}
 	if !reflect.DeepEqual(terms, want) {
 		t.Errorf("categorias = %v, esperado %v", terms, want)
 	}

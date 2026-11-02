@@ -38,9 +38,14 @@ const CONCEITOS_ENADE = [
   { label: 'Conceito 3', value: '3' },
   { label: 'Conceito 2', value: '2' },
   { label: 'Conceito 1', value: '1' },
+  { label: 'Sem avaliação no Ciclo', value: 'Sem avaliação no Ciclo' },
+  { label: 'Sem conceito', value: 'SC' },
 ]
 
-const INGRESSOS = [{ label: 'Via Sisu', value: 'Via Sisu' }]
+const INGRESSOS = [
+  { label: 'Gratuito', value: 'gratuito' },
+  { label: 'Com vagas Sisu', value: 'sisu' },
+]
 
 const SECTIONS: FilterSectionDefinition[] = [
   {
@@ -83,9 +88,9 @@ const SECTIONS: FilterSectionDefinition[] = [
     options: CONCEITOS_ENADE,
   },
   {
-    key: 'sisu',
+    key: 'ingresso',
     title: 'Ingresso',
-    aggregationKey: 'sisu',
+    aggregationKey: 'ingresso',
     options: INGRESSOS,
   },
 ]

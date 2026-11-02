@@ -84,11 +84,53 @@ func categoriaFilter(categoria string) map[string]any {
 }
 
 // sisuTerm monta a cláusula que seleciona cursos com ingresso pelo Sisu
-// (tem_sisu == true), usada tanto no filtro quanto na agregação "sisu".
+// (tem_sisu == true), usada tanto no filtro quanto na agregação "ingresso".
 func sisuTerm() map[string]any {
 	return map[string]any{
 		"term": map[string]any{"sisu.tem_sisu": true},
 	}
+}
+
+// gratuitoTerm monta a cláusula que seleciona cursos gratuitos
+// (in_gratuito == true), usada tanto no filtro quanto na agregação "ingresso".
+func gratuitoTerm() map[string]any {
+	return map[string]any{
+		"term": map[string]any{"curso.in_gratuito": true},
+	}
+}
+
+// enadeField é o campo keyword da faixa do conceito Enade no documento de curso.
+const enadeField = "enade.conceito_faixa_enade"
+
+// enadeSemAvaliacaoClause seleciona cursos sem avaliação no ciclo do Enade, ou
+// seja, cuja faixa de conceito está ausente no documento.
+func enadeSemAvaliacaoClause() map[string]any {
+	return map[string]any{
+		"bool": map[string]any{
+			"must_not": []map[string]any{
+				{"exists": map[string]any{"field": enadeField}},
+			},
+		},
+	}
+}
+
+// enadeFilterClauses traduz os valores do filtro Enade em cláusulas: faixas
+// numéricas e "SC" viram terms; "sem avaliação no ciclo" vira a ausência do
+// campo. As cláusulas retornadas se combinam com "ou" pelo chamador.
+func enadeFilterClauses(enades []string) []map[string]any {
+	var terms []string
+	var clauses []map[string]any
+	for _, enade := range enades {
+		if strings.EqualFold(strings.TrimSpace(enade), "sem avaliação no ciclo") {
+			clauses = append(clauses, enadeSemAvaliacaoClause())
+			continue
+		}
+		terms = append(terms, enade)
+	}
+	if len(terms) > 0 {
+		clauses = append(clauses, elasticsearch.TermsFilter(enadeField, terms))
+	}
+	return clauses
 }
 
 // hasExactCourseName verifica se existe ao menos um documento cujo nome de
@@ -204,11 +246,22 @@ func buildFilterClauses(filters SearchFilterParams) []map[string]any {
 	}
 
 	if len(filters.Enade) > 0 {
-		clauses = append(clauses, elasticsearch.TermsFilter("enade.conceito_faixa_enade", filters.Enade))
+		clauses = append(clauses, elasticsearch.AnyOf(enadeFilterClauses(filters.Enade)))
 	}
 
-	if len(filters.Sisu) > 0 {
-		clauses = append(clauses, sisuTerm())
+	if len(filters.Ingresso) > 0 {
+		should := make([]map[string]any, 0, len(filters.Ingresso))
+		for _, ingresso := range filters.Ingresso {
+			switch strings.ToLower(strings.TrimSpace(ingresso)) {
+			case "gratuito":
+				should = append(should, gratuitoTerm())
+			case "sisu":
+				should = append(should, sisuTerm())
+			}
+		}
+		if len(should) > 0 {
+			clauses = append(clauses, elasticsearch.AnyOf(should))
+		}
 	}
 
 	if len(filters.Turno) > 0 {
@@ -258,21 +311,25 @@ func buildAggregations() map[string]any {
 		"ufs":         elasticsearch.TermsAgg("localizacao.sg_uf", 30),
 		"graus":       elasticsearch.TermsAgg("curso.no_grau_academico", 10),
 		"modalidades": elasticsearch.TermsAgg("curso.no_modalidade_ensino", 10),
-		"enades":      elasticsearch.TermsAgg("enade.conceito_faixa_enade", 10),
-		"categorias":  elasticsearch.CategoriasAgg(categoriaField),
+		"enades": elasticsearch.FiltersAgg(map[string]any{
+			"1":                      elasticsearch.TermsFilter(enadeField, []string{"1"}),
+			"2":                      elasticsearch.TermsFilter(enadeField, []string{"2"}),
+			"3":                      elasticsearch.TermsFilter(enadeField, []string{"3"}),
+			"4":                      elasticsearch.TermsFilter(enadeField, []string{"4"}),
+			"5":                      elasticsearch.TermsFilter(enadeField, []string{"5"}),
+			"SC":                     elasticsearch.TermsFilter(enadeField, []string{"SC"}),
+			"Sem avaliação no Ciclo": enadeSemAvaliacaoClause(),
+		}),
+		"categorias": elasticsearch.CategoriasAgg(categoriaField),
 		"turnos": elasticsearch.FiltersAgg(map[string]any{
 			"Diurno":   elasticsearch.AnyOf(turnoShouldClauses("diurno")),
 			"Noturno":  elasticsearch.AnyOf(turnoShouldClauses("noturno")),
 			"Integral": elasticsearch.AnyOf(turnoShouldClauses("integral")),
 			"EaD":      elasticsearch.AnyOf(turnoShouldClauses("ead")),
 		}),
-		"gratuitos": elasticsearch.FiltersAgg(map[string]any{
-			"Gratuito": map[string]any{
-				"term": map[string]any{"curso.in_gratuito": true},
-			},
-		}),
-		"sisu": elasticsearch.FiltersAgg(map[string]any{
-			"Via Sisu": sisuTerm(),
+		"ingresso": elasticsearch.FiltersAgg(map[string]any{
+			"gratuito": gratuitoTerm(),
+			"sisu":     sisuTerm(),
 		}),
 	}
 }
@@ -323,8 +380,7 @@ func (r *ElasticsearchRepository) Search(
 			Categorias:  elasticsearch.ParseBuckets(resp.Aggregations, "categorias"),
 			Modalidades: elasticsearch.ParseBuckets(resp.Aggregations, "modalidades"),
 			Enades:      elasticsearch.ParseBuckets(resp.Aggregations, "enades"),
-			Gratuitos:   elasticsearch.ParseBuckets(resp.Aggregations, "gratuitos"),
-			Sisu:        elasticsearch.ParseBuckets(resp.Aggregations, "sisu"),
+			Ingresso:    elasticsearch.ParseBuckets(resp.Aggregations, "ingresso"),
 		}
 	}
 

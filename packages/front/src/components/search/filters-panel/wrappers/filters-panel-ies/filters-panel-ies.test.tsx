@@ -35,7 +35,7 @@ describe('FiltersPanelIes', () => {
       aggregations: {
         ufs: [{ key: 'SP', count: 5 }],
         regioes: [{ key: 'Sudeste', count: 5 }],
-        categorias: [{ key: 'Privada', count: 3 }],
+        categorias: [{ key: 'Pública Federal', count: 3 }],
         organizacoes: [{ key: 'Universidade', count: 4 }],
       },
       setQuery: vi.fn(),
