@@ -14,8 +14,6 @@ export const CardHeader = ({ v = 'prev', children, className }: Props) => {
   }
 
   return (
-    <div className={cn('flex w-full', 'mb-2', variants[v], className)}>
-      {children}
-    </div>
+    <div className={cn('flex w-full', variants[v], className)}>{children}</div>
   )
 }

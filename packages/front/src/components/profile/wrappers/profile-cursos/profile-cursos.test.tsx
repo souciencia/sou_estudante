@@ -4,7 +4,24 @@ import type { Curso } from '@/services/api/types'
 import { ProfileCursos } from './profile-cursos'
 
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ back: vi.fn(), push: vi.fn() }),
+  useRouter: () => ({
+    back: vi.fn(),
+    push: vi.fn(),
+  }),
+  useParams: () => ({
+    id: '1',
+  }),
+}))
+
+vi.mock('@/components/compare/compare-provider', () => ({
+  MAX_COMPARE: 4,
+  useCompareCursos: () => ({
+    ids: [],
+    isComparing: false,
+    isSelected: vi.fn(() => false),
+    toggle: vi.fn(),
+    setComparing: vi.fn(),
+  }),
 }))
 
 const curso: Curso = {

@@ -23,18 +23,18 @@ export function CompareActions({ module, className }: CompareActionsProps) {
     <div
       data-module={module}
       className={cn(
-        'flex items-center gap-1 rounded-full border border-accent bg-accent/20 py-1 pl-[1.15rem] pr-1',
+        'flex items-center gap-1 rounded-control bg-m5-accent py-1 pl-[1.15rem] pr-1',
         className,
       )}
     >
-      <Link href="/comparar" className="text-xs font-semibold text-accent-deep">
+      <Link href="/comparar" className="text-xs font-semibold text-white">
         {ids.length > 0 ? `Comparar (${ids.length})` : 'Comparar'}
       </Link>
       <button
         type="button"
         onClick={clear}
         aria-label="Limpar comparação"
-        className="flex size-6 cursor-pointer items-center justify-center rounded-full text-accent-deep transition-colors duration-fast hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
+        className="flex size-6 cursor-pointer items-center justify-center rounded-full text-white transition-colors duration-fast hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
       >
         <X className="size-3.5" aria-hidden="true" />
       </button>

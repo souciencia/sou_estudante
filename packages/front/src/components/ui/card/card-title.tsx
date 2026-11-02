@@ -25,7 +25,7 @@ export const CardTitle = ({ title, subtitle, className, level = 4 }: Props) => {
     | 'h6'
 
   return (
-    <div className={cn(className, 'my-2')}>
+    <div className={cn(className)}>
       <TitleTag className="font-display font-bold text-base">{title}</TitleTag>
       {subtitle && (
         <SubtitleTag className="font-sans text-fg-muted text-sm">

@@ -1,7 +1,28 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import type { Curso } from '@/services/api/types'
 import { ProfileCursosQuality } from './profile-cursos-quality'
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    back: vi.fn(),
+    push: vi.fn(),
+  }),
+  useParams: () => ({
+    id: '1',
+  }),
+}))
+
+vi.mock('@/components/compare/compare-provider', () => ({
+  MAX_COMPARE: 4,
+  useCompareCursos: () => ({
+    ids: [],
+    isComparing: false,
+    isSelected: vi.fn(() => false),
+    toggle: vi.fn(),
+    setComparing: vi.fn(),
+  }),
+}))
 
 const curso: Curso = {
   sequencial: 1,

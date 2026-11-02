@@ -28,7 +28,7 @@ export const Tag = ({
   )
 
   const colors = {
-    module: 'bg-accent/20 border-accent/80 text-accent-deep',
+    module: 'bg-accent/20 border-accent-deep/20 text-accent-deep',
     curso: 'bg-tag-curso-surface border-tag-curso-border text-tag-curso-deep',
     blue: 'bg-sky-100 border-sky-600 text-sky-800',
     green: 'bg-green-100 border-green-600 text-green-800',

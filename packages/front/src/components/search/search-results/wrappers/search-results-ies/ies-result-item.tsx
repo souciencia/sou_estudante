@@ -27,12 +27,12 @@ export function IesResultItem({ ies, module }: IesResultItemProps) {
         <Card.Title
           level={3}
           title={nome}
-          subtitle={sigla ? `• ${sigla}` : undefined}
+          subtitle={sigla ? `${sigla}` : undefined}
         />
       </Card.Header>
-      {tags.length > 0 && <Card.Tags source={tags} className="ml-11" />}
+      {tags.length > 0 && <Card.Tags source={tags} />}
       <Card.Fields
-        className="ml-11 mt-2"
+        className="mt-2"
         items={[{ label: 'Localização', value: localizacao }]}
       />
     </Card>
