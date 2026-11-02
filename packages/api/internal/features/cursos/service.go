@@ -102,7 +102,7 @@ func cursosFilterValues(query string, filters SearchFilterParams) url.Values {
 	httpx.SetCSV(values, "categoria", filters.Categoria)
 	httpx.SetCSV(values, "modalidade", filters.Modalidade)
 	httpx.SetCSV(values, "enade", filters.Enade)
-	httpx.SetCSV(values, "sisu", filters.Sisu)
+	httpx.SetCSV(values, "ingresso", filters.Ingresso)
 	if filters.Sort != "" {
 		values.Set("sort", filters.Sort)
 	}

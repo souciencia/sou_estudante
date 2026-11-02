@@ -73,10 +73,8 @@ func TestFiltersAggEmbrulhaOsFiltrosNomeados(t *testing.T) {
 }
 
 func TestCategoriaFilterTraduzOsRotulosDaUI(t *testing.T) {
-	assertJSON(t, CategoriaFilter("categoria_administrativa", "Privada"),
-		`{"terms": {"categoria_administrativa": [
-			"Privada Com Fins Lucrativos", "Privada Sem Fins Lucrativos"
-		]}}`)
+	assertJSON(t, CategoriaFilter("categoria_administrativa", "Privada Sem Fins Lucrativos"),
+		`{"terms": {"categoria_administrativa": ["Privada Sem Fins Lucrativos"]}}`)
 }
 
 func TestCategoriaFilterDevolveNilParaRotuloDesconhecido(t *testing.T) {
@@ -86,7 +84,7 @@ func TestCategoriaFilterDevolveNilParaRotuloDesconhecido(t *testing.T) {
 }
 
 func TestCategoriaAnyOfCombinaAsCategoriasConhecidas(t *testing.T) {
-	got := CategoriaAnyOf("cat", []string{"federal", "inexistente", "estadual"})
+	got := CategoriaAnyOf("cat", []string{"pública federal", "inexistente", "pública estadual"})
 	assertJSON(t, got, `{"bool": {
 		"should": [
 			{"terms": {"cat": ["Pública Federal"]}},
@@ -105,12 +103,13 @@ func TestCategoriaAnyOfDevolveNilQuandoNenhumaCategoriaEConhecida(t *testing.T) 
 	}
 }
 
-func TestCategoriasAggTemUmBucketPorGrupoDeCategoria(t *testing.T) {
+func TestCategoriasAggTemUmBucketPorCategoria(t *testing.T) {
 	assertJSON(t, CategoriasAgg("cat"), `{"filters": {"filters": {
-		"Privada":   {"terms": {"cat": ["Privada Com Fins Lucrativos", "Privada Sem Fins Lucrativos"]}},
-		"Federal":   {"terms": {"cat": ["Pública Federal"]}},
-		"Estadual":  {"terms": {"cat": ["Pública Estadual"]}},
-		"Municipal": {"terms": {"cat": ["Pública Municipal"]}}
+		"Privada Com Fins Lucrativos": {"terms": {"cat": ["Privada Com Fins Lucrativos"]}},
+		"Privada Sem Fins Lucrativos": {"terms": {"cat": ["Privada Sem Fins Lucrativos"]}},
+		"Pública Federal":             {"terms": {"cat": ["Pública Federal"]}},
+		"Pública Estadual":            {"terms": {"cat": ["Pública Estadual"]}},
+		"Pública Municipal":           {"terms": {"cat": ["Pública Municipal"]}}
 	}}}`)
 }
 

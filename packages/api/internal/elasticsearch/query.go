@@ -82,14 +82,15 @@ func CategoriaAnyOf(field string, categorias []string) map[string]any {
 	return AnyOf(should)
 }
 
-// CategoriasAgg monta a agregação com um bucket por grupo de categoria
-// (Privada, Federal, Estadual e Municipal) sobre o campo informado.
+// CategoriasAgg monta a agregação com um bucket por categoria administrativa
+// sobre o campo informado.
 func CategoriasAgg(field string) map[string]any {
 	return FiltersAgg(map[string]any{
-		"Privada":   CategoriaFilter(field, "privada"),
-		"Federal":   CategoriaFilter(field, "federal"),
-		"Estadual":  CategoriaFilter(field, "estadual"),
-		"Municipal": CategoriaFilter(field, "municipal"),
+		"Privada Com Fins Lucrativos": CategoriaFilter(field, "privada com fins lucrativos"),
+		"Privada Sem Fins Lucrativos": CategoriaFilter(field, "privada sem fins lucrativos"),
+		"Pública Federal":             CategoriaFilter(field, "pública federal"),
+		"Pública Estadual":            CategoriaFilter(field, "pública estadual"),
+		"Pública Municipal":           CategoriaFilter(field, "pública municipal"),
 	})
 }
 

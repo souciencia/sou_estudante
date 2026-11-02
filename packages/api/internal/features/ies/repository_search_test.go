@@ -28,7 +28,7 @@ func TestParseAggregationsMapeiaBuckets(t *testing.T) {
 	raw := map[string]json.RawMessage{
 		"ufs":          json.RawMessage(`{"buckets":[{"key":"SP","doc_count":7}]}`),
 		"regioes":      json.RawMessage(`{"buckets":[{"key":"Sudeste","doc_count":5}]}`),
-		"categorias":   json.RawMessage(`{"buckets":{"Privada":{"doc_count":3}}}`),
+		"categorias":   json.RawMessage(`{"buckets":{"Pública Federal":{"doc_count":3}}}`),
 		"organizacoes": json.RawMessage(`{"buckets":[{"key":"Universidade","doc_count":2}]}`),
 	}
 
@@ -42,7 +42,7 @@ func TestParseAggregationsMapeiaBuckets(t *testing.T) {
 	if len(got.Regioes) != 1 || got.Regioes[0].Key != "Sudeste" {
 		t.Errorf("regioes inesperadas: %+v", got.Regioes)
 	}
-	if len(got.Categorias) != 1 || got.Categorias[0].Key != "Privada" {
+	if len(got.Categorias) != 1 || got.Categorias[0].Key != "Pública Federal" {
 		t.Errorf("categorias inesperadas: %+v", got.Categorias)
 	}
 	if len(got.Organizacoes) != 1 || got.Organizacoes[0].Key != "Universidade" {
@@ -51,7 +51,7 @@ func TestParseAggregationsMapeiaBuckets(t *testing.T) {
 }
 
 func TestBuildFilterClausesCategoria(t *testing.T) {
-	clauses := buildFilterClauses(SearchFilterParams{Categoria: []string{"Privada"}})
+	clauses := buildFilterClauses(SearchFilterParams{Categoria: []string{"Pública Federal"}})
 	if len(clauses) != 1 {
 		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
 	}

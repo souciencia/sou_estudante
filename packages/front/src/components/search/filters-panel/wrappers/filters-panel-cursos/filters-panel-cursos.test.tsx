@@ -53,7 +53,10 @@ describe('FiltersPanelCursos', () => {
     expect(screen.getByText('Conceito Enade')).toBeInTheDocument()
     expect(screen.getByText('Ingresso')).toBeInTheDocument()
     expect(
-      screen.getByRole('checkbox', { name: /Via Sisu/ }),
+      screen.getByRole('checkbox', { name: /Com vagas Sisu/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('checkbox', { name: /Gratuito/ }),
     ).toBeInTheDocument()
   })
 
@@ -115,7 +118,7 @@ describe('FiltersPanelCursos', () => {
     })
   })
 
-  it('atualiza a URL ao marcar a opção Via Sisu do grupo Ingresso', () => {
+  it('atualiza a URL ao marcar a opção Com vagas Sisu do grupo Ingresso', () => {
     const params = new URLSearchParams()
     vi.mocked(useSearchParams).mockReturnValue(
       params as unknown as ReadonlyURLSearchParams,
@@ -123,9 +126,24 @@ describe('FiltersPanelCursos', () => {
 
     render(<FiltersPanelCursos />)
 
-    fireEvent.click(screen.getByRole('checkbox', { name: /Via Sisu/ }))
+    fireEvent.click(screen.getByRole('checkbox', { name: /Com vagas Sisu/ }))
     expect(mockUpdateParams).toHaveBeenCalledWith({
-      sisu: 'Via Sisu',
+      ingresso: 'sisu',
+      page: '1',
+    })
+  })
+
+  it('atualiza a URL ao marcar a opção Gratuito do grupo Ingresso', () => {
+    const params = new URLSearchParams()
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<FiltersPanelCursos />)
+
+    fireEvent.click(screen.getByRole('checkbox', { name: /Gratuito/ }))
+    expect(mockUpdateParams).toHaveBeenCalledWith({
+      ingresso: 'gratuito',
       page: '1',
     })
   })

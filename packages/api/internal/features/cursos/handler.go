@@ -30,7 +30,7 @@ func parseExactParam(raw string) bool {
 }
 
 // ServeHTTP implementa http.Handler
-// GET /cursos?q={termo}&page={page}&limit={limit}&uf={uf}&turno={turno}&grau={grau}&categoria={categoria}&modalidade={modalidade}&enade={enade}&sisu={sisu}&sort={sort}
+// GET /cursos?q={termo}&page={page}&limit={limit}&uf={uf}&turno={turno}&grau={grau}&categoria={categoria}&modalidade={modalidade}&enade={enade}&ingresso={ingresso}&sort={sort}
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	query := strings.TrimSpace(r.URL.Query().Get("q"))
 	if query == "" {
@@ -47,7 +47,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Categoria:  httpx.SplitCSV(r.URL.Query()["categoria"]),
 		Modalidade: httpx.SplitCSV(r.URL.Query()["modalidade"]),
 		Enade:      httpx.SplitCSV(r.URL.Query()["enade"]),
-		Sisu:       httpx.SplitCSV(r.URL.Query()["sisu"]),
+		Ingresso:   httpx.SplitCSV(r.URL.Query()["ingresso"]),
 		Sort:       r.URL.Query().Get("sort"),
 		Exact:      parseExactParam(r.URL.Query().Get("exact")),
 	}

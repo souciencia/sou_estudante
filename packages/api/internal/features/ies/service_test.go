@@ -73,7 +73,7 @@ func TestBuscarIESRepassaFiltrosEQuery(t *testing.T) {
 	filters := SearchFilterParams{
 		UF:          []string{"SP", "RJ"},
 		Regiao:      []string{"Sudeste"},
-		Categoria:   []string{"Federal"},
+		Categoria:   []string{"Pública Federal"},
 		Organizacao: []string{"Universidade"},
 		Sort:        "relevancia",
 	}
@@ -213,7 +213,7 @@ func TestBuscarIESPreservaFiltrosNosLinks(t *testing.T) {
 	filters := SearchFilterParams{
 		UF:          []string{"SP", "RJ"},
 		Regiao:      []string{"Sudeste"},
-		Categoria:   []string{"Federal"},
+		Categoria:   []string{"Pública Federal"},
 		Organizacao: []string{"Universidade"},
 		Sort:        "az",
 	}
@@ -232,7 +232,7 @@ func TestBuscarIESPreservaFiltrosNosLinks(t *testing.T) {
 		"q":           "federal",
 		"uf":          "SP,RJ",
 		"regiao":      "Sudeste",
-		"categoria":   "Federal",
+		"categoria":   "Pública Federal",
 		"organizacao": "Universidade",
 		"sort":        "az",
 		"page":        "2",
