@@ -6,6 +6,8 @@ export interface UseFilterPanelReturn {
   getActiveValues: (key: string) => string[]
   /** Liga/desliga um valor de uma chave e volta para a página 1. */
   toggle: (key: string, value: string) => void
+  /** Grava de uma vez o estado completo dos filtros e volta para a página 1. */
+  apply: (values: Record<string, string[]>) => void
 }
 
 /**
@@ -45,5 +47,17 @@ export function useFilterPanel(
     [getActiveValues, updateParams],
   )
 
-  return { getActiveValues, toggle }
+  const apply = useCallback(
+    (values: Record<string, string[]>) => {
+      const params: Record<string, string | null> = {}
+      for (const [key, list] of Object.entries(values)) {
+        params[key] = list.length > 0 ? list.join(',') : null
+      }
+      params.page = '1'
+      updateParams(params)
+    },
+    [updateParams],
+  )
+
+  return { getActiveValues, toggle, apply }
 }
