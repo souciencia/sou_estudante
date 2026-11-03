@@ -1,34 +1,9 @@
-#!/usr/bin/env bash
-# =============================================================================
-# setup.sh — orquestrador único do SoU_Estudante.
-#
-# Pergunta se o setup é para desenvolvimento ou produção e delega para a
-# rotina correspondente em scripts/routines/. As funções e rotinas ficam em
-# arquivos pequenos dentro de scripts/lib/ e scripts/routines/.
-#
-# Uso:
-#   ./setup.sh                  # pergunta o ambiente (dev/prod)
-#   ./setup.sh --dev            # ambiente de desenvolvimento (local)
-#   ./setup.sh --prod           # ambiente de produção (no servidor)
-# =============================================================================
+# Configuração padrão e parsing de argumentos compartilhado entre os setups
+# (setup-dev.sh e setup-prod.sh). Requer as libs log.sh e util.sh já carregadas.
 
-set -euo pipefail
-umask 077
-
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPTS_DIR="$ROOT/scripts"
-
-# -----------------------------------------------------------------------------
-# Carrega as bibliotecas compartilhadas (funções), em ordem de dependência.
-# -----------------------------------------------------------------------------
-source "$SCRIPTS_DIR/lib/log.sh"
-source "$SCRIPTS_DIR/lib/util.sh"
-source "$SCRIPTS_DIR/lib/env.sh"
-source "$SCRIPTS_DIR/lib/engine.sh"
-source "$SCRIPTS_DIR/lib/curl.sh"
-source "$SCRIPTS_DIR/lib/es.sh"
-source "$SCRIPTS_DIR/routines/dev.sh"
-source "$SCRIPTS_DIR/routines/prod.sh"
+# Descrições sobrescritas por cada setup antes de chamar usage().
+SETUP_DESC=""
+ENGINE_DESC=""
 
 # -----------------------------------------------------------------------------
 # Configuração padrão
@@ -74,13 +49,6 @@ ENGINE=""
 CONTAINER_ENGINE=""
 COMPOSE_CMD=()
 
-# Produção (routines/prod.sh)
-COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
-export IMAGE_TAG="${IMAGE_TAG:-latest}"
-
-# Ambiente alvo: "dev" ou "prod" (vazio = pergunta)
-TARGET=""
-
 # -----------------------------------------------------------------------------
 # CLI / Argumentos
 # -----------------------------------------------------------------------------
@@ -88,9 +56,7 @@ usage() {
   printf '%b\n' "${BOLD}Uso:${RESET} $(basename "$0") ${MUTED}[opções]${RESET}
 
 ${BOLD}${CATEGORY_COLOR}Ambiente:${RESET}
-  ${CMD}--dev${RESET}                            Setup de desenvolvimento (local)
-  ${CMD}--prod${RESET}                           Deploy de produção (no servidor)
-  ${MUTED}(sem --dev/--prod, pergunta o ambiente)${RESET}
+  ${SETUP_DESC}
 
 ${BOLD}${CATEGORY_COLOR}Arquivos e credenciais:${RESET}
   ${CMD}-e, --env-file <caminho>${RESET}        Arquivo .env de destino ${MUTED}(padrão: ${ENV_FILE})${RESET}
@@ -100,7 +66,7 @@ ${BOLD}${CATEGORY_COLOR}Arquivos e credenciais:${RESET}
   ${CMD}-u, --username <usuario>${RESET}        Usuário ES (sobrescreve o .env)
   ${CMD}-P, --password <senha>${RESET}          Senha ES (sobrescreve o .env)
 
-${BOLD}${CATEGORY_COLOR}Elasticsearch / containers (dev):${RESET}
+${BOLD}${CATEGORY_COLOR}Elasticsearch / containers:${RESET}
   ${CMD}    --url <url>${RESET}                 URL do ES vista do host ${MUTED}(padrão: ${ES_HOST_URL})${RESET}
   ${CMD}    --es-service <nome>${RESET}         Serviço do ES no compose ${MUTED}(padrão: ${ES_SERVICE})${RESET}
   ${CMD}    --es-container <nome>${RESET}       Nome do container do ES ${MUTED}(padrão: ESNODE01_NAME)${RESET}
@@ -126,7 +92,7 @@ ${BOLD}${CATEGORY_COLOR}Gerais:${RESET}
   ${CMD}    --non-interactive${RESET}           Modo CI: não faz perguntas no terminal
   ${CMD}    --dry-run${RESET}                   Simula as ações sem alterar o .env ou criar recursos
   ${CMD}    --timeout <segundos>${RESET}        Timeout do curl ${MUTED}(padrão: ${CURL_TIMEOUT})${RESET}
-  ${CMD}    --engine <podman|docker>${RESET}    Engine de containers ${MUTED}(padrão: autodetectar)${RESET}
+  ${CMD}    --engine <podman|docker>${RESET}    Engine de containers ${MUTED}(${ENGINE_DESC})${RESET}
   ${CMD}-k, --insecure${RESET}                  Ignora validação do certificado TLS
   ${CMD}-h, --help${RESET}                      Exibe esta ajuda
 
@@ -141,8 +107,6 @@ require_option_value() {
 parse_args() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --dev)                    TARGET=dev; shift ;;
-      --prod)                   TARGET=prod; shift ;;
       -e|--env-file)          require_option_value "$1" "${2:-}"; ENV_FILE="$2"; shift 2 ;;
       -x|--example-file)      require_option_value "$1" "${2:-}"; ENV_EXAMPLE_FILE="$2"; shift 2 ;;
       --keep-env)             KEEP_ENV=true; shift ;;
@@ -183,50 +147,3 @@ parse_args() {
     *) die "Engine inválido para --engine: '$ENGINE' (use podman ou docker)." ;;
   esac
 }
-
-resolve_target() {
-  [[ -n "$TARGET" ]] && return 0
-
-  if [[ "$NON_INTERACTIVE" == true ]]; then
-    die "Modo não interativo exige --dev ou --prod."
-  fi
-
-  local input=""
-  while [[ "$input" != "dev" && "$input" != "prod" ]]; do
-    read -r -p "$(printf '%b' "  ${CATEGORY_COLOR}?${RESET} Ambiente (dev/prod) [dev]: ")" input || die "Entrada interrompida."
-    input="${input:-dev}"
-  done
-  TARGET="$input"
-}
-
-main() {
-  parse_args "$@"
-  require_command curl
-  build_curl_opts
-
-  resolve_target
-
-  cd "$ROOT"
-
-  print_header "Setup do ambiente SoU_Estudante ($([[ "$TARGET" == "prod" ]] && echo produção || echo desenvolvimento))"
-
-  if [[ "$DRY_RUN" == true ]]; then
-    log_warn "Modo --dry-run ativo. Nenhuma alteração real será feita."
-  fi
-
-  if [[ "$TARGET" == "prod" ]]; then
-    run_prod
-    return 0
-  fi
-
-  # --- desenvolvimento ---
-  print_step "1. Arquivo .env"
-  reset_env_file
-
-  print_step "2. Credenciais do Elasticsearch"
-  ensure_credentials
-
-  run_dev
-}
-
-main "$@"

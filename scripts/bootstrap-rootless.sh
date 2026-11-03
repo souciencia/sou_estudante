@@ -4,7 +4,7 @@
 #
 # Prepara o host para rodar o stack (Elasticsearch, API, front e Caddy) como um
 # usuário SEM privilégios, usando Podman rootless. Requer root/sudo apenas nesta
-# etapa; o deploy diário (`setup.sh --prod`) roda sem sudo.
+# etapa; o deploy diário (`setup-prod.sh`) roda sem sudo.
 #
 # Uso:
 #   sudo ./scripts/bootstrap-rootless.sh <usuario>

@@ -2,17 +2,17 @@
 
 ### API keys de produção
 
-O `setup.sh` gera as keys falando com `localhost:9200` — no ambiente **local**
-(`--dev`). Em produção, o ES **não publica porta no host** (sem `ports:` no
+O `setup-dev.sh` gera as keys falando com `localhost:9200` — no ambiente
+**local**. Em produção, o ES **não publica porta no host** (sem `ports:` no
 `docker-compose.prod.yml`), então não dá para usar `localhost:9200` direto. As
 keys do `.env` precisam ser válidas contra o cluster de produção.
 
-O `setup.sh` é o orquestrador único: pergunta **dev ou produção** (`--dev`/
-`--prod`) e delega para a rotina correspondente (`scripts/routines/`). Em
-produção, a geração das keys roda **dentro do container do ES** via
-`podman exec` (função `setup_api_keys_in_container` em `scripts/lib/es.sh`),
-sem precisar de porta no host. O `scripts/deploy.sh` foi absorvido nessa rotina
-e removido.
+Os setups são dois scripts separados: `setup-dev.sh` (local) e `setup-prod.sh`
+(produção, usando apenas Docker), que delegam para as rotinas em
+`scripts/routines/`. Em produção, a geração das keys roda **dentro do container
+do ES** via `docker exec` (função `setup_api_keys_in_container` em
+`scripts/lib/es.sh`), sem precisar de porta no host. O `scripts/deploy.sh` foi
+absorvido nessa rotina e removido.
 
 > A rotina de produção valida `ELASTIC_PASSWORD`, sobe o ES, gera as duas keys
 > dentro do container e grava `ELASTICSEARCH_APIKEY` e
@@ -41,7 +41,7 @@ indexa num índice novo datado (`<base>-<AAAA-MM-DD>`) e aponta o alias
 continua no índice antigo.
 
 ```bash
-podman compose -f docker-compose.prod.yml --env-file .env --profile bulk run --rm --no-deps se_bulk
+docker compose -f docker-compose.prod.yml --env-file .env --profile bulk run --rm --no-deps se_bulk
 ```
 O deploy não roda o seed automaticamente.
 
@@ -52,12 +52,11 @@ O deploy não roda o seed automaticamente.
 
 ## Checklist antes de subir produção
 
-- [ ] `.env` com `SE_HOST` (domínio real) e `SE_AUTH_HASH` válido (o `Caddyfile` usa `{$VAR}` e não deve ser editado).
-- [ ] Portas 80/443 da VM liberadas e domínio com registro A correto.
+- [ ] Porta 3000 da VM liberada (o front é exposto direto, sem reverse proxy/TLS).
 - [ ] `.env` criado em `DEPLOY_PATH`, com `ELASTIC_PASSWORD` coerente com o volume do ES.
-- [ ] `ELASTICSEARCH_APIKEY` e `ELASTICSEARCH_BULK_APIKEY` geradas contra o ES de produção (o `setup.sh --prod` faz isso automaticamente via `podman exec`).
+- [ ] `ELASTICSEARCH_APIKEY` e `ELASTICSEARCH_BULK_APIKEY` geradas contra o ES de produção (o `setup-prod.sh` faz isso automaticamente via `docker exec`).
 - [ ] `./data` com os JSONs, se for rodar o seed.
-- [ ] Comando de compose disponível no servidor (podman/docker).
+- [ ] Comando de compose disponível no servidor (docker).
 
 ## Riscos e limitações atuais
 
