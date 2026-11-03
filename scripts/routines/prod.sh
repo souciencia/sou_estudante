@@ -10,7 +10,7 @@ validate_env_essentials() {
   for var in ELASTIC_PASSWORD; do
     value="$(get_env_var "$var")"
     if is_blank "$value"; then
-      printf 'ERRO: variável %s vazia ou ausente no .env\n' "$var" >&2
+      printf 'ERRO: variável %s vazia ou ausente em %s\n' "$var" "$ENV_FILE" >&2
       missing=1
     fi
   done
