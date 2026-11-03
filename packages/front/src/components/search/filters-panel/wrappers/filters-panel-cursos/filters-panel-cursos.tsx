@@ -105,7 +105,7 @@ export function FiltersPanelCursos({
   className,
 }: FiltersPanelCursosProps) {
   const { updateParams, aggregations, resetFilters } = useSearchCursos()
-  const { getActiveValues, toggle } = useFilterPanel(updateParams)
+  const { getActiveValues, toggle, apply } = useFilterPanel(updateParams)
 
   return (
     <FiltersPanel
@@ -113,6 +113,7 @@ export function FiltersPanelCursos({
       aggregations={aggregations}
       activeValues={getActiveValues}
       onToggle={toggle}
+      onApply={apply}
       onClear={resetFilters}
       leading={<SortingOptionsCursos module={module} />}
       module={module}
