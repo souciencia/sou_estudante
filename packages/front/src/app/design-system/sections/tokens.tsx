@@ -181,6 +181,16 @@ const NEUTRAL_COLORS = [
   },
   { token: '--color-muted', name: 'muted', value: 'oklch(96.7% 0 264)' },
   { token: '--color-on-dark', name: 'on dark', value: 'oklch(100% 0 0)' },
+  {
+    token: '--color-navy-900',
+    name: 'navy 900',
+    value: 'oklch(28.3% 0.034 249.13)',
+  },
+  {
+    token: '--color-navy-950',
+    name: 'navy 950',
+    value: 'oklch(21.4% 0.032 249.13)',
+  },
 ]
 
 const FONT_SCALE = [

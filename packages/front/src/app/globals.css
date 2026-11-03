@@ -56,6 +56,9 @@
   );
   --color-surface-header: oklch(28.3% 0.034 249.13);
 
+  --color-navy-900: oklch(28.3% 0.034 249.13);
+  --color-navy-950: oklch(21.4% 0.032 249.13);
+
   --color-border-primary: oklch(0.92 0 0);
   --color-border-secondary: oklch(93.6% 0.022 312.18);
 
@@ -281,7 +284,7 @@ body {
   animation-name: page-transition-enter;
   animation-duration: var(--duration-page);
   animation-timing-function: var(--ease-page);
-  animation-fill-mode: both;
+  animation-fill-mode: backwards;
 }
 
 @keyframes page-transition-enter {
