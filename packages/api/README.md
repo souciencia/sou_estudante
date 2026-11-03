@@ -26,7 +26,7 @@ No ambiente do projeto os comandos rodam dentro do container
 
 ## Variáveis de ambiente
 
-Lidas em `internal/config/config.go`. **A API não sobe sem `ES_APIKEY`** e o seed não roda sem `ES_INGEST_APIKEY` (o `./setup.sh` gera as duas). Valores inteiros inválidos ou ≤ 0 geram um aviso no log e usam o padrão. Principais: `ES_URL`, `ES_APIKEY` (leitura,
+Lidas em `internal/config/config.go`. **A API não sobe sem `ES_APIKEY`** e o seed não roda sem `ES_INGEST_APIKEY` (o `./setup-dev.sh`/`./setup-prod.sh` gera as duas). Valores inteiros inválidos ou ≤ 0 geram um aviso no log e usam o padrão. Principais: `ES_URL`, `ES_APIKEY` (leitura,
 API), `ES_INGEST_APIKEY` (escrita, seed), `PORT` (padrão `8080`) e os nomes dos
 índices (`CURSOS_INDEX_NAME`, `IES_INDEX_NAME`, `CURSOS_DICT_INDEX_NAME`,
 `IES_DICT_INDEX_NAME`). O seed também usa `CURSOS_JSON_FILE_PATH`, `IES_JSON_FILE_PATH`,

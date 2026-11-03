@@ -1,5 +1,3 @@
-name: sou_estudante
-
 services:
   se_es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.17.0

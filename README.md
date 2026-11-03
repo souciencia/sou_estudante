@@ -24,7 +24,7 @@ Tudo é orquestrado por `docker-compose.yml` (desenvolvimento) e `docker-compose
 
 ### Pré-requisitos
 
-- **Podman** com `podman compose` (runtime adotado pelo projeto, usado também no deploy). O `setup.sh` usa `podman compose` e, se não encontrar, tenta `podman-compose`, `docker compose` ou `docker-compose`. Para forçar Docker, use `./setup.sh --engine docker`. Os comandos abaixo funcionam com `docker compose` trocando o prefixo.
+- **Podman** com `podman compose` (runtime adotado para desenvolvimento). O `setup-dev.sh` usa `podman compose` e, se não encontrar, tenta `podman-compose`, `docker compose` ou `docker-compose`. Para forçar Docker, use `./setup-dev.sh --engine docker`. O `setup-prod.sh` usa apenas Docker. Os comandos abaixo funcionam com `docker compose` trocando o prefixo.
 - `curl`; `jq` é opcional.
 - No Windows, use o WSL ([instalação](https://learn.microsoft.com/pt-br/windows/wsl/install)).
 
@@ -35,13 +35,13 @@ Os arquivos de dados **não estão no repositório** (a pasta `data/` é ignorad
 - `data/dados_cursos.json`
 - `data/dados_ies.json`
 
-Sem eles o `setup.sh` apenas avisa e pula a ingestão: a API sobe, mas sem dados.
+Sem eles o `setup-dev.sh` apenas avisa e pula a ingestão: a API sobe, mas sem dados.
 
 ### Passo a passo
 
-1. `./setup.sh`
+1. `./setup-dev.sh` (desenvolvimento) ou `./setup-prod.sh` (produção)
 
-O `./setup.sh` é o orquestrador único: pergunta se o setup é para **desenvolvimento** ou **produção** (ou aceita `--dev`/`--prod`) e delega para a rotina em `scripts/routines/`. No modo desenvolvimento, faz, em ordem: cria o `.env` a partir de `.env.example` (pede a senha do Elasticsearch se estiver em branco); constrói as imagens; sobe o Elasticsearch e aguarda; gera as API keys (leitura para a API, leitura/escrita para a ingestão) e grava no `.env`; roda o job de ingestão `se_bulk`; lista os índices existentes; sobe `se_api` e `se_front`; e abre o front no navegador. No modo produção, gera as API keys **dentro do container do ES** (`podman exec`) e publica os serviços. Veja `./setup.sh --help` para as opções (`--keep-env`, `--skip-build`, `--skip-bulk`, `--dry-run`, `--non-interactive`, ...).
+O `setup-dev.sh` prepara o ambiente de desenvolvimento e, em ordem: cria o `.env` a partir de `.env.example` (pede a senha do Elasticsearch se estiver em branco); constrói as imagens; sobe o Elasticsearch e aguarda; gera as API keys (leitura para a API, leitura/escrita para a ingestão) e grava no `.env`; roda o job de ingestão `se_bulk`; lista os índices existentes; sobe `se_api` e `se_front`; e abre o front no navegador. O `setup-prod.sh` faz o deploy de produção (usa apenas Docker): gera as API keys **dentro do container do ES** (`docker exec`) e publica os serviços. Veja `./setup-dev.sh --help` para as opções (`--keep-env`, `--skip-build`, `--skip-bulk`, `--dry-run`, `--non-interactive`, ...).
 
 Para reingerir os dados depois: `podman compose --profile bulk run --rm --no-deps se_bulk`. A ingestão sempre reingere por troca atômica (blue/green) (ver [docs/10.database.md](docs/10.database.md)).
 

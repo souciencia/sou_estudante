@@ -81,10 +81,10 @@ jobs:
       - name: Publica e verifica a saúde
         run: |
           set -euo pipefail
-          # O setup.sh --prod orquestra: sobe o ES, gera as API keys dentro do
+          # O setup-prod.sh orquestra: sobe o ES, gera as API keys dentro do
           # container, constrói as imagens, sobe os serviços e verifica /readyz.
-          # --engine docker: a VM usa Docker (podman apresentou problemas).
-          ssh deploy "cd '${DEPLOY_PATH}' && IMAGE_TAG='${GITHUB_SHA}' bash setup.sh --prod --engine docker"
+          # O setup de produção usa apenas Docker (a VM não usa podman).
+          ssh deploy "cd '${DEPLOY_PATH}' && IMAGE_TAG='${GITHUB_SHA}' bash setup-prod.sh"
       - name: Remove a chave SSH
         if: always()
         run: rm -f ~/.ssh/deploy_key
