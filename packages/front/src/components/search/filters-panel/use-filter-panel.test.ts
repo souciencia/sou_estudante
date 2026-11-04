@@ -53,4 +53,25 @@ describe('useFilterPanel', () => {
 
     expect(updateParams).toHaveBeenCalledWith({ uf: null, page: '1' })
   })
+
+  it('grava o estado completo dos filtros de uma vez e volta à página 1', () => {
+    setParams('uf=SP')
+
+    const { result } = renderHook(() => useFilterPanel(updateParams))
+
+    act(() => {
+      result.current.apply({
+        uf: ['SP', 'RJ'],
+        turno: [],
+        grau: ['Bacharelado'],
+      })
+    })
+
+    expect(updateParams).toHaveBeenCalledWith({
+      uf: 'SP,RJ',
+      turno: null,
+      grau: 'Bacharelado',
+      page: '1',
+    })
+  })
 })

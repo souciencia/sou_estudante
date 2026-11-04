@@ -1,5 +1,3 @@
-name: sou_estudante
-
 services:
   se_es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.17.0
@@ -116,31 +114,9 @@ services:
         condition: service_healthy
     profiles: ["bulk"]
 
-  caddy:
-    image: docker.io/library/caddy:2
-    container_name: se_caddy
-    environment:
-      - SE_HOST=${SE_HOST}
-      - SE_AUTH_USER=${SE_AUTH_USER}
-      - SE_AUTH_HASH=${SE_AUTH_HASH}
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - web_net
-    depends_on:
-      - se_front
-    restart: unless-stopped
-
 volumes:
   elsou-data:
     driver: local
-  caddy_data:
-  caddy_config:
 
 networks:
   web_net:

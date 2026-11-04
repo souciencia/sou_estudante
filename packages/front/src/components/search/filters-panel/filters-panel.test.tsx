@@ -112,6 +112,21 @@ describe('FiltersPanel', () => {
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
   })
+
+  it('não renderiza o botão Aplicar no modo desktop', () => {
+    render(
+      <FiltersPanel
+        sections={sections}
+        activeValues={() => []}
+        onToggle={() => {}}
+        onApply={() => {}}
+      />,
+    )
+
+    expect(
+      screen.queryByRole('button', { name: 'Aplicar' }),
+    ).not.toBeInTheDocument()
+  })
 })
 
 describe('FiltersPanel · mobile', () => {
@@ -193,5 +208,77 @@ describe('FiltersPanel · mobile', () => {
     expect(screen.getByRole('button', { name: 'Filtros' })).toHaveTextContent(
       'Filtros',
     )
+  })
+
+  it('mantém o painel aberto ao alternar filtros e só aplica no botão Aplicar', async () => {
+    stubMobile()
+    const user = userEvent.setup()
+    const onToggle = vi.fn()
+    const onApply = vi.fn()
+    render(
+      <FiltersPanel
+        sections={sections}
+        activeValues={() => []}
+        onToggle={onToggle}
+        onApply={onApply}
+      />,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Filtros' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Bahia' }))
+
+    expect(onToggle).not.toHaveBeenCalled()
+    expect(screen.getByRole('dialog', { name: 'Filtros' })).toBeVisible()
+
+    await user.click(screen.getByRole('button', { name: 'Aplicar' }))
+
+    expect(onApply).toHaveBeenCalledWith({ uf: ['BA'] })
+    expect(
+      screen.getByRole('dialog', { hidden: true, name: 'Filtros' }),
+    ).toHaveAttribute('inert', '')
+  })
+
+  it('fecha pelo X sem aplicar o rascunho', async () => {
+    stubMobile()
+    const user = userEvent.setup()
+    const onApply = vi.fn()
+    render(
+      <FiltersPanel
+        sections={sections}
+        activeValues={() => []}
+        onToggle={() => {}}
+        onApply={onApply}
+      />,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Filtros' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Bahia' }))
+    await user.click(screen.getByRole('button', { name: 'Fechar filtros' }))
+
+    expect(onApply).not.toHaveBeenCalled()
+    expect(
+      screen.getByRole('dialog', { hidden: true, name: 'Filtros' }),
+    ).toHaveAttribute('inert', '')
+  })
+
+  it('pré-seleciona no rascunho os filtros já ativos na URL', async () => {
+    stubMobile()
+    const user = userEvent.setup()
+    const onApply = vi.fn()
+    render(
+      <FiltersPanel
+        sections={sections}
+        activeValues={() => ['SP']}
+        onToggle={() => {}}
+        onApply={onApply}
+      />,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Filtros' }))
+
+    expect(screen.getByRole('checkbox', { name: 'São Paulo' })).toBeChecked()
+
+    await user.click(screen.getByRole('button', { name: 'Aplicar' }))
+    expect(onApply).toHaveBeenCalledWith({ uf: ['SP'] })
   })
 })

@@ -25,7 +25,7 @@ source "$SCRIPTS_DIR/lib/env.sh"
 ES_HOST_URL="${ES_HOST_URL:-http://localhost:9200}"
 
 [[ $# -ge 1 && $# -le 2 ]] || die "uso: $0 <cursos|ies> [id]"
-[[ -f "$ENV_FILE" ]] || die "$ENV_FILE não encontrado (rode ./setup.sh)"
+[[ -f "$ENV_FILE" ]] || die "$ENV_FILE não encontrado (rode ./setup-dev.sh)"
 require_command curl
 
 case "$1" in

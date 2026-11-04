@@ -111,11 +111,11 @@ export function BottomSheet({
             aria-label="Fechar filtros"
             onClick={onClose}
             className={cn(
-              'cursor-pointer justify-self-end rounded-sm p-1 text-fg-muted transition-colors hover:text-fg',
+              'flex size-11 cursor-pointer items-center justify-center justify-self-end rounded-full border border-border-primary bg-surface-lv1 text-fg transition-colors hover:border-accent-deep hover:text-accent-deep',
               'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
             )}
           >
-            <X className="size-4" aria-hidden="true" />
+            <X className="size-6" aria-hidden="true" />
           </button>
         </div>
 

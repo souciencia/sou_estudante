@@ -40,6 +40,8 @@ export interface FiltersPanelProps {
   aggregations?: AggregationsMap | null
   activeValues: (key: string) => string[]
   onToggle: (key: string, value: string) => void
+  /** Grava de uma vez o estado completo dos filtros (usado no mobile ao aplicar). */
+  onApply?: (values: Record<string, string[]>) => void
   /** Limpa todos os filtros ativos. Sem ele, desmarca cada valor ativo. */
   onClear?: () => void
   /** Conteúdo exibido como primeiro item, antes das seções de filtro. */
@@ -60,6 +62,7 @@ export function FiltersPanel({
   aggregations,
   activeValues,
   onToggle,
+  onApply,
   onClear,
   leading,
   module,
@@ -67,18 +70,54 @@ export function FiltersPanel({
 }: FiltersPanelProps) {
   const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY)
   const [open, setOpen] = useState(false)
+  const [draft, setDraft] = useState<Record<string, string[]> | null>(null)
   const titleId = useId()
   const sheetId = useId()
 
+  const drafting = isMobile && draft !== null
+  const resolvedActiveValues = drafting
+    ? (key: string) => draft?.[key] ?? []
+    : activeValues
+  const toggleDraft = (key: string, value: string) => {
+    setDraft((current) =>
+      current ? toggleDraftValues(current, key, value) : current,
+    )
+  }
+  const resolvedOnToggle = drafting ? toggleDraft : onToggle
+
   const hasActiveFilters = sections.some(
-    (section) => activeValues(section.key).length > 0,
+    (section) => resolvedActiveValues(section.key).length > 0,
   )
   const activeCount = sections.reduce(
     (sum, section) => sum + activeValues(section.key).length,
     0,
   )
 
+  const openSheet = () => {
+    setDraft(
+      Object.fromEntries(
+        sections.map((section) => [section.key, activeValues(section.key)]),
+      ),
+    )
+    setOpen(true)
+  }
+
+  const closeSheet = () => {
+    setOpen(false)
+    setDraft(null)
+  }
+
+  const applyDraft = () => {
+    if (draft) onApply?.(draft)
+    closeSheet()
+  }
+
   const handleClear = () => {
+    if (drafting) {
+      setDraft(Object.fromEntries(sections.map((section) => [section.key, []])))
+      return
+    }
+
     if (onClear) {
       onClear()
       return
@@ -141,8 +180,8 @@ export function FiltersPanel({
           <FilterSection
             section={section}
             aggregations={aggregations}
-            activeValues={activeValues}
-            onToggle={onToggle}
+            activeValues={resolvedActiveValues}
+            onToggle={resolvedOnToggle}
           />
         </Fragment>
       ))}
@@ -158,7 +197,7 @@ export function FiltersPanel({
           aria-haspopup="dialog"
           aria-expanded={open}
           aria-controls={sheetId}
-          onClick={() => setOpen(true)}
+          onClick={openSheet}
         >
           <SlidersHorizontal className="size-4" aria-hidden="true" />
           Filtros
@@ -177,17 +216,24 @@ export function FiltersPanel({
         <BottomSheet
           id={sheetId}
           open={open}
-          onClose={() => setOpen(false)}
+          onClose={closeSheet}
           labelledBy={titleId}
         >
           <div
             data-module={module}
-            className={cn(
-              'flex flex-col gap-6 p-6 font-sans text-fg',
-              className,
-            )}
+            className={cn('flex flex-col font-sans text-fg', className)}
           >
-            {content}
+            <div className="flex flex-col gap-6 p-6">{content}</div>
+            <div className="sticky bottom-0 border-t border-border-primary bg-surface-lv1 px-6 py-4">
+              <Button
+                module={module}
+                v="solid"
+                onClick={applyDraft}
+                className="w-full justify-center"
+              >
+                Aplicar
+              </Button>
+            </div>
           </div>
         </BottomSheet>
       </>
@@ -205,6 +251,18 @@ export function FiltersPanel({
       {content}
     </div>
   )
+}
+
+function toggleDraftValues(
+  draft: Record<string, string[]>,
+  key: string,
+  value: string,
+): Record<string, string[]> {
+  const values = draft[key] ?? []
+  const next = values.includes(value)
+    ? values.filter((item) => item !== value)
+    : [...values, value]
+  return { ...draft, [key]: next }
 }
 
 interface FilterSectionProps {
