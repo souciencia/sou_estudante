@@ -10,7 +10,7 @@ interface IesResultItemProps {
 
 export function IesResultItem({ ies, module }: IesResultItemProps) {
   const nome = ies.no_ies || 'Instituição não especificada'
-  const sigla = ies.sg_ies || ''
+  const sigla = ies.sg_ies === 'INEXISTENTE' ? undefined : ies.sg_ies
   const localizacao = [ies.localizacao?.no_municipio, ies.localizacao?.sg_uf]
     .filter(Boolean)
     .join(' - ')

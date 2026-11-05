@@ -20,7 +20,16 @@ export const iesService = {
     limit = 20,
     filters?: Record<string, string | null>,
   ): Promise<Result<IesListResponse>> {
-    const params = buildSearchParams(query, page, limit, filters)
+    const filtersDefault = {
+      // busca por relevancia torna-se padrao
+      sort: 'relevancia',
+      ...filters,
+    }
+
+    // torna query maiuscula para conseguir buscar as siglas de ies corretamente
+    const queryDefault = query.toUpperCase()
+
+    const params = buildSearchParams(queryDefault, page, limit, filtersDefault)
 
     return apiClient<IesListResponse>(
       `${API_CONFIG.ENDPOINTS.SEARCH_IES}?${params.toString()}`,
