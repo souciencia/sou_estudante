@@ -155,7 +155,7 @@ export function FiltersPanel({
               : 'cursor-not-allowed text-fg-muted',
           )}
         >
-          <span className="text-xs">Limpar tudo</span>
+          <span className="text-xs">Limpar filtros</span>
         </button>
       </header>
 
