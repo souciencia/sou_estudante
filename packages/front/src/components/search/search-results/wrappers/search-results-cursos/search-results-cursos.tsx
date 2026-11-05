@@ -46,7 +46,7 @@ export function SearchResultsCursos({ module }: SearchResultsCursosProps) {
       labels={{ singular: 'curso', plural: 'cursos' }}
       emptyMessage="Nenhum curso encontrado"
       showCount={false}
-      footer={<SearchResultsCursosSummary module={module} />}
+      footer={<SearchResultsCursosSummary />}
       getItemKey={(curso, index) =>
         curso.sequencial
           ? `seq-${curso.sequencial}`
