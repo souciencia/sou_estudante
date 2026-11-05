@@ -52,7 +52,7 @@ describe('ProfileIES', () => {
   it('handles fallback fallback texts when name or abbreviation are missing', () => {
     const incompleteIes = {
       ...iesMock,
-      sg_ies: '',
+      sg_ies: 'INEXISTENTE',
       no_ies: undefined,
     }
 

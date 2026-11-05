@@ -35,7 +35,7 @@ describe('iesService.searchIes', () => {
 
     const [url] = mockFetch.mock.calls[0] as [string]
     expect(url).toContain('/ies')
-    expect(url).toContain('q=anhang')
+    expect(url).toContain('q=ANHANG')
     expect(url).toContain('page=2')
     expect(url).toContain('limit=10')
     expect(url).toContain('uf=SP')
