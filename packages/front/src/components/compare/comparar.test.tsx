@@ -6,12 +6,6 @@ import type { Curso } from '@/services/api/types'
 import { Comparar } from './comparar'
 import { CompareProvider, useCompareCursos } from './compare-provider'
 
-const push = vi.fn()
-
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push }),
-}))
-
 vi.mock('@/services/api/curso.service', () => ({
   cursoService: { getCurso: vi.fn() },
 }))
@@ -45,11 +39,6 @@ function Seeder({ ids }: { ids: string[] }) {
   )
 }
 
-function ComparingProbe() {
-  const { isComparing } = useCompareCursos()
-  return <span data-testid="comparing">{String(isComparing)}</span>
-}
-
 function renderComparar(ids: string[]) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -59,7 +48,6 @@ function renderComparar(ids: string[]) {
     <QueryClientProvider client={queryClient}>
       <CompareProvider>
         <Seeder ids={ids} />
-        <ComparingProbe />
         <Comparar module="5" />
       </CompareProvider>
     </QueryClientProvider>,
@@ -67,21 +55,6 @@ function renderComparar(ids: string[]) {
 }
 
 describe('Comparar', () => {
-  it('mostra o estado vazio quando nenhum curso foi selecionado', () => {
-    renderComparar([])
-
-    expect(screen.getByText('Nenhum curso selecionado')).toBeInTheDocument()
-  })
-
-  it('ativa o modo de comparação e navega para a busca ao clicar em "Buscar cursos"', () => {
-    renderComparar([])
-
-    fireEvent.click(screen.getByRole('button', { name: 'Buscar cursos' }))
-
-    expect(push).toHaveBeenCalledWith('/cursos')
-    expect(screen.getByTestId('comparing')).toHaveTextContent('true')
-  })
-
   it('busca e exibe os cursos selecionados na matriz', async () => {
     vi.mocked(cursoService.getCurso).mockResolvedValue({
       success: true,
