@@ -49,6 +49,18 @@ describe('CourseSearchRedirect', () => {
     fireEvent.change(input, { target: { value: 'medicina' } })
     fireEvent.keyDown(input, { key: 'Enter' })
 
-    expect(push).toHaveBeenCalledWith('/cursos?q=medicina&to=ingresso')
+    expect(push).toHaveBeenCalledWith(
+      '/cursos?q=medicina&to=ingresso&ingresso=sisu',
+    )
+  })
+
+  it('does not add the sisu filter for the permanencia origin', () => {
+    render(<CourseSearchRedirect to="permanencia" title="Como permanecer?" />)
+
+    const input = screen.getByRole('combobox')
+    fireEvent.change(input, { target: { value: 'medicina' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+
+    expect(push).toHaveBeenCalledWith('/cursos?q=medicina&to=permanencia')
   })
 })

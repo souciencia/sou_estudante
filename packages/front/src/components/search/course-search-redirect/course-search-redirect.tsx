@@ -32,6 +32,9 @@ export function CourseSearchRedirect({
 
   const handleSubmit = (value: string) => {
     const params = new URLSearchParams({ q: value, to })
+    if (to === 'ingresso') {
+      params.set('ingresso', 'sisu')
+    }
     router.push(`/cursos?${params.toString()}`)
   }
 
