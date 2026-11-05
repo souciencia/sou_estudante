@@ -1,5 +1,4 @@
 import { Hero } from '@/components/layout/hero/hero'
-import { Button } from '@/components/ui/button/button'
 import { Route } from '@/components/ui/route/route'
 import { MODULES } from '@/lib/module'
 
@@ -33,25 +32,8 @@ export default function Home() {
         </section>
 
         <section id="howto" className="mx-auto mt-9 max-w-[680px]">
-          <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2.5">
-            <div className="text-xs font-bold uppercase tracking-[0.9px] text-fg-muted">
-              Como funciona
-            </div>
-
-            <Button
-              type="button"
-              className="inline-flex cursor-pointer items-center gap-[6px] rounded-full border-none bg-fg px-[0.9rem] py-[0.45rem] font-sans text-xs font-semibold text-on-dark"
-            >
-              <svg
-                viewBox="0 0 12 12"
-                fill="none"
-                className="h-[10px] w-[10px]"
-                aria-hidden="true"
-              >
-                <path d="M3 2L10 6L3 10Z" fill="currentColor" />
-              </svg>
-              Ver passo a passo guiado
-            </Button>
+          <div className="mb-3.5 text-xs font-bold uppercase tracking-[0.9px] text-fg-muted">
+            Como funciona
           </div>
 
           <p className="mb-4 max-w-[600px] text-xs leading-[1.55] text-fg-muted">
