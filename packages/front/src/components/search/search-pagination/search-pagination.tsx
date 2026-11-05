@@ -31,44 +31,28 @@ export function Pagination({
     <nav
       data-module={module}
       className={cn(
-        'flex items-center justify-between gap-4 py-4 font-sans text-fg',
+        'flex items-center justify-between gap-4 rounded-card bg-filters-bg px-4 py-4 font-sans text-fg shadow',
         className,
       )}
       aria-label="Navegação de páginas"
     >
-      <div className="flex gap-2">
-        <PaginationButton
-          onClick={() => onNavigate(links.first)}
-          disabled={!links.prev}
-          label="Primeira"
-          ariaLabel="Ir para primeira página"
-        />
-        <PaginationButton
-          onClick={() => links.prev && onNavigate(links.prev)}
-          disabled={!links.prev}
-          label="Anterior"
-          ariaLabel="Ir para página anterior"
-        />
-      </div>
+      <PaginationButton
+        onClick={() => links.prev && onNavigate(links.prev)}
+        disabled={!links.prev}
+        label="Anterior"
+        ariaLabel="Ir para página anterior"
+      />
 
       <Typo v="mute" s="sm" t="span">
         Página {currentPage} de {totalPages}
       </Typo>
 
-      <div className="flex gap-2">
-        <PaginationButton
-          onClick={() => links.next && onNavigate(links.next)}
-          disabled={!links.next}
-          label="Próxima"
-          ariaLabel="Ir para próxima página"
-        />
-        <PaginationButton
-          onClick={() => onNavigate(links.last)}
-          disabled={!links.next}
-          label="Última"
-          ariaLabel="Ir para última página"
-        />
-      </div>
+      <PaginationButton
+        onClick={() => links.next && onNavigate(links.next)}
+        disabled={!links.next}
+        label="Próxima"
+        ariaLabel="Ir para próxima página"
+      />
     </nav>
   )
 }
