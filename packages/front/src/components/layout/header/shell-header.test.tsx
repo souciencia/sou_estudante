@@ -44,7 +44,7 @@ describe('ShellHeader', () => {
   ])('shows the inner header with the site name on %s', (pathname) => {
     renderAt(pathname)
 
-    expect(screen.getByRole('banner')).toHaveClass('max-w-pages')
+    expect(screen.getByRole('banner')).toHaveClass('max-w-home')
     expect(screen.getByRole('link', { name: /SoU_Estudante/ })).toHaveAttribute(
       'href',
       '/',

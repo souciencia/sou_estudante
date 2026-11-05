@@ -7,7 +7,7 @@ const P = 'font-sans text-base leading-[1.7] text-fg'
 
 export default function SobrePage() {
   return (
-    <div className="mx-auto w-full max-w-pages px-3 py-8 bg-surface-lv1 rounded-b-callout">
+    <div className="mx-auto w-full max-w-home px-3 py-8 bg-surface-lv1 rounded-b-callout">
       <article className="mx-auto max-w-2xl">
         <header>
           <h1 className="font-sans text-display font-bold leading-[1.08] tracking-[-0.02em] text-fg">

@@ -7,7 +7,7 @@ const P = 'font-sans text-base leading-[1.7] text-fg'
 
 export default function MetodologiaPage() {
   return (
-    <div className="mx-auto w-full max-w-pages px-4 py-6 bg-surface-lv1 rounded-b-callout">
+    <div className="mx-auto w-full max-w-home px-4 py-6 bg-surface-lv1 rounded-b-callout">
       <article className="mx-auto max-w-3xl">
         <div>
           <span className="text-2xs text-fg-muted font-bold tracking-[0.7px]">
