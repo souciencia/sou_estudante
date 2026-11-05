@@ -35,7 +35,7 @@ function RouteLineIcon({ className }: { className?: string }) {
 export function RoutesBar({ module, className }: RoutesBarProps) {
   return (
     <nav aria-label="Rotas" data-module={module} className={cn(className)}>
-      <div className="mx-auto flex w-full max-w-pages items-center gap-5 overflow-x-auto px-5">
+      <div className="mx-auto flex w-full max-w-home items-center gap-5 overflow-x-auto px-5">
         <span className="flex shrink-0 items-center gap-[7px] py-3 text-xs font-bold uppercase tracking-[0.9px] text-fg-muted">
           <RouteLineIcon className="size-[14px]" />
           Rota

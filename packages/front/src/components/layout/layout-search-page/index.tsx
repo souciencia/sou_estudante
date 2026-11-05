@@ -53,7 +53,7 @@ export function LayoutSearchPage({
 
   return (
     <div data-module={module} className="min-h-screen">
-      <div className="mx-auto w-full max-w-pages px-5 py-8 min-h-page bg-surface-lv1 rounded-b-callout shadw">
+      <div className="mx-auto w-full max-w-home px-5 py-8 min-h-page bg-surface-lv1 rounded-b-callout shadw">
         {/* <RoutesBar module={module} /> */}
         {meta && module && (
           <header className="mb-6">

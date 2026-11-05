@@ -16,7 +16,7 @@ const sections: FilterSectionDefinition[] = [
 ]
 
 describe('FiltersPanel', () => {
-  it('renderiza grupos, opções e contagens das agregações', () => {
+  it('renderiza grupos e opções das agregações', () => {
     render(
       <FiltersPanel
         sections={sections}
@@ -27,10 +27,7 @@ describe('FiltersPanel', () => {
     )
 
     expect(screen.getByText('Estado')).toBeInTheDocument()
-    expect(screen.getByText('10')).toBeInTheDocument()
-    expect(
-      screen.getByRole('checkbox', { name: 'São Paulo, 10 resultados' }),
-    ).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: 'São Paulo' })).toBeChecked()
   })
 
   it('dispara onToggle com a chave do filtro e o valor', () => {

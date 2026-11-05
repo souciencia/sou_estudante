@@ -55,12 +55,6 @@ function renderComparar(ids: string[]) {
 }
 
 describe('Comparar', () => {
-  it('mostra o estado vazio quando nenhum curso foi selecionado', () => {
-    renderComparar([])
-
-    expect(screen.getByText('Nenhum curso selecionado')).toBeInTheDocument()
-  })
-
   it('busca e exibe os cursos selecionados na matriz', async () => {
     vi.mocked(cursoService.getCurso).mockResolvedValue({
       success: true,

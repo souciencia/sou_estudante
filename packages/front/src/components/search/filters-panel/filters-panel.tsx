@@ -155,7 +155,7 @@ export function FiltersPanel({
               : 'cursor-not-allowed text-fg-muted',
           )}
         >
-          <span className="text-xs">Limpar tudo</span>
+          <span className="text-xs">Limpar filtros</span>
         </button>
       </header>
 
@@ -306,7 +306,6 @@ function FilterSection({
             <FilterGroup.Option
               key={item.value}
               label={item.label}
-              resultCount={resultCount}
               checked={isActive}
               disabled={resultCount === 0 && !isActive}
               onChange={() => onToggle(section.key, item.value)}

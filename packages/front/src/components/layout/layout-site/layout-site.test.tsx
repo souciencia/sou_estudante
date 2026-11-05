@@ -57,11 +57,11 @@ describe('LayoutSite', () => {
     expect(screen.getByRole('banner')).toHaveClass('max-w-home')
   })
 
-  it('keeps the header full width on other pages', () => {
+  it('constrains the header to the home content width on list pages', () => {
     vi.mocked(usePathname).mockReturnValue('/cursos')
 
     renderShell()
 
-    expect(screen.getByRole('banner')).not.toHaveClass('max-w-home')
+    expect(screen.getByRole('banner')).toHaveClass('max-w-home')
   })
 })

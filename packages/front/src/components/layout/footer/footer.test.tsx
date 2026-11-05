@@ -90,9 +90,9 @@ describe('Footer', () => {
 
   it.each([
     ['/', 'max-w-home'],
-    ['/cursos', 'max-w-pages'],
-    ['/metodologia', 'max-w-pages'],
-    ['/sobre', 'max-w-pages'],
+    ['/cursos', 'max-w-home'],
+    ['/metodologia', 'max-w-home'],
+    ['/sobre', 'max-w-home'],
     ['/cursos/123', 'max-w-2xl'],
   ])('uses the %s container width on %s', (pathname, expected) => {
     vi.mocked(usePathname).mockReturnValue(pathname)

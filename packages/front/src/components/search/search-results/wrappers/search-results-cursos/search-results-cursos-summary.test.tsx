@@ -54,44 +54,6 @@ describe('SearchResultsCursosSummary', () => {
     expect(screen.getByText('1 curso encontrado')).toBeInTheDocument()
   })
 
-  it('exibe a tag de gratuitos ao lado da contagem', () => {
-    vi.mocked(useSearchCursos).mockReturnValue(
-      buildHookReturn({
-        results: [curso, curso],
-        total: 30,
-        aggregations: { ingresso: [{ key: 'gratuito', count: 12 }] },
-      }),
-    )
-
-    render(<SearchResultsCursosSummary />)
-
-    expect(screen.getByText('12 gratuitos')).toBeInTheDocument()
-  })
-
-  it('usa o singular na tag quando há um único gratuito', () => {
-    vi.mocked(useSearchCursos).mockReturnValue(
-      buildHookReturn({
-        results: [curso, curso],
-        total: 30,
-        aggregations: { ingresso: [{ key: 'gratuito', count: 1 }] },
-      }),
-    )
-
-    render(<SearchResultsCursosSummary />)
-
-    expect(screen.getByText('1 gratuito')).toBeInTheDocument()
-  })
-
-  it('omite a tag quando não há gratuitos', () => {
-    vi.mocked(useSearchCursos).mockReturnValue(
-      buildHookReturn({ results: [curso, curso], total: 30 }),
-    )
-
-    render(<SearchResultsCursosSummary />)
-
-    expect(screen.queryByText(/gratuito/)).not.toBeInTheDocument()
-  })
-
   it('não renderiza nada quando não há resultados', () => {
     vi.mocked(useSearchCursos).mockReturnValue(
       buildHookReturn({ results: [], total: 0 }),

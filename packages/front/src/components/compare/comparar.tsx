@@ -1,10 +1,8 @@
 'use client'
 
 import { useQueries } from '@tanstack/react-query'
-import Link from 'next/link'
 import { SkeletonCard } from '@/components/ui/card/skeleton-card'
 import { ErrorMessage } from '@/components/ui/error-message'
-import { Typo } from '@/components/ui/typo'
 import type { Module } from '@/lib/module'
 import { cursoService } from '@/services/api/curso.service'
 import { CompareMatrix } from './compare-matrix'
@@ -42,23 +40,7 @@ export function Comparar({ module }: CompararProps) {
   })
 
   if (ids.length === 0) {
-    return (
-      <div className="rounded-card border border-border-primary bg-surface-lv2 p-8 text-center">
-        <Typo v="title" s="lg" t="h2" className="block">
-          Nenhum curso selecionado
-        </Typo>
-        <Typo v="mute" s="sm" t="p" className="mt-2">
-          Volte à busca, ative a comparação e selecione os cursos que você quer
-          colocar lado a lado.
-        </Typo>
-        <Link
-          href="/cursos"
-          className="mt-6 inline-block rounded-full border border-accent bg-accent px-5 py-2 font-sans text-sm font-bold text-accent-fg shadow-md transition duration-300 hover:bg-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
-        >
-          Buscar cursos
-        </Link>
-      </div>
-    )
+    return null
   }
 
   if (queries.some((query) => query.isPending)) {
