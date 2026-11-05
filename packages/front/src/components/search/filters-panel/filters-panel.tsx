@@ -306,7 +306,6 @@ function FilterSection({
             <FilterGroup.Option
               key={item.value}
               label={item.label}
-              resultCount={resultCount}
               checked={isActive}
               disabled={resultCount === 0 && !isActive}
               onChange={() => onToggle(section.key, item.value)}

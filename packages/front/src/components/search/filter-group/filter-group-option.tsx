@@ -3,7 +3,6 @@ import { useFilterGroupContext } from './filter-group-context'
 
 export interface FilterGroupOptionProps {
   label: string
-  resultCount?: number
   checked?: boolean
   disabled?: boolean
   className?: string
@@ -14,7 +13,6 @@ export interface FilterGroupOptionProps {
 
 export function FilterGroupOption({
   label,
-  resultCount,
   checked,
   disabled = false,
   className,
@@ -24,11 +22,6 @@ export function FilterGroupOption({
   // `useFilterGroupContext` garante que a opção está dentro de `FilterGroup.Root`
   // e fornece o `groupId` usado como `name` dos radios para agrupá-los.
   const { groupId } = useFilterGroupContext('FilterGroup.Option')
-  const hasResultCount = typeof resultCount === 'number'
-  const countPhrase = hasResultCount
-    ? `${resultCount} ${resultCount === 1 ? 'resultado' : 'resultados'}`
-    : null
-  const accessibleLabel = countPhrase ? `${label}, ${countPhrase}` : label
 
   return (
     <li className={className}>
@@ -50,18 +43,10 @@ export function FilterGroupOption({
           disabled={disabled}
           readOnly={checked !== undefined && !onChange}
           onChange={onChange}
-          aria-label={accessibleLabel}
+          aria-label={label}
           className="sr-only"
         />
         <span aria-hidden="true">{label}</span>
-        {hasResultCount && (
-          <span
-            aria-hidden="true"
-            className="font-normal tabular-nums text-xs opacity-70"
-          >
-            {resultCount}
-          </span>
-        )}
       </label>
     </li>
   )

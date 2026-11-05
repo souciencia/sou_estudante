@@ -158,36 +158,4 @@ describe('FiltersPanelCursos', () => {
 
     expect(container.firstChild).toHaveAttribute('data-module', '5')
   })
-
-  it('exibe as contagens dinâmicas resultCount nas opções a partir de aggregations', () => {
-    const params = new URLSearchParams()
-    vi.mocked(useSearchParams).mockReturnValue(
-      params as unknown as ReadonlyURLSearchParams,
-    )
-    vi.mocked(useSearchCursos).mockReturnValue({
-      query: 'direito',
-      results: [],
-      isLoading: false,
-      error: null,
-      total: 0,
-      currentPage: 1,
-      limit: 20,
-      links: null,
-      setQuery: vi.fn(),
-      navigateToPage: vi.fn(),
-      updateParams: mockUpdateParams,
-      resetFilters: vi.fn(),
-      aggregations: {
-        ufs: [{ key: 'SP', count: 323 }],
-        graus: [{ key: 'BACHARELADO', count: 1860 }],
-        enades: [{ key: '5', count: 73 }],
-      },
-    } as unknown as ReturnType<typeof useSearchCursos>)
-
-    render(<FiltersPanelCursos />)
-
-    expect(screen.getByText('323')).toBeInTheDocument()
-    expect(screen.getByText('1860')).toBeInTheDocument()
-    expect(screen.getByText('73')).toBeInTheDocument()
-  })
 })
