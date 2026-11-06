@@ -4,7 +4,7 @@ import { MODULES } from '@/lib/module'
 
 export default function Home() {
   return (
-    <div className="bg-surface-lv2 rounded-b-lg mx-auto w-full min-[860px]:max-w-home shadw">
+    <div className="bg-surface-lv1 rounded-b-lg mx-auto w-full min-[860px]:max-w-home shadw">
       <Hero />
 
       <div className="px-5 pb-8 pt-10">
@@ -20,8 +20,8 @@ export default function Home() {
           </h2>
 
           <p className="mx-auto mb-[1.875rem] max-w-[520px] text-center text-sm leading-[1.6] text-fg-muted">
-            Cada módulo responde a uma pergunta da sua jornada. Acesse-os na
-            ordem que fizer sentido para você.
+            Escolha a pergunta que mais interessa a você agora. Não há uma ordem certa<br/>
+            para começar.
           </p>
 
           <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2.5 max-w-[820px] mx-auto">
@@ -37,8 +37,8 @@ export default function Home() {
           </div>
 
           <p className="mb-4 max-w-[600px] text-xs leading-[1.55] text-fg-muted">
-            Cada módulo leva o nome de um instrumento de navegação. Escolher
-            onde estudar também é traçar uma rota.
+            As cinco rotas ajudam você a explorar diferentes aspectos da escolha de um curso 
+            e de uma instituição de ensino superior. Você pode seguir pela rota que quiser.
           </p>
 
           <div className="grid gap-2">
