@@ -76,7 +76,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       lead: 'Entrar é só o começo.',
       accent: 'Permanecer também conta.',
       subtitle:
-        'Bolsas, cotas e apoios que ajudam a chegar até a formatura. Veja, por curso, quantos estudantes contaram com cada apoio — com o ano de referência sempre à vista.',
+        'Conheça os apoios, bolsas e financiamentos registrados para os estudantes de cada curso. Veja também quantos ingressaram por reserva de vagas — sempre com o ano de referência.',
     },
     list: {
       title: 'Encontre apoio para permanecer',
