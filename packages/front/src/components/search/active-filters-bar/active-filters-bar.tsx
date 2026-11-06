@@ -51,7 +51,7 @@ export function ActiveFiltersBar({
         <span
           key={`${item.key}-${item.value}`}
           className={cn(
-            'inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent-deep',
+            'inline-flex items-center gap-1 rounded-full border border-accent-deep/30 bg-accent/40 px-3 py-1 text-xs font-medium',
           )}
         >
           <Typo s="xs" t="span">
@@ -62,7 +62,7 @@ export function ActiveFiltersBar({
             onClick={() => onRemove(item.key, item.value)}
             aria-label={`Remover filtro ${item.label}`}
             className={cn(
-              'ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full text-accent-deep hover:bg-accent/20 cursor-pointer',
+              'ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full text-accent-deep hover:bg-accent/40 border-accent-deep/70 cursor-pointer',
               'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
             )}
           >
