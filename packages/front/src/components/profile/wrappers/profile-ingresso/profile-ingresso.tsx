@@ -105,7 +105,7 @@ export const ProfileIngresso = ({
         className="px-0"
       >
         <Tag
-          label={'Tem Sisu'}
+          label={'Com vagas no Sisu'}
           module={module}
           className="text-2xs py-[2px] bg-accent/10 border-accent/30"
           variant="module"
