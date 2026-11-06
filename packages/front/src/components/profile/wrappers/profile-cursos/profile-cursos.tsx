@@ -22,7 +22,11 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
   const subtitulo =
-    curso.instituicao?.sg_ies || curso.instituicao?.no_ies || undefined
+    curso.instituicao?.sg_ies === 'INEXISTENTE'
+      ? curso.instituicao?.no_ies?.toUpperCase()
+      : curso.instituicao?.sg_ies ||
+        curso.instituicao?.no_ies?.toUpperCase() ||
+        undefined
   const cidade = curso.localizacao?.no_municipio
   const uf = curso.localizacao?.sg_uf
   const temSisu = curso.sisu?.tem_sisu ?? false
@@ -42,7 +46,7 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
       >
         {temSisu && (
           <Tag
-            label={'Tem Sisu'}
+            label={'Com vagas no Sisu'}
             module={'2'}
             className="text-2xs py-[2px] bg-accent/10 border-accent/30"
             variant="module"
@@ -84,8 +88,8 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
             module="2"
             variant="inline"
             href={ingressoHref}
-            title="Como ingressar neste curso"
-            description="Notas de corte, vagas e cotas no Sisu — Bússola"
+            title="Como posso ingressar?"
+            description="Veja vagas e informações do Sisu — Bússola"
           />
         )}
         <Route
@@ -93,7 +97,7 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
           variant="inline"
           href={permanenciaHref}
           title="Vou conseguir me manter?"
-          description="Bolsas, cotas e apoios à permanência — Âncora"
+          description="Bolsas, auxílios e outros apoios à permanência — Âncora"
         />
         <Route
           module="4"

@@ -20,7 +20,7 @@ export const CalloutRoot = ({
       data-variant={v}
       className={cn(
         'callout rounded-callout bg-callout-surface p-3 px-4 font-sans text-xs leading-[1.6]',
-        'border border-callout-accent/40 text-callout-accent-deep',
+        'border border-callout-accent-deep/30 text-callout-accent-deep',
         className,
       )}
       {...props}

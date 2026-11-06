@@ -24,7 +24,7 @@ export default function CursosPage() {
       filtersPanel={<FiltersPanelCursos module={module} />}
       results={<SearchResultsCursos module={module} />}
       minQueryLength={API_CONFIG.SEARCH_MIN_CHARS}
-      emptyPrompt="Busque um curso para ver os resultados"
+      emptyPrompt="Busque um curso para começar a explorar"
     />
   )
 }

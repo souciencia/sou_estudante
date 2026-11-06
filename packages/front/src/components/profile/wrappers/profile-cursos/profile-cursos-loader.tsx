@@ -24,7 +24,7 @@ export const ProfileCursosLoader = ({
       notFound={notFound}
       notFoundTitle="Curso não encontrado"
       notFoundDescription="O curso que você procura não existe ou foi removido."
-      fallbackError="Não foi possível carregar o curso."
+      fallbackError="Não foi possível carregar o curso. Pode ser uma instabilidade temporária. Tente novamente em alguns instantes."
       backHref="/cursos"
     >
       {(data) => <ProfileCursos curso={data} />}

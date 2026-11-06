@@ -79,7 +79,7 @@ describe('ProfileCursos', () => {
     )
 
     expect(
-      screen.getByRole('link', { name: /Como ingressar neste curso/ }),
+      screen.getByRole('link', { name: /Como posso ingressar/ }),
     ).toHaveAttribute('href', '/ingresso/1')
   })
 
@@ -87,7 +87,7 @@ describe('ProfileCursos', () => {
     render(<ProfileCursos curso={curso} />)
 
     expect(
-      screen.queryByRole('link', { name: /Como ingressar neste curso/ }),
+      screen.queryByRole('link', { name: /Como posso ingressar/ }),
     ).not.toBeInTheDocument()
   })
 

@@ -24,7 +24,7 @@ export const ProfileIngressoLoader = ({
       notFound={notFound}
       notFoundTitle="Oferta não encontrada"
       notFoundDescription="O endereço aponta para uma oferta que não existe nesta edição dos dados. O link pode estar desatualizado ou incompleto."
-      fallbackError="Não foi possível carregar esta oferta."
+      fallbackError="Não foi possível carregar esta oferta. Pode ser uma instabilidade temporária. Tente novamente em alguns instantes."
       backHref="/cursos"
     >
       {(data) => <ProfileIngresso curso={data} />}

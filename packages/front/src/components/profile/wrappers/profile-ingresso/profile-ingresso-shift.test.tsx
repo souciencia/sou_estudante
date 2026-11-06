@@ -47,7 +47,9 @@ describe('ProfileIngressoShift', () => {
   it('lists the quota offers after the broad-competition one', () => {
     render(<ProfileIngressoShift ofertas={[ampla, cota]} />)
 
-    expect(screen.getByText('Modalidades de cota — Sisu')).toBeInTheDocument()
+    expect(
+      screen.getByText('Modalidades de concorrência — Sisu'),
+    ).toBeInTheDocument()
     expect(
       screen.getByText('Baixa renda · demais candidatos'),
     ).toBeInTheDocument()
@@ -62,7 +64,7 @@ describe('ProfileIngressoShift', () => {
     render(<ProfileIngressoShift ofertas={[ampla]} />)
 
     expect(
-      screen.queryByText('Modalidades de cota — Sisu'),
+      screen.queryByText('Modalidades de concorrência — Sisu'),
     ).not.toBeInTheDocument()
   })
 })
