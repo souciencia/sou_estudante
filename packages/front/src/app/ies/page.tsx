@@ -6,6 +6,7 @@ import { SearchHeaderIes } from '@/components/search/search-header/wrappers/sear
 import { SearchResultsIes } from '@/components/search/search-results/wrappers/search-results-ies/search-results-ies'
 import { Callout } from '@/components/ui/callout'
 import type { Module } from '@/lib/module'
+import { IconModule } from '@/components/ui/icon-module/icon-module'
 
 const module: Module = '4'
 
@@ -20,10 +21,10 @@ export default function IesPage() {
       results={<SearchResultsIes module={module} />}
       emptyPrompt="Busque uma instituição para ver os resultados"
       notice={
-        <Callout v="blue">
+        <Callout v="module">
           <Callout.Header>
             <Callout.Icon>
-              <Info aria-hidden="true" />
+              <IconModule module="4" />
             </Callout.Icon>
             <Callout.HeaderContent>
               <Callout.Tagline>Para você, estudante</Callout.Tagline>
