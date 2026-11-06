@@ -45,7 +45,7 @@ export function ProfileLoader<TData>({
 
   if (notFound) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-16">
+      <div className="mx-auto max-w-2xl bg-surface-lv1 rounded-b-card shadw px-4 py-16">
         <div className="text-center">
           <Typo v="title" s="xl" t="h1" className="block">
             {notFoundTitle}
@@ -57,7 +57,7 @@ export function ProfileLoader<TData>({
         <div className="mt-6 text-center">
           <Link
             href={backHref}
-            className="inline-block rounded-full border border-accent px-5 py-2 font-sans text-sm font-bold text-accent-deep transition-colors hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
+            className="inline-block rounded-panel border border-accent-deep/80 bg-accent/30 px-5 py-2 font-sans text-sm font-bold text-accent-deep transition-colors hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
           >
             Voltar à busca
           </Link>
