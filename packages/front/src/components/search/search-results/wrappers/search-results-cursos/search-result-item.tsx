@@ -64,7 +64,7 @@ export function SearchResultItem({
   const tagsBottom: Array<string | CardTag | ReactElement> = []
   tags.push(<TagEnade key="enade" level={conceitoEnade} />)
   if (gratuito) tags.push({ label: 'Gratuito', tone: 'green' })
-  if (temSisu) tags.push({ label: 'Tem Sisu', tone: 'blue' })
+  if (temSisu) tags.push({ label: 'Com vagas no Sisu', tone: 'blue' })
   if (modalidade) tags.push(modalidade)
   if (turno) tags.push(turno)
   if (localizacaoTag) {

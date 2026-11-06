@@ -24,10 +24,9 @@ export const ProfileIngresso = ({
   const nomeCurso = curso.curso?.no_curso ?? 'Curso não especificado'
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
-  const subtitulo =
-    [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
-      .filter(Boolean)
-      .join(' · ') || undefined
+  const subtitulo = curso.instituicao?.sg_ies !== 'INEXISTENTE' 
+    ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies].filter(Boolean).join(' · ') 
+    : curso.instituicao?.no_ies || undefined
   const cidade = curso.localizacao?.no_municipio
   const uf = curso.localizacao?.sg_uf
   const ofertas = curso.sisu?.ofertas ?? []

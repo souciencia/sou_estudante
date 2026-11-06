@@ -33,7 +33,7 @@ export type ApiError = {
 
 export const ERROR_MESSAGES: Record<ApiErrorType, string> = {
   network: 'Sem conexão com a internet 📡',
-  server: 'Serviço temporariamente indisponível ⚙️',
+  server: 'Serviço temporariamente indisponível. Tente novamente em alguns instantes.',
   client: `Busca inválida. Digite pelo menos ${API_CONFIG.SEARCH_MIN_CHARS} caracteres 🔍`,
   parse: 'Erro ao processar resposta do servidor 🔧',
   validation: 'Nenhum resultado encontrado 🤷',
