@@ -56,9 +56,9 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     description: 'Notas de corte, vagas e cotas no Sisu',
     page: {
       lead: 'Ingresso',
-      accent: 'via Sisu',
+      accent: 'pelo Sisu',
       subtitle:
-        'Notas de corte, vagas e modalidades de cota — tudo pelo Enem. Dados da edição mais recente do Sisu.',
+        'Consulte vagas, notas de corte e modalidades de concorrência dos cursos oferecidos pelo Sisu. Dados da edição de 2026.',
     },
     list: {
       title: 'Veja como ingressar',
