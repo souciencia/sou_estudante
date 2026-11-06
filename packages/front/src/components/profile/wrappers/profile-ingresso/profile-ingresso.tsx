@@ -181,7 +181,7 @@ export const ProfileIngresso = ({
           variant="inline"
           href={permanenciaHref}
           title="Vou conseguir me manter?"
-          description="Bolsas, cotas e apoios à permanência — Âncora"
+          description="Bolsas, auxílios e outros apoios à permanência — Âncora"
         />
         <Route
           module="4"
