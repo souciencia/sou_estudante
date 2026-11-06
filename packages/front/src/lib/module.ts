@@ -94,7 +94,7 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       lead: 'Antes de embarcar,',
       accent: 'olhe de perto.',
       subtitle:
-        'Os indicadores oficiais da instituição — porte, cursos e corpo docente — traduzidos. O conceito de qualidade se lê no curso.',
+        'Conheça a instituição: número de estudantes, cursos de graduação e perfil do corpo docente, com dados do Censo da Educação Superior.',
     },
     list: {
       title: 'Conheça a instituição',

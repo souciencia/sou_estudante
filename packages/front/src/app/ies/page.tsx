@@ -32,15 +32,16 @@ export default function IesPage() {
           </Callout.Header>
           <Callout.Content>
             <p>
-              Aqui você encontra um retrato dos aspectos quantitativos da
-              instituição: quantos estudantes, quantos cursos, como se compõe o
-              corpo docente. Cada número vem do Censo da Educação Superior, com
-              ano e fonte declarados.
+              Aqui você encontra um retrato da instituição: quantos estudantes estão 
+              matriculados na graduação, quantos cursos ela oferece e como se compõe seu corpo docente.
             </p>
             <p>
-              A qualidade se verifica de vários modos — e o conceito Enade do
-              curso que você pretende fazer diz muito sobre a instituição. Os
-              números daqui dão contexto, não veredito.
+              Essas informações ajudam a conhecer o perfil da instituição, mas não dizem, 
+              sozinhas, como será a experiência em um curso específico. Para conhecer melhor 
+              o curso que você pretende fazer, consulte também as informações da Carta Náutica.
+            </p>
+            <p>
+              Os dados vêm do Censo da Educação Superior, com o ano de referência sempre indicado.
             </p>
           </Callout.Content>
           <Callout.Footer>
