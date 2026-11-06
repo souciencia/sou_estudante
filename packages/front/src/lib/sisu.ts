@@ -60,7 +60,7 @@ export function modalidadePorExtensao(oferta: Oferta): {
   if (codigo === 'B1') {
     return {
       nome: 'Bônus da instituição',
-      descricao: oferta.descricao ?? null
+      descricao: oferta.descricao ?? null,
     }
   }
 

@@ -1,5 +1,3 @@
-import { Info } from 'lucide-react'
-import { Button } from '@/components/ui/button/button'
 import { Tag } from '@/components/ui/tag/tag'
 import { modalidadePorExtensao } from '@/lib/sisu'
 import type { Oferta } from '@/services/api'

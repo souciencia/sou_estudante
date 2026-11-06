@@ -20,7 +20,9 @@ export default function Home() {
           </h2>
 
           <p className="mx-auto mb-[1.875rem] max-w-[520px] text-center text-sm leading-[1.6] text-fg-muted">
-            Escolha a pergunta que mais interessa a você agora. Não há uma ordem certa<br/>
+            Escolha a pergunta que mais interessa a você agora. Não há uma ordem
+            certa
+            <br />
             para começar.
           </p>
 
@@ -37,8 +39,9 @@ export default function Home() {
           </div>
 
           <p className="mb-4 max-w-[600px] text-xs leading-[1.55] text-fg-muted">
-            As cinco rotas ajudam você a explorar diferentes aspectos da escolha de um curso 
-            e de uma instituição de ensino superior. Você pode seguir pela rota que quiser.
+            As cinco rotas ajudam você a explorar diferentes aspectos da escolha
+            de um curso e de uma instituição de ensino superior. Você pode
+            seguir pela rota que quiser.
           </p>
 
           <div className="grid gap-2">

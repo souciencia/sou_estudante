@@ -22,7 +22,11 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
   const subtitulo =
-    curso.instituicao?.sg_ies === 'INEXISTENTE' ? curso.instituicao?.no_ies?.toUpperCase() : curso.instituicao?.sg_ies || curso.instituicao?.no_ies?.toUpperCase() || undefined
+    curso.instituicao?.sg_ies === 'INEXISTENTE'
+      ? curso.instituicao?.no_ies?.toUpperCase()
+      : curso.instituicao?.sg_ies ||
+        curso.instituicao?.no_ies?.toUpperCase() ||
+        undefined
   const cidade = curso.localizacao?.no_municipio
   const uf = curso.localizacao?.sg_uf
   const temSisu = curso.sisu?.tem_sisu ?? false

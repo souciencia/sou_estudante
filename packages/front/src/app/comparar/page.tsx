@@ -48,22 +48,24 @@ export default function CompararPage() {
             </Callout.Icon>
             <Callout.HeaderContent>
               <Callout.Tagline>Para você, estudante</Callout.Tagline>
-              <Callout.Title>Cursos diferentes podem ter vantagens diferentes para você.</Callout.Title>
+              <Callout.Title>
+                Cursos diferentes podem ter vantagens diferentes para você.
+              </Callout.Title>
             </Callout.HeaderContent>
           </Callout.Header>
           <Callout.Content>
             <p>
-              Um curso pode ficar mais perto de casa; outro pode ter uma forma de ingresso 
-              mais adequada à sua situação. Um pode ser gratuito; outro pode oferecer características 
-              que você considera importantes.
+              Um curso pode ficar mais perto de casa; outro pode ter uma forma
+              de ingresso mais adequada à sua situação. Um pode ser gratuito;
+              outro pode oferecer características que você considera
+              importantes.
             </p>
             <p>
-              Compare cada informação separadamente e observe sempre a fonte e o ano. A nota de corte, 
-              por exemplo, ajuda a entender resultados anteriores do Sisu — não mede a qualidade do curso.
+              Compare cada informação separadamente e observe sempre a fonte e o
+              ano. A nota de corte, por exemplo, ajuda a entender resultados
+              anteriores do Sisu — não mede a qualidade do curso.
             </p>
-            <p>
-              A escolha final é sua.
-            </p>
+            <p>A escolha final é sua.</p>
           </Callout.Content>
           <Callout.Footer>
             — SoU_Estudante · SoU_Ciência / Unifesp

@@ -48,11 +48,13 @@ export const ProfileIngressoQuotas = ({
           </div>
         )}
 
-        {nome !== 'Bônus da instituição' && !vazia && typeof vagas === 'number' && (
-          <div className="font-mono text-2xs text-fg-muted">
-            {vagas} {vagas === 1 ? 'vaga' : 'vagas'}
-          </div>
-        )}
+        {nome !== 'Bônus da instituição' &&
+          !vazia &&
+          typeof vagas === 'number' && (
+            <div className="font-mono text-2xs text-fg-muted">
+              {vagas} {vagas === 1 ? 'vaga' : 'vagas'}
+            </div>
+          )}
         {texto && <div className="text-2xs text-text-muted">{texto}</div>}
       </div>
     </div>

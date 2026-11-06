@@ -20,7 +20,8 @@ export function useCurso(id: string, initialData?: Curso): UseCursoReturn {
     scope: 'curso',
     id,
     fetcher: cursoService.getCurso,
-    errorMessage: 'Não foi possível carregar o curso. Pode ser uma instabilidade temporária. Tente novamente em alguns instantes.',
+    errorMessage:
+      'Não foi possível carregar o curso. Pode ser uma instabilidade temporária. Tente novamente em alguns instantes.',
     initialData,
   })
 

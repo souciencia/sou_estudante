@@ -30,18 +30,19 @@ export default function PermanenciaPage() {
           </Callout.Header>
           <Callout.Content>
             <p>
-              Moradia, alimentação, transporte e condições financeiras podem fazer 
-              diferença para continuar estudando. As instituições e os programas 
-              públicos oferecem diferentes formas de apoio.
+              Moradia, alimentação, transporte e condições financeiras podem
+              fazer diferença para continuar estudando. As instituições e os
+              programas públicos oferecem diferentes formas de apoio.
             </p>
             <p>
-              Aqui você pode consultar quantos estudantes tiveram apoio social, 
-              participaram de atividades extracurriculares, receberam ProUni ou utilizaram 
-              Fies, além de quantos ingressaram por reserva de vagas.
+              Aqui você pode consultar quantos estudantes tiveram apoio social,
+              participaram de atividades extracurriculares, receberam ProUni ou
+              utilizaram Fies, além de quantos ingressaram por reserva de vagas.
             </p>
             <p>
-              Os dados se referem ao ano indicado em cada informação e não mostram, necessariamente, 
-              todos os apoios disponíveis hoje. Por isso, consulte também o site da instituição.
+              Os dados se referem ao ano indicado em cada informação e não
+              mostram, necessariamente, todos os apoios disponíveis hoje. Por
+              isso, consulte também o site da instituição.
             </p>
           </Callout.Content>
           <Callout.Footer>

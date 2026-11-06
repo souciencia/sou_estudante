@@ -149,7 +149,8 @@ export const ProfilePermanencia = ({
             <strong className="text-fg">
               Existem outras formas de financiamento ou custeio
             </strong>
-            , sujeitas ao mercado de financiamentos privados. ProUni e Fies são iniciativas públicas.
+            , sujeitas ao mercado de financiamentos privados. ProUni e Fies são
+            iniciativas públicas.
           </Callout>
         </>
       )}

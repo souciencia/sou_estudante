@@ -13,7 +13,8 @@ export function useSearchCursos(explicitQuery?: string): UseSearchCursosReturn {
       scope: 'cursos',
       fetcher: cursoService.searchCursos,
       minChars: API_CONFIG.SEARCH_MIN_CHARS,
-      errorMessage: 'Erro ao buscar cursos. Tente novamente em alguns instantes.',
+      errorMessage:
+        'Erro ao buscar cursos. Tente novamente em alguns instantes.',
     },
     explicitQuery,
   )
