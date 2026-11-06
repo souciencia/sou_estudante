@@ -54,6 +54,17 @@ describe('Footer', () => {
     )
   })
 
+  it('links the logo to SoU_Ciência in a new tab', () => {
+    render(<Footer />)
+
+    const logoLink = screen.getByRole('link', {
+      name: 'SoU_Ciência · Unifesp',
+    })
+    expect(logoLink).toHaveAttribute('href', 'https://souciencia.unifesp.br/')
+    expect(logoLink).toHaveAttribute('target', '_blank')
+    expect(logoLink).toHaveAttribute('rel', 'noopener noreferrer')
+  })
+
   it('links to SoU_Ciência and Unifesp in new tabs', () => {
     render(<Footer />)
 
