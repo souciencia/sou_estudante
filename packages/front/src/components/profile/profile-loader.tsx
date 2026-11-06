@@ -68,7 +68,7 @@ export function ProfileLoader<TData>({
 
   if (error || !data) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-10">
+      <div className="mx-auto max-w-2xl bg-surface-lv1 rounded-b-card shadw px-4 py-10">
         <ErrorMessage message={error ?? fallbackError} />
       </div>
     )
