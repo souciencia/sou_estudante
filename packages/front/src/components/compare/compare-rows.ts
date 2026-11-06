@@ -18,7 +18,7 @@ export interface CompareSection {
 const capitalize = (value?: string) =>
   value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : ''
 
-const NAO_USA_SISU = 'Não usa Sisu · verifique as cotas na instituição'
+const NAO_USA_SISU = 'Sem vagas no Sisu · verifique as cotas na instituição'
 
 const MODALIDADES_COTA: ReadonlyArray<{ codigo: string; label: string }> = [
   { codigo: 'LB_EP', label: 'Baixa renda · demais candidatos' },

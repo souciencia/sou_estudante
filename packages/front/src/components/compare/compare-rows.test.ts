@@ -173,7 +173,7 @@ describe('buildCompareSections', () => {
     expect(linhas.get('Outras modalidades da instituição')).toBeUndefined()
   })
 
-  it('preenche com "Não usa Sisu" quando o curso não tem Sisu', () => {
+  it('preenche com "Sem vagas no Sisu" quando o curso não tem Sisu', () => {
     const sections = buildCompareSections([
       buildCurso({ sisu: { tem_sisu: false, ofertas: [] } }),
     ])
@@ -185,7 +185,7 @@ describe('buildCompareSections', () => {
       }
     }
 
-    const NAO_USA_SISU = 'Não usa Sisu · verifique as cotas na instituição'
+    const NAO_USA_SISU = 'Sem vagas no Sisu · verifique as cotas na instituição'
 
     expect(labels['Oferta no Sisu']).toBe(NAO_USA_SISU)
     expect(labels['Nota de corte']).toBe(NAO_USA_SISU)

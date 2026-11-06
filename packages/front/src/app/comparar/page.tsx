@@ -48,17 +48,21 @@ export default function CompararPage() {
             </Callout.Icon>
             <Callout.HeaderContent>
               <Callout.Tagline>Para você, estudante</Callout.Tagline>
+              <Callout.Title>Cursos diferentes podem ter vantagens diferentes para você.</Callout.Title>
             </Callout.HeaderContent>
           </Callout.Header>
           <Callout.Content>
             <p>
-              Um curso pode ter nota mais alta e ficar longe de casa. Outro pode
-              ser gratuito, mas mais concorrido. Não existe campeão único —
-              existe o que faz sentido para a sua rota.
+              Um curso pode ficar mais perto de casa; outro pode ter uma forma de ingresso 
+              mais adequada à sua situação. Um pode ser gratuito; outro pode oferecer características 
+              que você considera importantes.
             </p>
             <p>
-              Cada linha traz a fonte e o ano do dado — e a leitura final é sua.
-              A nota de corte, por exemplo, mostra concorrência, não qualidade.
+              Compare cada informação separadamente e observe sempre a fonte e o ano. A nota de corte, 
+              por exemplo, ajuda a entender resultados anteriores do Sisu — não mede a qualidade do curso.
+            </p>
+            <p>
+              A escolha final é sua.
             </p>
           </Callout.Content>
           <Callout.Footer>
