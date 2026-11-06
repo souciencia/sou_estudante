@@ -57,6 +57,13 @@ export function modalidadePorExtensao(oferta: Oferta): {
   const infos = MAPA[codigo]
   if (infos) return infos
 
+  if (codigo === 'B1') {
+    return {
+      nome: 'Bônus da instituição',
+      descricao: oferta.descricao ?? null
+    }
+  }
+
   return {
     nome: 'Outras modalidades da instituição',
     descricao: DESC_OUTRAS,
