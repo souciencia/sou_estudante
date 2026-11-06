@@ -41,7 +41,7 @@ export const ProfileIngresso = ({
     return (
       <Profile module={module} className="p-4" courseId={id} iesId={idIes}>
         <Profile.Header
-          badge="Ingresso via Sisu"
+          badge="Ingresso pelo Sisu"
           title={titulo}
           subtitle={subtitulo}
           className="px-0"
@@ -99,7 +99,7 @@ export const ProfileIngresso = ({
   return (
     <Profile module={module} className="p-4" courseId={id} iesId={idIes}>
       <Profile.Header
-        badge={'Ingresso via Sisu'}
+        badge={'Ingresso pelo Sisu'}
         title={titulo}
         subtitle={subtitulo}
         className="px-0"

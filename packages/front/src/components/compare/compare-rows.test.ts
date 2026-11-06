@@ -86,7 +86,7 @@ describe('buildCompareSections', () => {
 
     expect(ingresso?.source).toBe('Sisu')
     expect(
-      sections.some((section) => section.title === 'Ingresso via Sisu'),
+      sections.some((section) => section.title === 'Ingresso pelo Sisu'),
     ).toBe(false)
   })
 
