@@ -38,9 +38,9 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     navTitle: 'Cursos',
     description: 'Explore por área, localização e modalidade',
     page: {
-      lead: 'Descobrir cursos',
+      lead: 'Explorar cursos',
       accent: 'é traçar a rota.',
-      subtitle: 'Cursos do ensino superior no Brasil — fonte: Censo.',
+      subtitle: 'Cursos do ensino superior no Brasil. Fonte: Censo.',
     },
     list: {
       title: 'Explore os cursos',
