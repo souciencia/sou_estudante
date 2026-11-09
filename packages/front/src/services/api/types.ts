@@ -13,6 +13,19 @@ export interface SugestoesResponse {
   results: string[]
 }
 
+/**
+ * Município (código IBGE + nome), item do filtro de município por estado.
+ */
+export interface Municipio {
+  codigo: string
+  nome: string
+}
+
+/**
+ * Municípios agrupados por sigla de UF, retornados por `GET /municipios`.
+ */
+export type MunicipiosMap = Record<string, Municipio[]>
+
 export type Result<T> =
   | { success: true; data: T }
   | { success: false; error: ApiError }
@@ -70,6 +83,7 @@ export type AggregationsMap = Record<string, AggregationBucket[] | undefined>
 
 export interface SearchAggregations {
   ufs?: AggregationBucket[]
+  municipios?: AggregationBucket[]
   turnos?: AggregationBucket[]
   graus?: AggregationBucket[]
   categorias?: AggregationBucket[]
@@ -302,6 +316,7 @@ export interface IesVagasMatriculas {
 
 export interface IesSearchAggregations {
   ufs?: AggregationBucket[]
+  municipios?: AggregationBucket[]
   regioes?: AggregationBucket[]
   categorias?: AggregationBucket[]
   organizacoes?: AggregationBucket[]

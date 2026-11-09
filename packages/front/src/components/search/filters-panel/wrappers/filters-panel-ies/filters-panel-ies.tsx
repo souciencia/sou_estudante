@@ -8,10 +8,12 @@ import {
   type FilterSectionDefinition,
   FiltersPanel,
 } from '@/components/search/filters-panel/filters-panel'
-import { useFilterPanel } from '@/components/search/filters-panel/use-filter-panel'
+import { useMunicipioFilterPanel } from '@/components/search/filters-panel/use-municipio-filter-panel'
+import { MunicipioFilters } from '@/components/search/municipio-filter/municipio-filters'
 import { SortingOptionsIes } from '@/components/search/sorting-options/wrappers/sorting-options-ies/sorting-options-ies'
 import type { Module } from '@/lib/module'
 import { ufOptions } from '@/lib/uf'
+import { useMunicipios } from '@/services/api/use-municipios'
 import { useSearchIes } from '@/services/api/use-search-ies'
 
 interface FiltersPanelIesProps {
@@ -21,7 +23,14 @@ interface FiltersPanelIesProps {
 
 export function FiltersPanelIes({ module, className }: FiltersPanelIesProps) {
   const { updateParams, aggregations, resetFilters } = useSearchIes()
-  const { getActiveValues, toggle, apply } = useFilterPanel(updateParams)
+  const { municipios } = useMunicipios()
+  const { getActiveValues, onToggle, onApply } = useMunicipioFilterPanel(
+    updateParams,
+    municipios,
+  )
+  const availableCodigos = aggregations?.municipios
+    ? new Set(aggregations.municipios.map((bucket) => bucket.key))
+    : undefined
 
   const sections: FilterSectionDefinition[] = [
     {
@@ -55,10 +64,22 @@ export function FiltersPanelIes({ module, className }: FiltersPanelIesProps) {
       sections={sections}
       aggregations={aggregations}
       activeValues={getActiveValues}
-      onToggle={toggle}
-      onApply={apply}
+      onToggle={onToggle}
+      onApply={onApply}
       onClear={resetFilters}
       leading={<SortingOptionsIes module={module} />}
+      afterSection={(section, ctx) =>
+        section.key === 'uf' ? (
+          <MunicipioFilters
+            ufs={ctx.activeValues('uf')}
+            municipios={municipios}
+            selected={ctx.activeValues('municipio')}
+            onToggle={(codigo) => ctx.onToggle('municipio', codigo)}
+            availableCodigos={availableCodigos}
+            module={module}
+          />
+        ) : null
+      }
       module={module}
       className={className}
     />

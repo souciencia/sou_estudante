@@ -15,6 +15,10 @@ vi.mock('@/services/api/use-search-ies', () => ({
   useSearchIes: vi.fn(),
 }))
 
+vi.mock('@/services/api/use-municipios', () => ({
+  useMunicipios: () => ({ municipios: {}, isLoading: false, isError: false }),
+}))
+
 describe('ActiveFiltersIes', () => {
   const updateParams = vi.fn()
   const resetFilters = vi.fn()

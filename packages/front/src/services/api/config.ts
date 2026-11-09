@@ -19,6 +19,7 @@ export const API_CONFIG = {
     SEARCH_IES: '/ies',
     DETAIL_IES: (id: string) => `/ies/${encodeURIComponent(id)}`,
     SUGESTOES_IES: '/ies/sugestoes',
+    MUNICIPIOS: '/municipios',
     // Futuros endpoints dos 5 módulos:
     // COMO_INGRESSAR: '/ingresso',
     // COMO_PERMANECER: '/permanencia',
