@@ -1,5 +1,3 @@
-import { Info } from 'lucide-react'
-import { Button } from '@/components/ui/button/button'
 import { Tag } from '@/components/ui/tag/tag'
 import { modalidadePorExtensao } from '@/lib/sisu'
 import type { Oferta } from '@/services/api'
@@ -91,7 +89,7 @@ export const ProfileIngressoShift = ({
           <div className="mb-[10px] mt-4 flex items-center gap-2">
             <div className="h-px flex-1 bg-surface-deep" />
             <div className="whitespace-nowrap text-2xs font-bold uppercase tracking-[0.7px] text-fg-muted">
-              Modalidades de cota — Sisu
+              Modalidades de concorrência — Sisu
             </div>
             <div className="h-px flex-1 bg-surface-deep" />
           </div>
@@ -114,7 +112,7 @@ export const ProfileIngressoShift = ({
         </>
       )}
 
-      <footer className="flex items-center justify-between gap-2 border-t border-border-secondary pt-2">
+      {/*<footer className="flex items-center justify-between gap-2 border-t border-border-secondary pt-2">
         <Tag
           label={'Sisu'}
           module={'2'}
@@ -129,7 +127,7 @@ export const ProfileIngressoShift = ({
           <Info className="size-3" aria-hidden="true" />
           Como interpretar?
         </Button>
-      </footer>
+      </footer>*/}
     </article>
   )
 }

@@ -11,7 +11,7 @@ export default function PermanenciaPage() {
         <CourseSearchRedirect
           module="3"
           to="permanencia"
-          title="De qual curso você quer saber?"
+          title="Conheça os apoios aos estudantes. De qual curso você quer saber?"
           description="Busque seu curso."
         />
       }
@@ -30,17 +30,19 @@ export default function PermanenciaPage() {
           </Callout.Header>
           <Callout.Content>
             <p>
-              Muita gente entra na universidade e não consegue ficar — por falta
-              de moradia, transporte, ou de uma bolsa que faça a conta fechar.
-              Esses apoios existem, e os números mostram quem já alcançou cada
-              um.
+              Moradia, alimentação, transporte e condições financeiras podem
+              fazer diferença para continuar estudando. As instituições e os
+              programas públicos oferecem diferentes formas de apoio.
             </p>
             <p>
-              Os dados são proporcionais. Bolsas e cotas mostram quantos, entre
-              os ingressantes daquele ano, foram beneficiados; os apoios de
-              permanência tomam os matriculados como referência. Onde aparece
-              zero, significa que não houve beneficiário registrado — e isso
-              também é informação.
+              Aqui você pode consultar quantos estudantes tiveram apoio social,
+              participaram de atividades extracurriculares, receberam ProUni ou
+              utilizaram Fies, além de quantos ingressaram por reserva de vagas.
+            </p>
+            <p>
+              Os dados se referem ao ano indicado em cada informação e não
+              mostram, necessariamente, todos os apoios disponíveis hoje. Por
+              isso, consulte também o site da instituição.
             </p>
           </Callout.Content>
           <Callout.Footer>

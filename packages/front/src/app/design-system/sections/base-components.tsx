@@ -64,7 +64,7 @@ export function BaseComponents() {
             <Tag label="Tubarão, SC" variant="curso" source="Censo" />
           </State>
           <State label="blue">
-            <Tag label="Tem Sisu" variant="blue" />
+            <Tag label="Com vagas no Sisu" variant="blue" />
           </State>
           <State label="green">
             <Tag label="Gratuito" variant="green" />

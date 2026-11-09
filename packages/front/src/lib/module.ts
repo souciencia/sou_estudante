@@ -38,12 +38,12 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     navTitle: 'Cursos',
     description: 'Explore por área, localização e modalidade',
     page: {
-      lead: 'Descobrir cursos',
+      lead: 'Explorar cursos',
       accent: 'é traçar a rota.',
-      subtitle: 'Cursos do ensino superior no Brasil — fonte: Censo.',
+      subtitle: 'Cursos do ensino superior no Brasil. Fonte: Censo.',
     },
     list: {
-      title: 'Escolha um curso',
+      title: 'Explore os cursos',
       description:
         'A carta náutica mapeia as rotas possíveis: explore os cursos por área, local e modalidade.',
     },
@@ -56,14 +56,14 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
     description: 'Notas de corte, vagas e cotas no Sisu',
     page: {
       lead: 'Ingresso',
-      accent: 'via Sisu',
+      accent: 'pelo Sisu',
       subtitle:
-        'Notas de corte, vagas e modalidades de cota — tudo pelo Enem. Dados da edição mais recente do Sisu.',
+        'Consulte vagas, notas de corte e modalidades de concorrência dos cursos oferecidos pelo Sisu. Dados da edição de 2026.',
     },
     list: {
       title: 'Veja como ingressar',
       description:
-        'A bússola aponta o caminho da entrada: notas de corte, vagas e cotas no Sisu.',
+        'A bússola aponta o caminho da entrada: consulte notas de corte, vagas e cotas no Sisu.',
     },
     href: '/ingresso',
   },
@@ -76,12 +76,12 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       lead: 'Entrar é só o começo.',
       accent: 'Permanecer também conta.',
       subtitle:
-        'Bolsas, cotas e apoios que ajudam a chegar até a formatura. Veja, por curso, quantos estudantes contaram com cada apoio — com o ano de referência sempre à vista.',
+        'Conheça os apoios, bolsas e financiamentos registrados para os estudantes de cada curso. Veja também quantos ingressaram por reserva de vagas — sempre com o ano de referência.',
     },
     list: {
       title: 'Encontre apoio para permanecer',
       description:
-        'A âncora segura você no percurso: bolsas, cotas e apoios para chegar até a formatura.',
+        'A âncora ajuda a dar segurança ao percurso: conheça bolsas, auxílios e outros apoios para chegar até a formatura.',
     },
     href: '/permanencia',
   },
@@ -94,12 +94,12 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       lead: 'Antes de embarcar,',
       accent: 'olhe de perto.',
       subtitle:
-        'Os indicadores oficiais da instituição — porte, cursos e corpo docente — traduzidos. O conceito de qualidade se lê no curso.',
+        'Conheça a instituição: número de estudantes, cursos de graduação e perfil do corpo docente, com dados do Censo da Educação Superior.',
     },
     list: {
       title: 'Conheça a instituição',
       description:
-        'O telescópio aproxima o que está longe: os indicadores oficiais da instituição, traduzidos.',
+        'O telescópio ajuda você a olhar mais de perto informações e indicadores oficiais para conhecer melhor a instituição.',
     },
     href: '/ies',
   },
@@ -112,12 +112,12 @@ export const MODULE_META: Record<Module, ModuleMeta> = {
       lead: 'Lado a lado,',
       accent: 'a escolha fica mais clara.',
       subtitle:
-        'Compare até cinco cursos pelos mesmos critérios. Cada linha mostra de onde vem o dado e em que ano — sem somar tudo numa nota única, porque o que pesa mais é decisão sua.',
+        'Cada informação mostra sua fonte e seu ano de referência. O painel não transforma tudo em uma nota única: você decide o que é mais importante para a sua escolha.',
     },
     list: {
-      title: 'Compare lado a lado',
+      title: 'Compare lado a lado suas opções',
       description:
-        'O sextante mede posições para orientar a escolha: até cinco cursos comparados pelos mesmos critérios, sem ranking.',
+        'O sextante ajuda a orientar sua escolha: compare até cinco cursos pelos mesmos critérios, lado a lado e sem ranking.',
     },
     href: '/comparar',
   },

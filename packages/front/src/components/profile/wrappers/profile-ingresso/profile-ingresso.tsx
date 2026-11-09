@@ -25,9 +25,11 @@ export const ProfileIngresso = ({
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
   const subtitulo =
-    [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
-      .filter(Boolean)
-      .join(' · ') || undefined
+    curso.instituicao?.sg_ies !== 'INEXISTENTE'
+      ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
+          .filter(Boolean)
+          .join(' · ')
+      : curso.instituicao?.no_ies || undefined
   const cidade = curso.localizacao?.no_municipio
   const uf = curso.localizacao?.sg_uf
   const ofertas = curso.sisu?.ofertas ?? []
@@ -42,7 +44,7 @@ export const ProfileIngresso = ({
     return (
       <Profile module={module} className="p-4" courseId={id} iesId={idIes}>
         <Profile.Header
-          badge="Ingresso via Sisu"
+          badge="Ingresso pelo Sisu"
           title={titulo}
           subtitle={subtitulo}
           className="px-0"
@@ -100,13 +102,13 @@ export const ProfileIngresso = ({
   return (
     <Profile module={module} className="p-4" courseId={id} iesId={idIes}>
       <Profile.Header
-        badge={'Ingresso via Sisu'}
+        badge={'Ingresso pelo Sisu'}
         title={titulo}
         subtitle={subtitulo}
         className="px-0"
       >
         <Tag
-          label={'Tem Sisu'}
+          label={'Com vagas no Sisu'}
           module={module}
           className="text-2xs py-[2px] bg-accent/10 border-accent/30"
           variant="module"
@@ -182,7 +184,7 @@ export const ProfileIngresso = ({
           variant="inline"
           href={permanenciaHref}
           title="Vou conseguir me manter?"
-          description="Bolsas, cotas e apoios à permanência — Âncora"
+          description="Bolsas, auxílios e outros apoios à permanência — Âncora"
         />
         <Route
           module="4"

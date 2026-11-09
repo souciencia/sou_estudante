@@ -62,7 +62,7 @@ describe('ProfileIngresso Component', () => {
       screen.getByText(/Universidade Federal do Rio de Janeiro · UFRJ/i),
     ).toBeInTheDocument()
 
-    expect(screen.getByText('Tem Sisu')).toBeInTheDocument()
+    expect(screen.getByText('Com vagas no Sisu')).toBeInTheDocument()
 
     expect(screen.getByText('Rio de Janeiro, RJ')).toBeInTheDocument()
   })
@@ -82,6 +82,6 @@ describe('ProfileIngresso Component', () => {
     ).toBeInTheDocument()
     expect(screen.getByText('Sem Sisu')).toBeInTheDocument()
     expect(screen.getByText(/Medicina — Bacharelado/i)).toBeInTheDocument()
-    expect(screen.queryByText('Tem Sisu')).not.toBeInTheDocument()
+    expect(screen.queryByText('Com vagas no Sisu')).not.toBeInTheDocument()
   })
 })

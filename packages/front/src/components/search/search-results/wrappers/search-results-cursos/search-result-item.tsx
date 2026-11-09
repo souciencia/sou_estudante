@@ -64,7 +64,7 @@ export function SearchResultItem({
   const tagsBottom: Array<string | CardTag | ReactElement> = []
   tags.push(<TagEnade key="enade" level={conceitoEnade} />)
   if (gratuito) tags.push({ label: 'Gratuito', tone: 'green' })
-  if (temSisu) tags.push({ label: 'Tem Sisu', tone: 'blue' })
+  if (temSisu) tags.push({ label: 'Com vagas no Sisu', tone: 'blue' })
   if (modalidade) tags.push(modalidade)
   if (turno) tags.push(turno)
   if (localizacaoTag) {
@@ -146,10 +146,10 @@ export function SearchResultItem({
           {temSisu && to !== 'ingresso' && (
             <Link
               href={`/ingresso/${id}`}
-              aria-label={`Ver ingresso via Sisu de ${nomeCurso}`}
+              aria-label={`Ver ingresso pelo Sisu de ${nomeCurso}`}
               className="inline-flex items-center gap-1 rounded-full px-1 font-sans text-xs font-bold text-accent-deep hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
             >
-              Ver ingresso via Sisu
+              Ver ingresso pelo Sisu
               <ArrowRight className="size-3" aria-hidden="true" />
             </Link>
           )}

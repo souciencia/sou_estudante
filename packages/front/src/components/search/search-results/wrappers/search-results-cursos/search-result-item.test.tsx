@@ -53,7 +53,7 @@ describe('SearchResultItem', () => {
     render(<SearchResultItem curso={buildCurso(true)} to="ingresso" />)
 
     expect(
-      screen.queryByRole('link', { name: /Ver ingresso via Sisu/ }),
+      screen.queryByRole('link', { name: /Ver ingresso pelo Sisu/ }),
     ).not.toBeInTheDocument()
   })
 
@@ -61,7 +61,7 @@ describe('SearchResultItem', () => {
     render(<SearchResultItem curso={buildCurso(true)} />)
 
     expect(
-      screen.getByRole('link', { name: /Ver ingresso via Sisu/ }),
+      screen.getByRole('link', { name: /Ver ingresso pelo Sisu/ }),
     ).toHaveAttribute('href', '/ingresso/101')
   })
 
@@ -69,7 +69,7 @@ describe('SearchResultItem', () => {
     render(<SearchResultItem curso={buildCurso(false)} />)
 
     expect(
-      screen.queryByRole('link', { name: /Ver ingresso via Sisu/ }),
+      screen.queryByRole('link', { name: /Ver ingresso pelo Sisu/ }),
     ).not.toBeInTheDocument()
   })
 

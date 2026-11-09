@@ -77,14 +77,18 @@ describe('useSearchIes', () => {
 
     vi.mocked(iesService.searchIes).mockResolvedValue({
       success: false,
-      error: { type: 'server', message: 'erro no servidor' },
+      error: {
+        type: 'server',
+        message:
+          'Serviço temporariamente indisponível. Tente novamente em alguns instantes.',
+      },
     })
 
     const { result } = renderUseSearchIes()
 
     await waitFor(() => {
       expect(result.current.error).toBe(
-        'Serviço temporariamente indisponível ⚙️',
+        'Serviço temporariamente indisponível. Tente novamente em alguns instantes.',
       )
     })
   })

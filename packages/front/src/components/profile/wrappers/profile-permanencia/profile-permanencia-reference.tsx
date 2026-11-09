@@ -14,7 +14,7 @@ export const ProfilePermanenciaReference = ({
       <UsersRound className="text-accent-deep size-4" aria-hidden="true" />
       <div>
         <h3 className="mb-[1px] text-2xs font-bold uppercase tracking-[0.5px] text-accent-deep">
-          Turmas de referência
+          Estudantes de referência
         </h3>
         <h4 className="text-base font-bold text-fg">
           <span className="text-accent-deep/90">{ingressantes}</span>{' '}

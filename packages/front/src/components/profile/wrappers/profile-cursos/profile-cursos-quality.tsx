@@ -75,7 +75,7 @@ export const ProfileCursosQuality = ({
               {ano ?? '—'}
             </span>
             <p className="font-sans text-xs text-fg-muted">
-              Nota oficial mais recente para este curso, na escala de 1 a 5.
+              Conceito Enade mais recente para este curso, na escala de 1 a 5.
             </p>
             <span className="font-sans text-xs text-fg-muted">
               Fonte: Inep · Enade {ano ?? '—'}
@@ -92,7 +92,7 @@ export const ProfileCursosQuality = ({
         calendários distintos.
       </Callout>
 
-      <Callout v="blue">
+      <Callout v="gold">
         <span className="inline-flex gap-2">
           <TrendingUp
             className="size-3 scale-125 translate-y-0.5"

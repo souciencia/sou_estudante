@@ -9,7 +9,7 @@ const routes = [
     description: 'Explore por área, localização e modalidade',
     badge: 'CARTA NÁUTICA',
     list: {
-      title: 'Escolha um curso',
+      title: 'Explore os cursos',
       description:
         'A carta náutica mapeia as rotas possíveis: explore os cursos por área, local e modalidade.',
     },
@@ -23,7 +23,7 @@ const routes = [
     list: {
       title: 'Veja como ingressar',
       description:
-        'A bússola aponta o caminho da entrada: notas de corte, vagas e cotas no Sisu.',
+        'A bússola aponta o caminho da entrada: consulte notas de corte, vagas e cotas no Sisu.',
     },
     href: '/ingresso',
   },
@@ -35,7 +35,7 @@ const routes = [
     list: {
       title: 'Encontre apoio para permanecer',
       description:
-        'A âncora segura você no percurso: bolsas, cotas e apoios para chegar até a formatura.',
+        'A âncora ajuda a dar segurança ao percurso: conheça bolsas, auxílios e outros apoios para chegar até a formatura.',
     },
     href: '/permanencia',
   },
@@ -47,7 +47,7 @@ const routes = [
     list: {
       title: 'Conheça a instituição',
       description:
-        'O telescópio aproxima o que está longe: os indicadores oficiais da instituição, traduzidos.',
+        'O telescópio ajuda você a olhar mais de perto informações e indicadores oficiais para conhecer melhor a instituição.',
     },
     href: '/ies',
   },
@@ -57,9 +57,9 @@ const routes = [
     description: 'Analise até 5 cursos lado a lado',
     badge: 'SEXTANTE',
     list: {
-      title: 'Compare lado a lado',
+      title: 'Compare lado a lado suas opções',
       description:
-        'O sextante mede posições para orientar a escolha: até cinco cursos comparados pelos mesmos critérios, sem ranking.',
+        'O sextante ajuda a orientar sua escolha: compare até cinco cursos pelos mesmos critérios, lado a lado e sem ranking.',
     },
     href: '/comparar',
   },

@@ -1,10 +1,10 @@
-import { Info } from 'lucide-react'
 import { LayoutSearchPage } from '@/components/layout/layout-search-page'
 import { ActiveFiltersIes } from '@/components/search/active-filters/wrappers/active-filters-ies/active-filters-ies'
 import { FiltersPanelIes } from '@/components/search/filters-panel/wrappers/filters-panel-ies/filters-panel-ies'
 import { SearchHeaderIes } from '@/components/search/search-header/wrappers/search-header-ies/search-header-ies'
 import { SearchResultsIes } from '@/components/search/search-results/wrappers/search-results-ies/search-results-ies'
 import { Callout } from '@/components/ui/callout'
+import { IconModule } from '@/components/ui/icon-module/icon-module'
 import type { Module } from '@/lib/module'
 
 const module: Module = '4'
@@ -20,10 +20,10 @@ export default function IesPage() {
       results={<SearchResultsIes module={module} />}
       emptyPrompt="Busque uma instituição para ver os resultados"
       notice={
-        <Callout v="blue">
+        <Callout v="module">
           <Callout.Header>
             <Callout.Icon>
-              <Info aria-hidden="true" />
+              <IconModule module="4" />
             </Callout.Icon>
             <Callout.HeaderContent>
               <Callout.Tagline>Para você, estudante</Callout.Tagline>
@@ -32,15 +32,19 @@ export default function IesPage() {
           </Callout.Header>
           <Callout.Content>
             <p>
-              Aqui você encontra um retrato dos aspectos quantitativos da
-              instituição: quantos estudantes, quantos cursos, como se compõe o
-              corpo docente. Cada número vem do Censo da Educação Superior, com
-              ano e fonte declarados.
+              Aqui você encontra um retrato da instituição: quantos estudantes
+              estão matriculados na graduação, quantos cursos ela oferece e como
+              se compõe seu corpo docente.
             </p>
             <p>
-              A qualidade se verifica de vários modos — e o conceito Enade do
-              curso que você pretende fazer diz muito sobre a instituição. Os
-              números daqui dão contexto, não veredito.
+              Essas informações ajudam a conhecer o perfil da instituição, mas
+              não dizem, sozinhas, como será a experiência em um curso
+              específico. Para conhecer melhor o curso que você pretende fazer,
+              consulte também as informações da Carta Náutica.
+            </p>
+            <p>
+              Os dados vêm do Censo da Educação Superior, com o ano de
+              referência sempre indicado.
             </p>
           </Callout.Content>
           <Callout.Footer>

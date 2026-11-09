@@ -42,11 +42,19 @@ export const ProfileIngressoQuotas = ({
           {nota ? formatNotaCorte(nota) : '—'}
         </span>
 
-        {!vazia && typeof vagas === 'number' && (
-          <div className="font-mono text-2xs text-fg-muted">
-            {vagas} {vagas === 1 ? 'vaga' : 'vagas'}
+        {nome === 'Bônus da instituição' && (
+          <div className="text-2xs text-fg-muted">
+            Nota da ampla concorrência — o bônus é aplicado à nota do estudante
           </div>
         )}
+
+        {nome !== 'Bônus da instituição' &&
+          !vazia &&
+          typeof vagas === 'number' && (
+            <div className="font-mono text-2xs text-fg-muted">
+              {vagas} {vagas === 1 ? 'vaga' : 'vagas'}
+            </div>
+          )}
         {texto && <div className="text-2xs text-text-muted">{texto}</div>}
       </div>
     </div>
