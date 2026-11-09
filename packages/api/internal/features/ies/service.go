@@ -97,6 +97,7 @@ func iesFilterValues(query string, filters SearchFilterParams) url.Values {
 		values.Set("q", query)
 	}
 	httpx.SetCSV(values, "uf", filters.UF)
+	httpx.SetCSV(values, "municipio", filters.Municipio)
 	httpx.SetCSV(values, "regiao", filters.Regiao)
 	httpx.SetCSV(values, "categoria", filters.Categoria)
 	httpx.SetCSV(values, "organizacao", filters.Organizacao)

@@ -42,6 +42,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	filters := SearchFilterParams{
 		UF:         httpx.SplitCSV(r.URL.Query()["uf"]),
+		Municipio:  httpx.SplitCSV(r.URL.Query()["municipio"]),
 		Turno:      httpx.SplitCSV(r.URL.Query()["turno"]),
 		Grau:       httpx.SplitCSV(r.URL.Query()["grau"]),
 		Categoria:  httpx.SplitCSV(r.URL.Query()["categoria"]),

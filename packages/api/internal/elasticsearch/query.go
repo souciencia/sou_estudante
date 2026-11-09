@@ -47,6 +47,20 @@ func TermsAgg(field string, size int) map[string]any {
 	}
 }
 
+// FilteredAgg envolve uma agregação interna num filtro bool, para a faceta
+// refletir os demais filtros da busca (preservando a própria multi-seleção). O
+// bucket interno é nomeado "termos" e é lido por ParseFilteredBuckets.
+func FilteredAgg(filter []map[string]any, inner map[string]any) map[string]any {
+	return map[string]any{
+		"filter": map[string]any{
+			"bool": map[string]any{"filter": filter},
+		},
+		"aggs": map[string]any{
+			"termos": inner,
+		},
+	}
+}
+
 // FiltersAgg monta uma agregação "filters" com um bucket por filtro nomeado.
 func FiltersAgg(named map[string]any) map[string]any {
 	return map[string]any{

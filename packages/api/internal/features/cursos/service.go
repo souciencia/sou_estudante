@@ -97,6 +97,7 @@ func cursosFilterValues(query string, filters SearchFilterParams) url.Values {
 	values := url.Values{}
 	values.Set("q", query)
 	httpx.SetCSV(values, "uf", filters.UF)
+	httpx.SetCSV(values, "municipio", filters.Municipio)
 	httpx.SetCSV(values, "turno", filters.Turno)
 	httpx.SetCSV(values, "grau", filters.Grau)
 	httpx.SetCSV(values, "categoria", filters.Categoria)

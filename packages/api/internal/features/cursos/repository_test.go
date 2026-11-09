@@ -76,7 +76,7 @@ func TestCategoriaFilterIgnoraCategoriaDesconhecida(t *testing.T) {
 // Referenciá-los com o sufixo resulta em campo inexistente e buckets vazios,
 // sumindo com as contagens dos filtros da UI.
 func TestBuildAggregationsUsaCamposKeywordSemSufixo(t *testing.T) {
-	aggs := buildAggregations()
+	aggs := buildAggregations(SearchFilterParams{})
 
 	want := map[string]string{
 		"ufs":         "localizacao.sg_uf",
@@ -91,7 +91,7 @@ func TestBuildAggregationsUsaCamposKeywordSemSufixo(t *testing.T) {
 }
 
 func TestBuildAggregationsIncluiTodosOsGrupos(t *testing.T) {
-	aggs := buildAggregations()
+	aggs := buildAggregations(SearchFilterParams{})
 
 	for _, key := range []string{"ufs", "graus", "modalidades", "enades", "categorias", "turnos", "ingresso"} {
 		if _, ok := aggs[key]; !ok {
@@ -100,9 +100,36 @@ func TestBuildAggregationsIncluiTodosOsGrupos(t *testing.T) {
 	}
 }
 
+// Cada faceta reflete os demais filtros ativos: com categoria selecionada, a
+// agregação ufs deve incluir a cláusula de categoria no seu contexto (para
+// desabilitar UFs sem curso daquela categoria).
+func TestBuildAggregationsUfsRefleteOutrosFiltros(t *testing.T) {
+	aggs := buildAggregations(SearchFilterParams{Categoria: []string{"Pública Federal"}})
+
+	ufs, ok := aggs["ufs"].(map[string]any)
+	if !ok {
+		t.Fatal("agregação ufs ausente")
+	}
+	filter, ok := ufs["filter"].(map[string]any)
+	if !ok {
+		t.Fatalf("ufs deveria ser filter agg, obtido %v", ufs)
+	}
+	boolNode, ok := filter["bool"].(map[string]any)
+	if !ok {
+		t.Fatalf("filter agg sem nó bool: %v", filter)
+	}
+	ctxClauses, ok := boolNode["filter"].([]map[string]any)
+	if !ok || len(ctxClauses) != 1 {
+		t.Fatalf("esperado 1 cláusula de contexto (categoria), obtido %v", boolNode["filter"])
+	}
+	if _, ok := ctxClauses[0]["bool"].(map[string]any); !ok {
+		t.Errorf("contexto de ufs não contém a cláusula de categoria: %v", ctxClauses[0])
+	}
+}
+
 // O conceito Enade agrega faixas (1-5, SC) e a ausência de avaliação no ciclo.
 func TestBuildAggregationsEnadeIncluiFaixasEAusencia(t *testing.T) {
-	aggs := buildAggregations()
+	aggs := buildAggregations(SearchFilterParams{})
 
 	filters := filtersBuckets(t, aggs, "enades")
 	for _, key := range []string{"1", "2", "3", "4", "5", "SC", "Sem avaliação no Ciclo"} {
@@ -114,7 +141,7 @@ func TestBuildAggregationsEnadeIncluiFaixasEAusencia(t *testing.T) {
 
 // A contagem de gratuito deve usar o campo booleano curso.in_gratuito.
 func TestBuildAggregationsIngressoGratuitoFiltraInGratuito(t *testing.T) {
-	aggs := buildAggregations()
+	aggs := buildAggregations(SearchFilterParams{})
 
 	filters := filtersBuckets(t, aggs, "ingresso")
 	gratuito, ok := filters["gratuito"].(map[string]any)
@@ -132,7 +159,7 @@ func TestBuildAggregationsIngressoGratuitoFiltraInGratuito(t *testing.T) {
 
 // A contagem de com vagas Sisu deve usar o campo booleano sisu.tem_sisu.
 func TestBuildAggregationsIngressoSisuFiltraTemSisu(t *testing.T) {
-	aggs := buildAggregations()
+	aggs := buildAggregations(SearchFilterParams{})
 
 	filters := filtersBuckets(t, aggs, "ingresso")
 	viaSisu, ok := filters["sisu"].(map[string]any)
@@ -274,13 +301,10 @@ func TestBuildSortClausesPadraoUsaScore(t *testing.T) {
 func termsAggField(t *testing.T, aggs map[string]any, group string) string {
 	t.Helper()
 
-	agg, ok := aggs[group].(map[string]any)
+	termos := filteredInnerAgg(t, aggs, group)
+	terms, ok := termos["terms"].(map[string]any)
 	if !ok {
-		t.Fatalf("agregação %q ausente ou com tipo inesperado: %v", group, aggs[group])
-	}
-	terms, ok := agg["terms"].(map[string]any)
-	if !ok {
-		t.Fatalf("agregação %q não é terms (%T)", group, agg["terms"])
+		t.Fatalf("agregação %q não é terms (%T)", group, termos["terms"])
 	}
 	field, _ := terms["field"].(string)
 	return field
@@ -290,15 +314,32 @@ func termsAggField(t *testing.T, aggs map[string]any, group string) string {
 func filtersBuckets(t *testing.T, aggs map[string]any, group string) map[string]any {
 	t.Helper()
 
+	termos := filteredInnerAgg(t, aggs, group)
+	filters, ok := termos["filters"].(map[string]any)["filters"].(map[string]any)
+	if !ok {
+		t.Fatalf("esperado nó filters.filters, obtido %v", termos["filters"])
+	}
+	return filters
+}
+
+// filteredInnerAgg desce até o bucket interno "termos" de uma agregação
+// envolvida por FilteredAgg (estrutura filter.aggs.termos).
+func filteredInnerAgg(t *testing.T, aggs map[string]any, group string) map[string]any {
+	t.Helper()
+
 	agg, ok := aggs[group].(map[string]any)
 	if !ok {
 		t.Fatalf("agregação %q ausente ou com tipo inesperado: %v", group, aggs[group])
 	}
-	filters, ok := agg["filters"].(map[string]any)["filters"].(map[string]any)
+	inner, ok := agg["aggs"].(map[string]any)
 	if !ok {
-		t.Fatalf("esperado nó filters.filters, obtido %v", agg["filters"])
+		t.Fatalf("agregação %q não é filter agg (%v)", group, agg)
 	}
-	return filters
+	termos, ok := inner["termos"].(map[string]any)
+	if !ok {
+		t.Fatalf("bucket interno termos ausente em %q: %v", group, inner)
+	}
+	return termos
 }
 
 func termsNodeFrom(t *testing.T, clause map[string]any) map[string]any {
@@ -431,6 +472,23 @@ func TestBuildFilterClausesFiltrosDiferentesSeCombinamComE(t *testing.T) {
 func TestBuildFilterClausesSemFiltrosNaoGeraClausulas(t *testing.T) {
 	if clauses := buildFilterClauses(SearchFilterParams{}); len(clauses) != 0 {
 		t.Errorf("esperado nenhuma cláusula, obtido %v", clauses)
+	}
+}
+
+func TestContextClausesExcluiFaceta(t *testing.T) {
+	filters := SearchFilterParams{UF: []string{"SP"}, Municipio: []string{"3550308"}}
+	all := buildFilterClauses(filters)
+	ctx := contextClauses(filters, "municipio")
+
+	if len(ctx) != len(all)-1 {
+		t.Fatalf("contexto = %d cláusulas, esperado %d (todas menos município)", len(ctx), len(all)-1)
+	}
+	if len(ctx) != 1 {
+		t.Fatalf("esperado 1 cláusula (UF), obtido %d", len(ctx))
+	}
+	terms := termsNodeFrom(t, ctx[0])
+	if got := terms["localizacao.sg_uf"]; !reflect.DeepEqual(got, []string{"SP"}) {
+		t.Errorf("localizacao.sg_uf = %v, esperado [SP]", got)
 	}
 }
 

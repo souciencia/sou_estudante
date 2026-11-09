@@ -15,7 +15,7 @@ const cursosSearchResponse = `{
 		"total": {"value": 1},
 		"hits": [{"_source": {"sequencial": 1, "curso": {"no_curso": "MEDICINA"}}}]
 	},
-	"aggregations": {"ufs": {"buckets": [{"key": "SP", "doc_count": 1}]}}
+	"aggregations": {"ufs": {"termos": {"buckets": [{"key": "SP", "doc_count": 1}]}}}
 }`
 
 func TestSearchDecodificaHitsEAgregacoes(t *testing.T) {
@@ -45,6 +45,62 @@ func TestSearchDecodificaHitsEAgregacoes(t *testing.T) {
 	}
 	if requests != 1 {
 		t.Errorf("requisições = %d, esperado 1", requests)
+	}
+}
+
+func TestSearchDecodificaAgregacaoDeMunicipios(t *testing.T) {
+	client := testutil.NewESClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"hits":{"total":{"value":0},"hits":[]},"aggregations":{"municipios":{"termos":{"buckets":[{"key":"3550308","doc_count":3},{"key":"3509502","doc_count":1}]}}}}`))
+	})
+
+	repo := NewElasticsearchRepository(client, "cursos")
+	result, err := repo.Search(context.Background(), "medicina", SearchFilterParams{}, 1, 10)
+	if err != nil {
+		t.Fatalf("erro inesperado: %v", err)
+	}
+	if result.Aggregations == nil || len(result.Aggregations.Municipios) != 2 {
+		t.Fatalf("municípios inesperados: %+v", result.Aggregations)
+	}
+	if result.Aggregations.Municipios[0].Key != "3550308" || result.Aggregations.Municipios[0].Count != 3 {
+		t.Errorf("primeiro município inesperado: %+v", result.Aggregations.Municipios[0])
+	}
+}
+
+func TestBuildAggregationsIncluiMunicipiosFiltrados(t *testing.T) {
+	raw, ok := buildAggregations(SearchFilterParams{UF: []string{"SP"}})["municipios"].(map[string]any)
+	if !ok {
+		t.Fatal("agregação municipios ausente")
+	}
+
+	filter, ok := raw["filter"].(map[string]any)
+	if !ok {
+		t.Fatalf("municipios deveria ser filter agg, obtido %v", raw)
+	}
+	boolNode, ok := filter["bool"].(map[string]any)
+	if !ok {
+		t.Fatalf("filter agg sem nó bool: %v", filter)
+	}
+	// O contexto de municipios inclui a UF ativa (excluindo o próprio município).
+	ctxClauses, ok := boolNode["filter"].([]map[string]any)
+	if !ok || len(ctxClauses) != 1 {
+		t.Fatalf("esperado 1 cláusula de contexto (UF), obtido %v", boolNode["filter"])
+	}
+
+	aggs, ok := raw["aggs"].(map[string]any)
+	if !ok {
+		t.Fatalf("filter agg sem aggs: %v", raw)
+	}
+	termos, ok := aggs["termos"].(map[string]any)
+	if !ok {
+		t.Fatalf("bucket interno termos ausente: %v", aggs)
+	}
+	terms, ok := termos["terms"].(map[string]any)
+	if !ok {
+		t.Fatalf("termos não é terms agg: %v", termos)
+	}
+	if terms["field"] != "localizacao.co_municipio" {
+		t.Errorf("field = %v, esperado localizacao.co_municipio", terms["field"])
 	}
 }
 
@@ -81,6 +137,28 @@ func TestSearchEnviaPaginacaoOrdenacaoEFiltros(t *testing.T) {
 	filter := mustFilter(t, body)
 	if got := filter[0]["terms"].(map[string]any)["localizacao.sg_uf"]; got == nil {
 		t.Errorf("filtro de UF ausente: %v", filter)
+	}
+}
+
+func TestSearchEnviaFiltroDeMunicipio(t *testing.T) {
+	var body map[string]any
+	client := testutil.NewESClient(t, func(w http.ResponseWriter, r *http.Request) {
+		raw, _ := io.ReadAll(r.Body)
+		body = testutil.DecodeJSONObject(t, string(raw))
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"hits":{"total":{"value":0},"hits":[]}}`))
+	})
+
+	repo := NewElasticsearchRepository(client, "cursos")
+	_, err := repo.Search(context.Background(), "medicina", SearchFilterParams{Municipio: []string{"3550308", "3304557"}}, 1, 10)
+	if err != nil {
+		t.Fatalf("erro inesperado: %v", err)
+	}
+
+	filter := mustFilter(t, body)
+	terms := filter[0]["terms"].(map[string]any)["localizacao.co_municipio"]
+	if terms == nil {
+		t.Errorf("filtro de município ausente: %v", filter)
 	}
 }
 

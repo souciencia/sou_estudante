@@ -15,6 +15,7 @@ import (
 	"api_estudante/internal/elasticsearch"
 	"api_estudante/internal/features/cursos"
 	"api_estudante/internal/features/ies"
+	"api_estudante/internal/features/municipios"
 	"api_estudante/internal/features/sugestoes"
 	"api_estudante/internal/httpx"
 	"api_estudante/internal/middlewares"
@@ -85,6 +86,9 @@ func newRouter(esClient *es.Client, cfg *config.Config) http.Handler {
 
 	iesSugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, config.LatestIndexName(cfg.IESDictIndexName), "no_ies", "sg_ies")
 	mux.Handle("GET /ies/sugestoes", &sugestoes.Handler{Service: sugestoes.NewService(iesSugestaoRepo)})
+
+	municipiosRepo := municipios.NewElasticsearchRepository(esClient, config.LatestIndexName(cfg.MunicipiosIndexName))
+	mux.Handle("GET /municipios", &municipios.Handler{Service: municipios.NewService(municipiosRepo)})
 
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
 		httpx.WriteJSON(w, http.StatusOK, map[string]string{"status": "ok"})

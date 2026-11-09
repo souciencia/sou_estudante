@@ -210,14 +210,22 @@ func turnoShouldClauses(turno string) []map[string]any {
 	}
 }
 
-// buildFilterClauses monta as cláusulas de filtro cumulativas da busca de cursos.
-// Os campos de agregação/filtro já são keyword no índice, portanto não levam o
-// sufixo ".keyword" (que resultaria em campo inexistente e buckets vazios).
-func buildFilterClauses(filters SearchFilterParams) []map[string]any {
-	clauses := []map[string]any{}
+// facetOrder define a ordem estável das cláusulas de filtro (e a base das
+// agregações facetadas).
+var facetOrder = []string{"uf", "municipio", "grau", "modalidade", "categoria", "enade", "ingresso", "turno"}
+
+// clausesByFacet monta a cláusula de filtro de cada faceta ativa. Os campos já
+// são keyword no índice, portanto não levam o sufixo ".keyword" (que resultaria
+// em campo inexistente e buckets vazios).
+func clausesByFacet(filters SearchFilterParams) map[string]map[string]any {
+	clauses := make(map[string]map[string]any)
 
 	if len(filters.UF) > 0 {
-		clauses = append(clauses, elasticsearch.UpperTermsFilter("localizacao.sg_uf", filters.UF))
+		clauses["uf"] = elasticsearch.UpperTermsFilter("localizacao.sg_uf", filters.UF)
+	}
+
+	if len(filters.Municipio) > 0 {
+		clauses["municipio"] = elasticsearch.TermsFilter("localizacao.co_municipio", filters.Municipio)
 	}
 
 	if len(filters.Grau) > 0 {
@@ -230,7 +238,7 @@ func buildFilterClauses(filters SearchFilterParams) []map[string]any {
 				},
 			})
 		}
-		clauses = append(clauses, elasticsearch.AnyOf(should))
+		clauses["grau"] = elasticsearch.AnyOf(should)
 	}
 
 	if len(filters.Modalidade) > 0 {
@@ -238,15 +246,15 @@ func buildFilterClauses(filters SearchFilterParams) []map[string]any {
 		for _, mod := range filters.Modalidade {
 			should = append(should, modalidadeShouldClauses(mod)...)
 		}
-		clauses = append(clauses, elasticsearch.AnyOf(should))
+		clauses["modalidade"] = elasticsearch.AnyOf(should)
 	}
 
 	if clause := elasticsearch.CategoriaAnyOf(categoriaField, filters.Categoria); clause != nil {
-		clauses = append(clauses, clause)
+		clauses["categoria"] = clause
 	}
 
 	if len(filters.Enade) > 0 {
-		clauses = append(clauses, elasticsearch.AnyOf(enadeFilterClauses(filters.Enade)))
+		clauses["enade"] = elasticsearch.AnyOf(enadeFilterClauses(filters.Enade))
 	}
 
 	if len(filters.Ingresso) > 0 {
@@ -260,7 +268,7 @@ func buildFilterClauses(filters SearchFilterParams) []map[string]any {
 			}
 		}
 		if len(should) > 0 {
-			clauses = append(clauses, elasticsearch.AnyOf(should))
+			clauses["ingresso"] = elasticsearch.AnyOf(should)
 		}
 	}
 
@@ -269,9 +277,40 @@ func buildFilterClauses(filters SearchFilterParams) []map[string]any {
 		for _, turno := range filters.Turno {
 			should = append(should, turnoShouldClauses(turno)...)
 		}
-		clauses = append(clauses, elasticsearch.AnyOf(should))
+		clauses["turno"] = elasticsearch.AnyOf(should)
 	}
 
+	return clauses
+}
+
+// buildFilterClauses monta todas as cláusulas de filtro cumulativas, em ordem
+// estável, para o post_filter.
+func buildFilterClauses(filters SearchFilterParams) []map[string]any {
+	byFacet := clausesByFacet(filters)
+	clauses := make([]map[string]any, 0, len(byFacet))
+	for _, facet := range facetOrder {
+		if clause, ok := byFacet[facet]; ok {
+			clauses = append(clauses, clause)
+		}
+	}
+	return clauses
+}
+
+// contextClauses devolve todas as cláusulas de filtro exceto a da faceta
+// informada. É o filtro que envolve cada agregação facetada, para que a
+// contagem reflita o resultado atual preservando a multi-seleção da própria
+// faceta.
+func contextClauses(filters SearchFilterParams, facet string) []map[string]any {
+	byFacet := clausesByFacet(filters)
+	clauses := make([]map[string]any, 0, len(byFacet))
+	for _, f := range facetOrder {
+		if f == facet {
+			continue
+		}
+		if clause, ok := byFacet[f]; ok {
+			clauses = append(clauses, clause)
+		}
+	}
 	return clauses
 }
 
@@ -305,32 +344,62 @@ func buildSortClauses(sort string) []map[string]any {
 	}
 }
 
-// buildAggregations monta as agregações usadas pelos filtros da UI.
-func buildAggregations() map[string]any {
+// buildAggregations monta as agregações usadas pelos filtros da UI. Cada faceta
+// é filtrada pelas demais cláusulas ativas (contextClauses), para que sua
+// contagem reflita o resultado atual e preserve a própria multi-seleção.
+func buildAggregations(filters SearchFilterParams) map[string]any {
 	return map[string]any{
-		"ufs":         elasticsearch.TermsAgg("localizacao.sg_uf", 30),
-		"graus":       elasticsearch.TermsAgg("curso.no_grau_academico", 10),
-		"modalidades": elasticsearch.TermsAgg("curso.no_modalidade_ensino", 10),
-		"enades": elasticsearch.FiltersAgg(map[string]any{
-			"1":                      elasticsearch.TermsFilter(enadeField, []string{"1"}),
-			"2":                      elasticsearch.TermsFilter(enadeField, []string{"2"}),
-			"3":                      elasticsearch.TermsFilter(enadeField, []string{"3"}),
-			"4":                      elasticsearch.TermsFilter(enadeField, []string{"4"}),
-			"5":                      elasticsearch.TermsFilter(enadeField, []string{"5"}),
-			"SC":                     elasticsearch.TermsFilter(enadeField, []string{"SC"}),
-			"Sem avaliação no Ciclo": enadeSemAvaliacaoClause(),
-		}),
-		"categorias": elasticsearch.CategoriasAgg(categoriaField),
-		"turnos": elasticsearch.FiltersAgg(map[string]any{
-			"Diurno":   elasticsearch.AnyOf(turnoShouldClauses("diurno")),
-			"Noturno":  elasticsearch.AnyOf(turnoShouldClauses("noturno")),
-			"Integral": elasticsearch.AnyOf(turnoShouldClauses("integral")),
-			"EaD":      elasticsearch.AnyOf(turnoShouldClauses("ead")),
-		}),
-		"ingresso": elasticsearch.FiltersAgg(map[string]any{
-			"gratuito": gratuitoTerm(),
-			"sisu":     sisuTerm(),
-		}),
+		"ufs": elasticsearch.FilteredAgg(
+			contextClauses(filters, "uf"),
+			elasticsearch.TermsAgg("localizacao.sg_uf", 30),
+		),
+		// size alto o bastante para não truncar os municípios distintos de um
+		// termo de busca (o "q" mínimo tem 5 caracteres, então o conjunto é
+		// pequeno na prática).
+		"municipios": elasticsearch.FilteredAgg(
+			contextClauses(filters, "municipio"),
+			elasticsearch.TermsAgg("localizacao.co_municipio", 1000),
+		),
+		"graus": elasticsearch.FilteredAgg(
+			contextClauses(filters, "grau"),
+			elasticsearch.TermsAgg("curso.no_grau_academico", 10),
+		),
+		"modalidades": elasticsearch.FilteredAgg(
+			contextClauses(filters, "modalidade"),
+			elasticsearch.TermsAgg("curso.no_modalidade_ensino", 10),
+		),
+		"enades": elasticsearch.FilteredAgg(
+			contextClauses(filters, "enade"),
+			elasticsearch.FiltersAgg(map[string]any{
+				"1":                      elasticsearch.TermsFilter(enadeField, []string{"1"}),
+				"2":                      elasticsearch.TermsFilter(enadeField, []string{"2"}),
+				"3":                      elasticsearch.TermsFilter(enadeField, []string{"3"}),
+				"4":                      elasticsearch.TermsFilter(enadeField, []string{"4"}),
+				"5":                      elasticsearch.TermsFilter(enadeField, []string{"5"}),
+				"SC":                     elasticsearch.TermsFilter(enadeField, []string{"SC"}),
+				"Sem avaliação no Ciclo": enadeSemAvaliacaoClause(),
+			}),
+		),
+		"categorias": elasticsearch.FilteredAgg(
+			contextClauses(filters, "categoria"),
+			elasticsearch.CategoriasAgg(categoriaField),
+		),
+		"turnos": elasticsearch.FilteredAgg(
+			contextClauses(filters, "turno"),
+			elasticsearch.FiltersAgg(map[string]any{
+				"Diurno":   elasticsearch.AnyOf(turnoShouldClauses("diurno")),
+				"Noturno":  elasticsearch.AnyOf(turnoShouldClauses("noturno")),
+				"Integral": elasticsearch.AnyOf(turnoShouldClauses("integral")),
+				"EaD":      elasticsearch.AnyOf(turnoShouldClauses("ead")),
+			}),
+		),
+		"ingresso": elasticsearch.FilteredAgg(
+			contextClauses(filters, "ingresso"),
+			elasticsearch.FiltersAgg(map[string]any{
+				"gratuito": gratuitoTerm(),
+				"sisu":     sisuTerm(),
+			}),
+		),
 	}
 }
 
@@ -360,7 +429,7 @@ func (r *ElasticsearchRepository) Search(
 		mustQuery,
 		buildFilterClauses(filters),
 		buildSortClauses(filters.Sort),
-		buildAggregations(),
+		buildAggregations(filters),
 		page, limit,
 	)
 
@@ -374,13 +443,14 @@ func (r *ElasticsearchRepository) Search(
 	var searchAggs *SearchAggregations
 	if len(resp.Aggregations) > 0 {
 		searchAggs = &SearchAggregations{
-			UFs:         elasticsearch.ParseBuckets(resp.Aggregations, "ufs"),
-			Turnos:      elasticsearch.ParseBuckets(resp.Aggregations, "turnos"),
-			Graus:       elasticsearch.ParseBuckets(resp.Aggregations, "graus"),
-			Categorias:  elasticsearch.ParseBuckets(resp.Aggregations, "categorias"),
-			Modalidades: elasticsearch.ParseBuckets(resp.Aggregations, "modalidades"),
-			Enades:      elasticsearch.ParseBuckets(resp.Aggregations, "enades"),
-			Ingresso:    elasticsearch.ParseBuckets(resp.Aggregations, "ingresso"),
+			UFs:         elasticsearch.ParseFilteredBuckets(resp.Aggregations, "ufs"),
+			Municipios:  elasticsearch.ParseFilteredBuckets(resp.Aggregations, "municipios"),
+			Turnos:      elasticsearch.ParseFilteredBuckets(resp.Aggregations, "turnos"),
+			Graus:       elasticsearch.ParseFilteredBuckets(resp.Aggregations, "graus"),
+			Categorias:  elasticsearch.ParseFilteredBuckets(resp.Aggregations, "categorias"),
+			Modalidades: elasticsearch.ParseFilteredBuckets(resp.Aggregations, "modalidades"),
+			Enades:      elasticsearch.ParseFilteredBuckets(resp.Aggregations, "enades"),
+			Ingresso:    elasticsearch.ParseFilteredBuckets(resp.Aggregations, "ingresso"),
 		}
 	}
 

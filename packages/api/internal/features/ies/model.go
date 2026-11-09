@@ -118,6 +118,7 @@ type VagasMatriculas struct {
 // SearchFilterParams contém parâmetros opcionais de filtragem e ordenação.
 type SearchFilterParams struct {
 	UF          []string
+	Municipio   []string
 	Regiao      []string
 	Categoria   []string
 	Organizacao []string
@@ -131,6 +132,7 @@ type AggregationBucket = elasticsearch.AggregationBucket
 // SearchAggregations mapeia as agregações por grupo de filtro.
 type SearchAggregations struct {
 	UFs          []AggregationBucket `json:"ufs,omitempty"`
+	Municipios   []AggregationBucket `json:"municipios,omitempty"`
 	Regioes      []AggregationBucket `json:"regioes,omitempty"`
 	Categorias   []AggregationBucket `json:"categorias,omitempty"`
 	Organizacoes []AggregationBucket `json:"organizacoes,omitempty"`
