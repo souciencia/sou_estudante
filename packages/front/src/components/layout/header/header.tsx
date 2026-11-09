@@ -21,7 +21,7 @@ function SiteLogo({ className }: { className?: string }) {
         <NauticalIcon className="w-7 h-7" />
       </span>
       <span className="text-sm font-semibold tracking-[-0.2px]">
-        So<span className="text-m1-accent">U</span>_Estudante
+        SoU_Estudante
       </span>
     </Link>
   )
