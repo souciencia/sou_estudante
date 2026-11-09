@@ -69,26 +69,63 @@ func categoriaFilter(categoria string) map[string]any {
 	return elasticsearch.CategoriaFilter(categoriaField, categoria)
 }
 
-// buildFilterClauses monta as cláusulas de filtro cumulativas.
-func buildFilterClauses(filters SearchFilterParams) []map[string]any {
-	clauses := []map[string]any{}
+// facetOrder define a ordem estável das cláusulas de filtro (e a base das
+// agregações facetadas).
+var facetOrder = []string{"uf", "municipio", "regiao", "categoria", "organizacao"}
+
+// clausesByFacet monta a cláusula de filtro de cada faceta ativa.
+func clausesByFacet(filters SearchFilterParams) map[string]map[string]any {
+	clauses := make(map[string]map[string]any)
 
 	if len(filters.UF) > 0 {
-		clauses = append(clauses, elasticsearch.UpperTermsFilter(ufField, filters.UF))
+		clauses["uf"] = elasticsearch.UpperTermsFilter(ufField, filters.UF)
+	}
+
+	if len(filters.Municipio) > 0 {
+		clauses["municipio"] = elasticsearch.TermsFilter("localizacao.co_municipio", filters.Municipio)
 	}
 
 	if len(filters.Regiao) > 0 {
-		clauses = append(clauses, elasticsearch.TermsFilter(regiaoField, filters.Regiao))
+		clauses["regiao"] = elasticsearch.TermsFilter(regiaoField, filters.Regiao)
 	}
 
 	if clause := elasticsearch.CategoriaAnyOf(categoriaField, filters.Categoria); clause != nil {
-		clauses = append(clauses, clause)
+		clauses["categoria"] = clause
 	}
 
 	if len(filters.Organizacao) > 0 {
-		clauses = append(clauses, elasticsearch.TermsFilter(organizacaoField, filters.Organizacao))
+		clauses["organizacao"] = elasticsearch.TermsFilter(organizacaoField, filters.Organizacao)
 	}
 
+	return clauses
+}
+
+// buildFilterClauses monta todas as cláusulas de filtro cumulativas, em ordem
+// estável, para o post_filter.
+func buildFilterClauses(filters SearchFilterParams) []map[string]any {
+	byFacet := clausesByFacet(filters)
+	clauses := make([]map[string]any, 0, len(byFacet))
+	for _, facet := range facetOrder {
+		if clause, ok := byFacet[facet]; ok {
+			clauses = append(clauses, clause)
+		}
+	}
+	return clauses
+}
+
+// contextClauses devolve todas as cláusulas de filtro exceto a da faceta
+// informada (base do filtro que envolve cada agregação facetada).
+func contextClauses(filters SearchFilterParams, facet string) []map[string]any {
+	byFacet := clausesByFacet(filters)
+	clauses := make([]map[string]any, 0, len(byFacet))
+	for _, f := range facetOrder {
+		if f == facet {
+			continue
+		}
+		if clause, ok := byFacet[f]; ok {
+			clauses = append(clauses, clause)
+		}
+	}
 	return clauses
 }
 
@@ -106,13 +143,31 @@ func buildSortClauses(sort string) []map[string]any {
 	}
 }
 
-// buildAggregations monta as agregações usadas pelos filtros da UI.
-func buildAggregations() map[string]any {
+// buildAggregations monta as agregações usadas pelos filtros da UI. Cada faceta
+// é filtrada pelas demais cláusulas ativas (contextClauses), para que sua
+// contagem reflita o resultado atual e preserve a própria multi-seleção.
+func buildAggregations(filters SearchFilterParams) map[string]any {
 	return map[string]any{
-		"ufs":          elasticsearch.TermsAgg(ufField, 30),
-		"regioes":      elasticsearch.TermsAgg(regiaoField, 10),
-		"organizacoes": elasticsearch.TermsAgg(organizacaoField, 20),
-		"categorias":   elasticsearch.CategoriasAgg(categoriaField),
+		"ufs": elasticsearch.FilteredAgg(
+			contextClauses(filters, "uf"),
+			elasticsearch.TermsAgg(ufField, 30),
+		),
+		"municipios": elasticsearch.FilteredAgg(
+			contextClauses(filters, "municipio"),
+			elasticsearch.TermsAgg("localizacao.co_municipio", 1000),
+		),
+		"regioes": elasticsearch.FilteredAgg(
+			contextClauses(filters, "regiao"),
+			elasticsearch.TermsAgg(regiaoField, 10),
+		),
+		"organizacoes": elasticsearch.FilteredAgg(
+			contextClauses(filters, "organizacao"),
+			elasticsearch.TermsAgg(organizacaoField, 20),
+		),
+		"categorias": elasticsearch.FilteredAgg(
+			contextClauses(filters, "categoria"),
+			elasticsearch.CategoriasAgg(categoriaField),
+		),
 	}
 }
 
@@ -123,10 +178,11 @@ func parseAggregations(raw map[string]json.RawMessage) *SearchAggregations {
 	}
 
 	return &SearchAggregations{
-		UFs:          elasticsearch.ParseBuckets(raw, "ufs"),
-		Regioes:      elasticsearch.ParseBuckets(raw, "regioes"),
-		Categorias:   elasticsearch.ParseBuckets(raw, "categorias"),
-		Organizacoes: elasticsearch.ParseBuckets(raw, "organizacoes"),
+		UFs:          elasticsearch.ParseFilteredBuckets(raw, "ufs"),
+		Municipios:   elasticsearch.ParseFilteredBuckets(raw, "municipios"),
+		Regioes:      elasticsearch.ParseFilteredBuckets(raw, "regioes"),
+		Categorias:   elasticsearch.ParseFilteredBuckets(raw, "categorias"),
+		Organizacoes: elasticsearch.ParseFilteredBuckets(raw, "organizacoes"),
 	}
 }
 
@@ -141,7 +197,7 @@ func (r *ElasticsearchRepository) Search(
 		buildTextQuery(query),
 		buildFilterClauses(filters),
 		buildSortClauses(filters.Sort),
-		buildAggregations(),
+		buildAggregations(filters),
 		page, limit,
 	)
 

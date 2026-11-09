@@ -15,6 +15,10 @@ vi.mock('@/services/api/use-search-cursos', () => ({
   useSearchCursos: vi.fn(),
 }))
 
+vi.mock('@/services/api/use-municipios', () => ({
+  useMunicipios: () => ({ municipios: {}, isLoading: false, isError: false }),
+}))
+
 describe('FiltersPanelCursos', () => {
   const mockUpdateParams = vi.fn()
 

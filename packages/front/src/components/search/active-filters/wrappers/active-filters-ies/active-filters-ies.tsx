@@ -2,10 +2,19 @@
 
 import { ActiveFilters as ActiveFiltersBase } from '@/components/search/active-filters/active-filters'
 import type { Module } from '@/lib/module'
+import { municipioNome } from '@/lib/municipio'
 import { ufLabel } from '@/lib/uf'
+import { useMunicipios } from '@/services/api/use-municipios'
 import { useSearchIes } from '@/services/api/use-search-ies'
 
-const FILTER_KEYS = ['uf', 'regiao', 'categoria', 'organizacao', 'sort']
+const FILTER_KEYS = [
+  'uf',
+  'municipio',
+  'regiao',
+  'categoria',
+  'organizacao',
+  'sort',
+]
 
 const SORT_LABELS: Record<string, string> = {
   az: 'A Z',
@@ -25,11 +34,16 @@ interface ActiveFiltersIesProps {
 
 export function ActiveFiltersIes({ module, className }: ActiveFiltersIesProps) {
   const { updateParams, resetFilters } = useSearchIes()
+  const { municipios } = useMunicipios()
 
   return (
     <ActiveFiltersBase
       filterKeys={FILTER_KEYS}
-      labelFor={labelFor}
+      labelFor={(key, value) =>
+        key === 'municipio'
+          ? (municipioNome(municipios, value) ?? value)
+          : labelFor(key, value)
+      }
       updateParams={updateParams}
       resetFilters={resetFilters}
       module={module}

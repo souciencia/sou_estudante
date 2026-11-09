@@ -54,6 +54,28 @@ func TestIESMappingIsEmbeddedAndStrict(t *testing.T) {
 	}
 }
 
+func TestMunicipiosMappingIsEmbeddedAndStrict(t *testing.T) {
+	var mapping struct {
+		Mappings struct {
+			Dynamic    string                     `json:"dynamic"`
+			Properties map[string]json.RawMessage `json:"properties"`
+		} `json:"mappings"`
+	}
+
+	if err := json.Unmarshal(Municipios, &mapping); err != nil {
+		t.Fatalf("mapping de municípios deve ser JSON válido: %v", err)
+	}
+	if mapping.Mappings.Dynamic != "strict" {
+		t.Errorf("dynamic = %q, esperado %q", mapping.Mappings.Dynamic, "strict")
+	}
+
+	for _, field := range []string{"uf", "municipios"} {
+		if _, ok := mapping.Mappings.Properties[field]; !ok {
+			t.Errorf("mapping de municípios não declara o campo %q", field)
+		}
+	}
+}
+
 func TestDictionaryMappingsUseBrazilianAnalyzer(t *testing.T) {
 	cases := []struct {
 		name  string

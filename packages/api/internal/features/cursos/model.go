@@ -8,6 +8,7 @@ import (
 // SearchFilterParams contém parâmetros opcionais de filtragem e ordenação
 type SearchFilterParams struct {
 	UF         []string
+	Municipio  []string
 	Turno      []string
 	Grau       []string
 	Categoria  []string
@@ -25,6 +26,7 @@ type AggregationBucket = elasticsearch.AggregationBucket
 // SearchAggregations mapeia as agregações por grupo de filtro
 type SearchAggregations struct {
 	UFs         []AggregationBucket `json:"ufs,omitempty"`
+	Municipios  []AggregationBucket `json:"municipios,omitempty"`
 	Turnos      []AggregationBucket `json:"turnos,omitempty"`
 	Graus       []AggregationBucket `json:"graus,omitempty"`
 	Categorias  []AggregationBucket `json:"categorias,omitempty"`

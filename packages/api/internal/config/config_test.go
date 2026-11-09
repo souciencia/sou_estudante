@@ -17,6 +17,7 @@ var envVars = []string{
 	"IES_INDEX_NAME",
 	"CURSOS_DICT_INDEX_NAME",
 	"IES_DICT_INDEX_NAME",
+	"MUNICIPIOS_INDEX_NAME",
 	"CURSOS_JSON_FILE_PATH",
 	"IES_JSON_FILE_PATH",
 	"ES_INGEST_APIKEY",
@@ -38,19 +39,20 @@ func TestLoadAppliesDefaultsWhenEnvIsEmpty(t *testing.T) {
 	cfg := Load()
 
 	checks := map[string]any{
-		"ESURL":            "http://localhost:9200",
-		"ESAPIKey":         "",
-		"Port":             "8080",
-		"CursosIndexName":  "cursos",
-		"IESIndexName":     "ies",
-		"DictIndexName":    "dicionario-cursos",
-		"IESDictIndexName": "dicionario-ies",
-		"JSONFilePath":     "/data/dados_cursos.json",
-		"IESJSONFilePath":  "/data/dados_ies.json",
-		"ESIngestAPIKey":   "",
-		"NumWorkers":       4,
-		"FlushBytes":       5_000_000,
-		"FlushIntervalSec": 30,
+		"ESURL":               "http://localhost:9200",
+		"ESAPIKey":            "",
+		"Port":                "8080",
+		"CursosIndexName":     "cursos",
+		"IESIndexName":        "ies",
+		"DictIndexName":       "dicionario-cursos",
+		"IESDictIndexName":    "dicionario-ies",
+		"MunicipiosIndexName": "estados-municipios",
+		"JSONFilePath":        "/data/dados_cursos.json",
+		"IESJSONFilePath":     "/data/dados_ies.json",
+		"ESIngestAPIKey":      "",
+		"NumWorkers":          4,
+		"FlushBytes":          5_000_000,
+		"FlushIntervalSec":    30,
 	}
 
 	assertConfig(t, cfg, checks)
@@ -67,6 +69,7 @@ func TestLoadReadsValuesFromEnv(t *testing.T) {
 		"IES_INDEX_NAME":         "ies_teste",
 		"CURSOS_DICT_INDEX_NAME": "dict_cursos_teste",
 		"IES_DICT_INDEX_NAME":    "dict_ies_teste",
+		"MUNICIPIOS_INDEX_NAME":  "municipios_teste",
 		"CURSOS_JSON_FILE_PATH":  "/tmp/cursos.json",
 		"IES_JSON_FILE_PATH":     "/tmp/ies.json",
 		"ES_INGEST_APIKEY":       "chave-escrita",
@@ -81,19 +84,20 @@ func TestLoadReadsValuesFromEnv(t *testing.T) {
 	cfg := Load()
 
 	assertConfig(t, cfg, map[string]any{
-		"ESURL":            "http://outro:9200",
-		"ESAPIKey":         "chave-leitura",
-		"Port":             "9090",
-		"CursosIndexName":  "cursos_teste",
-		"IESIndexName":     "ies_teste",
-		"DictIndexName":    "dict_cursos_teste",
-		"IESDictIndexName": "dict_ies_teste",
-		"JSONFilePath":     "/tmp/cursos.json",
-		"IESJSONFilePath":  "/tmp/ies.json",
-		"ESIngestAPIKey":   "chave-escrita",
-		"NumWorkers":       8,
-		"FlushBytes":       12345,
-		"FlushIntervalSec": 60,
+		"ESURL":               "http://outro:9200",
+		"ESAPIKey":            "chave-leitura",
+		"Port":                "9090",
+		"CursosIndexName":     "cursos_teste",
+		"IESIndexName":        "ies_teste",
+		"DictIndexName":       "dict_cursos_teste",
+		"IESDictIndexName":    "dict_ies_teste",
+		"MunicipiosIndexName": "municipios_teste",
+		"JSONFilePath":        "/tmp/cursos.json",
+		"IESJSONFilePath":     "/tmp/ies.json",
+		"ESIngestAPIKey":      "chave-escrita",
+		"NumWorkers":          8,
+		"FlushBytes":          12345,
+		"FlushIntervalSec":    60,
 	})
 }
 
@@ -150,19 +154,20 @@ func assertConfig(t *testing.T, cfg *Config, checks map[string]any) {
 	t.Helper()
 
 	actual := map[string]any{
-		"ESURL":            cfg.ESURL,
-		"ESAPIKey":         cfg.ESAPIKey,
-		"Port":             cfg.Port,
-		"CursosIndexName":  cfg.CursosIndexName,
-		"IESIndexName":     cfg.IESIndexName,
-		"DictIndexName":    cfg.DictIndexName,
-		"IESDictIndexName": cfg.IESDictIndexName,
-		"JSONFilePath":     cfg.JSONFilePath,
-		"IESJSONFilePath":  cfg.IESJSONFilePath,
-		"ESIngestAPIKey":   cfg.ESIngestAPIKey,
-		"NumWorkers":       cfg.NumWorkers,
-		"FlushBytes":       cfg.FlushBytes,
-		"FlushIntervalSec": cfg.FlushIntervalSec,
+		"ESURL":               cfg.ESURL,
+		"ESAPIKey":            cfg.ESAPIKey,
+		"Port":                cfg.Port,
+		"CursosIndexName":     cfg.CursosIndexName,
+		"IESIndexName":        cfg.IESIndexName,
+		"DictIndexName":       cfg.DictIndexName,
+		"IESDictIndexName":    cfg.IESDictIndexName,
+		"MunicipiosIndexName": cfg.MunicipiosIndexName,
+		"JSONFilePath":        cfg.JSONFilePath,
+		"IESJSONFilePath":     cfg.IESJSONFilePath,
+		"ESIngestAPIKey":      cfg.ESIngestAPIKey,
+		"NumWorkers":          cfg.NumWorkers,
+		"FlushBytes":          cfg.FlushBytes,
+		"FlushIntervalSec":    cfg.FlushIntervalSec,
 	}
 
 	for field, want := range checks {

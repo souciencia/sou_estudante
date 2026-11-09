@@ -31,7 +31,30 @@ func ParseBuckets(aggregations map[string]json.RawMessage, name string) []Aggreg
 	if !ok {
 		return nil
 	}
+	return parseBucketsRaw(raw)
+}
 
+// ParseFilteredBuckets lê os buckets de uma agregação montada por FilteredAgg:
+// um nó "filter" com um bucket interno nomeado "termos". Devolve nil quando a
+// agregação não existe.
+func ParseFilteredBuckets(aggregations map[string]json.RawMessage, name string) []AggregationBucket {
+	raw, ok := aggregations[name]
+	if !ok {
+		return nil
+	}
+
+	var wrapper struct {
+		Termos json.RawMessage `json:"termos"`
+	}
+	if err := json.Unmarshal(raw, &wrapper); err != nil || wrapper.Termos == nil {
+		return nil
+	}
+	return parseBucketsRaw(wrapper.Termos)
+}
+
+// parseBucketsRaw converte o JSON de uma agregação (terms array ou filters map)
+// em buckets ordenados de forma estável.
+func parseBucketsRaw(raw json.RawMessage) []AggregationBucket {
 	// 1. Tentar array buckets (ex: terms aggregation).
 	var arrayAgg struct {
 		Buckets []struct {
@@ -78,7 +101,6 @@ func ParseBuckets(aggregations map[string]json.RawMessage, name string) []Aggreg
 	return nil
 }
 
-// SearchResponse agrupa o essencial da resposta de um search: total de hits,
 // documentos já decodificados em T e as agregações cruas por nome.
 type SearchResponse[T any] struct {
 	Total        int

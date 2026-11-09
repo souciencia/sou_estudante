@@ -57,7 +57,7 @@ func TestHandlerExtraiFiltrosCumulativos(t *testing.T) {
 
 	handler := &Handler{Service: mockService}
 
-	req := httptest.NewRequest(http.MethodGet, "/cursos?q=medicina&uf=SP,RJ&turno=Noturno,Diurno&grau=Bacharelado&ingresso=sisu&sort=enade", nil)
+	req := httptest.NewRequest(http.MethodGet, "/cursos?q=medicina&uf=SP,RJ&municipio=3550308,3304557&turno=Noturno,Diurno&grau=Bacharelado&ingresso=sisu&sort=enade", nil)
 	rec := httptest.NewRecorder()
 
 	handler.ServeHTTP(rec, req)
@@ -71,6 +71,9 @@ func TestHandlerExtraiFiltrosCumulativos(t *testing.T) {
 	}
 	if len(mockService.CapturedFilters.UF) != 2 || mockService.CapturedFilters.UF[0] != "SP" || mockService.CapturedFilters.UF[1] != "RJ" {
 		t.Errorf("esperado UF ['SP', 'RJ'], recebido '%v'", mockService.CapturedFilters.UF)
+	}
+	if len(mockService.CapturedFilters.Municipio) != 2 || mockService.CapturedFilters.Municipio[0] != "3550308" || mockService.CapturedFilters.Municipio[1] != "3304557" {
+		t.Errorf("esperado Municipio ['3550308', '3304557'], recebido '%v'", mockService.CapturedFilters.Municipio)
 	}
 	if len(mockService.CapturedFilters.Turno) != 2 || mockService.CapturedFilters.Turno[0] != "Noturno" || mockService.CapturedFilters.Turno[1] != "Diurno" {
 		t.Errorf("esperado Turno ['Noturno', 'Diurno'], recebido '%v'", mockService.CapturedFilters.Turno)

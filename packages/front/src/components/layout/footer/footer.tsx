@@ -25,7 +25,15 @@ export const Footer = ({ className }: FooterProps) => {
       <div className="bg-surface-footer text-on-dark px-5 py-10 rounded-panel shadw">
         <div className="grid gap-8 text-center md:grid-cols-2 md:text-left">
           <div className="flex flex-col items-center gap-5 md:items-start">
-            <SouCienciaLogo className="h-auto w-full max-w-xs" />
+            <a
+              href="https://souciencia.unifesp.br/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="SoU_Ciência · Unifesp"
+              className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-dark"
+            >
+              <SouCienciaLogo className="h-auto w-full max-w-xs" />
+            </a>
             <p className="text-xs leading-[1.6] text-on-dark">
               Um produto do <strong>SoU_Ciência · Unifesp</strong> · Dados
               públicos ·{' '}

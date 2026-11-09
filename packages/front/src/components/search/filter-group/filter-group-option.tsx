@@ -31,7 +31,7 @@ export function FilterGroupOption({
           'focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-accent-deep',
           'font-sans text-xs font-semibold tracking-wide uppercase',
           checked
-            ? 'bg-accent/70 border-accent/70 text-accent-fg'
+            ? 'bg-accent/70 border-accent-deep/30 text-accent-fg'
             : 'bg-filter-option text-fg-muted border border-fg-muted/10',
           disabled && 'cursor-not-allowed opacity-50',
         )}

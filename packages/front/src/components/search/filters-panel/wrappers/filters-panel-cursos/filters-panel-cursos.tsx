@@ -5,10 +5,12 @@ import {
   type FilterSectionDefinition,
   FiltersPanel,
 } from '@/components/search/filters-panel/filters-panel'
-import { useFilterPanel } from '@/components/search/filters-panel/use-filter-panel'
+import { useMunicipioFilterPanel } from '@/components/search/filters-panel/use-municipio-filter-panel'
+import { MunicipioFilters } from '@/components/search/municipio-filter/municipio-filters'
 import { SortingOptionsCursos } from '@/components/search/sorting-options/wrappers/sorting-options-cursos/sorting-options-cursos'
 import type { Module } from '@/lib/module'
 import { ufOptions } from '@/lib/uf'
+import { useMunicipios } from '@/services/api/use-municipios'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 
 /** Quantidade de UFs visíveis antes de expandir (as prioritárias de `ufOptions`). */
@@ -105,17 +107,36 @@ export function FiltersPanelCursos({
   className,
 }: FiltersPanelCursosProps) {
   const { updateParams, aggregations, resetFilters } = useSearchCursos()
-  const { getActiveValues, toggle, apply } = useFilterPanel(updateParams)
+  const { municipios } = useMunicipios()
+  const { getActiveValues, onToggle, onApply } = useMunicipioFilterPanel(
+    updateParams,
+    municipios,
+  )
+  const availableCodigos = aggregations?.municipios
+    ? new Set(aggregations.municipios.map((bucket) => bucket.key))
+    : undefined
 
   return (
     <FiltersPanel
       sections={SECTIONS}
       aggregations={aggregations}
       activeValues={getActiveValues}
-      onToggle={toggle}
-      onApply={apply}
+      onToggle={onToggle}
+      onApply={onApply}
       onClear={resetFilters}
       leading={<SortingOptionsCursos module={module} />}
+      afterSection={(section, ctx) =>
+        section.key === 'uf' ? (
+          <MunicipioFilters
+            ufs={ctx.activeValues('uf')}
+            municipios={municipios}
+            selected={ctx.activeValues('municipio')}
+            onToggle={(codigo) => ctx.onToggle('municipio', codigo)}
+            availableCodigos={availableCodigos}
+            module={module}
+          />
+        ) : null
+      }
       module={module}
       className={className}
     />

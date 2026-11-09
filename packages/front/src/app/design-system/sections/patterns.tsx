@@ -1,9 +1,42 @@
+'use client'
+
+import { useState } from 'react'
+import { MunicipioFilter } from '@/components/search/municipio-filter/municipio-filter'
 import { Button } from '@/components/ui/button/button'
 import { SkeletonCard } from '@/components/ui/card/skeleton-card'
 import { ErrorMessage } from '@/components/ui/error-message'
 import { Route } from '@/components/ui/route/route'
 import { MODULES } from '@/lib/module'
 import { Section, SubSection } from '../kit'
+
+const MUNICIPIOS_DEMO = [
+  { codigo: '3509502', nome: 'Campinas' },
+  { codigo: '3550308', nome: 'São Paulo' },
+  { codigo: '3548708', nome: 'São Bernardo do Campo' },
+  { codigo: '3520509', nome: 'Indaiatuba' },
+]
+
+function MunicipioFilterDemo() {
+  const [selected, setSelected] = useState<string[]>(['3550308'])
+
+  return (
+    <div className="max-w-64">
+      <MunicipioFilter
+        label="Municípios de São Paulo"
+        options={MUNICIPIOS_DEMO}
+        selected={selected}
+        onToggle={(codigo) =>
+          setSelected((current) =>
+            current.includes(codigo)
+              ? current.filter((item) => item !== codigo)
+              : [...current, codigo],
+          )
+        }
+        module="1"
+      />
+    </div>
+  )
+}
 
 export function Patterns() {
   return (
@@ -20,6 +53,10 @@ export function Patterns() {
           <Button>Integral</Button>
           <Button v="outline">Noturno</Button>
         </div>
+      </SubSection>
+
+      <SubSection title="Menu de municípios (multi-select)">
+        <MunicipioFilterDemo />
       </SubSection>
 
       <SubSection title="Acento escopado por módulo (mesmo componente)">

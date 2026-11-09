@@ -46,6 +46,14 @@ export interface FiltersPanelProps {
   onClear?: () => void
   /** Conteúdo exibido como primeiro item, antes das seções de filtro. */
   leading?: ReactNode
+  /** Conteúdo extra renderizado logo após uma seção (ex.: menus de municípios após "uf"). */
+  afterSection?: (
+    section: FilterSectionDefinition,
+    context: {
+      activeValues: (key: string) => string[]
+      onToggle: (key: string, value: string) => void
+    },
+  ) => ReactNode | null
   module?: Module
   className?: string
 }
@@ -65,6 +73,7 @@ export function FiltersPanel({
   onApply,
   onClear,
   leading,
+  afterSection,
   module,
   className,
 }: FiltersPanelProps) {
@@ -149,13 +158,13 @@ export function FiltersPanel({
           onClick={handleClear}
           disabled={!hasActiveFilters}
           className={cn(
-            'rounded-sm uppercase tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
+            'rounded-sm tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
             hasActiveFilters
               ? 'cursor-pointer text-accent-deep hover:underline'
               : 'cursor-not-allowed text-fg-muted',
           )}
         >
-          <span className="text-xs">Limpar filtros</span>
+          <span className="text-xs">Limpar</span>
         </button>
       </header>
 
@@ -183,6 +192,10 @@ export function FiltersPanel({
             activeValues={resolvedActiveValues}
             onToggle={resolvedOnToggle}
           />
+          {afterSection?.(section, {
+            activeValues: resolvedActiveValues,
+            onToggle: resolvedOnToggle,
+          })}
         </Fragment>
       ))}
     </>

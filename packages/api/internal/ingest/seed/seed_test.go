@@ -43,17 +43,18 @@ func (s *sliceStream) Close() error { return nil }
 
 func testConfig() *config.Config {
 	return &config.Config{
-		ESURL:            "http://localhost:9200",
-		ESIngestAPIKey:   "chave",
-		CursosIndexName:  "cursos",
-		IESIndexName:     "ies",
-		DictIndexName:    "dicionario-cursos",
-		IESDictIndexName: "dicionario-ies",
-		JSONFilePath:     "/data/cursos.json",
-		IESJSONFilePath:  "/data/ies.json",
-		NumWorkers:       1,
-		FlushBytes:       10_000,
-		FlushIntervalSec: 1,
+		ESURL:               "http://localhost:9200",
+		ESIngestAPIKey:      "chave",
+		CursosIndexName:     "cursos",
+		IESIndexName:        "ies",
+		DictIndexName:       "dicionario-cursos",
+		IESDictIndexName:    "dicionario-ies",
+		MunicipiosIndexName: "estados-municipios",
+		JSONFilePath:        "/data/cursos.json",
+		IESJSONFilePath:     "/data/ies.json",
+		NumWorkers:          1,
+		FlushBytes:          10_000,
+		FlushIntervalSec:    1,
 	}
 }
 
@@ -364,6 +365,59 @@ func TestEnsureIESDicionarioIndexaNomeESigla(t *testing.T) {
 	}
 	if !strings.Contains(capturedBulk, `"sg_ies":"USP"`) {
 		t.Errorf("bulk deveria conter a sigla da IES, obtido %s", capturedBulk)
+	}
+	if atomic.LoadInt32(&aliasPointed) != 1 {
+		t.Errorf("alias atualizado %d vezes, esperado 1", aliasPointed)
+	}
+}
+
+func TestEnsureMunicipiosIndexaUmDocumentoPorUF(t *testing.T) {
+	var searched, aliasPointed int32
+	var capturedBulk string
+	client := testutil.NewESClient(t, func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodDelete && r.URL.Path == "/estados-municipios-"+testDate:
+			w.WriteHeader(http.StatusNotFound)
+		case r.Method == http.MethodPut && r.URL.Path == "/estados-municipios-"+testDate:
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"acknowledged":true}`))
+		case r.Method == http.MethodPost && strings.HasSuffix(r.URL.Path, "/_search"):
+			atomic.AddInt32(&searched, 1)
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"aggregations":{"municipios":{"buckets":[
+				{"key":{"uf":"SP","codigo":"3550308","nome":"São Paulo"}}
+			]}}}`))
+		case r.Method == http.MethodPost && strings.HasSuffix(r.URL.Path, "/_bulk"):
+			body, _ := io.ReadAll(r.Body)
+			capturedBulk = string(body)
+			actions := testutil.CountBulkActions(capturedBulk)
+			items := make([]string, actions)
+			for i := range items {
+				items[i] = `{"index":{"status":201}}`
+			}
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"took":1,"errors":false,"items":[` + strings.Join(items, ",") + `]}`))
+		case r.Method == http.MethodPost && strings.HasSuffix(r.URL.Path, "/_refresh"):
+			w.WriteHeader(http.StatusOK)
+		case r.Method == http.MethodGet && r.URL.Path == "/_alias/estados-municipios-latest":
+			w.WriteHeader(http.StatusNotFound)
+		case r.Method == http.MethodPost && r.URL.Path == "/_aliases":
+			atomic.AddInt32(&aliasPointed, 1)
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"acknowledged":true}`))
+		default:
+			t.Errorf("requisição inesperada: %s %s", r.Method, r.URL.Path)
+		}
+	})
+
+	if err := ensureMunicipios(context.Background(), client, testConfig(), testDate); err != nil {
+		t.Fatalf("erro inesperado: %v", err)
+	}
+	if atomic.LoadInt32(&searched) != 2 {
+		t.Errorf("buscas de agregação = %d, esperado 2 (cursos e ies)", searched)
+	}
+	if !strings.Contains(capturedBulk, `"uf":"SP"`) || !strings.Contains(capturedBulk, `"codigo":"3550308"`) {
+		t.Errorf("bulk deveria conter o município por UF, obtido %s", capturedBulk)
 	}
 	if atomic.LoadInt32(&aliasPointed) != 1 {
 		t.Errorf("alias atualizado %d vezes, esperado 1", aliasPointed)

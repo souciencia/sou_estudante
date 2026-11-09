@@ -15,7 +15,7 @@ const iesSearchResponse = `{
 		"total": {"value": 1},
 		"hits": [{"_source": {"co_ies": "376", "no_ies": "ANHANGUERA", "uf": "SP"}}]
 	},
-	"aggregations": {"ufs": {"buckets": [{"key": "SP", "doc_count": 1}]}}
+	"aggregations": {"ufs": {"termos": {"buckets": [{"key": "SP", "doc_count": 1}]}}}
 }`
 
 func TestParseAggregationsVazioEhNil(t *testing.T) {
@@ -26,10 +26,11 @@ func TestParseAggregationsVazioEhNil(t *testing.T) {
 
 func TestParseAggregationsMapeiaBuckets(t *testing.T) {
 	raw := map[string]json.RawMessage{
-		"ufs":          json.RawMessage(`{"buckets":[{"key":"SP","doc_count":7}]}`),
-		"regioes":      json.RawMessage(`{"buckets":[{"key":"Sudeste","doc_count":5}]}`),
-		"categorias":   json.RawMessage(`{"buckets":{"Pública Federal":{"doc_count":3}}}`),
-		"organizacoes": json.RawMessage(`{"buckets":[{"key":"Universidade","doc_count":2}]}`),
+		"ufs":          json.RawMessage(`{"termos":{"buckets":[{"key":"SP","doc_count":7}]}}`),
+		"municipios":   json.RawMessage(`{"termos":{"buckets":[{"key":"3550308","doc_count":3}]}}`),
+		"regioes":      json.RawMessage(`{"termos":{"buckets":[{"key":"Sudeste","doc_count":5}]}}`),
+		"categorias":   json.RawMessage(`{"termos":{"buckets":{"Pública Federal":{"doc_count":3}}}}`),
+		"organizacoes": json.RawMessage(`{"termos":{"buckets":[{"key":"Universidade","doc_count":2}]}}`),
 	}
 
 	got := parseAggregations(raw)
@@ -38,6 +39,9 @@ func TestParseAggregationsMapeiaBuckets(t *testing.T) {
 	}
 	if len(got.UFs) != 1 || got.UFs[0].Key != "SP" || got.UFs[0].Count != 7 {
 		t.Errorf("ufs inesperadas: %+v", got.UFs)
+	}
+	if len(got.Municipios) != 1 || got.Municipios[0].Key != "3550308" || got.Municipios[0].Count != 3 {
+		t.Errorf("municipios inesperados: %+v", got.Municipios)
 	}
 	if len(got.Regioes) != 1 || got.Regioes[0].Key != "Sudeste" {
 		t.Errorf("regioes inesperadas: %+v", got.Regioes)
@@ -61,6 +65,63 @@ func TestBuildFilterClausesCategoria(t *testing.T) {
 	}
 	if should, ok := boolNode["should"].([]map[string]any); !ok || len(should) != 1 {
 		t.Errorf("esperado 1 should de categoria, obtido %v", boolNode["should"])
+	}
+}
+
+func TestBuildFilterClausesMunicipio(t *testing.T) {
+	clauses := buildFilterClauses(SearchFilterParams{Municipio: []string{"3550308"}})
+	if len(clauses) != 1 {
+		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
+	}
+	terms, ok := clauses[0]["terms"].(map[string]any)
+	if !ok {
+		t.Fatalf("esperado nó terms, obtido %T", clauses[0]["terms"])
+	}
+	if got := terms["localizacao.co_municipio"]; got == nil {
+		t.Errorf("esperado filtro por localizacao.co_municipio, obtido %v", terms)
+	}
+}
+
+func TestContextClausesExcluiFaceta(t *testing.T) {
+	filters := SearchFilterParams{UF: []string{"SP"}, Municipio: []string{"3550308"}}
+	all := buildFilterClauses(filters)
+	ctx := contextClauses(filters, "municipio")
+
+	if len(ctx) != len(all)-1 {
+		t.Fatalf("contexto = %d cláusulas, esperado %d (todas menos município)", len(ctx), len(all)-1)
+	}
+	if len(ctx) != 1 {
+		t.Fatalf("esperado 1 cláusula (UF), obtido %d", len(ctx))
+	}
+	if _, ok := ctx[0]["terms"].(map[string]any)["localizacao.sg_uf"]; !ok {
+		t.Errorf("esperado cláusula de UF, obtido %v", ctx[0])
+	}
+}
+
+func TestBuildAggregationsIncluiMunicipiosFiltrados(t *testing.T) {
+	raw, ok := buildAggregations(SearchFilterParams{})["municipios"].(map[string]any)
+	if !ok {
+		t.Fatal("agregação municipios ausente")
+	}
+
+	if _, ok := raw["filter"].(map[string]any); !ok {
+		t.Fatalf("municipios deveria ser filter agg, obtido %v", raw)
+	}
+
+	aggs, ok := raw["aggs"].(map[string]any)
+	if !ok {
+		t.Fatalf("filter agg sem aggs: %v", raw)
+	}
+	termos, ok := aggs["termos"].(map[string]any)
+	if !ok {
+		t.Fatalf("bucket interno termos ausente: %v", aggs)
+	}
+	terms, ok := termos["terms"].(map[string]any)
+	if !ok {
+		t.Fatalf("termos não é terms agg: %v", termos)
+	}
+	if terms["field"] != "localizacao.co_municipio" {
+		t.Errorf("field = %v, esperado localizacao.co_municipio", terms["field"])
 	}
 }
 

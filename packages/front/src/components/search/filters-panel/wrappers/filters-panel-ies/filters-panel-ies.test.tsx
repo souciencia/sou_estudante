@@ -15,6 +15,10 @@ vi.mock('@/services/api/use-search-ies', () => ({
   useSearchIes: vi.fn(),
 }))
 
+vi.mock('@/services/api/use-municipios', () => ({
+  useMunicipios: () => ({ municipios: {}, isLoading: false, isError: false }),
+}))
+
 describe('FiltersPanelIes', () => {
   const updateParams = vi.fn()
 
@@ -73,7 +77,11 @@ describe('FiltersPanelIes', () => {
 
     fireEvent.click(screen.getByRole('checkbox', { name: /São Paulo/ }))
 
-    expect(updateParams).toHaveBeenCalledWith({ uf: 'SP', page: '1' })
+    expect(updateParams).toHaveBeenCalledWith({
+      uf: 'SP',
+      municipio: null,
+      page: '1',
+    })
   })
 
   it('expõe o tema via data-module', () => {

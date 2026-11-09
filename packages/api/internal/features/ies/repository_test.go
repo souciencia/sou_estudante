@@ -119,7 +119,7 @@ func TestBuildSortClausesRelevanciaUsaScore(t *testing.T) {
 }
 
 func TestBuildAggregationsIncluiGruposDeFiltro(t *testing.T) {
-	aggs := buildAggregations()
+	aggs := buildAggregations(SearchFilterParams{})
 
 	for _, key := range []string{"ufs", "regioes", "organizacoes", "categorias"} {
 		if _, ok := aggs[key]; !ok {
