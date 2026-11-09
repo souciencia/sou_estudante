@@ -40,6 +40,7 @@ services:
       - IES_INDEX_NAME=${IES_INDEX_NAME}
       - CURSOS_DICT_INDEX_NAME=${CURSOS_DICT_INDEX_NAME}
       - IES_DICT_INDEX_NAME=${IES_DICT_INDEX_NAME}
+      - MUNICIPIOS_INDEX_NAME=${MUNICIPIOS_INDEX_NAME}
     ports:
       - "8080:8080"
     volumes:
@@ -67,6 +68,7 @@ services:
       - IES_INDEX_NAME=${IES_INDEX_NAME}
       - IES_JSON_FILE_PATH=${IES_JSON_FILE_PATH}
       - IES_DICT_INDEX_NAME=${IES_DICT_INDEX_NAME}
+      - MUNICIPIOS_INDEX_NAME=${MUNICIPIOS_INDEX_NAME}
     volumes:
       - ./data:/data:ro
     networks:

@@ -17,6 +17,7 @@ import (
 	"api_estudante/internal/ingest/bulk"
 	"api_estudante/internal/ingest/dictionary"
 	"api_estudante/internal/ingest/mappings"
+	"api_estudante/internal/ingest/municipios"
 )
 
 // indexSpec descreve um índice a ser populado a partir de um arquivo de origem.
@@ -120,7 +121,10 @@ func run(ctx context.Context, cfg *config.Config, deps Deps) error {
 	if err := ensureCursosDicionario(ctx, client, cfg, date); err != nil {
 		return err
 	}
-	return ensureIESDicionario(ctx, client, cfg, iesDocs, date)
+	if err := ensureIESDicionario(ctx, client, cfg, iesDocs, date); err != nil {
+		return err
+	}
+	return ensureMunicipios(ctx, client, cfg, date)
 }
 
 // ensureData ingere os documentos do arquivo de origem num índice novo datado
@@ -199,5 +203,24 @@ func ensureDicionario(ctx context.Context, client *es.Client, cfg *config.Config
 		return fmt.Errorf("construir dicionário %s: %w", spec.TargetIndex, err)
 	}
 	slog.Info("dicionário construído", "termos_unicos", terms, "index", spec.TargetIndex)
+	return nil
+}
+
+// ensureMunicipios constrói o índice estados-municipios a partir dos municípios
+// presentes nos índices de cursos e de IES já ingeridos, por troca atômica.
+func ensureMunicipios(ctx context.Context, client *es.Client, cfg *config.Config, date string) error {
+	stream, err := municipios.NewStream(ctx, client, []string{
+		config.LatestIndexName(cfg.CursosIndexName),
+		config.LatestIndexName(cfg.IESIndexName),
+	})
+	if err != nil {
+		return fmt.Errorf("agregar municípios por UF: %w", err)
+	}
+
+	inserted, err := dictionary.BuildStream(ctx, client, cfg, cfg.MunicipiosIndexName, mappings.Municipios, stream, date)
+	if err != nil {
+		return fmt.Errorf("construir índice %s: %w", cfg.MunicipiosIndexName, err)
+	}
+	slog.Info("índice de municípios construído", "estados", inserted, "index", cfg.MunicipiosIndexName)
 	return nil
 }

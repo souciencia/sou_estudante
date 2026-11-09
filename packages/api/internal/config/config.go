@@ -8,17 +8,18 @@ import (
 )
 
 const (
-	defaultESURL            = "http://localhost:9200"
-	defaultPort             = "8080"
-	defaultCursosIndexName  = "cursos"
-	defaultIESIndexName     = "ies"
-	defaultDictIndexName    = "dicionario-cursos"
-	defaultIESDictIndexName = "dicionario-ies"
-	defaultJSONFilePath     = "/data/dados_cursos.json"
-	defaultIESJSONFilePath  = "/data/dados_ies.json"
-	defaultNumWorkers       = 4
-	defaultFlushBytes       = 5_000_000
-	defaultFlushIntervalSec = 30
+	defaultESURL               = "http://localhost:9200"
+	defaultPort                = "8080"
+	defaultCursosIndexName     = "cursos"
+	defaultIESIndexName        = "ies"
+	defaultDictIndexName       = "dicionario-cursos"
+	defaultIESDictIndexName    = "dicionario-ies"
+	defaultMunicipiosIndexName = "estados-municipios"
+	defaultJSONFilePath        = "/data/dados_cursos.json"
+	defaultIESJSONFilePath     = "/data/dados_ies.json"
+	defaultNumWorkers          = 4
+	defaultFlushBytes          = 5_000_000
+	defaultFlushIntervalSec    = 30
 )
 
 // Config agrupa os parâmetros dos binários do pacote: a API (somente leitura)
@@ -30,12 +31,13 @@ type Config struct {
 	ESAPIKey string // chave somente leitura usada pela API
 	Port     string
 
-	CursosIndexName  string
-	IESIndexName     string
-	DictIndexName    string
-	IESDictIndexName string
-	JSONFilePath     string
-	IESJSONFilePath  string
+	CursosIndexName     string
+	IESIndexName        string
+	DictIndexName       string
+	IESDictIndexName    string
+	MunicipiosIndexName string
+	JSONFilePath        string
+	IESJSONFilePath     string
 
 	ESIngestAPIKey   string // chave de leitura/escrita usada pelo job de ingestão
 	NumWorkers       int
@@ -64,19 +66,20 @@ func (c *Config) ValidateSeed() error {
 // ValidateAPI ou ValidateSeed conforme o binário.
 func Load() *Config {
 	return &Config{
-		ESURL:            getEnv("ES_URL", defaultESURL),
-		ESAPIKey:         os.Getenv("ES_APIKEY"),
-		Port:             getEnv("PORT", defaultPort),
-		CursosIndexName:  getEnv("CURSOS_INDEX_NAME", defaultCursosIndexName),
-		IESIndexName:     getEnv("IES_INDEX_NAME", defaultIESIndexName),
-		DictIndexName:    getEnv("CURSOS_DICT_INDEX_NAME", defaultDictIndexName),
-		IESDictIndexName: getEnv("IES_DICT_INDEX_NAME", defaultIESDictIndexName),
-		JSONFilePath:     getEnv("CURSOS_JSON_FILE_PATH", defaultJSONFilePath),
-		IESJSONFilePath:  getEnv("IES_JSON_FILE_PATH", defaultIESJSONFilePath),
-		ESIngestAPIKey:   os.Getenv("ES_INGEST_APIKEY"),
-		NumWorkers:       getEnvInt("ES_NUM_WORKERS", defaultNumWorkers),
-		FlushBytes:       getEnvInt("ES_FLUSH_BYTES", defaultFlushBytes),
-		FlushIntervalSec: getEnvInt("ES_FLUSH_INTERVAL_SEC", defaultFlushIntervalSec),
+		ESURL:               getEnv("ES_URL", defaultESURL),
+		ESAPIKey:            os.Getenv("ES_APIKEY"),
+		Port:                getEnv("PORT", defaultPort),
+		CursosIndexName:     getEnv("CURSOS_INDEX_NAME", defaultCursosIndexName),
+		IESIndexName:        getEnv("IES_INDEX_NAME", defaultIESIndexName),
+		DictIndexName:       getEnv("CURSOS_DICT_INDEX_NAME", defaultDictIndexName),
+		IESDictIndexName:    getEnv("IES_DICT_INDEX_NAME", defaultIESDictIndexName),
+		MunicipiosIndexName: getEnv("MUNICIPIOS_INDEX_NAME", defaultMunicipiosIndexName),
+		JSONFilePath:        getEnv("CURSOS_JSON_FILE_PATH", defaultJSONFilePath),
+		IESJSONFilePath:     getEnv("IES_JSON_FILE_PATH", defaultIESJSONFilePath),
+		ESIngestAPIKey:      os.Getenv("ES_INGEST_APIKEY"),
+		NumWorkers:          getEnvInt("ES_NUM_WORKERS", defaultNumWorkers),
+		FlushBytes:          getEnvInt("ES_FLUSH_BYTES", defaultFlushBytes),
+		FlushIntervalSec:    getEnvInt("ES_FLUSH_INTERVAL_SEC", defaultFlushIntervalSec),
 	}
 }
 

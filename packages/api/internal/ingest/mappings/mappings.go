@@ -24,3 +24,8 @@ var CursosDictionary []byte
 //
 //go:embed ies_dictionary.json
 var IESDictionary []byte
+
+// Municipios é o mapping do índice estados-municipios (municípios por UF).
+//
+//go:embed municipios.json
+var Municipios []byte
