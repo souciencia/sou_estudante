@@ -64,19 +64,19 @@ jobs:
       - name: Sincroniza o código (rsync)
         run: |
           set -euo pipefail
-          # --delete não remove caminhos excluídos: .env, data/ e .git do
+          # --delete não remove caminhos excluídos: .env, _data/ e .git do
           # servidor são preservados.
           rsync -az --delete \
             --rsync-path="mkdir -p '${DEPLOY_PATH}' && rsync" \
             --include='/.env.example' \
             --exclude='/.env*' \
-            --exclude='/data/' \
+            --exclude='/_data/' \
             --exclude='.git/' \
             --exclude='/.github/' \
             --exclude='node_modules/' \
             --exclude='.next/' \
             --exclude='coverage/' \
-            --exclude='packages/api/tmp/' \
+            --exclude='api/tmp/' \
             ./ "deploy:${DEPLOY_PATH}/"
       - name: Publica e verifica a saúde
         run: |

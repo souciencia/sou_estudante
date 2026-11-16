@@ -63,9 +63,9 @@ start_bulk() {
   local data_file source
   source="$(get_env_var "CURSOS_JSON_FILE_PATH")"
   if is_blank "$source"; then
-    data_file="./data/dados_cursos.json"
+    data_file="./_data/dados_cursos.json"
   else
-    data_file="./data/${source##*/}"
+    data_file="./_data/${source##*/}"
   fi
   if [[ ! -f "$data_file" ]]; then
     log_warn "Arquivo de dados não encontrado em ${data_file}; bulking ignorado."

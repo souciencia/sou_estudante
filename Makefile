@@ -29,19 +29,19 @@ seed: ## Roda o job de ingestão (só carrega índices vazios)
 test: test-api test-front ## Testes da API e do front
 
 test-api:
-	cd packages/api && go test -race -count=1 ./...
+	cd api && go test -race -count=1 ./...
 
 test-front:
-	cd packages/front && npm run test:run
+	cd front && npm run test:run
 
 lint: lint-api lint-front ## Verificações do CI: formatação, vet e tipos
 
 lint-api:
-	cd packages/api && test -z "$$(gofmt -l .)" && go vet ./... && go mod tidy -diff
+	cd api && test -z "$$(gofmt -l .)" && go vet ./... && go mod tidy -diff
 
 lint-front:
-	cd packages/front && npm run check:ci && npm run typecheck
+	cd front && npm run check:ci && npm run typecheck
 
 fmt: ## Formata Go e front
-	cd packages/api && gofmt -s -w .
-	cd packages/front && npm run lint:fix
+	cd api && gofmt -s -w .
+	cd front && npm run lint:fix

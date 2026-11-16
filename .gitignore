@@ -1,13 +1,13 @@
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-/data/
+/_data/
 queries/
 */session.json
 session.json
 ss.json
 .opencode/
-docs/imgs/
+_docs/imgs/
 query2.json
 
 # dependencies
@@ -21,7 +21,7 @@ node_modules/
 !.yarn/versions
 
 # api: artefato de build do air
-packages/api/tmp/
+api/tmp/
 
 # testing
 coverage/

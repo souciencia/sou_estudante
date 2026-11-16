@@ -2,7 +2,7 @@
 
 O **SoU_Estudante** é uma plataforma de pesquisa e comparação de cursos e universidades, feita para ajudar estudantes e pesquisadores.
 
-> Documentação técnica na pasta [docs/](docs/): [diretrizes](docs/00.guidelines.md), [arquitetura](docs/00.arquitetura.md), [banco de dados](docs/10.database.md), [API](docs/20.api.md), [front-end](docs/30.frontend.md), [deploy](docs/40.deploy.md), [glossário](docs/glossario.md) e [decisões (ADR)](docs/adr/README.md). Cada pacote tem seu README: [api](packages/api/README.md) e [front](packages/front/README.md).
+> Documentação técnica na pasta [_docs/](_docs/): [diretrizes](_docs/00.guidelines.md), [arquitetura](_docs/00.arquitetura.md), [banco de dados](_docs/10.database.md), [API](_docs/20.api.md), [front-end](_docs/30.frontend.md), [deploy](_docs/40.deploy.md) e [glossário](_docs/glossario.md). Cada pacote tem seu README: [api](api/README.md) e [front](front/README.md).
 
 ## Arquitetura
 
@@ -30,10 +30,10 @@ Tudo é orquestrado por `docker-compose.yml` (desenvolvimento) e `docker-compose
 
 ### Dados
 
-Os arquivos de dados **não estão no repositório** (a pasta `data/` é ignorada pelo Git). Peça-os à equipe de dados e coloque em `data/`:
+Os arquivos de dados **não estão no repositório** (a pasta `_data/` é ignorada pelo Git). Peça-os à equipe de dados e coloque em `_data/`:
 
-- `data/dados_cursos.json`
-- `data/dados_ies.json`
+- `_data/dados_cursos.json`
+- `_data/dados_ies.json`
 
 Sem eles o `setup-dev.sh` apenas avisa e pula a ingestão: a API sobe, mas sem dados.
 
@@ -43,7 +43,7 @@ Sem eles o `setup-dev.sh` apenas avisa e pula a ingestão: a API sobe, mas sem d
 
 O `setup-dev.sh` prepara o ambiente de desenvolvimento e, em ordem: cria o `.env` a partir de `.env.example` (pede a senha do Elasticsearch se estiver em branco); constrói as imagens; sobe o Elasticsearch e aguarda; gera as API keys (leitura para a API, leitura/escrita para a ingestão) e grava no `.env`; roda o job de ingestão `se_bulk`; lista os índices existentes; sobe `se_api` e `se_front`; e abre o front no navegador. O `setup-prod.sh` faz o deploy de produção (usa apenas Docker): gera as API keys **dentro do container do ES** (`docker exec`) e publica os serviços. Veja `./setup-dev.sh --help` para as opções (`--keep-env`, `--skip-build`, `--skip-bulk`, `--dry-run`, `--non-interactive`, ...).
 
-Para reingerir os dados depois: `podman compose --profile bulk run --rm --no-deps se_bulk`. A ingestão sempre reingere por troca atômica (blue/green) (ver [docs/10.database.md](docs/10.database.md)).
+Para reingerir os dados depois: `podman compose --profile bulk run --rm --no-deps se_bulk`. A ingestão sempre reingere por troca atômica (blue/green) (ver [_docs/10.database.md](_docs/10.database.md)).
 
 ## As coisas estão funcionando?
 
@@ -63,7 +63,7 @@ O fluxo passa por três containers; verifique cada um separadamente, pelos logs 
 
 ## Testes e qualidade
 
-| Pacote | Comando (em `packages/<pacote>`) |
+| Pacote | Comando (em `api/` ou `front/`) |
 | :--- | :--- |
 | API | `go vet ./...`, `go test ./...`, `gofmt -s -l .` (os testes usam `httptest`; não precisam do Elasticsearch) |
 | Front | `npm run typecheck`, `npm run test:run`, `npm run check:ci` (Biome), `npm run lint:fix` para corrigir |
@@ -74,12 +74,12 @@ Os mesmos checks rodam no CI (`.github/workflows`) e bloqueiam o deploy.
 
 ## Como Contribuir
 
-Antes de começar, leia [docs/00.guidelines.md](docs/00.guidelines.md): simplicidade primeiro, TDD (Red → Green → Refactor → Commit) e as regras de cada pacote.
+Antes de começar, leia [_docs/00.guidelines.md](_docs/00.guidelines.md): simplicidade primeiro, TDD (Red → Green → Refactor → Commit) e as regras de cada pacote.
 
 ### Organização do código
 
-- **API (Go):** `handlers → services → repository`, por feature em `internal/features/*`. A API é somente leitura e não importa a ingestão (há um teste que garante isso). Ver [packages/api/AGENTS.md](packages/api/AGENTS.md) e [docs/20.api.md](docs/20.api.md).
-- **Front (Next.js):** componentes por domínio em `src/components/` (`ui`, `layout`, `search`, `profile`, `enade`). Componentes ricos usam *Compound Components*; os que servem a mais de um domínio são agnósticos e ganham especializações em `wrappers/`. Ver [docs/30.frontend.md](docs/30.frontend.md) e [docs/01.component-composition.md](docs/01.component-composition.md).
+- **API (Go):** `handlers → services → repository`, por feature em `internal/features/*`. A API é somente leitura e não importa a ingestão (há um teste que garante isso). Ver [api/AGENTS.md](api/AGENTS.md) e [_docs/20.api.md](_docs/20.api.md).
+- **Front (Next.js):** componentes por domínio em `src/components/` (`ui`, `layout`, `search`, `profile`, `enade`). Componentes ricos usam *Compound Components*; os que servem a mais de um domínio são agnósticos e ganham especializações em `wrappers/`. Ver [_docs/30.frontend.md](_docs/30.frontend.md) e [_docs/31.component-composition.md](_docs/31.component-composition.md).
 - **DRY:** cada regra de negócio ou lógica tem uma só representação. Se um comportamento se repete, extraia para função, *hook* ou componente reutilizável (mas só a partir do segundo uso real).
 
 ### Agentes de IA

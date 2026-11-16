@@ -30,7 +30,7 @@ services:
 
   se_api:
     build:
-      context: ./packages/api
+      context: ./api
       dockerfile: Dockerfile.dev
     container_name: se_api
     environment:
@@ -44,7 +44,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./packages/api:/app:z
+      - ./api:/app:z
       - go-mod-cache:/root/go/pkg/mod
     networks:
       - web_net
@@ -56,7 +56,7 @@ services:
 
   se_bulk:
     build:
-      context: ./packages/api
+      context: ./api
       dockerfile: Dockerfile.seed
     container_name: se_bulk
     environment:
@@ -70,7 +70,7 @@ services:
       - IES_DICT_INDEX_NAME=${IES_DICT_INDEX_NAME}
       - MUNICIPIOS_INDEX_NAME=${MUNICIPIOS_INDEX_NAME}
     volumes:
-      - ./data:/data:ro
+      - ./_data:/data:ro
     networks:
       - data_net
     depends_on:
@@ -80,7 +80,7 @@ services:
 
   se_front:
     build:
-      context: ./packages/front
+      context: ./front
       dockerfile: Dockerfile.dev
     container_name: se_front
     environment:
@@ -90,7 +90,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./packages/front:/app:z
+      - ./front:/app:z
       - node_modules-data:/app/node_modules
       - /app/.next
     networks:
