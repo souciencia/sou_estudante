@@ -1,0 +1,344 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Rubik Mono One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/RubikMonoOne-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("/fonts/SourceSans3-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("/fonts/SourceSans3-Italic-VariableFont_wght.ttf") format("truetype");
+}
+
+@theme {
+  /* Cores · Acentos por módulo */
+  --color-m1-accent: oklch(93.6% 0.225 121.24);
+  --color-m2-accent: oklch(84.4% 0.145 209.29);
+  --color-m3-accent: oklch(72.9% 0.205 347.95);
+  --color-m4-accent: oklch(65.7% 0.221 302.89);
+  --color-m5-accent: oklch(75.4% 0.165 52.47);
+
+  /* Tons companheiros (texto legível sobre claro) */
+  --color-m1-deep: oklch(50% 0.1213 121);
+  --color-m2-deep: oklch(48% 0.0834 209);
+  --color-m3-deep: oklch(48% 0.1821 351);
+  --color-m4-deep: oklch(41% 0.1961 296);
+  --color-m5-deep: oklch(51% 0.1368 049);
+
+  --color-surface-lv0: oklch(93% 0.0222 312);
+  --color-surface-lv0-top: oklch(93% 0.03 250);
+  --color-surface-lv1: oklch(97% 0.0102 311);
+  --color-surface-lv2: oklch(100% 0 0);
+
+  --color-filters-bg: oklch(98.5% 0 0);
+  --color-filter-option: oklch(95% 0 0);
+  --color-filter-option-active: oklch(89% 0 0);
+
+  --color-surface-deep: oklch(93% 0.0222 312);
+  --color-surface-footer: color-mix(
+    in oklab,
+    var(--color-blue-900) 75%,
+    transparent
+  );
+  --color-surface-header: oklch(28.3% 0.034 249.13);
+
+  --color-navy-900: oklch(28.3% 0.034 249.13);
+  --color-navy-950: oklch(21.4% 0.032 249.13);
+
+  --color-border-primary: oklch(0.92 0 0);
+  --color-border-secondary: oklch(93.6% 0.022 312.18);
+
+  /* Cores · Feedback (faixas do Enade e progresso) */
+
+  --color-ok: oklch(56% 0.121 158);
+  --color-ok-surface: oklch(96% 0.018 166);
+
+  --color-warn: oklch(57% 0.135 59);
+  --color-warn-surface: oklch(96% 0.028 79);
+
+  --color-low: oklch(54% 0.174 29);
+  --color-low-surface: oklch(95% 0.018 25);
+
+  /* Cores · Feedback genérico (erro) */
+  --color-error: oklch(54% 0.174 29);
+  --color-error-surface: oklch(95% 0.018 25);
+
+  /* Cores · Informação (banner de localização, tag de curso) */
+  --color-info: oklch(81% 0.055 215);
+  --color-info-deep: oklch(29% 0.066 243);
+  --color-info-border: oklch(88% 0.051 221);
+  --color-info-surface: oklch(100% 0 0);
+
+  --color-progress-bar-foreground: oklch(81.5% 0.055 215.5);
+  --color-progress-bar-background: oklch(0.94 0.01 75);
+
+  --color-muted: oklch(96.7% 0 264);
+  --color-fg: oklch(19.19% 0.0441 309.16);
+  --color-fg-muted: oklch(45.48% 0.0339 305.48);
+  --color-on-dark: oklch(100% 0 0);
+
+  /* Cores · tag de cursos */
+  --color-tag-curso-surface: var(--color-slate-100);
+  --color-tag-curso-border: var(--color-slate-600);
+  --color-tag-curso-deep: var(--color-slate-800);
+
+  /* Cores · Callout (sobrescritas por [data-variant] em .callout) */
+  --color-callout-accent: var(--color-info);
+  --color-callout-surface: var(--color-info-surface);
+  --color-callout-accent-deep: var(--color-info-deep);
+
+  /* Cores · Acento escopado (sobrescrito por [data-module]) */
+  --color-accent: var(--color-m1-accent);
+  --color-accent-deep: var(--color-m1-deep);
+  --color-accent-fg: var(--color-m1-deep);
+
+  /*  Tipografia · Famílias */
+  --font-mono: "DM Mono", ui-monospace, monospace; /* dados numéricos */
+  --font-display: "Source Sans 3", system-ui, sans-serif; /* títulos */
+  /* Corpo. O `next/font` sobrescreve esta variável no <body> (layout.tsx). */
+  --font-sans: "Source Sans 3", system-ui, sans-serif;
+  --font-selo: "Rubik Mono One", system-ui;
+
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-4xl: 2.25rem; /* 36px */
+  --text-2xs: 0.688rem;
+  --text-display: clamp(1.6rem, 4vw, 2.35rem);
+
+  /* Formas */
+  --radius-card: 20px;
+  --radius-callout: 18px;
+  --radius-panel: 14px; /* painéis e banners internos de perfil */
+  --radius-control: 10px; /* botões e controles pequenos */
+
+  --container-home: 900px;
+
+  /* Movimento · Durações e easings */
+  --duration-fast: 150ms;
+  --duration-cruise: 400ms;
+  --duration-page: 400ms;
+  --ease-prow: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-page: var(--ease-prow);
+  --ease-tide: var(--ease-wave);
+
+  --ease-wave: cubic-bezier(0.55, 0.5, 0.45, 0.5);
+
+  /* Transição de página (fade + subida) */
+  --page-transition-offset: 8px;
+
+  /* em dois lugares: `MOBILE_MEDIA_QUERY` em `src/components/ui/use-media-query.ts`. */
+  --breakpoint-md: 48rem;
+}
+
+/* Temas por módulo */
+[data-module="1"] {
+  --color-accent: var(--color-m1-accent);
+  --color-accent-deep: var(--color-m1-deep);
+  --color-accent-fg: var(--color-m1-deep);
+}
+[data-module="2"] {
+  --color-accent: var(--color-m2-accent);
+  --color-accent-deep: var(--color-m2-deep);
+  --color-accent-fg: var(--color-m2-deep);
+}
+[data-module="3"] {
+  --color-accent: var(--color-m3-accent);
+  --color-accent-deep: var(--color-m3-deep);
+  --color-accent-fg: var(--color-m3-deep);
+}
+[data-module="4"] {
+  --color-accent: var(--color-m4-accent);
+  --color-accent-deep: var(--color-m4-deep);
+  --color-accent-fg: var(--color-m4-deep);
+}
+[data-module="5"] {
+  --color-accent: var(--color-m5-accent);
+  --color-accent-deep: var(--color-m5-deep);
+  --color-accent-fg: var(--color-m5-deep);
+}
+
+/* Temas do Callout (Scoped-Variable Pattern, sem React Context) */
+.callout[data-variant="blue"] {
+  --color-callout-accent: var(--color-info);
+  --color-callout-surface: color-mix(
+    in oklab,
+    var(--color-info) 12%,
+    var(--color-surface-lv2)
+  );
+  --color-callout-accent-deep: var(--color-info-deep);
+}
+
+.callout[data-variant="gold"] {
+  --color-callout-accent: var(--color-warn);
+  --color-callout-surface: oklch(98.9% 0.013 86.83);
+  --color-callout-accent-deep: var(--color-warn);
+  border-color: color-mix(
+    in oklab,
+    var(--color-callout-accent) 50%,
+    transparent
+  );
+}
+
+.callout[data-variant="gold"] .callout-tagline {
+  color: color-mix(in oklab, var(--color-callout-accent) 50%, transparent);
+}
+
+.callout[data-variant="module"] {
+  --color-callout-accent: var(--color-accent);
+  --color-callout-surface: var(--color-surface-lv2);
+  --color-callout-accent-deep: var(--color-accent-deep);
+}
+
+/* Base */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-fg);
+  /* Títulos usam a mesma família do corpo. */
+  --font-display: var(--font-sans);
+}
+
+/*  Bússola da Hero da Página Inicial */
+.hero-bussola {
+  position: absolute;
+  top: 50%;
+  right: -80px;
+  transform: translateY(-50%);
+  width: 188px;
+  height: 188px;
+  opacity: 0.34;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-bussola .contorno,
+.hero-bussola .seta {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.hero-bussola .contorno {
+  animation: bussola-contorno 10s ease-in-out infinite;
+}
+.hero-bussola .seta {
+  animation: bussola-seta 5.6s ease-in-out infinite;
+}
+
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+
+@keyframes bussola-contorno {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+@keyframes bussola-seta {
+  0%,
+  100% {
+    transform: rotate(12deg);
+  }
+  50% {
+    transform: rotate(-14deg);
+  }
+}
+@media (min-width: 860px) {
+  .hero-bussola {
+    width: 312px;
+    height: 312px;
+    right: 16px;
+    opacity: 1;
+  }
+}
+
+/* Transição de página (fade + leve subida) */
+.page-transition {
+  animation-name: page-transition-enter;
+  animation-duration: var(--duration-page);
+  animation-timing-function: var(--ease-page);
+  animation-fill-mode: backwards;
+}
+
+@keyframes page-transition-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--page-transition-offset), 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Todo movimento respeita prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+  }
+}
+
+@layer utilities {
+  .min-h-page {
+    min-height: 700px;
+  }
+
+  .destak {
+    border: 2px solid red;
+  }
+
+  .shadw {
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.05),
+      0 4px 10px rgba(0, 0, 0, 0.09);
+  }
+
+  /* Mantém a barra de rolagem sempre visível (mesmo em overlay scrollbars). */
+  .scrollbar-visible {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-fg-muted) transparent;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: var(--color-fg-muted);
+  }
+}
