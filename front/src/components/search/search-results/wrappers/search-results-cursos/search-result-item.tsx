@@ -50,7 +50,6 @@ export function SearchResultItem({
 
   // Localização
   const localizacaoItens = [municipio, uf].filter(Boolean)
-  const localizacaoCompleta = localizacaoItens.join(' - ')
   const localizacaoTag = localizacaoItens.join(', ')
 
   // Vagas (Censo)

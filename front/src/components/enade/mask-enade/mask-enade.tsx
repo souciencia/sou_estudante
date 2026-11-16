@@ -44,11 +44,15 @@ export function MaskEnade({ level, className }: Props) {
         maskRepeat: 'no-repeat',
         WebkitMaskRepeat: 'no-repeat',
       }}
-    > 
+    >
       <ConceitoEnade level={level} className="h-full w-full" />
-      <div className='absolute top-0 flex flex-col place-content-center size-full font-black font-display'>
-        <span className='text-4xl text-white self-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]'>{level}</span> 
-        <span className='text-xl text-white self-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]'>Enade</span>
+      <div className="absolute top-0 flex flex-col place-content-center size-full font-black font-display">
+        <span className="text-4xl text-white self-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+          {level}
+        </span>
+        <span className="text-xl text-white self-center drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+          Enade
+        </span>
       </div>
     </div>
   )
