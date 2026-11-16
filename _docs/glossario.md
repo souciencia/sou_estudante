@@ -35,9 +35,9 @@
 | 4 | Telescópio | Conhecer a instituição | `/ies` |
 | 5 | Sextante | Comparar cursos | `/comparar` |
 
-Fonte: `MODULE_META` em `packages/front/src/lib/module.ts`.
+Fonte: `MODULE_META` em `front/src/lib/module.ts`.
 
 ## Termos de arquitetura de componentes
 
 Agnóstico, Wrapper, Compound, Scoped-Variable e Slot estão definidos em
-[01.component-composition.md](01.component-composition.md#9-terminologia).
+[31.component-composition.md](31.component-composition.md#9-terminologia).
