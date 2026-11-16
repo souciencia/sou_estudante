@@ -160,6 +160,7 @@ export const ProfilePermanenciaFinancing = ({
       <Link
         href={'https://souciencia.unifesp.br/painel-de-cotas'}
         className="mt-[0.625rem] flex items-center gap-1 text-2xs font-semibold text-accent-deep"
+        target='_blank'
       >
         Ver tipos no Painel de Cotas
         <ArrowRight className="size-3" />
@@ -168,6 +169,7 @@ export const ProfilePermanenciaFinancing = ({
       <Link
         href={'https://souciencia.unifesp.br/cartilha-cotas'}
         className="mt-[0.625rem] flex items-center gap-1 text-2xs font-semibold text-accent-deep"
+        target='_blank'
       >
         Entenda as cotas na Cartilha
         <ArrowRight className="size-3" />
