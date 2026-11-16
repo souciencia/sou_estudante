@@ -173,7 +173,7 @@ describe('buildCompareSections', () => {
     expect(linhas.get('Outras modalidades da instituição')).toBeUndefined()
   })
 
-  it('preenche com "Sem vagas no Sisu" quando o curso não tem Sisu', () => {
+  it('mostra "Sem vagas no Sisu" uma vez por seção quando o curso não tem Sisu', () => {
     const sections = buildCompareSections([
       buildCurso({ sisu: { tem_sisu: false, ofertas: [] } }),
     ])
@@ -188,10 +188,17 @@ describe('buildCompareSections', () => {
     const NAO_USA_SISU = 'Sem vagas no Sisu · verifique as cotas na instituição'
 
     expect(labels['Oferta no Sisu']).toBe(NAO_USA_SISU)
-    expect(labels['Nota de corte']).toBe(NAO_USA_SISU)
-    expect(labels['Vagas no Sisu']).toBe(NAO_USA_SISU)
-    expect(labels.Turno).toBe(NAO_USA_SISU)
-    expect(labels['Baixa renda · demais candidatos']).toBe(NAO_USA_SISU)
+    expect(labels['Nota de corte']).toBeUndefined()
+    expect(labels['Vagas no Sisu']).toBeUndefined()
+    expect(labels.Turno).toBeUndefined()
+    expect(labels['Baixa renda · demais candidatos']).toBeUndefined()
     expect(labels['Outras modalidades da instituição']).toBe(NAO_USA_SISU)
+
+    const ocorrencias = sections.flatMap((section) =>
+      section.rows.flatMap((row) => row.values),
+    )
+    expect(ocorrencias.filter((valor) => valor === NAO_USA_SISU)).toHaveLength(
+      2,
+    )
   })
 })

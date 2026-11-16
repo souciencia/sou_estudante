@@ -43,7 +43,7 @@ const MODALIDADES_CONHECIDAS = new Set([
 ])
 
 function notaCota(curso: Curso, codigo: string): string | undefined {
-  if (!curso.sisu?.tem_sisu) return NAO_USA_SISU
+  if (!curso.sisu?.tem_sisu) return undefined
   const oferta = curso.sisu?.ofertas?.find((o) => o.modalidade === codigo)
   return oferta?.nota_corte !== undefined
     ? String(oferta.nota_corte)
@@ -180,7 +180,7 @@ export function buildCompareSections(
           label: 'Nota de corte',
           numeric: true,
           values: column((c) => {
-            if (!c.sisu?.tem_sisu) return NAO_USA_SISU
+            if (!c.sisu?.tem_sisu) return undefined
             const nota = c.sisu?.ofertas?.[0]?.nota_corte
             return nota !== undefined ? String(nota) : undefined
           }),
@@ -189,17 +189,18 @@ export function buildCompareSections(
           label: 'Vagas no Sisu',
           numeric: true,
           values: column((c) => {
-            if (!c.sisu?.tem_sisu) return NAO_USA_SISU
+            if (!c.sisu?.tem_sisu) return undefined
             const vagas = c.sisu?.ofertas?.[0]?.vagas
             return vagas !== undefined ? String(vagas) : undefined
           }),
         },
         {
           label: 'Turno',
-          values: column((c) => {
-            if (!c.sisu?.tem_sisu) return NAO_USA_SISU
-            return capitalize(c.sisu?.ofertas?.[0]?.turno)
-          }),
+          values: column((c) =>
+            c.sisu?.tem_sisu
+              ? capitalize(c.sisu?.ofertas?.[0]?.turno)
+              : undefined,
+          ),
         },
       ],
     },
