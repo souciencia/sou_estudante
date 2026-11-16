@@ -1,0 +1,14 @@
+FROM docker.io/library/golang:1.27-alpine
+
+WORKDIR /app
+
+RUN go install github.com/air-verse/air@v1.52.3
+
+# go.mod/go.sum antes do código: a camada de dependências só é refeita quando
+# elas mudam. O código vem por volume (./api:/app) em desenvolvimento.
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+CMD ["air"]

@@ -23,11 +23,11 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v7
         with:
-          go-version-file: packages/api/go.mod
+          go-version-file: api/go.mod
           cache: false
 
       - name: Check TypeScript / CSS format (Biome)
-        working-directory: packages/front
+        working-directory: front
         run: npx --yes @biomejs/biome@2.5.15 ci .
 
       - name: Check Go format (gofmt)

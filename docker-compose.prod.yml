@@ -27,7 +27,7 @@ services:
 
   se_api:
     build:
-      context: ./packages/api
+      context: ./api
       dockerfile: Dockerfile
     image: sou_estudante/api:${IMAGE_TAG:-latest}
     container_name: se_api
@@ -63,7 +63,7 @@ services:
 
   se_front:
     build:
-      context: ./packages/front
+      context: ./front
       dockerfile: Dockerfile
       args:
         API_URL: ${API_URL:-http://se_api:8080}
@@ -93,7 +93,7 @@ services:
 
   se_bulk:
     build:
-      context: ./packages/api
+      context: ./api
       dockerfile: Dockerfile.seed
     image: sou_estudante/seed:${IMAGE_TAG:-latest}
     container_name: se_bulk
@@ -108,7 +108,7 @@ services:
       - IES_DICT_INDEX_NAME=${IES_DICT_INDEX_NAME}
       - MUNICIPIOS_INDEX_NAME=${MUNICIPIOS_INDEX_NAME}
     volumes:
-      - ./data:/data:ro
+      - ./_data:/data:ro
     networks:
       - data_net
     depends_on:
