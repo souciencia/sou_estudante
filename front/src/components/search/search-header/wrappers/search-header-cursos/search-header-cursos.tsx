@@ -40,29 +40,31 @@ export function SearchHeaderCursos({ module }: SearchHeaderCursosProps) {
         submitLabel="Buscar"
       />
 
-      <SearchHeader.Actions>
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Typo s="sm" t="span" id={exactLabelId} className="text-fg">
-              Busca exata
-            </Typo>
-            <Switch
-              size="sm"
-              module={module}
-              checked={exact}
-              aria-labelledby={exactLabelId}
-              aria-describedby={exactHintId}
-              onCheckedChange={handleExactChange}
-            />
+      {query.trim().length > 0 && (
+        <SearchHeader.Actions>
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Typo s="sm" t="span" id={exactLabelId} className="text-fg">
+                Busca exata
+              </Typo>
+              <Switch
+                size="sm"
+                module={module}
+                checked={exact}
+                aria-labelledby={exactLabelId}
+                aria-describedby={exactHintId}
+                onCheckedChange={handleExactChange}
+              />
+            </div>
+            <CompareToggle module={module} />
           </div>
-          <CompareToggle module={module} />
-        </div>
-        <Typo s="xs" t="span" v="mute" id={exactHintId}>
-          {exact
-            ? 'Retorna somente o curso com esse nome exato'
-            : 'Também inclui cursos com nome parecido'}
-        </Typo>
-      </SearchHeader.Actions>
+          <Typo s="xs" t="span" v="mute" id={exactHintId}>
+            {exact
+              ? 'Retorna somente o curso com esse nome exato'
+              : 'Também inclui cursos com nome parecido'}
+          </Typo>
+        </SearchHeader.Actions>
+      )}
     </SearchHeader>
   )
 }

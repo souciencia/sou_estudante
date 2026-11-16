@@ -39,6 +39,12 @@ describe('SearchHeaderCursos', () => {
   })
 
   it('propaga o módulo para os controles do cabeçalho', () => {
+    vi.mocked(useSearchCursos).mockReturnValue({
+      query: 'pedagogia',
+      setQuery: vi.fn(),
+      updateParams: vi.fn(),
+    } as unknown as ReturnType<typeof useSearchCursos>)
+
     render(
       <CompareProvider>
         <SearchHeaderCursos module="4" />
@@ -53,6 +59,12 @@ describe('SearchHeaderCursos', () => {
   })
 
   it('exibe os alternadores de busca exata e de comparação lado a lado', () => {
+    vi.mocked(useSearchCursos).mockReturnValue({
+      query: 'pedagogia',
+      setQuery: vi.fn(),
+      updateParams: vi.fn(),
+    } as unknown as ReturnType<typeof useSearchCursos>)
+
     render(
       <CompareProvider>
         <SearchHeaderCursos module="4" />
@@ -63,5 +75,21 @@ describe('SearchHeaderCursos', () => {
       screen.getByRole('switch', { name: 'Busca exata' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('switch', { name: 'Comparar' })).toBeInTheDocument()
+  })
+
+  it('oculta os alternadores e a dica de busca exata quando não há busca', () => {
+    render(
+      <CompareProvider>
+        <SearchHeaderCursos module="4" />
+      </CompareProvider>,
+    )
+
+    expect(screen.queryByRole('switch')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Retorna somente o curso com esse nome exato/),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Também inclui cursos com nome parecido/),
+    ).not.toBeInTheDocument()
   })
 })
