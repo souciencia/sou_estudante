@@ -27,7 +27,7 @@ jobs:
     env:
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
-      SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+      SSH_PORT: ${{ secrets.SSH_PORT || '2233' }}
       DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
 
     steps:
