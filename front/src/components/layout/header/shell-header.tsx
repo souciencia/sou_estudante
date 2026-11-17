@@ -9,7 +9,7 @@ export const ShellHeader = () => {
   const pathname = usePathname()
   const container = pageContainer(pathname)
 
-  if (container === 'home') {
+  if (container === 'home'||'home2') {
     return <Header variant="home" className={PAGE_CONTAINER_CLASS.home} />
   }
 
