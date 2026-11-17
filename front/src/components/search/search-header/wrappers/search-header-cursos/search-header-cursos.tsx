@@ -2,7 +2,6 @@
 
 import { useSearchParams } from 'next/navigation'
 import { useId } from 'react'
-import { CompareToggle } from '@/components/compare/compare-toggle'
 import { searchAutocompleteCursosConfig } from '@/components/search/search-autocomplete/wrappers/search-autocomplete-cursos/search-autocomplete-cursos'
 import { SearchHeader } from '@/components/search/search-header'
 import { Switch } from '@/components/ui/switch/switch'
@@ -42,21 +41,18 @@ export function SearchHeaderCursos({ module }: SearchHeaderCursosProps) {
 
       {query.trim().length > 0 && (
         <SearchHeader.Actions>
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Typo s="sm" t="span" id={exactLabelId} className="text-fg">
-                Busca exata
-              </Typo>
-              <Switch
-                size="sm"
-                module={module}
-                checked={exact}
-                aria-labelledby={exactLabelId}
-                aria-describedby={exactHintId}
-                onCheckedChange={handleExactChange}
-              />
-            </div>
-            <CompareToggle module={module} />
+          <div className="flex items-center gap-2">
+            <Typo s="sm" t="span" id={exactLabelId} className="text-fg">
+              Busca exata
+            </Typo>
+            <Switch
+              size="sm"
+              module={module}
+              checked={exact}
+              aria-labelledby={exactLabelId}
+              aria-describedby={exactHintId}
+              onCheckedChange={handleExactChange}
+            />
           </div>
           <Typo s="xs" t="span" v="mute" id={exactHintId}>
             {exact

@@ -4,7 +4,7 @@ import { CompareBar } from './compare-bar'
 import { CompareProvider, useCompareCursos } from './compare-provider'
 
 function Harness({ ids }: { ids: string[] }) {
-  const { toggle, setComparing } = useCompareCursos()
+  const { toggle } = useCompareCursos()
   return (
     <>
       <button
@@ -14,9 +14,6 @@ function Harness({ ids }: { ids: string[] }) {
         }}
       >
         seed
-      </button>
-      <button type="button" onClick={() => setComparing(true)}>
-        enable
       </button>
       <CompareBar module="1" />
     </>
@@ -32,32 +29,20 @@ function renderBar(ids: string[]) {
 }
 
 describe('CompareBar', () => {
-  it('não renderiza quando o modo de comparação está desligado', () => {
-    renderBar(['101', '102'])
-
-    fireEvent.click(screen.getByRole('button', { name: 'seed' }))
-
-    expect(
-      screen.queryByRole('link', { name: /Comparar/ }),
-    ).not.toBeInTheDocument()
-  })
-
   it('não renderiza com menos de dois cursos selecionados', () => {
     renderBar(['101'])
 
     fireEvent.click(screen.getByRole('button', { name: 'seed' }))
-    fireEvent.click(screen.getByRole('button', { name: 'enable' }))
 
     expect(
       screen.queryByRole('link', { name: /Comparar/ }),
     ).not.toBeInTheDocument()
   })
 
-  it('renderiza o resumo e o link ao ligar a comparação com 2+ selecionados', () => {
+  it('renderiza o resumo e o link com 2+ selecionados', () => {
     renderBar(['101', '102'])
 
     fireEvent.click(screen.getByRole('button', { name: 'seed' }))
-    fireEvent.click(screen.getByRole('button', { name: 'enable' }))
 
     expect(screen.getByText(/2 de 5 cursos selecionados/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Comparar (2)' })).toHaveAttribute(
@@ -70,7 +55,6 @@ describe('CompareBar', () => {
     renderBar(['101', '102'])
 
     fireEvent.click(screen.getByRole('button', { name: 'seed' }))
-    fireEvent.click(screen.getByRole('button', { name: 'enable' }))
 
     fireEvent.click(screen.getByRole('button', { name: 'Limpar comparação' }))
 

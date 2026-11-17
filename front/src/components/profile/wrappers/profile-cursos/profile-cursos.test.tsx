@@ -14,13 +14,10 @@ vi.mock('next/navigation', () => ({
 }))
 
 vi.mock('@/components/compare/compare-provider', () => ({
-  MAX_COMPARE: 4,
   useCompareCursos: () => ({
     ids: [],
-    isComparing: false,
     isSelected: vi.fn(() => false),
     toggle: vi.fn(),
-    setComparing: vi.fn(),
   }),
 }))
 
@@ -97,5 +94,14 @@ describe('ProfileCursos', () => {
     expect(
       screen.getByRole('link', { name: /Vou conseguir me manter/ }),
     ).toHaveAttribute('href', '/permanencia/1')
+  })
+
+  it('shows the compare button and the link to the comparison page', () => {
+    render(<ProfileCursos curso={curso} />)
+
+    expect(screen.getByRole('button', { name: /Comparar/ })).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /Ir para a comparação/ }),
+    ).toHaveAttribute('href', '/comparar')
   })
 })

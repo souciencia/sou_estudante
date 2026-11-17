@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useCompareCursos } from '@/components/compare/compare-provider'
 import { SearchAutocompleteCursos } from '@/components/search/search-autocomplete/wrappers/search-autocomplete-cursos/search-autocomplete-cursos'
 import type { Module } from '@/lib/module'
 import { cn } from '@/utils/cn'
@@ -20,8 +19,7 @@ export interface CourseSearchRedirectProps {
 /**
  * Bloco de entrada das páginas de módulo (Ingresso, Permanência e Comparar):
  * título, texto de apoio e o autocomplete de cursos, que redireciona para a
- * busca de cursos (`/cursos?q=...`) preservando a origem. Na origem `comparar`,
- * ativa o modo de comparação em vez de passar um `to`.
+ * busca de cursos (`/cursos?q=...`) preservando a origem.
  */
 export function CourseSearchRedirect({
   title,
@@ -31,7 +29,6 @@ export function CourseSearchRedirect({
   className,
 }: CourseSearchRedirectProps) {
   const router = useRouter()
-  const { setComparing } = useCompareCursos()
 
   const handleSubmit = (value: string) => {
     const params = new URLSearchParams({ q: value })
@@ -40,8 +37,6 @@ export function CourseSearchRedirect({
       params.set('ingresso', 'sisu')
     } else if (to === 'permanencia') {
       params.set('to', 'permanencia')
-    } else {
-      setComparing(true)
     }
     router.push(`/cursos?${params.toString()}`)
   }
