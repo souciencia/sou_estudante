@@ -139,6 +139,26 @@ describe('SearchAutocomplete', () => {
     expect(screen.getByText('300 cursos')).toBeInTheDocument()
   })
 
+  it('exibe a sigla após o nome quando disponível', () => {
+    useSuggestions.mockReturnValue({
+      sugestoes: [
+        { nome: 'UNIVERSIDADE DE SÃO PAULO', sigla: 'USP', count: 0 },
+      ],
+      isLoading: false,
+    })
+    renderAutocomplete()
+    const input = screen.getByRole('combobox')
+
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: 'usp' } })
+
+    expect(
+      screen.getByRole('option', {
+        name: /UNIVERSIDADE DE SÃO PAULO\s*\(USP\)/,
+      }),
+    ).toBeInTheDocument()
+  })
+
   it('uses only the labels and hook injected by the domain', () => {
     renderAutocomplete()
     expect(screen.getByPlaceholderText('Busque algo')).toBeInTheDocument()

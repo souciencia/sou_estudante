@@ -43,7 +43,7 @@ func TestSugestoesHandlerRequerParametroQ(t *testing.T) {
 
 func TestSugestoesHandlerRetornaSugestoesJSON(t *testing.T) {
 	mockService := &MockService{
-		ReturnSugestoes: []Sugestao{{Nome: "MEDICINA"}, {Nome: "MEDICINA VETERINÁRIA"}},
+		ReturnSugestoes: []Sugestao{{Nome: "MEDICINA"}, {Nome: "MEDICINA VETERINÁRIA", Sigla: "MV"}},
 	}
 	handler := &Handler{Service: mockService}
 
@@ -72,6 +72,12 @@ func TestSugestoesHandlerRetornaSugestoesJSON(t *testing.T) {
 	}
 	if len(decoded.Results) != 2 || decoded.Results[0].Nome != "MEDICINA" || decoded.Results[1].Nome != "MEDICINA VETERINÁRIA" {
 		t.Errorf("esperado results [MEDICINA MEDICINA VETERINÁRIA], recebido %v", decoded.Results)
+	}
+	if decoded.Results[0].Sigla != "" {
+		t.Errorf("esperado sigla vazia no primeiro resultado, recebido %q", decoded.Results[0].Sigla)
+	}
+	if decoded.Results[1].Sigla != "MV" {
+		t.Errorf("esperado sigla MV no segundo resultado, recebido %q", decoded.Results[1].Sigla)
 	}
 }
 

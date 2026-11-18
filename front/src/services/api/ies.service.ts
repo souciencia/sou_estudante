@@ -83,6 +83,13 @@ export const iesService = {
       `${API_CONFIG.ENDPOINTS.SUGESTOES_IES}?${params.toString()}`,
     )
 
-    return result.success ? result.data.results : []
+    if (!result.success) {
+      return []
+    }
+
+    return result.data.results.map(({ sigla, ...sugestao }) => ({
+      ...sugestao,
+      sigla: sigla === 'INEXISTENTE' ? undefined : sigla,
+    }))
   },
 }

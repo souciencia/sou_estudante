@@ -76,7 +76,7 @@ func newRouter(esClient *es.Client, cfg *config.Config) http.Handler {
 	mux.Handle("GET /cursos", &cursos.Handler{Service: cursoService})
 	mux.Handle("GET /cursos/{id}", &cursos.DetailHandler{Service: cursoService})
 
-	sugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, config.LatestIndexName(cfg.DictIndexName), "no_curso")
+	sugestaoRepo := sugestoes.NewElasticsearchRepository(esClient, config.LatestIndexName(cfg.DictIndexName), "no_curso", "")
 	mux.Handle("GET /cursos/sugestoes", &sugestoes.Handler{Service: sugestoes.NewService(sugestaoRepo)})
 
 	iesRepo := ies.NewElasticsearchRepository(esClient, config.LatestIndexName(cfg.IESIndexName))

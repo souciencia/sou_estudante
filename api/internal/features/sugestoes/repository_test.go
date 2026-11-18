@@ -48,7 +48,7 @@ func TestBuscarSugestoesFazTrimEDedup(t *testing.T) {
 		}`))
 	})
 
-	repo := NewElasticsearchRepository(client, "dicionario_cursos", "no_curso")
+	repo := NewElasticsearchRepository(client, "dicionario_cursos", "no_curso", "")
 	got, err := repo.BuscarSugestoes(context.Background(), "dir", 8)
 	if err != nil {
 		t.Fatalf("erro inesperado: %v", err)
@@ -79,7 +79,7 @@ func TestBuscarSugestoesPriorizaMatchExato(t *testing.T) {
 		}`))
 	})
 
-	repo := NewElasticsearchRepository(client, "dicionario_cursos", "no_curso")
+	repo := NewElasticsearchRepository(client, "dicionario_cursos", "no_curso", "")
 	if _, err := repo.BuscarSugestoes(context.Background(), "engenharia", 8); err != nil {
 		t.Fatalf("erro inesperado: %v", err)
 	}
@@ -114,7 +114,7 @@ func TestBuscarSugestoesPriorizaMatchExato(t *testing.T) {
 	}
 }
 
-func TestBuscarSugestoesMultiCampoConsultaSiglaEDevolveNome(t *testing.T) {
+func TestBuscarSugestoesMultiCampoConsultaSiglaEDevolveNomeESigla(t *testing.T) {
 	var capturedBody string
 	client := testutil.NewESClient(t, func(w http.ResponseWriter, r *http.Request) {
 		raw, _ := io.ReadAll(r.Body)
@@ -134,8 +134,8 @@ func TestBuscarSugestoesMultiCampoConsultaSiglaEDevolveNome(t *testing.T) {
 	if err != nil {
 		t.Fatalf("erro inesperado: %v", err)
 	}
-	if !reflect.DeepEqual(got, []Sugestao{{Nome: "UNIVERSIDADE DE SÃO PAULO"}}) {
-		t.Errorf("sugestões = %v, esperado [UNIVERSIDADE DE SÃO PAULO]", got)
+	if !reflect.DeepEqual(got, []Sugestao{{Nome: "UNIVERSIDADE DE SÃO PAULO", Sigla: "USP"}}) {
+		t.Errorf("sugestões = %v, esperado [UNIVERSIDADE DE SÃO PAULO (USP)]", got)
 	}
 
 	should := mustSugestoesShould(t, testutil.DecodeJSONObject(t, capturedBody))
@@ -177,7 +177,7 @@ func TestBuscarSugestoesLeContagemDoDocumento(t *testing.T) {
 		}`))
 	})
 
-	repo := NewElasticsearchRepository(client, "dicionario_cursos", "no_curso")
+	repo := NewElasticsearchRepository(client, "dicionario_cursos", "no_curso", "")
 	got, err := repo.BuscarSugestoes(context.Background(), "dir", 8)
 	if err != nil {
 		t.Fatalf("erro inesperado: %v", err)
@@ -194,7 +194,7 @@ func TestBuscarSugestoesRetornaErroEmFalha(t *testing.T) {
 		_, _ = w.Write([]byte(`{"error": "boom"}`))
 	})
 
-	repo := NewElasticsearchRepository(client, "dicionario_cursos", "no_curso")
+	repo := NewElasticsearchRepository(client, "dicionario_cursos", "no_curso", "")
 	if _, err := repo.BuscarSugestoes(context.Background(), "dir", 8); err == nil {
 		t.Fatal("esperado erro para status 500")
 	}

@@ -103,7 +103,9 @@ describe('iesService.sugerirIes', () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
-        results: [{ nome: 'UNIVERSIDADE DE SÃO PAULO', count: 0 }],
+        results: [
+          { nome: 'UNIVERSIDADE DE SÃO PAULO', sigla: 'USP', count: 0 },
+        ],
       }),
     })
     global.fetch = mockFetch
@@ -113,6 +115,24 @@ describe('iesService.sugerirIes', () => {
     const [url] = mockFetch.mock.calls[0] as [string]
     expect(url).toContain('/ies/sugestoes')
     expect(url).toContain('q=universidade')
+    expect(result).toEqual([
+      { nome: 'UNIVERSIDADE DE SÃO PAULO', sigla: 'USP', count: 0 },
+    ])
+  })
+
+  it('omite a sigla quando ela é INEXISTENTE', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        results: [
+          { nome: 'UNIVERSIDADE DE SÃO PAULO', sigla: 'INEXISTENTE', count: 0 },
+        ],
+      }),
+    })
+    global.fetch = mockFetch
+
+    const result = await iesService.sugerirIes('universidade')
+
     expect(result).toEqual([{ nome: 'UNIVERSIDADE DE SÃO PAULO', count: 0 }])
   })
 
