@@ -162,4 +162,64 @@ describe('FiltersPanelCursos', () => {
 
     expect(container.firstChild).toHaveAttribute('data-module', '5')
   })
+
+  it('exibe o alternador de resultados semelhantes desligado por padrão', () => {
+    const params = new URLSearchParams()
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<FiltersPanelCursos />)
+
+    expect(
+      screen.getByRole('switch', { name: 'Mostrar resultados semelhantes' }),
+    ).toHaveAttribute('aria-checked', 'false')
+  })
+
+  it('ativa o alternador quando a URL já pede resultados semelhantes', () => {
+    const params = new URLSearchParams('exact=false')
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<FiltersPanelCursos />)
+
+    expect(
+      screen.getByRole('switch', { name: 'Mostrar resultados semelhantes' }),
+    ).toHaveAttribute('aria-checked', 'true')
+  })
+
+  it('grava exact=false ao ligar o alternador de resultados semelhantes', () => {
+    const params = new URLSearchParams()
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<FiltersPanelCursos />)
+
+    fireEvent.click(
+      screen.getByRole('switch', { name: 'Mostrar resultados semelhantes' }),
+    )
+    expect(mockUpdateParams).toHaveBeenCalledWith({
+      exact: 'false',
+      page: '1',
+    })
+  })
+
+  it('grava exact=true ao desligar o alternador de resultados semelhantes', () => {
+    const params = new URLSearchParams('exact=false')
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<FiltersPanelCursos />)
+
+    fireEvent.click(
+      screen.getByRole('switch', { name: 'Mostrar resultados semelhantes' }),
+    )
+    expect(mockUpdateParams).toHaveBeenCalledWith({
+      exact: 'true',
+      page: '1',
+    })
+  })
 })

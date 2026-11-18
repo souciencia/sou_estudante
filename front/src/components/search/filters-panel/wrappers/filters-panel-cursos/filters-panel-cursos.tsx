@@ -1,5 +1,7 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
+import { useId } from 'react'
 import { CATEGORIAS_ADMINISTRATIVAS } from '@/components/search/filters-panel/filters-helpers'
 import {
   type FilterSectionDefinition,
@@ -8,6 +10,8 @@ import {
 import { useMunicipioFilterPanel } from '@/components/search/filters-panel/use-municipio-filter-panel'
 import { MunicipioFilters } from '@/components/search/municipio-filter/municipio-filters'
 import { SortingOptionsCursos } from '@/components/search/sorting-options/wrappers/sorting-options-cursos/sorting-options-cursos'
+import { Switch } from '@/components/ui/switch/switch'
+import { Typo } from '@/components/ui/typo'
 import type { Module } from '@/lib/module'
 import { ufOptions } from '@/lib/uf'
 import { useMunicipios } from '@/services/api/use-municipios'
@@ -97,6 +101,51 @@ const SECTIONS: FilterSectionDefinition[] = [
   },
 ]
 
+interface SimilarResultsSwitchProps {
+  module?: Module
+}
+
+/**
+ * Alternador "Mostrar resultados semelhantes": desligado por padrão, mantém a
+ * busca por nome exato (`exact=true`). Ligado, inclui cursos com nome parecido.
+ */
+function SimilarResultsSwitch({ module }: SimilarResultsSwitchProps) {
+  const { updateParams } = useSearchCursos()
+  const searchParams = useSearchParams()
+  const labelId = useId()
+  const hintId = useId()
+
+  const exact = searchParams?.get('exact') !== 'false'
+  const showSimilar = !exact
+
+  const handleChange = (value: boolean) => {
+    updateParams({ exact: value ? 'false' : 'true', page: '1' })
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center justify-between gap-2">
+        <Typo s="sm" t="span" id={labelId} className="text-fg">
+          Mostrar resultados semelhantes
+        </Typo>
+        <Switch
+          size="sm"
+          module={module}
+          checked={showSimilar}
+          aria-labelledby={labelId}
+          aria-describedby={hintId}
+          onCheckedChange={handleChange}
+        />
+      </div>
+      <Typo s="xs" t="span" v="mute" id={hintId}>
+        {showSimilar
+          ? 'Também inclui cursos com nome parecido'
+          : 'Retorna somente o curso com esse nome exato'}
+      </Typo>
+    </div>
+  )
+}
+
 interface FiltersPanelCursosProps {
   module?: Module
   className?: string
@@ -124,7 +173,12 @@ export function FiltersPanelCursos({
       onToggle={onToggle}
       onApply={onApply}
       onClear={resetFilters}
-      leading={<SortingOptionsCursos module={module} />}
+      leading={
+        <div className="flex flex-col gap-6">
+          <SortingOptionsCursos module={module} />
+          <SimilarResultsSwitch module={module} />
+        </div>
+      }
       afterSection={(section, ctx) =>
         section.key === 'uf' ? (
           <MunicipioFilters
