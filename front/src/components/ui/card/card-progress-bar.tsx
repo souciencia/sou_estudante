@@ -22,7 +22,7 @@ export const CardProgressBar = ({
   const fillWidth = hasData ? percentage : '0%'
 
   return (
-    <div className="m-1 max-w-[20rem]">
+    <div className="m-1 w-[70%]">
       <div className="flex justify-between font-sans text-xs text-fg-muted">
         <p>{displayTitle}</p>
         <p>{displayValue}</p>
