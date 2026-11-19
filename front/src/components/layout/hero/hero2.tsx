@@ -1,6 +1,5 @@
-import Link from 'next/link'
-import { BussolaHero } from './bussola/bussola-hero'
 import { CourseSearchEntry } from '@/components/search/course-search-entry/course-search-entry'
+import { BussolaHero } from './bussola/bussola-hero'
 
 export const Hero2 = () => {
   return (
@@ -36,7 +35,7 @@ export const Hero2 = () => {
         e conheça as instituições — com dados públicos, atualizados e de fácil
         compreensão.
       </p>
- 
+
       <svg
         className="absolute inset-x-0 bottom-0 block h-9 w-full"
         viewBox="0 0 1440 36"
@@ -50,7 +49,7 @@ export const Hero2 = () => {
         />
       </svg>
       <section className="mx-auto my-10 max-w-[620px]">
-          <CourseSearchEntry />
+        <CourseSearchEntry />
       </section>
     </section>
   )
