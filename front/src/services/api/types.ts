@@ -8,10 +8,12 @@ export type ApiResponse<T> = {
   // Pode ter outros campos no futuro: pagination, total, etc.
 }
 
-// Sugestão de autocomplete: nome e a contagem de resultados com aquele nome
-// (ex.: número de cursos). IES não armazena contagem, então `count` vem 0.
+// Sugestão de autocomplete: nome, sigla opcional do domínio (ex.: "USP" para
+// IES) e a contagem de resultados com aquele nome (ex.: número de cursos). IES
+// não armazena contagem, então `count` vem 0.
 export interface Sugestao {
   nome: string
+  sigla?: string
   count: number
 }
 

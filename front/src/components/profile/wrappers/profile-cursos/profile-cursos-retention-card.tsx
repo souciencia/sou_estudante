@@ -1,5 +1,3 @@
-import { ArrowRight } from 'lucide-react'
-import { Button } from '@/components/ui/button/button'
 import { cn } from '@/utils/cn'
 
 export interface ProfileCursosRetentionCardProps {
@@ -7,7 +5,6 @@ export interface ProfileCursosRetentionCardProps {
   mediaBrasil?: number
   anoInicio?: number
   anoFim?: number
-  onComparar?: () => void
   className?: string
 }
 
@@ -27,7 +24,6 @@ export const ProfileCursosRetentionCard = ({
   mediaBrasil,
   anoInicio,
   anoFim,
-  onComparar,
   className,
 }: ProfileCursosRetentionCardProps) => {
   const hasTaxa = typeof taxa === 'number'
@@ -102,16 +98,6 @@ export const ProfileCursosRetentionCard = ({
         A taxa varia muito conforme a área. Ela ganha sentido lado a lado com
         cursos parecidos — Pedagogia com Pedagogia, Medicina com Medicina.
       </p>
-
-      <Button
-        v="outline"
-        module="5"
-        onClick={onComparar}
-        className="cursor-pointer self-start px-3 py-[6px] rounded-control text-xs bg-accent/10 border-accent/70 font-semibold"
-      >
-        Comparar com outros cursos
-        <ArrowRight className="size-3 -translate-y-0.2" aria-hidden="true" />
-      </Button>
     </section>
   )
 }

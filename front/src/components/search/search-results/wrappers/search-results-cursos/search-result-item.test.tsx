@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
 import type { Curso } from '@/services/api/types'
 import { SearchResultItem } from './search-result-item'
 
@@ -81,48 +81,5 @@ describe('SearchResultItem', () => {
     render(<SearchResultItem curso={curso} />)
 
     expect(screen.getAllByText('Ead')).toHaveLength(1)
-  })
-
-  it('does not show the checkbox when not comparing', () => {
-    render(<SearchResultItem curso={buildCurso(false)} />)
-
-    expect(
-      screen.queryByRole('checkbox', {
-        name: /Comparar Ciência da Computação/,
-      }),
-    ).not.toBeInTheDocument()
-  })
-
-  it('shows the checkbox when comparing', () => {
-    render(<SearchResultItem curso={buildCurso(false)} comparing />)
-
-    expect(
-      screen.getByRole('checkbox', { name: /Comparar Ciência da Computação/ }),
-    ).toBeInTheDocument()
-  })
-
-  it('notifies the toggle with the course id when checked', () => {
-    const onToggle = vi.fn()
-    render(
-      <SearchResultItem
-        curso={buildCurso(false)}
-        comparing
-        onToggle={onToggle}
-      />,
-    )
-
-    fireEvent.click(
-      screen.getByRole('checkbox', { name: /Comparar Ciência da Computação/ }),
-    )
-
-    expect(onToggle).toHaveBeenCalledWith('101')
-  })
-
-  it('can disable the checkbox when the limit is reached', () => {
-    render(<SearchResultItem curso={buildCurso(false)} comparing disabled />)
-
-    expect(
-      screen.getByRole('checkbox', { name: /Comparar Ciência da Computação/ }),
-    ).toBeDisabled()
   })
 })

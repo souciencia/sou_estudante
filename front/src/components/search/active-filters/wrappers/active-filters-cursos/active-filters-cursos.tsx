@@ -15,6 +15,7 @@ const FILTER_KEYS = [
   'modalidade',
   'enade',
   'sort',
+  'exact',
 ]
 
 interface ActiveFiltersCursosProps {
@@ -32,11 +33,15 @@ export function ActiveFiltersCursos({
   return (
     <ActiveFiltersBase
       filterKeys={FILTER_KEYS}
-      labelFor={(key, value) =>
-        key === 'municipio'
-          ? (municipioNome(municipios, value) ?? value)
-          : value
-      }
+      labelFor={(key, value) => {
+        if (key === 'municipio') {
+          return municipioNome(municipios, value) ?? value
+        }
+        if (key === 'exact') {
+          return 'Resultados parecidos'
+        }
+        return value
+      }}
       updateParams={updateParams}
       resetFilters={resetFilters}
       module={module}

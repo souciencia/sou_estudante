@@ -35,6 +35,7 @@ export const Hero = () => {
         e conheça as instituições — com dados públicos, atualizados e de fácil
         compreensão.
       </p>
+
       <div className="relative z-[2] mt-[1.6rem] flex flex-wrap justify-center gap-2.5">
         <Link
           href="/cursos/"
@@ -94,6 +95,7 @@ export const Hero = () => {
           Como funciona
         </a>
       </div>
+
       <svg
         className="absolute inset-x-0 bottom-0 block h-9 w-full"
         viewBox="0 0 1440 36"

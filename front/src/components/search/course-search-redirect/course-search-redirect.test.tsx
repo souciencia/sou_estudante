@@ -1,10 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import type { ReactNode } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import {
-  CompareProvider,
-  useCompareCursos,
-} from '@/components/compare/compare-provider'
 import { useSugestoesCursos } from '@/services/api/use-sugestoes-cursos'
 import { CourseSearchRedirect } from './course-search-redirect'
 
@@ -18,20 +13,6 @@ vi.mock('@/services/api/use-sugestoes-cursos', () => ({
   useSugestoesCursos: vi.fn(),
 }))
 
-function ComparingProbe() {
-  const { isComparing } = useCompareCursos()
-  return <span data-testid="comparing">{String(isComparing)}</span>
-}
-
-function renderRedirect(node: ReactNode) {
-  return render(
-    <CompareProvider>
-      <ComparingProbe />
-      {node}
-    </CompareProvider>,
-  )
-}
-
 describe('CourseSearchRedirect', () => {
   beforeEach(() => {
     push.mockClear()
@@ -42,7 +23,7 @@ describe('CourseSearchRedirect', () => {
   })
 
   it('renders the title and description', () => {
-    renderRedirect(
+    render(
       <CourseSearchRedirect
         to="ingresso"
         title="Onde você quer estudar?"
@@ -60,7 +41,7 @@ describe('CourseSearchRedirect', () => {
   })
 
   it('redirects to the course search preserving the origin on submit', () => {
-    renderRedirect(
+    render(
       <CourseSearchRedirect to="ingresso" title="Onde você quer estudar?" />,
     )
 
@@ -74,9 +55,7 @@ describe('CourseSearchRedirect', () => {
   })
 
   it('does not add the sisu filter for the permanencia origin', () => {
-    renderRedirect(
-      <CourseSearchRedirect to="permanencia" title="Como permanecer?" />,
-    )
+    render(<CourseSearchRedirect to="permanencia" title="Como permanecer?" />)
 
     const input = screen.getByRole('combobox')
     fireEvent.change(input, { target: { value: 'medicina' } })
@@ -85,8 +64,8 @@ describe('CourseSearchRedirect', () => {
     expect(push).toHaveBeenCalledWith('/cursos?q=medicina&to=permanencia')
   })
 
-  it('activates the compare mode without a to param for the comparar origin', () => {
-    renderRedirect(
+  it('redirects without a to param for the comparar origin', () => {
+    render(
       <CourseSearchRedirect to="comparar" title="Quais cursos comparar?" />,
     )
 
@@ -95,6 +74,5 @@ describe('CourseSearchRedirect', () => {
     fireEvent.keyDown(input, { key: 'Enter' })
 
     expect(push).toHaveBeenCalledWith('/cursos?q=medicina')
-    expect(screen.getByTestId('comparing')).toHaveTextContent('true')
   })
 })

@@ -49,16 +49,6 @@ describe('useCompareCursos', () => {
     expect(result.current.ids).toEqual(['1', '2', '3', '4', '5'])
   })
 
-  it('ativa e desativa o modo de comparação', () => {
-    const { result } = renderHook(() => useCompareCursos(), { wrapper })
-
-    act(() => result.current.setComparing(true))
-    expect(result.current.isComparing).toBe(true)
-
-    act(() => result.current.setComparing(false))
-    expect(result.current.isComparing).toBe(false)
-  })
-
   it('limpa a seleção', () => {
     const { result } = renderHook(() => useCompareCursos(), { wrapper })
 

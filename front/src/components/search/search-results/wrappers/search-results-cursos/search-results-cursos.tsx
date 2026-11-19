@@ -1,10 +1,6 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import {
-  MAX_COMPARE,
-  useCompareCursos,
-} from '@/components/compare/compare-provider'
 import { SearchResults } from '@/components/search/search-results/search-results'
 import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
@@ -27,11 +23,8 @@ export function SearchResultsCursos({ module }: SearchResultsCursosProps) {
     links,
     navigateToPage,
   } = useSearchCursos()
-  const { ids, isComparing, isSelected, toggle } = useCompareCursos()
   const searchParams = useSearchParams()
   const to = searchParams?.get('to') ?? undefined
-
-  const selectionFull = ids.length >= MAX_COMPARE
 
   return (
     <SearchResults<Curso>
@@ -52,22 +45,9 @@ export function SearchResultsCursos({ module }: SearchResultsCursosProps) {
           ? `seq-${curso.sequencial}`
           : `${curso.instituicao?.co_ies}-${curso.curso?.co_curso}-${index}`
       }
-      renderItem={(curso) => {
-        const id = curso.sequencial
-        const selected = id !== undefined && isSelected(String(id))
-
-        return (
-          <SearchResultItem
-            curso={curso}
-            module={module}
-            comparing={isComparing}
-            selected={selected}
-            disabled={id !== undefined && !selected && selectionFull}
-            onToggle={toggle}
-            to={to}
-          />
-        )
-      }}
+      renderItem={(curso) => (
+        <SearchResultItem curso={curso} module={module} to={to} />
+      )}
       module={module}
     />
   )

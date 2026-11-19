@@ -60,15 +60,14 @@ describe('LayoutSearchPage', () => {
     expect(summary.parentElement).toHaveClass('justify-between')
   })
 
-  it('places the filters in a complementary landmark and the results outside it', () => {
+  it('renders the filters above the results in a single column', () => {
     renderLayout()
 
-    expect(screen.getByRole('complementary')).toContainElement(
-      screen.getByText('filtros'),
-    )
-    // O `<main>` é do LayoutSite; aqui os resultados ficam em uma coluna interna.
-    expect(screen.getByRole('complementary')).not.toContainElement(
-      screen.getByText('resultados'),
+    const filters = screen.getByText('filtros')
+    const results = screen.getByText('resultados')
+
+    expect(filters.compareDocumentPosition(results)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
     )
   })
 

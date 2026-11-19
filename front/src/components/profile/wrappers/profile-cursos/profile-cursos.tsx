@@ -1,4 +1,5 @@
 import { MapPin } from 'lucide-react'
+import { CompareCourseButton } from '@/components/compare/compare-course-button'
 import { Profile } from '@/components/profile'
 import { Route } from '@/components/ui/route/route'
 import { Tag } from '@/components/ui/tag/tag'
@@ -105,6 +106,13 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
           href={iesHref}
           title="Conheça a instituição"
           description="Indicadores oficiais e perfil da IES — Telescópio"
+        />
+        {id !== undefined && <CompareCourseButton courseId={id} />}
+        <Route
+          module="5"
+          variant="inline"
+          title="Ir para a comparação"
+          description="Veja os cursos selecionados lado a lado — Sextante"
         />
       </Profile.Section>
     </Profile>

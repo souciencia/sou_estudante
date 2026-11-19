@@ -254,7 +254,12 @@ export function SearchAutocomplete({
                 activeIndex === index && 'bg-accent/10 text-accent-deep',
               )}
             >
-              <span>{sugestao.nome}</span>
+              <span>
+                {sugestao.nome}
+                {sugestao.sigla && (
+                  <span className="text-fg-muted"> ({sugestao.sigla})</span>
+                )}
+              </span>
               {sugestao.count > 0 && (
                 <span className="shrink-0 rounded-full bg-surface-deep/30 px-2 py-0.5 font-sans text-xs text-fg-muted">
                   {sugestao.count} {sugestao.count === 1 ? 'curso' : 'cursos'}

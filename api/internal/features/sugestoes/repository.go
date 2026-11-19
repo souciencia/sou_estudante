@@ -20,20 +20,26 @@ type ElasticsearchRepository struct {
 	client  *es.Client
 	index   string
 	display string
+	sigla   string
 	search  []string
 }
 
 // NewElasticsearchRepository cria nova instância do repository.
 // index é o índice de dicionário, display é o campo de texto exibido na
-// sugestão (ex.: "no_curso", "no_ies") e search são campos adicionais também
-// consultados. O campo display é sempre incluído na busca; o autocomplete de
-// IES, por exemplo, busca por "no_ies" e "sg_ies" mas devolve "no_ies".
-func NewElasticsearchRepository(client *es.Client, index, display string, search ...string) Repository {
+// sugestão (ex.: "no_curso", "no_ies") e sigla é o campo de sigla também
+// exibido e consultado (ex.: "sg_ies"; vazio quando o domínio não tem sigla).
+// Ambos são sempre incluídos na busca.
+func NewElasticsearchRepository(client *es.Client, index, display, sigla string) Repository {
+	search := []string{display}
+	if sigla != "" {
+		search = append(search, sigla)
+	}
 	return &ElasticsearchRepository{
 		client:  client,
 		index:   index,
 		display: display,
-		search:  append([]string{display}, search...),
+		sigla:   sigla,
+		search:  search,
 	}
 }
 
@@ -97,9 +103,18 @@ func (r *ElasticsearchRepository) BuscarSugestoes(ctx context.Context, termo str
 			continue
 		}
 		seen[nome] = struct{}{}
-		sugestoes = append(sugestoes, Sugestao{Nome: nome, Count: countOf(hit)})
+		sugestoes = append(sugestoes, Sugestao{Nome: nome, Sigla: siglaOf(r.sigla, hit), Count: countOf(hit)})
 	}
 	return sugestoes, nil
+}
+
+// siglaOf lê a sigla opcional de um hit; sem campo de sigla ou ausente vale "".
+func siglaOf(field string, hit map[string]any) string {
+	if field == "" {
+		return ""
+	}
+	sigla, _ := hit[field].(string)
+	return strings.TrimSpace(sigla)
 }
 
 // countOf lê a contagem opcional de um hit (documentos de origem com aquele

@@ -10,13 +10,13 @@ interface CompareBarProps {
 }
 
 /**
- * CTA de comparação exibido na busca de cursos quando o modo de comparação
- * está ativo e há 2+ cursos selecionados: resume a seleção e leva a /comparar.
+ * CTA de comparação exibido na busca de cursos quando há 2+ cursos
+ * selecionados: resume a seleção e leva a /comparar.
  */
 export function CompareBar({ module }: CompareBarProps) {
-  const { ids, isComparing } = useCompareCursos()
+  const { ids } = useCompareCursos()
 
-  if (!isComparing || ids.length < 2) {
+  if (ids.length < 2) {
     return null
   }
 

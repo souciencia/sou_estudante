@@ -89,7 +89,7 @@ export function SearchResults<TItem>({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-4">
       {showCount && (
         <div className="flex items-center gap-2">
           <Typo v="mute" s="sm" t="p">

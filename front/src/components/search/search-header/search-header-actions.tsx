@@ -6,7 +6,7 @@ export interface SearchHeaderActionsProps {
   className?: string
 }
 
-/** Faixa de controles extras do header (ex.: alternador de busca exata). */
+/** Faixa de controles extras do header. */
 export function SearchHeaderActions({
   children,
   className,

@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { FilterGroup } from '@/components/search/filter-group'
 import type { Module } from '@/lib/module'
 import { cn } from '@/utils/cn'
@@ -16,6 +17,8 @@ export interface SortingOptionsProps {
   value?: string
   /** Título do grupo de ordenação. */
   title?: string
+  /** Conteúdo extra renderizado no fim da lista (ex.: toggle de filtro). */
+  trailing?: ReactNode
   module?: Module
   className?: string
 }
@@ -30,6 +33,7 @@ export function SortingOptions({
   onSelect,
   value,
   title = 'Ordenação',
+  trailing,
   module,
   className,
 }: SortingOptionsProps) {
@@ -46,6 +50,7 @@ export function SortingOptions({
             onChange={() => onSelect(option.value)}
           />
         ))}
+        {trailing}
       </FilterGroup.List>
     </FilterGroup>
   )

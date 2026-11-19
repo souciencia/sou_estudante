@@ -68,6 +68,17 @@ describe('ActiveFiltersCursos', () => {
     ).toBeInTheDocument()
   })
 
+  it('renderiza a tag "Resultados parecidos" quando exact=false', () => {
+    const params = new URLSearchParams('q=direito&exact=false')
+    vi.mocked(useSearchParams).mockReturnValue(
+      params as unknown as ReadonlyURLSearchParams,
+    )
+
+    render(<ActiveFiltersCursos />)
+
+    expect(screen.getByText('Resultados parecidos')).toBeInTheDocument()
+  })
+
   it('remove um filtro específico ao clicar no botão de remover da tag', () => {
     const params = new URLSearchParams('q=direito&uf=SP,RJ&turno=Noturno')
     vi.mocked(useSearchParams).mockReturnValue(

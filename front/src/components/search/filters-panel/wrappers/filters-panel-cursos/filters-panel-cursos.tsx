@@ -1,5 +1,8 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
+import { ActiveFiltersCursos } from '@/components/search/active-filters/wrappers/active-filters-cursos/active-filters-cursos'
+import { FilterGroup } from '@/components/search/filter-group'
 import { CATEGORIAS_ADMINISTRATIVAS } from '@/components/search/filters-panel/filters-helpers'
 import {
   type FilterSectionDefinition,
@@ -12,9 +15,6 @@ import type { Module } from '@/lib/module'
 import { ufOptions } from '@/lib/uf'
 import { useMunicipios } from '@/services/api/use-municipios'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
-
-/** Quantidade de UFs visíveis antes de expandir (as prioritárias de `ufOptions`). */
-const UFS_VISIVEIS = 3
 
 const TURNOS = [
   { label: 'Diurno', value: 'Diurno' },
@@ -55,9 +55,6 @@ const SECTIONS: FilterSectionDefinition[] = [
     title: 'Estado',
     aggregationKey: 'ufs',
     options: ufOptions(),
-    visibleCount: UFS_VISIVEIS,
-    moreLabel: (hidden) => `+ ${hidden} estados`,
-    lessLabel: 'Ver menos estados',
   },
   {
     key: 'turno',
@@ -97,6 +94,30 @@ const SECTIONS: FilterSectionDefinition[] = [
   },
 ]
 
+/**
+ * Alternador "Mostrar resultados parecidos": desligado por padrão, mantém a
+ * busca por nome exato (`exact=true`). Ligado, inclui cursos com nome parecido.
+ */
+function SimilarResultsToggle() {
+  const { updateParams } = useSearchCursos()
+  const searchParams = useSearchParams()
+
+  const showSimilar = searchParams?.get('exact') === 'false'
+
+  const handleChange = () => {
+    updateParams({ exact: showSimilar ? null : 'false', page: '1' })
+  }
+
+  return (
+    <FilterGroup.Option
+      type="checkbox"
+      label="Mostrar resultados parecidos"
+      checked={showSimilar}
+      onChange={handleChange}
+    />
+  )
+}
+
 interface FiltersPanelCursosProps {
   module?: Module
   className?: string
@@ -124,7 +145,13 @@ export function FiltersPanelCursos({
       onToggle={onToggle}
       onApply={onApply}
       onClear={resetFilters}
-      leading={<SortingOptionsCursos module={module} />}
+      activeFilters={<ActiveFiltersCursos module={module} />}
+      leading={
+        <SortingOptionsCursos
+          module={module}
+          trailing={<SimilarResultsToggle />}
+        />
+      }
       afterSection={(section, ctx) =>
         section.key === 'uf' ? (
           <MunicipioFilters

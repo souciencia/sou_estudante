@@ -16,6 +16,42 @@ const sections: FilterSectionDefinition[] = [
 ]
 
 describe('FiltersPanel', () => {
+  function expandPanel() {
+    fireEvent.click(screen.getByRole('button', { name: 'Filtros' }))
+  }
+
+  it('começa colapsado e expande ao clicar no cabeçalho', () => {
+    render(
+      <FiltersPanel
+        sections={sections}
+        activeValues={() => []}
+        onToggle={() => {}}
+      />,
+    )
+
+    const toggle = screen.getByRole('button', { name: 'Filtros' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(screen.queryByText('Estado')).not.toBeInTheDocument()
+
+    fireEvent.click(toggle)
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByText('Estado')).toBeInTheDocument()
+  })
+
+  it('renderiza os filtros aplicados sempre, mesmo colapsado', () => {
+    render(
+      <FiltersPanel
+        sections={sections}
+        activeValues={() => []}
+        onToggle={() => {}}
+        activeFilters={<span>Filtros aplicados de exemplo</span>}
+      />,
+    )
+
+    expect(screen.getByText('Filtros aplicados de exemplo')).toBeInTheDocument()
+  })
+
   it('renderiza grupos e opções das agregações', () => {
     render(
       <FiltersPanel
@@ -25,6 +61,8 @@ describe('FiltersPanel', () => {
         onToggle={() => {}}
       />,
     )
+
+    expandPanel()
 
     expect(screen.getByText('Estado')).toBeInTheDocument()
     expect(screen.getByRole('checkbox', { name: 'São Paulo' })).toBeChecked()
@@ -40,6 +78,7 @@ describe('FiltersPanel', () => {
       />,
     )
 
+    expandPanel()
     fireEvent.click(screen.getByRole('checkbox', { name: 'Bahia' }))
 
     expect(onToggle).toHaveBeenCalledWith('uf', 'BA')
@@ -69,6 +108,8 @@ describe('FiltersPanel', () => {
         onToggle={() => {}}
       />,
     )
+
+    expandPanel()
 
     expect(screen.queryByText('Rio de Janeiro')).not.toBeInTheDocument()
     expect(screen.getByText('+ 2 opções')).toBeInTheDocument()
@@ -101,6 +142,8 @@ describe('FiltersPanel', () => {
         leading={<span>Ordenar por</span>}
       />,
     )
+
+    expandPanel()
 
     const leading = screen.getByText('Ordenar por')
     const firstSection = screen.getByText('Estado')

@@ -1,9 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import {
-  CompareProvider,
-  useCompareCursos,
-} from '@/components/compare/compare-provider'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 import { SearchResultsCursos } from './search-results-cursos'
 
@@ -12,20 +8,7 @@ vi.mock('@/services/api/use-search-cursos', () => ({
 }))
 
 function renderWithProvider() {
-  return render(
-    <CompareProvider>
-      <SearchResultsCursos />
-    </CompareProvider>,
-  )
-}
-
-function CompararSeeder() {
-  const { setComparing } = useCompareCursos()
-  return (
-    <button type="button" onClick={() => setComparing(true)}>
-      enable-compare
-    </button>
-  )
+  return render(<SearchResultsCursos />)
 }
 
 const buildSearchResult = (
@@ -160,28 +143,5 @@ describe('SearchResultsCursos', () => {
     expect(screen.getByText('Sem avaliação no Enade')).toBeInTheDocument()
     expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(1)
     expect(container.querySelector('[data-mask="enade"]')).toBeInTheDocument()
-  })
-
-  it('exibe os checkboxes quando o modo de comparação está ativo', () => {
-    vi.mocked(useSearchCursos).mockReturnValue(buildSearchResult({}))
-
-    render(
-      <CompareProvider>
-        <CompararSeeder />
-        <SearchResultsCursos />
-      </CompareProvider>,
-    )
-
-    expect(
-      screen.queryByRole('checkbox', {
-        name: /Comparar Ciência da Computação/,
-      }),
-    ).not.toBeInTheDocument()
-
-    fireEvent.click(screen.getByRole('button', { name: 'enable-compare' }))
-
-    expect(
-      screen.getByRole('checkbox', { name: /Comparar Ciência da Computação/ }),
-    ).toBeInTheDocument()
   })
 })

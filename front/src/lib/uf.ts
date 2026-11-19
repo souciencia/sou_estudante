@@ -38,33 +38,9 @@ export interface UfOption {
   value: string
 }
 
-/**
- * UFs mais representativas, exibidas antes das demais quando a lista é
- * recolhida. As 27 siglas seguem vindo de `UF_NOMES`.
- */
-const UF_PRIORITY = [
-  'SP',
-  'BA',
-  'RJ',
-  'MG',
-  'PR',
-  'RS',
-  'PE',
-  'CE',
-  'SC',
-  'GO',
-  'DF',
-]
-
-/** Todas as 27 UFs como opções de filtro, com as prioritárias primeiro. */
+/** Todas as 27 UFs como opções de filtro, em ordem alfabética pelo nome. */
 export function ufOptions(): UfOption[] {
-  const priority = UF_PRIORITY.filter((sigla) => sigla in UF_NOMES)
-  const rest = Object.keys(UF_NOMES)
-    .filter((sigla) => !priority.includes(sigla))
-    .sort((a, b) => a.localeCompare(b, 'pt-BR'))
-
-  return [...priority, ...rest].map((sigla) => ({
-    label: UF_NOMES[sigla],
-    value: sigla,
-  }))
+  return Object.keys(UF_NOMES)
+    .map((sigla) => ({ label: UF_NOMES[sigla], value: sigla }))
+    .sort((a, b) => a.label.localeCompare(b.label, 'pt-BR'))
 }
