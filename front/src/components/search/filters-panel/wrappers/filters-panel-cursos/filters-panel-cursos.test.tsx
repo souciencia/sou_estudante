@@ -22,6 +22,10 @@ vi.mock('@/services/api/use-municipios', () => ({
 describe('FiltersPanelCursos', () => {
   const mockUpdateParams = vi.fn()
 
+  function expandPanel() {
+    fireEvent.click(screen.getByRole('button', { name: 'Filtros' }))
+  }
+
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(useSearchCursos).mockReturnValue({
@@ -48,6 +52,7 @@ describe('FiltersPanelCursos', () => {
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     expect(screen.getByText('Estado')).toBeInTheDocument()
     expect(screen.getByText('Turno')).toBeInTheDocument()
@@ -71,6 +76,7 @@ describe('FiltersPanelCursos', () => {
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     const noturnoCheckbox = screen.getByRole('checkbox', { name: 'Noturno' })
     const diurnoCheckbox = screen.getByRole('checkbox', { name: 'Diurno' })
@@ -92,6 +98,7 @@ describe('FiltersPanelCursos', () => {
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     const noturnoCheckbox = screen.getByRole('checkbox', { name: 'Noturno' })
     const diurnoCheckbox = screen.getByRole('checkbox', { name: 'Diurno' })
@@ -113,6 +120,7 @@ describe('FiltersPanelCursos', () => {
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     const noturnoCheckbox = screen.getByRole('checkbox', { name: 'Noturno' })
     fireEvent.click(noturnoCheckbox)
@@ -129,6 +137,7 @@ describe('FiltersPanelCursos', () => {
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     fireEvent.click(screen.getByRole('checkbox', { name: /Com vagas Sisu/ }))
     expect(mockUpdateParams).toHaveBeenCalledWith({
@@ -144,6 +153,7 @@ describe('FiltersPanelCursos', () => {
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     fireEvent.click(screen.getByRole('checkbox', { name: /Gratuito/ }))
     expect(mockUpdateParams).toHaveBeenCalledWith({
@@ -163,42 +173,45 @@ describe('FiltersPanelCursos', () => {
     expect(container.firstChild).toHaveAttribute('data-module', '5')
   })
 
-  it('exibe o alternador de resultados semelhantes desligado por padrão', () => {
+  it('exibe o alternador de resultados parecidos desligado por padrão', () => {
     const params = new URLSearchParams()
     vi.mocked(useSearchParams).mockReturnValue(
       params as unknown as ReadonlyURLSearchParams,
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     expect(
-      screen.getByRole('switch', { name: 'Mostrar resultados semelhantes' }),
-    ).toHaveAttribute('aria-checked', 'false')
+      screen.getByRole('checkbox', { name: 'Mostrar resultados parecidos' }),
+    ).not.toBeChecked()
   })
 
-  it('ativa o alternador quando a URL já pede resultados semelhantes', () => {
+  it('ativa o alternador quando a URL já pede resultados parecidos', () => {
     const params = new URLSearchParams('exact=false')
     vi.mocked(useSearchParams).mockReturnValue(
       params as unknown as ReadonlyURLSearchParams,
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     expect(
-      screen.getByRole('switch', { name: 'Mostrar resultados semelhantes' }),
-    ).toHaveAttribute('aria-checked', 'true')
+      screen.getByRole('checkbox', { name: 'Mostrar resultados parecidos' }),
+    ).toBeChecked()
   })
 
-  it('grava exact=false ao ligar o alternador de resultados semelhantes', () => {
+  it('grava exact=false ao ligar o alternador de resultados parecidos', () => {
     const params = new URLSearchParams()
     vi.mocked(useSearchParams).mockReturnValue(
       params as unknown as ReadonlyURLSearchParams,
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     fireEvent.click(
-      screen.getByRole('switch', { name: 'Mostrar resultados semelhantes' }),
+      screen.getByRole('checkbox', { name: 'Mostrar resultados parecidos' }),
     )
     expect(mockUpdateParams).toHaveBeenCalledWith({
       exact: 'false',
@@ -206,19 +219,20 @@ describe('FiltersPanelCursos', () => {
     })
   })
 
-  it('grava exact=true ao desligar o alternador de resultados semelhantes', () => {
+  it('grava exact=true ao desligar o alternador de resultados parecidos', () => {
     const params = new URLSearchParams('exact=false')
     vi.mocked(useSearchParams).mockReturnValue(
       params as unknown as ReadonlyURLSearchParams,
     )
 
     render(<FiltersPanelCursos />)
+    expandPanel()
 
     fireEvent.click(
-      screen.getByRole('switch', { name: 'Mostrar resultados semelhantes' }),
+      screen.getByRole('checkbox', { name: 'Mostrar resultados parecidos' }),
     )
     expect(mockUpdateParams).toHaveBeenCalledWith({
-      exact: 'true',
+      exact: null,
       page: '1',
     })
   })

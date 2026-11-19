@@ -1,5 +1,6 @@
 'use client'
 
+import { ActiveFiltersIes } from '@/components/search/active-filters/wrappers/active-filters-ies/active-filters-ies'
 import {
   buildFilterOptions,
   CATEGORIAS_ADMINISTRATIVAS,
@@ -67,6 +68,7 @@ export function FiltersPanelIes({ module, className }: FiltersPanelIesProps) {
       onToggle={onToggle}
       onApply={onApply}
       onClear={resetFilters}
+      activeFilters={<ActiveFiltersIes module={module} />}
       leading={<SortingOptionsIes module={module} />}
       afterSection={(section, ctx) =>
         section.key === 'uf' ? (

@@ -1,6 +1,6 @@
 'use client'
 
-import { SlidersHorizontal } from 'lucide-react'
+import { ChevronDown, SlidersHorizontal } from 'lucide-react'
 import { Fragment, type ReactNode, useId, useState } from 'react'
 import { FilterGroup } from '@/components/search/filter-group'
 import { BottomSheet } from '@/components/ui/bottom-sheet/bottom-sheet'
@@ -44,6 +44,8 @@ export interface FiltersPanelProps {
   onApply?: (values: Record<string, string[]>) => void
   /** Limpa todos os filtros ativos. Sem ele, desmarca cada valor ativo. */
   onClear?: () => void
+  /** Linha de "filtros aplicados", exibida sempre logo após o título. */
+  activeFilters?: ReactNode
   /** Conteúdo exibido como primeiro item, antes das seções de filtro. */
   leading?: ReactNode
   /** Conteúdo extra renderizado logo após uma seção (ex.: menus de municípios após "uf"). */
@@ -72,6 +74,7 @@ export function FiltersPanel({
   onToggle,
   onApply,
   onClear,
+  activeFilters,
   leading,
   afterSection,
   module,
@@ -79,9 +82,11 @@ export function FiltersPanel({
 }: FiltersPanelProps) {
   const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY)
   const [open, setOpen] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const [draft, setDraft] = useState<Record<string, string[]> | null>(null)
   const titleId = useId()
   const sheetId = useId()
+  const bodyId = useId()
 
   const drafting = isMobile && draft !== null
   const resolvedActiveValues = drafting
@@ -139,35 +144,24 @@ export function FiltersPanel({
     }
   }
 
-  const content = (
+  const clearButton = (
+    <button
+      type="button"
+      onClick={handleClear}
+      disabled={!hasActiveFilters}
+      className={cn(
+        'rounded-sm tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
+        hasActiveFilters
+          ? 'cursor-pointer text-accent-deep hover:underline'
+          : 'cursor-not-allowed text-fg-muted',
+      )}
+    >
+      <span className="text-xs">Limpar</span>
+    </button>
+  )
+
+  const body = (
     <>
-      <header className="flex items-center justify-between">
-        <Typo
-          t="h2"
-          s="sm"
-          id={titleId}
-          className={cn(
-            'font-display font-bold uppercase tracking-[0.14em] text-fg',
-          )}
-        >
-          Filtros
-        </Typo>
-
-        <button
-          type="button"
-          onClick={handleClear}
-          disabled={!hasActiveFilters}
-          className={cn(
-            'rounded-sm tracking-[0.14em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
-            hasActiveFilters
-              ? 'cursor-pointer text-accent-deep hover:underline'
-              : 'cursor-not-allowed text-fg-muted',
-          )}
-        >
-          <span className="text-xs">Limpar</span>
-        </button>
-      </header>
-
       {leading && (
         <>
           {leading}
@@ -198,6 +192,27 @@ export function FiltersPanel({
           })}
         </Fragment>
       ))}
+    </>
+  )
+
+  const content = (
+    <>
+      <header className="flex items-center justify-between">
+        <Typo
+          t="h2"
+          s="sm"
+          id={titleId}
+          className={cn(
+            'font-display font-bold uppercase tracking-[0.14em] text-fg',
+          )}
+        >
+          Filtros
+        </Typo>
+
+        {clearButton}
+      </header>
+
+      {body}
     </>
   )
 
@@ -257,11 +272,50 @@ export function FiltersPanel({
     <div
       data-module={module}
       className={cn(
-        'flex flex-col gap-6 rounded-card border border-border-primary bg-filters-bg p-6 font-sans text-fg shadow-sm',
+        'mb-8 rounded-callout border border-accent-deep/30 bg-filters-bg font-sans text-fg shadow-sm',
         className,
       )}
     >
-      {content}
+      <h2>
+        <button
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+          aria-expanded={expanded}
+          aria-controls={bodyId}
+          className={cn(
+            'flex w-full cursor-pointer items-center justify-between rounded-t-callout bg-accent/10 p-3 px-4 text-left',
+            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
+          )}
+        >
+          <span className="flex items-center gap-2">
+            <SlidersHorizontal
+              className="size-4 text-accent-deep"
+              aria-hidden="true"
+            />
+            <span className="font-display text-sm font-bold uppercase tracking-[0.14em] text-fg">
+              Filtros
+            </span>
+          </span>
+          <ChevronDown
+            className={cn(
+              'shrink-0 size-4 text-fg-muted transition-transform duration-fast',
+              expanded && 'rotate-180',
+            )}
+            aria-hidden="true"
+          />
+        </button>
+      </h2>
+
+      {activeFilters && <div className="px-4 pb-3">{activeFilters}</div>}
+
+      {expanded && (
+        <div
+          id={bodyId}
+          className="flex flex-col gap-6 border-t border-border-primary p-4"
+        >
+          {body}
+        </div>
+      )}
     </div>
   )
 }

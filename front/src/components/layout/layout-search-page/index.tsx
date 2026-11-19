@@ -6,7 +6,6 @@ import { SearchGate } from '@/components/search/search-gate/search-gate'
 import { IconModule } from '@/components/ui/icon-module/icon-module'
 import { Typo } from '@/components/ui/typo'
 import { MODULE_META, type Module } from '@/lib/module'
-import { cn } from '@/utils/cn'
 
 const DEFAULT_EMPTY_PROMPT = 'Faça uma busca para ver os resultados'
 
@@ -117,27 +116,20 @@ export function LayoutSearchPage({
             {hasSearch && <Suspense fallback={null}>{activeFilters}</Suspense>}
 
             {hasResults && (
-              <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-7">
+              <div className="mt-6 space-y-6">
                 {filtersPanel && (
-                  <aside className="md:col-span-2">
-                    <Suspense
-                      fallback={
-                        <Typo v="mute" s="sm">
-                          Carregando filtros...
-                        </Typo>
-                      }
-                    >
-                      {filtersPanel}
-                    </Suspense>
-                  </aside>
+                  <Suspense
+                    fallback={
+                      <Typo v="mute" s="sm">
+                        Carregando filtros...
+                      </Typo>
+                    }
+                  >
+                    {filtersPanel}
+                  </Suspense>
                 )}
 
-                <div
-                  className={cn('space-y-4', {
-                    'md:col-span-5': Boolean(filtersPanel),
-                    'md:col-span-7': !filtersPanel,
-                  })}
-                >
+                <div className="space-y-4">
                   {(resultsSummary || toolbar) && (
                     <div className="flex items-center justify-between">
                       {resultsSummary && (

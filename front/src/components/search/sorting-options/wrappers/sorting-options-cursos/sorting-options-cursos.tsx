@@ -1,6 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
+import type { ReactNode } from 'react'
 import {
   SortingOptions,
   type SortOption,
@@ -16,9 +17,13 @@ const CURSOS_SORT_OPTIONS: SortOption[] = [
 
 interface SortingOptionsCursosProps {
   module?: Module
+  trailing?: ReactNode
 }
 
-export function SortingOptionsCursos({ module }: SortingOptionsCursosProps) {
+export function SortingOptionsCursos({
+  module,
+  trailing,
+}: SortingOptionsCursosProps) {
   const { updateParams } = useSearchCursos()
   const searchParams = useSearchParams()
   const sort = searchParams?.get('sort') ?? undefined
@@ -29,6 +34,7 @@ export function SortingOptionsCursos({ module }: SortingOptionsCursosProps) {
       value={sort}
       onSelect={(nextSort) => updateParams({ sort: nextSort })}
       module={module}
+      trailing={trailing}
     />
   )
 }

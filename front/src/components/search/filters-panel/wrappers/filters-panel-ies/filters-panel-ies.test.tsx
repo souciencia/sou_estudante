@@ -22,6 +22,10 @@ vi.mock('@/services/api/use-municipios', () => ({
 describe('FiltersPanelIes', () => {
   const updateParams = vi.fn()
 
+  function expandPanel() {
+    fireEvent.click(screen.getByRole('button', { name: 'Filtros' }))
+  }
+
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(useSearchParams).mockReturnValue(
@@ -51,6 +55,7 @@ describe('FiltersPanelIes', () => {
 
   it('renderiza os grupos de filtros de IES', () => {
     render(<FiltersPanelIes />)
+    expandPanel()
 
     expect(screen.getByText('Estado')).toBeInTheDocument()
     expect(screen.getByText('Região')).toBeInTheDocument()
@@ -60,6 +65,7 @@ describe('FiltersPanelIes', () => {
 
   it('deriva as opções das agregações (UF e região)', () => {
     render(<FiltersPanelIes />)
+    expandPanel()
 
     expect(
       screen.getByRole('checkbox', { name: /São Paulo/ }),
@@ -74,6 +80,7 @@ describe('FiltersPanelIes', () => {
 
   it('atualiza os parâmetros ao selecionar uma opção', () => {
     render(<FiltersPanelIes />)
+    expandPanel()
 
     fireEvent.click(screen.getByRole('checkbox', { name: /São Paulo/ }))
 
