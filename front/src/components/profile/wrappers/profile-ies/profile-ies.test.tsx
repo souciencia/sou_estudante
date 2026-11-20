@@ -4,7 +4,7 @@ import { ProfileIES } from './profile-ies'
 
 const iesMock = {
   co_ies: '376',
-  no_ies: 'UNIVERSIDADE FEDERAL DE MATO GROSSO',
+  no_ies: 'Universidade Federal De Mato Grosso',
   sg_ies: 'UFMT',
   categoria_administrativa: { no_categoria_administrativa: 'Pública Federal' },
   organizacao_academica: { no_organizacao_academica: 'Universidade' },
@@ -28,12 +28,13 @@ describe('ProfileIES', () => {
     render(<ProfileIES ies={iesMock} />)
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'UFMT' }),
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Universidade Federal De Mato Grosso',
+      }),
     ).toBeInTheDocument()
 
-    expect(
-      screen.getByText('UNIVERSIDADE FEDERAL DE MATO GROSSO'),
-    ).toBeInTheDocument()
+    expect(screen.getByText('UFMT')).toBeInTheDocument()
 
     expect(screen.getByText('Universidade')).toBeInTheDocument()
     expect(screen.getByText('Pública Federal')).toBeInTheDocument()

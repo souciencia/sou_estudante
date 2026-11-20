@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import type { Module } from '@/lib/module'
 import { cn } from '@/utils/cn'
 import { IconModule } from '../ui/icon-module/icon-module'
 import { useProfileContext } from './profile-context'
@@ -26,7 +25,7 @@ export function ProfileHeader({
   return (
     <section data-module={module} className={cn('p-4 pb-3', className)}>
       <span className="mb-[6px] flex items-center gap-[6px] text-2xs font-bold uppercase tracking-[0.7px] text-accent-deep">
-          <IconModule module={module ?? '1'} />
+        <IconModule module={module ?? '1'} />
         {badge}
       </span>
 
