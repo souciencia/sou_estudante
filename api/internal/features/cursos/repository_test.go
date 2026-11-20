@@ -127,12 +127,12 @@ func TestBuildAggregationsUfsRefleteOutrosFiltros(t *testing.T) {
 	}
 }
 
-// O conceito Enade agrega faixas (1-5, SC) e a ausência de avaliação no ciclo.
-func TestBuildAggregationsEnadeIncluiFaixasEAusencia(t *testing.T) {
+// O conceito Enade agrega faixas (1-5), "Sem conceito" e "Sem avaliação".
+func TestBuildAggregationsEnadeIncluiFaixasSemConceitoEAvaliacao(t *testing.T) {
 	aggs := buildAggregations(SearchFilterParams{})
 
 	filters := filtersBuckets(t, aggs, "enades")
-	for _, key := range []string{"1", "2", "3", "4", "5", "SC", "Sem avaliação no Ciclo"} {
+	for _, key := range []string{"1", "2", "3", "4", "5", "Sem conceito", "Sem avaliação"} {
 		if _, ok := filters[key]; !ok {
 			t.Errorf("esperado bucket %q na agregação enades, obtido %v", key, filters)
 		}
@@ -202,9 +202,9 @@ func TestBuildFilterClausesEnadeUsaCampoKeyword(t *testing.T) {
 	}
 }
 
-// "Sem avaliação no Ciclo" filtra cursos cuja faixa do Enade está ausente.
-func TestBuildFilterClausesEnadeSemAvaliacaoNoCiclo(t *testing.T) {
-	clauses := buildFilterClauses(SearchFilterParams{Enade: []string{"Sem avaliação no Ciclo"}})
+// "Sem avaliação" filtra cursos cuja faixa do Enade é "Sem avaliação".
+func TestBuildFilterClausesEnadeSemAvaliacao(t *testing.T) {
+	clauses := buildFilterClauses(SearchFilterParams{Enade: []string{"Sem avaliação"}})
 	if len(clauses) != 1 {
 		t.Fatalf("esperado 1 cláusula, obtido %d", len(clauses))
 	}
@@ -213,12 +213,9 @@ func TestBuildFilterClausesEnadeSemAvaliacaoNoCiclo(t *testing.T) {
 	if len(should) != 1 {
 		t.Fatalf("esperado 1 cláusula should, obtido %d", len(should))
 	}
-	boolNode, ok := should[0]["bool"].(map[string]any)
-	if !ok {
-		t.Fatalf("esperado nó bool, obtido %T", should[0]["bool"])
-	}
-	if mustNot, ok := boolNode["must_not"]; !ok || mustNot == nil {
-		t.Errorf("esperado must_not para ausência do Enade, obtido %v", boolNode)
+	terms := termsNodeFrom(t, should[0])
+	if got := terms["enade.conceito_faixa_enade"]; !reflect.DeepEqual(got, []string{"Sem avaliação"}) {
+		t.Errorf("enade.conceito_faixa_enade = %v, esperado [Sem avaliação]", got)
 	}
 }
 

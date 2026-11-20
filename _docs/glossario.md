@@ -11,7 +11,7 @@
 | **CINE** | Classificação Internacional Normalizada da Educação; organiza cursos em área geral, específica e detalhada, e rótulo. | `curso.cine.*` |
 | **Enade** | Exame Nacional de Desempenho dos Estudantes. Avalia cursos por ciclos (nem todo curso é avaliado todo ano). | `enade.*` |
 | **Conceito contínuo (Enade)** | Nota numérica do curso no Enade. Base da ordenação `sort=enade`. | `enade.conceito_continuo_enade` |
-| **Faixa (Enade)** | Conceito em 5 níveis (1 a 5) derivado do contínuo. `SC` = sem conceito no ciclo. Filtro `enade` da API. | `enade.conceito_faixa_enade` |
+| **Faixa (Enade)** | Conceito em 5 níveis (1 a 5) derivado do contínuo. `Sem conceito` = sem conceito no ciclo; `Sem avaliação` = curso não avaliado. Filtro `enade` da API. | `enade.conceito_faixa_enade` |
 | **Sisu** | Sistema de Seleção Unificada: ingresso pela nota do Enem. | `sisu.tem_sisu`, `sisu.ofertas` |
 | **Oferta (Sisu)** | Uma vaga ofertada por turno, modalidade de concorrência e grupo, com vagas, inscrições e nota de corte. | `sisu.ofertas[]` |
 | **Modalidade de concorrência / grupo** | Categoria de acesso à vaga (ampla concorrência, cotas). | `ofertas[].modalidade`, `grupo`, `descricao` |

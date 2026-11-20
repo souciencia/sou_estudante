@@ -122,9 +122,9 @@ describe('SearchResultsCursos', () => {
     expect(screen.queryByText(/sem dados/)).not.toBeInTheDocument()
   })
 
-  it('exibe a tag "SC" quando o curso não tem conceito', () => {
+  it('exibe a tag "Sem conceito" quando o curso não tem conceito', () => {
     vi.mocked(useSearchCursos).mockReturnValue(
-      buildSearchResult({}, { conceito_faixa_enade: 'SC' }),
+      buildSearchResult({}, { conceito_faixa_enade: 'Sem conceito' }),
     )
 
     renderWithProvider()

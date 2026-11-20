@@ -1,5 +1,8 @@
-import { CourseSearchEntry } from '@/components/search/course-search-entry/course-search-entry'
+import { Button } from '@/components/ui/button/button'
 import { BussolaHero } from './bussola/bussola-hero'
+import { IconLupa } from '@/assets/icon-lupa'
+import { IconInfo } from '@/assets/icon-info'
+import { ShapeCurve } from '@/assets/shape-curve'
 
 export const Hero2 = () => {
   return (
@@ -36,21 +39,17 @@ export const Hero2 = () => {
         compreensão.
       </p>
 
-      <svg
-        className="absolute inset-x-0 bottom-0 block h-9 w-full"
-        viewBox="0 0 1440 36"
-        fill="none"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M0,18 C360,36 1080,0 1440,18 L1440,36 L0,36 Z"
-          fill="var(--color-surface-lv1)"
-        />
-      </svg>
-      <section className="mx-auto my-10 max-w-[620px]">
-        <CourseSearchEntry />
-      </section>
+      <div className="relative z-[2] mt-[1.6rem] flex flex-wrap justify-center gap-2.5">
+        <Button href="/cursos/" v="solid" s="big">
+          <IconLupa />
+          Buscar curso
+        </Button>
+        <Button href="#howto" v="translucid" s="big">
+          <IconInfo />
+          Como funciona
+        </Button>
+      </div>
+        <ShapeCurve />
     </section>
   )
 }

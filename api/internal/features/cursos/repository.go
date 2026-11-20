@@ -102,35 +102,13 @@ func gratuitoTerm() map[string]any {
 // enadeField é o campo keyword da faixa do conceito Enade no documento de curso.
 const enadeField = "enade.conceito_faixa_enade"
 
-// enadeSemAvaliacaoClause seleciona cursos sem avaliação no ciclo do Enade, ou
-// seja, cuja faixa de conceito está ausente no documento.
-func enadeSemAvaliacaoClause() map[string]any {
-	return map[string]any{
-		"bool": map[string]any{
-			"must_not": []map[string]any{
-				{"exists": map[string]any{"field": enadeField}},
-			},
-		},
-	}
-}
-
-// enadeFilterClauses traduz os valores do filtro Enade em cláusulas: faixas
-// numéricas e "SC" viram terms; "sem avaliação no ciclo" vira a ausência do
-// campo. As cláusulas retornadas se combinam com "ou" pelo chamador.
+// enadeFilterClauses traduz os valores do filtro Enade (faixas "1" a "5",
+// "Sem conceito" e "Sem avaliação") em uma cláusula "terms" sobre o campo
+// keyword. A cláusula retornada se combina com "ou" pelo chamador.
 func enadeFilterClauses(enades []string) []map[string]any {
-	var terms []string
-	var clauses []map[string]any
-	for _, enade := range enades {
-		if strings.EqualFold(strings.TrimSpace(enade), "sem avaliação no ciclo") {
-			clauses = append(clauses, enadeSemAvaliacaoClause())
-			continue
-		}
-		terms = append(terms, enade)
+	return []map[string]any{
+		elasticsearch.TermsFilter(enadeField, enades),
 	}
-	if len(terms) > 0 {
-		clauses = append(clauses, elasticsearch.TermsFilter(enadeField, terms))
-	}
-	return clauses
 }
 
 // hasExactCourseName verifica se existe ao menos um documento cujo nome de
@@ -371,13 +349,13 @@ func buildAggregations(filters SearchFilterParams) map[string]any {
 		"enades": elasticsearch.FilteredAgg(
 			contextClauses(filters, "enade"),
 			elasticsearch.FiltersAgg(map[string]any{
-				"1":                      elasticsearch.TermsFilter(enadeField, []string{"1"}),
-				"2":                      elasticsearch.TermsFilter(enadeField, []string{"2"}),
-				"3":                      elasticsearch.TermsFilter(enadeField, []string{"3"}),
-				"4":                      elasticsearch.TermsFilter(enadeField, []string{"4"}),
-				"5":                      elasticsearch.TermsFilter(enadeField, []string{"5"}),
-				"SC":                     elasticsearch.TermsFilter(enadeField, []string{"SC"}),
-				"Sem avaliação no Ciclo": enadeSemAvaliacaoClause(),
+				"1":             elasticsearch.TermsFilter(enadeField, []string{"1"}),
+				"2":             elasticsearch.TermsFilter(enadeField, []string{"2"}),
+				"3":             elasticsearch.TermsFilter(enadeField, []string{"3"}),
+				"4":             elasticsearch.TermsFilter(enadeField, []string{"4"}),
+				"5":             elasticsearch.TermsFilter(enadeField, []string{"5"}),
+				"Sem conceito":  elasticsearch.TermsFilter(enadeField, []string{"Sem conceito"}),
+				"Sem avaliação": elasticsearch.TermsFilter(enadeField, []string{"Sem avaliação"}),
 			}),
 		),
 		"categorias": elasticsearch.FilteredAgg(
