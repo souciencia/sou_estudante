@@ -42,7 +42,7 @@ export const ProfileIngresso = ({
 
   if (!temSisu) {
     return (
-      <Profile module={module} className="p-4" courseId={id} iesId={idIes}>
+      <Profile module={module} className="p-4 py-0" courseId={id} iesId={idIes}>
         <Profile.Header
           badge="Ingresso pelo Sisu"
           title={titulo}
@@ -100,7 +100,7 @@ export const ProfileIngresso = ({
   const turnosUnicos = Object.keys(ofertasPorTurno)
 
   return (
-    <Profile module={module} className="p-4" courseId={id} iesId={idIes}>
+    <Profile module={module} className="p-4 py-0" courseId={id} iesId={idIes}>
       <Profile.Header
         badge={'Ingresso pelo Sisu'}
         title={titulo}
