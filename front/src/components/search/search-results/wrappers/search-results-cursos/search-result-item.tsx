@@ -19,7 +19,10 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
   // Extrair dados da estrutura completa
   const nomeCurso = curso.curso?.no_curso || 'Curso não especificado'
   const instituicao = curso.instituicao?.no_ies || ''
-  const siglaInstituicao = curso.instituicao.sg_ies === 'INEXISTENTE' ? undefined : curso.instituicao.sg_ies
+  const siglaInstituicao =
+    curso.instituicao.sg_ies === 'INEXISTENTE'
+      ? undefined
+      : curso.instituicao.sg_ies
   const modalidade = curso.curso?.no_modalidade_ensino || ''
   const municipio = curso.localizacao?.no_municipio || ''
   const uf = curso.localizacao?.sg_uf || ''
@@ -76,7 +79,9 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
         <div>
           <h4 className="font-display font-bold text-base">{nomeCurso}</h4>
           <h5 className="font-sans text-fg-muted text-sm">
-            {siglaInstituicao ? `${siglaInstituicao} • ${instituicao}` : instituicao}
+            {siglaInstituicao
+              ? `${siglaInstituicao} • ${instituicao}`
+              : instituicao}
           </h5>
         </div>
       </Card.Header>
