@@ -62,18 +62,18 @@ export const ProfilePermanencia = ({
         className="px-0"
       >
         {grau && (
-          <Tag label={grau} className="py-[2px] font-bold bg-white text-2xs" />
+          <Tag label={grau} className="py-[2px]  text-2xs" />
         )}
         {categoriaAdministrativa && (
           <Tag
             label={categoriaAdministrativa}
-            className="py-[2px] font-bold bg-white text-2xs"
+            className="py-[2px]  text-2xs"
           />
         )}
         {cidade && (
           <Tag
             label={`${cidade}, ${uf}`}
-            className="py-[2px] font-bold bg-white text-2xs"
+            className="py-[2px]  text-2xs"
           />
         )}
       </Profile.Header>

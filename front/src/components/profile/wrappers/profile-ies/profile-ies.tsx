@@ -37,7 +37,6 @@ export const ProfileIES = ({
         badge={MODULE_META[module].badge}
         title={titulo}
         subtitle={subtitulo}
-        className="bg-white"
       >
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-x-2">
