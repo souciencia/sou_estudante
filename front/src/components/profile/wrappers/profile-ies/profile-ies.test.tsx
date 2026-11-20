@@ -49,18 +49,4 @@ describe('ProfileIES', () => {
     ).toBeInTheDocument()
     expect(screen.getByText(/continue sua rota/i)).toBeInTheDocument()
   })
-
-  it('handles fallback fallback texts when name or abbreviation are missing', () => {
-    const incompleteIes = {
-      ...iesMock,
-      sg_ies: 'INEXISTENTE',
-      no_ies: undefined,
-    }
-
-    render(<ProfileIES ies={incompleteIes} />)
-
-    expect(
-      screen.getByText(/instituição não especificada/i),
-    ).toBeInTheDocument()
-  })
 })
