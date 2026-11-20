@@ -23,8 +23,12 @@ export const ProfilePermanencia = ({
   const grau = curso.curso.no_grau_academico
   const titulo = `${nomeCurso} — ${grau}`
   const cidade = curso.localizacao.no_municipio
-  const uf = curso.localizacao.sg_uf
-  const subtitulo = `${curso.instituicao.no_ies} · ${cidade} · ${uf}`
+  const subtitulo =
+    curso.instituicao?.sg_ies !== 'INEXISTENTE'
+      ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
+          .filter(Boolean)
+          .join(' · ')
+      : curso.instituicao?.no_ies || undefined
   const categoriaAdministrativa = curso.instituicao.categoria_administrativa
   const metricas = curso.censo_metricas
   const gratuito = curso.curso.in_gratuito
@@ -62,6 +66,12 @@ export const ProfilePermanencia = ({
         {categoriaAdministrativa && (
           <Tag
             label={categoriaAdministrativa}
+            className="py-[2px] font-bold bg-white text-2xs"
+          />
+        )}
+        {cidade && (
+          <Tag
+            label={cidade}
             className="py-[2px] font-bold bg-white text-2xs"
           />
         )}
