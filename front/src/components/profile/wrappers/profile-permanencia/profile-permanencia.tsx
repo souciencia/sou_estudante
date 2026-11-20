@@ -23,6 +23,7 @@ export const ProfilePermanencia = ({
   const grau = curso.curso.no_grau_academico
   const titulo = `${nomeCurso} — ${grau}`
   const cidade = curso.localizacao.no_municipio
+  const uf = curso.localizacao?.sg_uf
   const subtitulo =
     curso.instituicao?.sg_ies !== 'INEXISTENTE'
       ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
@@ -71,7 +72,7 @@ export const ProfilePermanencia = ({
         )}
         {cidade && (
           <Tag
-            label={cidade}
+            label={`${cidade}, ${uf}`}
             className="py-[2px] font-bold bg-white text-2xs"
           />
         )}
