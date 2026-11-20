@@ -23,9 +23,8 @@ export const ProfileIES = ({
   courseId,
 }: ProfileIESProps) => {
   const nome = ies.no_ies ?? 'Instituição não especificada'
-  const titulo = ies.sg_ies === 'INEXISTENTE' ? nome : ies.sg_ies || nome
-  const subtitulo =
-    ies.sg_ies === 'INEXISTENTE' ? undefined : nome.toUpperCase()
+  const titulo = nome
+  const subtitulo = ies.sg_ies === 'INEXISTENTE' ? nome : ies.sg_ies || nome
 
   const organizacao = ies.organizacao_academica?.no_organizacao_academica
   const categoria = ies.categoria_administrativa?.no_categoria_administrativa
@@ -38,7 +37,6 @@ export const ProfileIES = ({
         badge={MODULE_META[module].badge}
         title={titulo}
         subtitle={subtitulo}
-        className="bg-white"
       >
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-x-2">

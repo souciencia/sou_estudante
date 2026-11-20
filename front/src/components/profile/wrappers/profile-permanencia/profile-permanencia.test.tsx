@@ -53,7 +53,7 @@ describe('ProfilePermanencia', () => {
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText('Universidade de Exemplo · BELO HORIZONTE · MG'),
+      screen.getByText('Universidade de Exemplo · UNI-BH'),
     ).toBeInTheDocument()
 
     expect(screen.getByText('Privada com fins lucrativos')).toBeInTheDocument()
