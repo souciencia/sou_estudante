@@ -27,7 +27,6 @@ export function ProfileLocation({
   source,
   tag,
   module,
-  variant = false,
   campus,
   region,
   className,
@@ -40,15 +39,13 @@ export function ProfileLocation({
       data-module={theme}
       className={cn(
         'flex items-center justify-between gap-3 border-b-2',
-        variant
-          ? 'rounded-panel bg-accent/[.06] p-[0.875rem] border-accent'
-          : 'border-info-border bg-info-surface px-5 py-[0.875rem]',
+        'rounded-panel bg-accent/[.06] p-[0.875rem] border-accent mx-4 mb-4',
         className,
       )}
     >
       <IconTile
         module={theme}
-        className={variant ? 'h-[34px] w-[34px]' : undefined}
+        className='h-[34px] w-[34px]'
       >
         {icon}
       </IconTile>
@@ -59,8 +56,7 @@ export function ProfileLocation({
         </span>
         <span
           className={cn(
-            'font-sans text-base font-bold leading-[1.1] tracking-[-0.2px]',
-            variant ? 'text-fg' : 'text-accent-deep',
+            'font-sans text-base font-bold leading-[1.1] tracking-[-0.2px] text-fg',
           )}
         >
           {value}
@@ -73,8 +69,7 @@ export function ProfileLocation({
         {source && (
           <span
             className={cn(
-              'font-sans text-2xs',
-              variant ? 'text-fg-muted' : 'text-accent-deep/60',
+              'font-sans text-2xs text-fg-muted'
             )}
           >
             {source}

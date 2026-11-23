@@ -114,9 +114,6 @@ export const ProfileIngresso = ({
         {turnosUnicos.map((turno) => (
           <Tag key={turno} label={turno} className="text-2xs py-[2px]" />
         ))}
-        {cidade && (
-          <Tag label={`${cidade}, ${uf}`} className="text-2xs py-[2px]" />
-        )}
       </Profile.Header>
 
       {cidade && (
@@ -127,8 +124,6 @@ export const ProfileIngresso = ({
           source="Sisu · 2026"
           tag={uf}
           module={module}
-          variant={true}
-          className="mb-4 mx-4"
         />
       )}
 
