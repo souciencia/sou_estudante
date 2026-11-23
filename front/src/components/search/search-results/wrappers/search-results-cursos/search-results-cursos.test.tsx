@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { CompareProvider } from '@/components/compare/compare-provider'
 import { useSearchCursos } from '@/services/api/use-search-cursos'
 import { SearchResultsCursos } from './search-results-cursos'
 
@@ -8,7 +9,11 @@ vi.mock('@/services/api/use-search-cursos', () => ({
 }))
 
 function renderWithProvider() {
-  return render(<SearchResultsCursos />)
+  return render(
+    <CompareProvider>
+      <SearchResultsCursos />
+    </CompareProvider>,
+  )
 }
 
 const buildSearchResult = (
@@ -110,14 +115,14 @@ describe('SearchResultsCursos', () => {
     )
   })
 
-  it('exibe a taxa de desistência e a tag do Enade quando disponíveis', () => {
+  it('exibe a taxa de permanência e a tag do Enade quando disponíveis', () => {
     vi.mocked(useSearchCursos).mockReturnValue(
       buildSearchResult({ tda: 51 }, { conceito_faixa_enade: '4' }),
     )
 
     renderWithProvider()
 
-    expect(screen.getByText('51%')).toBeInTheDocument()
+    expect(screen.getByText('49%')).toBeInTheDocument()
     expect(screen.getByText('Nota 4 no Enade')).toBeInTheDocument()
     expect(screen.queryByText(/sem dados/)).not.toBeInTheDocument()
   })
@@ -138,7 +143,7 @@ describe('SearchResultsCursos', () => {
     const { container } = renderWithProvider()
 
     expect(
-      screen.getByText('Taxa de desistência acumulada (5 anos) • sem dados'),
+      screen.getByText('Taxa de permanência acumulada (5 anos) • sem dados'),
     ).toBeInTheDocument()
     expect(screen.getByText('Sem avaliação no Enade')).toBeInTheDocument()
     expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(1)
