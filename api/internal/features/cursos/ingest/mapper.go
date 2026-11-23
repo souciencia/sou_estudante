@@ -46,7 +46,7 @@ func ToDocument(src SourceRecord, info InstituicaoInfo) cursos.Curso {
 		Enade: cursos.Enade{
 			AnoEnade:              src.EnadeAnoEnade,
 			ConceitoContinuoEnade: src.EnadeConceitoContinuoEnade,
-			ConceitoFaixaEnade:    src.EnadeConceitoFaixaEnade,
+			ConceitoFaixaEnade:    mapConceitoFaixaEnade(src.EnadeConceitoFaixaEnade),
 		},
 		Tda: cursos.Tda{
 			NuAnoIngressoTda:   src.TdaNuAnoIngressoTda,
@@ -108,6 +108,16 @@ func mapLocalizacao(src SourceRecord) cursos.Localizacao {
 		NoMunicipio: textcase.Title(src.CursoNoMunicipio),
 		InCapital:   intToBool(src.CursoInCapital),
 	}
+}
+
+func mapConceitoFaixaEnade(valor *string) string {
+	if valor == nil {
+		return "Sem avaliação"
+	}
+	if *valor == "SC" {
+		return "Sem conceito"
+	}
+	return *valor
 }
 
 func mapOfertas(src []OfertaSource) []cursos.Oferta {

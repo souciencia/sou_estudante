@@ -39,4 +39,12 @@ describe('Button', () => {
     render(<Button>Enviar</Button>)
     expect(screen.getByRole('button')).not.toHaveAttribute('data-module')
   })
+
+  it('renders a link when href is provided', () => {
+    render(<Button href="/cursos">Buscar curso</Button>)
+    expect(screen.getByRole('link', { name: 'Buscar curso' })).toHaveAttribute(
+      'href',
+      '/cursos',
+    )
+  })
 })

@@ -2,7 +2,7 @@ export type EnadeLevel = 1 | 2 | 3 | 4 | 5 | 'SC' | null
 
 /**
  * Normaliza o valor bruto de `conceito_faixa_enade` para o nível aceito pelo
- * SeloEnade. Retorna `null` para vazio, inválido ou "sem avaliação no ciclo".
+ * SeloEnade. Retorna `null` para vazio, inválido ou "Sem avaliação".
  */
 export const parseEnadeLevel = (raw?: string | number | null): EnadeLevel => {
   if (raw === undefined || raw === null || raw === '') return null
@@ -11,5 +11,6 @@ export const parseEnadeLevel = (raw?: string | number | null): EnadeLevel => {
   if (numeric >= 1 && numeric <= 5) {
     return numeric as 1 | 2 | 3 | 4 | 5
   }
-  return normalized.toUpperCase() === 'SC' ? 'SC' : null
+  if (normalized === 'Sem conceito') return 'SC'
+  return null
 }

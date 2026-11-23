@@ -1,4 +1,7 @@
-import Link from 'next/link'
+import { IconInfo } from '@/assets/icon-info'
+import { IconLupa } from '@/assets/icon-lupa'
+import { ShapeCurve } from '@/assets/shape-curve'
+import { Button } from '@/components/ui/button/button'
 import { BussolaHero } from './bussola/bussola-hero'
 
 export const Hero = () => {
@@ -37,77 +40,16 @@ export const Hero = () => {
       </p>
 
       <div className="relative z-[2] mt-[1.6rem] flex flex-wrap justify-center gap-2.5">
-        <Link
-          href="/cursos/"
-          className="inline-flex items-center gap-[7px] rounded-full border-[1.5px] border-m1-accent bg-m1-accent px-[1.35rem] py-[0.7rem] text-sm font-semibold text-fg transition-transform duration-fast ease-prow hover:-translate-y-px"
-        >
-          <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            width="15"
-            height="15"
-            aria-hidden="true"
-          >
-            <circle
-              cx="7"
-              cy="7"
-              r="5"
-              stroke="currentColor"
-              strokeWidth="1.6"
-            />
-            <line
-              x1="11"
-              y1="11"
-              x2="14.5"
-              y2="14.5"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-            />
-          </svg>
+        <Button href="/cursos/" v="solid" s="big">
+          <IconLupa />
           Buscar curso
-        </Link>
-        <a
-          href="#howto"
-          className="inline-flex items-center gap-[7px] rounded-full border-[1.5px] border-on-dark/[.38] bg-on-dark/[.08] px-[1.35rem] py-[0.7rem] text-sm font-semibold text-on-dark transition-colors duration-fast ease-prow hover:bg-on-dark/[.16]"
-        >
-          <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            width="15"
-            height="15"
-            aria-hidden="true"
-          >
-            <circle
-              cx="8"
-              cy="8"
-              r="6.2"
-              stroke="currentColor"
-              strokeWidth="1.4"
-            />
-            <path
-              d="M8 7.2V11M8 5.1V5.2"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+        </Button>
+        <Button href="#howto" v="translucid" s="big">
+          <IconInfo />
           Como funciona
-        </a>
+        </Button>
       </div>
-
-      <svg
-        className="absolute inset-x-0 bottom-0 block h-9 w-full"
-        viewBox="0 0 1440 36"
-        fill="none"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M0,18 C360,36 1080,0 1440,18 L1440,36 L0,36 Z"
-          fill="var(--color-surface-lv1)"
-        />
-      </svg>
+      <ShapeCurve />
     </section>
   )
 }

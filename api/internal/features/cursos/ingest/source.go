@@ -50,7 +50,7 @@ type SourceRecord struct {
 	CursoTpDimensao               *int           `json:"curso_tp_dimensao"`
 	EnadeAnoEnade                 *int           `json:"enade_ano_enade"`
 	EnadeConceitoContinuoEnade    *float64       `json:"enade_conceito_continuo_enade"`
-	EnadeConceitoFaixaEnade       string         `json:"enade_conceito_faixa_enade"`
+	EnadeConceitoFaixaEnade       *string        `json:"enade_conceito_faixa_enade"`
 	TdaNuAnoIngressoTda           *int           `json:"tda_nu_ano_ingresso_tda"`
 	TdaNuAnoReferenciaTda         *int           `json:"tda_nu_ano_referencia_tda"`
 	TdaTap                        *float64       `json:"tda_tap"`

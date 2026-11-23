@@ -19,6 +19,10 @@ func float64Ptr(value float64) *float64 {
 	return &value
 }
 
+func stringPtr(value string) *string {
+	return &value
+}
+
 func TestToDocumentConverteRegistroCompleto(t *testing.T) {
 	src := SourceRecord{
 		Sequencial:                    int64Ptr(10),
@@ -68,7 +72,7 @@ func TestToDocumentConverteRegistroCompleto(t *testing.T) {
 		CursoTpDimensao:               intPtr(2),
 		EnadeAnoEnade:                 intPtr(2023),
 		EnadeConceitoContinuoEnade:    float64Ptr(3.5),
-		EnadeConceitoFaixaEnade:       "4",
+		EnadeConceitoFaixaEnade:       stringPtr("4"),
 		TdaNuAnoIngressoTda:           intPtr(2018),
 		TdaNuAnoReferenciaTda:         intPtr(2022),
 		TdaTap:                        float64Ptr(0.8),
@@ -179,5 +183,25 @@ func TestToDocumentSemNuAnoCensoDeixaEdicaoVazia(t *testing.T) {
 	doc := ToDocument(SourceRecord{}, InstituicaoInfo{})
 	if doc.Edicao != "" {
 		t.Errorf("edicao = %q, esperado vazio quando nu_ano_censo é nil", doc.Edicao)
+	}
+}
+
+func TestMapConceitoFaixaEnade(t *testing.T) {
+	casos := []struct {
+		nome  string
+		valor *string
+		want  string
+	}{
+		{"sem avaliacao quando nulo", nil, "Sem avaliação"},
+		{"sem conceito quando SC", stringPtr("SC"), "Sem conceito"},
+		{"preserva faixa numerica", stringPtr("4"), "4"},
+	}
+
+	for _, caso := range casos {
+		t.Run(caso.nome, func(t *testing.T) {
+			if got := mapConceitoFaixaEnade(caso.valor); got != caso.want {
+				t.Errorf("mapConceitoFaixaEnade(%v) = %q, esperado %q", caso.valor, got, caso.want)
+			}
+		})
 	}
 }
