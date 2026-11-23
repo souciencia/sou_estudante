@@ -5,6 +5,7 @@ import { MODULE_META, type Module } from '@/lib/module'
 import type { IES } from '@/services/api/types'
 import { ProfileIESFaculty } from './profile-ies-faculty'
 import { ProfileIESOverview } from './profile-ies-overview'
+import { getValidSigla } from '@/utils/siglas'
 
 interface ProfileIESProps {
   ies: IES
@@ -24,7 +25,7 @@ export const ProfileIES = ({
 }: ProfileIESProps) => {
   const nome = ies.no_ies ?? 'Instituição não especificada'
   const titulo = nome
-  const subtitulo = ies.sg_ies === 'INEXISTENTE' ? nome : ies.sg_ies || nome
+  const subtitulo = getValidSigla(ies.sg_ies)
 
   const organizacao = ies.organizacao_academica?.no_organizacao_academica
   const categoria = ies.categoria_administrativa?.no_categoria_administrativa

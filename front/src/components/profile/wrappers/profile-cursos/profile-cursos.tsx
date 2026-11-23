@@ -8,6 +8,7 @@ import { buildIesHref } from '@/lib/profile-links'
 import type { Curso } from '@/services/api/types'
 import { buildOverviewItems } from './profile-cursos-overview-items'
 import { ProfileCursosQuality } from './profile-cursos-quality'
+import { getValidSigla } from '@/utils/siglas'
 
 interface ProfileCursosProps {
   curso: Curso
@@ -22,12 +23,10 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
   const nomeCurso = curso.curso?.no_curso ?? 'Curso não especificado'
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
-  const subtitulo =
-    curso.instituicao?.sg_ies !== 'INEXISTENTE'
-      ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
-          .filter(Boolean)
-          .join(' · ')
-      : curso.instituicao?.no_ies || undefined
+  const subtitulo = 
+    [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
+      .filter(Boolean)
+      .join(' · ') || undefined
   const cidade = curso.localizacao?.no_municipio
   const uf = curso.localizacao?.sg_uf
   const temSisu = curso.sisu?.tem_sisu ?? false

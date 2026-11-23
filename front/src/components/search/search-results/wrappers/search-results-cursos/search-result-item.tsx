@@ -7,6 +7,7 @@ import { TagEnade } from '@/components/ui/tag/wrappers/tag-enade/tag-enade'
 import { parseEnadeLevel } from '@/lib/enade'
 import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
+import { getValidSigla } from '@/utils/siglas'
 
 interface SearchResultItemProps {
   curso: Curso
@@ -19,10 +20,7 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
   // Extrair dados da estrutura completa
   const nomeCurso = curso.curso?.no_curso || 'Curso não especificado'
   const instituicao = curso.instituicao?.no_ies || ''
-  const siglaInstituicao =
-    curso.instituicao.sg_ies === 'INEXISTENTE'
-      ? undefined
-      : curso.instituicao.sg_ies
+  const siglaInstituicao = getValidSigla(curso.instituicao.sg_ies)
   const modalidade = curso.curso?.no_modalidade_ensino || ''
   const municipio = curso.localizacao?.no_municipio || ''
   const uf = curso.localizacao?.sg_uf || ''

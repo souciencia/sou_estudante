@@ -9,6 +9,7 @@ import { Profile } from '../..'
 import { ProfilePermanenciaFinancing } from './profile-permanencia-financing'
 import { ProfilePermanenciaReference } from './profile-permanencia-reference'
 import { ProfilePermanenciaSupport } from './profile-permanencia-support'
+import { getValidSigla } from '@/utils/siglas'
 
 interface ProfilePermanenciaProps {
   curso: Curso
@@ -24,12 +25,10 @@ export const ProfilePermanencia = ({
   const titulo = `${nomeCurso} — ${grau}`
   const cidade = curso.localizacao.no_municipio
   const uf = curso.localizacao?.sg_uf
-  const subtitulo =
-    curso.instituicao?.sg_ies !== 'INEXISTENTE'
-      ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
-          .filter(Boolean)
-          .join(' · ')
-      : curso.instituicao?.no_ies || undefined
+  const subtitulo = 
+    [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
+      .filter(Boolean)
+      .join(' · ') || undefined
   const categoriaAdministrativa = curso.instituicao.categoria_administrativa
   const metricas = curso.censo_metricas
   const gratuito = curso.curso.in_gratuito

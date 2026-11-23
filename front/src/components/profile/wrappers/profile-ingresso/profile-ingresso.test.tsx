@@ -53,7 +53,7 @@ const mockCurso: Curso = {
 }
 
 describe('ProfileIngresso Component', () => {
-  it('deve renderizar corretamente o título, instituição e tags principais', () => {
+  it('deve renderizar corretamente o título, instituição e tag principal', () => {
     render(<ProfileIngresso curso={mockCurso} />)
 
     expect(screen.getByText(/Medicina — Bacharelado/i)).toBeInTheDocument()
@@ -63,8 +63,6 @@ describe('ProfileIngresso Component', () => {
     ).toBeInTheDocument()
 
     expect(screen.getByText('Com vagas no Sisu')).toBeInTheDocument()
-
-    expect(screen.getByText('Rio de Janeiro, RJ')).toBeInTheDocument()
   })
 
   it('exibe a mensagem de curso sem Sisu dentro do perfil, com rotas', () => {

@@ -7,6 +7,7 @@ import { buildIesHref } from '@/lib/profile-links'
 import type { Curso, Oferta } from '@/services/api'
 import { Profile } from '../..'
 import { ProfileIngressoShift } from './profile-ingresso-shift'
+import { getValidSigla } from '@/utils/siglas'
 
 interface ProfileIngressoProps {
   curso: Curso
@@ -24,12 +25,10 @@ export const ProfileIngresso = ({
   const nomeCurso = curso.curso?.no_curso ?? 'Curso não especificado'
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
-  const subtitulo =
-    curso.instituicao?.sg_ies !== 'INEXISTENTE'
-      ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
-          .filter(Boolean)
-          .join(' · ')
-      : curso.instituicao?.no_ies || undefined
+  const subtitulo = 
+    [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
+      .filter(Boolean)
+      .join(' · ') || undefined
   const cidade = curso.localizacao?.no_municipio
   const uf = curso.localizacao?.sg_uf
   const ofertas = curso.sisu?.ofertas ?? []

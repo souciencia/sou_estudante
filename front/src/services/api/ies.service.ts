@@ -1,3 +1,4 @@
+import { getValidSigla } from '@/utils/siglas'
 import { apiClient } from './client'
 import { API_CONFIG } from './config'
 import { buildSearchParams } from './search-params'
@@ -89,7 +90,7 @@ export const iesService = {
 
     return result.data.results.map(({ sigla, ...sugestao }) => ({
       ...sugestao,
-      sigla: sigla === 'INEXISTENTE' ? undefined : sigla,
+      sigla: getValidSigla(sigla),
     }))
   },
 }
