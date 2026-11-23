@@ -29,7 +29,7 @@ const variantStyles = (v: ButtonVariant, active: boolean) => {
       return 'border-accent bg-transparent text-accent-deep hover:bg-accent/10'
     case 'translucid':
       return 'border-on-dark bg-on-dark/[.08] text-on-dark hover:bg-on-dark/[.16]'
-      default:
+    default:
       return active
         ? 'border-accent/70 bg-accent/10 text-accent-fg'
         : 'border-transparent bg-muted text-fg-muted'
@@ -37,7 +37,7 @@ const variantStyles = (v: ButtonVariant, active: boolean) => {
 }
 
 const sizes = (s: ButtonSize) => {
-    switch (s) {
+  switch (s) {
     case 'normal':
       return 'px-4 py-1'
     case 'big':

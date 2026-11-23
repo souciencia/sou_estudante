@@ -1,8 +1,8 @@
+import { IconInfo } from '@/assets/icon-info'
+import { IconLupa } from '@/assets/icon-lupa'
+import { ShapeCurve } from '@/assets/shape-curve'
 import { Button } from '@/components/ui/button/button'
 import { BussolaHero } from './bussola/bussola-hero'
-import { IconLupa } from '@/assets/icon-lupa'
-import { IconInfo } from '@/assets/icon-info'
-import { ShapeCurve } from '@/assets/shape-curve'
 
 export const Hero = () => {
   return (
@@ -49,7 +49,7 @@ export const Hero = () => {
           Como funciona
         </Button>
       </div>
-        <ShapeCurve />
+      <ShapeCurve />
     </section>
   )
 }
