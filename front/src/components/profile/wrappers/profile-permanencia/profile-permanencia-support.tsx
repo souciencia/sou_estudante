@@ -15,7 +15,7 @@ export const ProfilePermanenciaSupport = ({
   descricao,
 }: ProfilePermanenciaSupportProps) => {
   return (
-    <div className="mb-3 rounded-card border border-border-secondary bg-surface-lv2 p-[1.125rem]">
+    <div className="mb-3 rounded-card border border-border-secondary bg-surface-lv2 p-[1.125rem] mx-4">
       <div className="mb-[0.625rem] flex items-start justify-between gap-3">
         <p className="text-sm font-bold text-fg">{titulo}</p>
         <Tag
