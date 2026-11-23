@@ -283,7 +283,7 @@ export function FiltersPanel({
           aria-expanded={expanded}
           aria-controls={bodyId}
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between rounded-t-callout bg-accent/10 p-3 px-4 text-left',
+            'flex w-full cursor-pointer items-center justify-between rounded-t-callout bg-accent/20 p-3 px-4 text-left',
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
           )}
         >
