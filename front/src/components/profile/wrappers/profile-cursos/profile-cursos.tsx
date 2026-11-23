@@ -60,7 +60,7 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
           icon={<MapPin className="size-4" />}
           eyebrow="Local de oferta"
           value={cidade}
-          source="Censo da Educação Superior"
+          source="Censo da Educação Superior · 2024"
           tag={uf}
           module="2"
         />
