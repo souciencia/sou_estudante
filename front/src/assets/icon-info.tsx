@@ -7,13 +7,7 @@ export const IconInfo = () => {
       height="15"
       aria-hidden="true"
     >
-      <circle
-        cx="8"
-        cy="8"
-        r="6.2"
-        stroke="currentColor"
-        strokeWidth="1.4"
-      />
+      <circle cx="8" cy="8" r="6.2" stroke="currentColor" strokeWidth="1.4" />
       <path
         d="M8 7.2V11M8 5.1V5.2"
         stroke="currentColor"
@@ -21,5 +15,5 @@ export const IconInfo = () => {
         strokeLinecap="round"
       />
     </svg>
-    )
- }
+  )
+}

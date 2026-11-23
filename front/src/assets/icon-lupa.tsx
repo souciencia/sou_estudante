@@ -7,13 +7,7 @@ export const IconLupa = () => {
       height="15"
       aria-hidden="true"
     >
-      <circle
-        cx="7"
-        cy="7"
-        r="5"
-        stroke="currentColor"
-        strokeWidth="1.6"
-      />
+      <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.6" />
       <line
         x1="11"
         y1="11"
@@ -25,4 +19,4 @@ export const IconLupa = () => {
       />
     </svg>
   )
- }
+}
