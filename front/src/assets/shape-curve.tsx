@@ -13,4 +13,4 @@ export const ShapeCurve = () => {
       />
     </svg>
   )
- }
+}
