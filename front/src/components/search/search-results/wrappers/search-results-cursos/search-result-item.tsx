@@ -51,24 +51,24 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
 
   // Montar tags dinâmicas
   const tags: Array<string | CardTag | ReactElement> = []
-  const tagsBottom: Array<string | CardTag | ReactElement> = []
+
   tags.push(<TagEnade key="enade" level={conceitoEnade} />)
-  if (gratuito) tags.push({ label: 'Gratuito', tone: 'green' })
-  if (temSisu) tags.push({ label: 'Com vagas no Sisu', tone: 'blue' })
+  if (gratuito) tags.push({ label: 'Gratuito', tone: 'destak' })
+  if (temSisu) tags.push({ label: 'Com vagas no Sisu', tone: 'destak' })
   if (modalidade) tags.push(modalidade)
   if (turno && turno.toLowerCase() !== modalidade.toLowerCase()) {
     tags.push(turno)
   }
   if (localizacaoTag) {
-    tagsBottom.push({
+    tags.push({
       label: localizacaoTag,
       icon: <MapPin aria-hidden className="size-3" />,
       source: 'Censo',
-      tone: 'blue',
+      tone: 'curso',
     })
   }
   if (vagasTag) {
-    tagsBottom.push({ label: vagasTag, source: 'Censo' })
+    tags.push({ label: vagasTag, source: 'Censo' })
   }
 
   const cardContent = (
@@ -128,7 +128,6 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
           'bg-no-repeat bg-[length:77%_1px] bg-left-top bg-gradient-to-r from-border-primary to-border-primary',
         )}
       >
-        {tagsBottom.length > 0 && <Card.Tags source={tagsBottom} />}
         <CompareCourseLink courseId={id} module={module} />
       </footer>
     </Card>
