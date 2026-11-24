@@ -90,10 +90,10 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
       {tags.length > 0 && <Card.Tags source={tags} className="pb-3" />}
 
       <Card.ProgressBar
-        title="Taxa de permanência acumulada (5 anos)"
+        title="Taxa de desistência acumulada (5 anos)"
         percentage={
           typeof taxaDesistencia === 'number'
-            ? `${100 - Math.round(taxaDesistencia)}%`
+            ? `${Math.round(taxaDesistencia)}%`
             : undefined
         }
         emptyHint="sem dados"
