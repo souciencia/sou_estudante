@@ -5,9 +5,9 @@ import { Tag } from '@/components/ui/tag/tag'
 import type { Module } from '@/lib/module'
 import { buildIesHref } from '@/lib/profile-links'
 import type { Curso, Oferta } from '@/services/api'
+import { getValidSigla } from '@/utils/siglas'
 import { Profile } from '../..'
 import { ProfileIngressoShift } from './profile-ingresso-shift'
-import { getValidSigla } from '@/utils/siglas'
 
 interface ProfileIngressoProps {
   curso: Curso
@@ -25,7 +25,7 @@ export const ProfileIngresso = ({
   const nomeCurso = curso.curso?.no_curso ?? 'Curso não especificado'
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
-  const subtitulo = 
+  const subtitulo =
     [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
       .filter(Boolean)
       .join(' · ') || undefined
@@ -50,7 +50,7 @@ export const ProfileIngresso = ({
           <Tag label="Sem Sisu" variant="blue" className="text-2xs py-[2px]" />
         </Profile.Header>
 
-        <Callout v="blue" className='mx-4'>
+        <Callout v="blue" className="mx-4">
           <Callout.Header>
             <Callout.Icon>
               <Info aria-hidden="true" />

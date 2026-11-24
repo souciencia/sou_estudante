@@ -6,9 +6,9 @@ import { Tag } from '@/components/ui/tag/tag'
 import { MODULE_META, type Module } from '@/lib/module'
 import { buildIesHref } from '@/lib/profile-links'
 import type { Curso } from '@/services/api/types'
+import { getValidSigla } from '@/utils/siglas'
 import { buildOverviewItems } from './profile-cursos-overview-items'
 import { ProfileCursosQuality } from './profile-cursos-quality'
-import { getValidSigla } from '@/utils/siglas'
 
 interface ProfileCursosProps {
   curso: Curso
@@ -23,7 +23,7 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
   const nomeCurso = curso.curso?.no_curso ?? 'Curso não especificado'
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
-  const subtitulo = 
+  const subtitulo =
     [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
       .filter(Boolean)
       .join(' · ') || undefined

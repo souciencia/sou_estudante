@@ -8,9 +8,9 @@ import { TagEnade } from '@/components/ui/tag/wrappers/tag-enade/tag-enade'
 import { parseEnadeLevel } from '@/lib/enade'
 import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
+import { cn } from '@/utils/cn'
 import { getValidSigla } from '@/utils/siglas'
 import { buildTurno } from '@/utils/turno'
-import { cn } from '@/utils/cn'
 
 interface SearchResultItemProps {
   curso: Curso

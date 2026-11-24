@@ -46,14 +46,14 @@ describe('buildOverviewItems', () => {
     )
 
     expect(byLabel(items, 'Turno')?.value).toBe('Diurno')
-    expect(byLabel(items, 'Turno')?.note).toBe('com vagas · Censo')
+    expect(byLabel(items, 'Turno')?.note).toBe('com vagas no Censo 2024')
   })
 
   it('shows the yearly vacancies from the censo', () => {
     const items = buildOverviewItems(makeCurso())
 
     expect(byLabel(items, 'Vagas/ano')?.value).toBe('252')
-    expect(byLabel(items, 'Vagas/ano')?.note).toBe('Censo')
+    expect(byLabel(items, 'Vagas/ano')?.note).toBe('Censo 2024')
   })
 
   it('marks a free course as having no tuition', () => {

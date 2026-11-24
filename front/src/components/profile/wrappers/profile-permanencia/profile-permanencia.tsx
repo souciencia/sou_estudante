@@ -5,11 +5,11 @@ import { Tag } from '@/components/ui/tag/tag'
 import type { Module } from '@/lib/module'
 import { buildIesHref } from '@/lib/profile-links'
 import type { Curso } from '@/services/api'
+import { getValidSigla } from '@/utils/siglas'
 import { Profile } from '../..'
 import { ProfilePermanenciaFinancing } from './profile-permanencia-financing'
 import { ProfilePermanenciaReference } from './profile-permanencia-reference'
 import { ProfilePermanenciaSupport } from './profile-permanencia-support'
-import { getValidSigla } from '@/utils/siglas'
 
 interface ProfilePermanenciaProps {
   curso: Curso
@@ -25,7 +25,7 @@ export const ProfilePermanencia = ({
   const titulo = `${nomeCurso} — ${grau}`
   const cidade = curso.localizacao.no_municipio
   const uf = curso.localizacao?.sg_uf
-  const subtitulo = 
+  const subtitulo =
     [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
       .filter(Boolean)
       .join(' · ') || undefined
@@ -49,11 +49,7 @@ export const ProfilePermanencia = ({
 
   return (
     <Profile module={module} courseId={curso.sequencial} iesId={idIes}>
-      <Profile.Header
-        badge={'Permanência'}
-        title={titulo}
-        subtitle={subtitulo}
-      >
+      <Profile.Header badge={'Permanência'} title={titulo} subtitle={subtitulo}>
         {grau && <Tag label={grau} className="py-[2px]  text-2xs" />}
         {categoriaAdministrativa && (
           <Tag label={categoriaAdministrativa} className="py-[2px]  text-2xs" />

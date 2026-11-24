@@ -3,9 +3,9 @@ import { Route } from '@/components/ui/route/route'
 import { Tag } from '@/components/ui/tag/tag'
 import { MODULE_META, type Module } from '@/lib/module'
 import type { IES } from '@/services/api/types'
+import { getValidSigla } from '@/utils/siglas'
 import { ProfileIESFaculty } from './profile-ies-faculty'
 import { ProfileIESOverview } from './profile-ies-overview'
-import { getValidSigla } from '@/utils/siglas'
 
 interface ProfileIESProps {
   ies: IES

@@ -43,10 +43,7 @@ export function ProfileLocation({
         className,
       )}
     >
-      <IconTile
-        module={theme}
-        className='h-[34px] w-[34px]'
-      >
+      <IconTile module={theme} className="h-[34px] w-[34px]">
         {icon}
       </IconTile>
 
@@ -67,11 +64,7 @@ export function ProfileLocation({
           </span>
         )}
         {source && (
-          <span
-            className={cn(
-              'font-sans text-2xs text-fg-muted'
-            )}
-          >
+          <span className={cn('font-sans text-2xs text-fg-muted')}>
             {source}
           </span>
         )}
