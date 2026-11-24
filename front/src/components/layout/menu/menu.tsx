@@ -90,7 +90,7 @@ export function Menu({ mode = 'light', module, variant = 'full' }: MenuProps) {
         className={
           count > 0
             ? cn(
-                'py-1.5 pl-3 pr-0.5 text-sm font-bold transition-colors duration-fast focus-visible:outline-2 focus-visible:outline-offset-2',
+                'py-1.5 px-2 text-sm font-bold transition-colors duration-fast focus-visible:outline-2 focus-visible:outline-offset-2',
                 mode === 'dark'
                   ? 'text-on-dark focus-visible:outline-on-dark'
                   : 'text-accent-deep focus-visible:outline-accent-deep',
@@ -100,21 +100,6 @@ export function Menu({ mode = 'light', module, variant = 'full' }: MenuProps) {
       >
         {count > 0 ? `Comparar (${count})` : 'Comparar'}
       </Link>
-      {count > 0 && (
-        <button
-          type="button"
-          onClick={clear}
-          aria-label="Limpar comparação"
-          className={cn(
-            'mr-1.5 flex size-6 shrink-0 items-center justify-center rounded-full transition-colors duration-fast focus-visible:outline-2 focus-visible:outline-offset-2',
-            mode === 'dark'
-              ? 'text-on-dark/70 hover:text-on-dark focus-visible:outline-on-dark'
-              : 'text-accent-deep hover:bg-accent/10 focus-visible:outline-accent-deep',
-          )}
-        >
-          <X className="size-3.5" aria-hidden="true" />
-        </button>
-      )}
     </span>
   )
 
