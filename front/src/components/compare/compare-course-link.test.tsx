@@ -12,36 +12,39 @@ function renderLink(courseId: number) {
 }
 
 describe('CompareCourseLink', () => {
-  it('mostra "Comparar" quando o curso não está na comparação', () => {
+  it('mostra "Incluir na comparação" quando o curso não está na comparação', () => {
     renderLink(101)
 
-    expect(screen.getByRole('button', { name: 'Comparar' })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
+    const toggle = screen.getByRole('switch', {
+      name: 'Incluir na comparação',
+    })
+    expect(toggle).toHaveAttribute('aria-checked', 'false')
   })
 
-  it('alterna para "Adicionado à comparação" ao clicar', () => {
+  it('alterna para "Incluído na comparação" ao ativar', () => {
     renderLink(101)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Comparar' }))
+    fireEvent.click(
+      screen.getByRole('switch', { name: 'Incluir na comparação' }),
+    )
 
     expect(
-      screen.getByRole('button', { name: 'Adicionado à comparação' }),
-    ).toHaveAttribute('aria-pressed', 'true')
+      screen.getByRole('switch', { name: 'Incluído na comparação' }),
+    ).toHaveAttribute('aria-checked', 'true')
   })
 
-  it('remove o curso da comparação ao clicar novamente', () => {
+  it('remove o curso da comparação ao desativar', () => {
     renderLink(101)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Comparar' }))
     fireEvent.click(
-      screen.getByRole('button', { name: 'Adicionado à comparação' }),
+      screen.getByRole('switch', { name: 'Incluir na comparação' }),
+    )
+    fireEvent.click(
+      screen.getByRole('switch', { name: 'Incluído na comparação' }),
     )
 
-    expect(screen.getByRole('button', { name: 'Comparar' })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
+    expect(
+      screen.getByRole('switch', { name: 'Incluir na comparação' }),
+    ).toHaveAttribute('aria-checked', 'false')
   })
 })

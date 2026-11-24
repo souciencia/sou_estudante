@@ -1,8 +1,9 @@
 'use client'
 
-import { Check } from 'lucide-react'
+import { useId } from 'react'
 import type { Module } from '@/lib/module'
 import { cn } from '@/utils/cn'
+import { Switch } from '../ui/switch/switch'
 import { useCompareCursos } from './compare-provider'
 
 export interface CompareCourseLinkProps {
@@ -12,35 +13,32 @@ export interface CompareCourseLinkProps {
   className?: string
 }
 
-/**
- * Link do rodapé do card de curso que adiciona/remove o curso da comparação:
- * o rótulo alterna entre "Comparar" e "Adicionado à comparação".
- */
 export function CompareCourseLink({
   courseId,
-  module = '5',
+  module,
   className,
 }: CompareCourseLinkProps) {
   const { isSelected, toggle } = useCompareCursos()
   const id = String(courseId)
   const selected = isSelected(id)
+  const labelId = useId()
+  const label = selected ? 'Incluído na comparação' : 'Incluir na comparação'
 
   return (
-    <button
-      type="button"
+    <div
       data-module={module}
-      aria-pressed={selected}
-      onClick={() => toggle(id)}
-      className={cn(
-        'flex flex-wrap gap-y-1 my-3',
-        'font-sans text-xs font-bold',
-        'hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep',
-        selected ? 'text-ok' : 'text-accent-deep',
-        className,
-      )}
+      className={cn('flex items-center gap-2', className)}
     >
-      {selected ? 'Adicionado à comparação' : 'Comparar'}
-      {selected && <Check className="size-3" aria-hidden="true" />}
-    </button>
+      <Switch
+        checked={selected}
+        onCheckedChange={() => toggle(id)}
+        module={module}
+        aria-labelledby={labelId}
+        size='sm'
+      />
+      <span id={labelId} className="font-sans text-sm text-fg-muted">
+        {label}
+      </span>
+    </div>
   )
 }
