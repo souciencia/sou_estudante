@@ -39,6 +39,13 @@
   --color-m4-deep: oklch(41% 0.1961 296);
   --color-m5-deep: oklch(51% 0.1368 049);
 
+  --color-m1-tag: oklch(93.6% 1.225 121.24);
+  --color-m2-tag: oklch(74.4% 1.145 209.29);
+  --color-m3-tag: oklch(72.9% 0.205 347.95);
+  --color-m4-tag: oklch(65.7% 0.221 302.89);
+  --color-m5-tag: oklch(75.4% 0.165 52.47);
+
+
   --color-surface-lv0: oklch(93% 0.0222 312);
   --color-surface-lv0-top: oklch(93% 0.03 250);
   --color-surface-lv1: oklch(97% 0.0102 311);
@@ -88,6 +95,7 @@
 
   --color-muted: oklch(96.7% 0 264);
   --color-fg: oklch(19.19% 0.0441 309.16);
+  --color-fg-tag: oklch(30.19% 0.0441 309.16);
   --color-fg-muted: oklch(45.48% 0.0339 305.48);
   --color-on-dark: oklch(100% 0 0);
 
@@ -105,6 +113,7 @@
   --color-accent: var(--color-m1-accent);
   --color-accent-deep: var(--color-m1-deep);
   --color-accent-fg: var(--color-m1-deep);
+  --color-accent-tag: var(--color-m1-tag);
 
   /*  Tipografia · Famílias */
   --font-mono: "DM Mono", ui-monospace, monospace; /* dados numéricos */
@@ -151,26 +160,31 @@
   --color-accent: var(--color-m1-accent);
   --color-accent-deep: var(--color-m1-deep);
   --color-accent-fg: var(--color-m1-deep);
+  --color-accent-tag: var(--color-m1-tag);
 }
 [data-module="2"] {
   --color-accent: var(--color-m2-accent);
   --color-accent-deep: var(--color-m2-deep);
   --color-accent-fg: var(--color-m2-deep);
+  --color-accent-tag: var(--color-m2-tag);
 }
 [data-module="3"] {
   --color-accent: var(--color-m3-accent);
   --color-accent-deep: var(--color-m3-deep);
   --color-accent-fg: var(--color-m3-deep);
+  --color-accent-tag: var(--color-m3-tag);
 }
 [data-module="4"] {
   --color-accent: var(--color-m4-accent);
   --color-accent-deep: var(--color-m4-deep);
   --color-accent-fg: var(--color-m4-deep);
+  --color-accent-tag: var(--color-m4-tag);
 }
 [data-module="5"] {
   --color-accent: var(--color-m5-accent);
   --color-accent-deep: var(--color-m5-deep);
   --color-accent-fg: var(--color-m5-deep);
+  --color-accent-tag: var(--color-m5-tag);
 }
 
 /* Temas do Callout (Scoped-Variable Pattern, sem React Context) */
