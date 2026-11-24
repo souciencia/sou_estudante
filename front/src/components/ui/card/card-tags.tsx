@@ -12,7 +12,7 @@ export interface CardTag {
   icon?: ReactNode
   source?: string
   /** Reservado para a estilização em andamento: hoje não altera o visual. */
-  tone?: 'blue' | 'green'
+  tone?: 'module' | 'curso' | 'destak' | 'none'
 }
 
 interface Props {
