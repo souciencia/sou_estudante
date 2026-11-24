@@ -6,6 +6,7 @@ import { Tag } from '@/components/ui/tag/tag'
 import { MODULE_META, type Module } from '@/lib/module'
 import { buildIesHref } from '@/lib/profile-links'
 import type { Curso } from '@/services/api/types'
+import { getValidSigla } from '@/utils/siglas'
 import { buildOverviewItems } from './profile-cursos-overview-items'
 import { ProfileCursosQuality } from './profile-cursos-quality'
 
@@ -23,11 +24,9 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
   const subtitulo =
-    curso.instituicao?.sg_ies !== 'INEXISTENTE'
-      ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
-          .filter(Boolean)
-          .join(' · ')
-      : curso.instituicao?.no_ies || undefined
+    [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
+      .filter(Boolean)
+      .join(' · ') || undefined
   const cidade = curso.localizacao?.no_municipio
   const uf = curso.localizacao?.sg_uf
   const temSisu = curso.sisu?.tem_sisu ?? false
@@ -60,7 +59,7 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
           icon={<MapPin className="size-4" />}
           eyebrow="Local de oferta"
           value={cidade}
-          source="Censo da Educação Superior"
+          source="Censo da Educação Superior · 2024"
           tag={uf}
           module="2"
         />

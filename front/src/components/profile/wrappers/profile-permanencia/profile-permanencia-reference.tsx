@@ -10,7 +10,7 @@ export const ProfilePermanenciaReference = ({
   matriculados,
 }: ProfilePermanenciaReferenceProps) => {
   return (
-    <div className="mb-4 flex items-start gap-3 rounded-card border border-border-secondary bg-surface-lv2 p-4">
+    <div className="mb-4 flex items-start gap-3 rounded-card border border-border-secondary bg-surface-lv2 p-4 mx-4">
       <UsersRound className="text-accent-deep size-4" aria-hidden="true" />
       <div>
         <h3 className="mb-[1px] text-2xs font-bold uppercase tracking-[0.5px] text-accent-deep">

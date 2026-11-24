@@ -1,27 +1,9 @@
 import type { OverviewItem } from '@/components/profile'
 import type { Curso } from '@/services/api/types'
+import { buildTurno } from '@/utils/turno'
 
 const capitalize = (value?: string) =>
   value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : ''
-
-/**
- * Deriva os rótulos de turno a partir das vagas do Censo, com fallback para a
- * oferta do Sisu. Retorna o rótulo e a nota de origem exibidos na lista.
- */
-function buildTurno(curso: Curso): { value: string; note?: string } {
-  const censo = curso.censo_metricas
-  const turnos: string[] = []
-  if ((censo?.qt_vg_total_diurno ?? 0) > 0) turnos.push('Diurno')
-  if ((censo?.qt_vg_total_noturno ?? 0) > 0) turnos.push('Noturno')
-  if ((censo?.qt_vg_total_ead ?? 0) > 0) turnos.push('EaD')
-
-  if (turnos.length > 0) {
-    return { value: turnos.join(' / '), note: 'com vagas · Censo' }
-  }
-
-  const oferta = curso.sisu?.ofertas?.[0]
-  return { value: capitalize(oferta?.turno) }
-}
 
 /**
  * Monta a lista de atributos exibidos na aba "Visão geral" a partir do curso.
@@ -40,7 +22,7 @@ export function buildOverviewItems(curso: Curso): OverviewItem[] {
     {
       label: 'Vagas/ano',
       value: vagas !== undefined ? String(vagas) : undefined,
-      note: vagas !== undefined ? 'Censo' : undefined,
+      note: vagas !== undefined ? 'Censo 2024' : undefined,
     },
     { label: 'Categoria', value: curso.instituicao?.categoria_administrativa },
     {

@@ -5,6 +5,7 @@ import { Tag } from '@/components/ui/tag/tag'
 import type { Module } from '@/lib/module'
 import { buildIesHref } from '@/lib/profile-links'
 import type { Curso, Oferta } from '@/services/api'
+import { getValidSigla } from '@/utils/siglas'
 import { Profile } from '../..'
 import { ProfileIngressoShift } from './profile-ingresso-shift'
 
@@ -25,11 +26,9 @@ export const ProfileIngresso = ({
   const grau = curso.curso?.no_grau_academico
   const titulo = grau ? `${nomeCurso} — ${grau}` : nomeCurso
   const subtitulo =
-    curso.instituicao?.sg_ies !== 'INEXISTENTE'
-      ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
-          .filter(Boolean)
-          .join(' · ')
-      : curso.instituicao?.no_ies || undefined
+    [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
+      .filter(Boolean)
+      .join(' · ') || undefined
   const cidade = curso.localizacao?.no_municipio
   const uf = curso.localizacao?.sg_uf
   const ofertas = curso.sisu?.ofertas ?? []
@@ -42,17 +41,16 @@ export const ProfileIngresso = ({
 
   if (!temSisu) {
     return (
-      <Profile module={module} className="p-4 py-0" courseId={id} iesId={idIes}>
+      <Profile module={module} courseId={id} iesId={idIes}>
         <Profile.Header
           badge="Ingresso pelo Sisu"
           title={titulo}
           subtitle={subtitulo}
-          className="px-0"
         >
           <Tag label="Sem Sisu" variant="blue" className="text-2xs py-[2px]" />
         </Profile.Header>
 
-        <Callout v="blue">
+        <Callout v="blue" className="mx-4">
           <Callout.Header>
             <Callout.Icon>
               <Info aria-hidden="true" />
@@ -100,12 +98,11 @@ export const ProfileIngresso = ({
   const turnosUnicos = Object.keys(ofertasPorTurno)
 
   return (
-    <Profile module={module} className="p-4 py-0" courseId={id} iesId={idIes}>
+    <Profile module={module} courseId={id} iesId={idIes}>
       <Profile.Header
         badge={'Ingresso pelo Sisu'}
         title={titulo}
         subtitle={subtitulo}
-        className="px-0"
       >
         <Tag
           label={'Com vagas no Sisu'}
@@ -116,9 +113,6 @@ export const ProfileIngresso = ({
         {turnosUnicos.map((turno) => (
           <Tag key={turno} label={turno} className="text-2xs py-[2px]" />
         ))}
-        {cidade && (
-          <Tag label={`${cidade}, ${uf}`} className="text-2xs py-[2px]" />
-        )}
       </Profile.Header>
 
       {cidade && (
@@ -129,8 +123,6 @@ export const ProfileIngresso = ({
           source="Sisu · 2026"
           tag={uf}
           module={module}
-          variant={true}
-          className="mb-4"
         />
       )}
 
@@ -139,7 +131,7 @@ export const ProfileIngresso = ({
         const temMaisDeUmTurno = Object.keys(ofertasPorTurno).length > 1
 
         return (
-          <div key={turno} className="mb-4">
+          <div key={turno} className="mb-4 mx-4">
             {temMaisDeUmTurno && (
               <div className="mb-2 text-xs font-bold uppercase tracking-[0.6px] text-fg-muted">
                 Turno: {turno}
@@ -151,7 +143,7 @@ export const ProfileIngresso = ({
         )
       })}
 
-      <span className="mt-3 flex items-start gap-2 px-1 text-xs leading-[1.6] text-fg-muted">
+      <span className="mt-3 flex items-start gap-2 px-1 text-xs leading-[1.6] text-fg-muted mx-4">
         &ldquo;Escola pública&rdquo; inclui escolas comunitárias de educação do
         campo conveniadas com o poder público. &ldquo;Baixa renda&rdquo; é renda
         familiar de até 1 salário mínimo por pessoa. Modalidades definidas pela
@@ -159,7 +151,7 @@ export const ProfileIngresso = ({
         são políticas de cada instituição.
       </span>
 
-      <Callout v="module" className="mt-5 text-xs">
+      <Callout v="module" className="mt-5 text-xs mx-4">
         A nota de corte que você está vendo é da plataforma Sisu — e é da{' '}
         <strong>primeira chamada</strong>. As universidades fazem várias
         chamadas e esta nota <strong>tende a cair</strong>: portanto, fique
@@ -169,7 +161,7 @@ export const ProfileIngresso = ({
         <strong>a lista de espera também resulta em matrículas.</strong>
       </Callout>
 
-      <Callout v="gold" className="mt-3 text-xs">
+      <Callout v="gold" className="mt-3 text-xs mx-4">
         <strong>Prazos valem vaga.</strong> Inscrição, chamadas e matrícula têm
         datas definidas no edital de cada universidade — perder um prazo pode
         significar perder a vaga. Leia o edital e acompanhe o processo até o
@@ -178,7 +170,7 @@ export const ProfileIngresso = ({
 
       {/* Mesmo Curso em outros locais */}
 
-      <Profile.Section title="Continue sua rota" className="mt-1 px-0">
+      <Profile.Section title="Continue sua rota" className="mt-1">
         <Route
           module="3"
           variant="inline"

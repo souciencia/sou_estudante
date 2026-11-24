@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import type { Module } from '@/lib/module'
 import type { IES } from '@/services/api/types'
+import { getValidSigla } from '@/utils/siglas'
 
 interface IesResultItemProps {
   ies: IES
@@ -10,7 +11,7 @@ interface IesResultItemProps {
 
 export function IesResultItem({ ies, module }: IesResultItemProps) {
   const nome = ies.no_ies || 'Instituição não especificada'
-  const sigla = ies.sg_ies === 'INEXISTENTE' ? undefined : ies.sg_ies
+  const sigla = getValidSigla(ies.sg_ies)
   const localizacao = [ies.localizacao?.no_municipio, ies.localizacao?.sg_uf]
     .filter(Boolean)
     .join(' - ')

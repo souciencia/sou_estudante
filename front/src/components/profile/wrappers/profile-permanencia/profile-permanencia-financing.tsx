@@ -26,7 +26,7 @@ export const ProfilePermanenciaFinancing = ({
 
   if (tipo === 'prouni') {
     return (
-      <div className="mb-3 rounded-card border border-border-secondary bg-surface-lv2 p-[1.125rem]">
+      <div className="mb-3 rounded-card border border-border-secondary bg-surface-lv2 p-[1.125rem] mx-4">
         <div className="mb-[0.625rem] flex items-start justify-between gap-3">
           <p className="text-sm font-bold text-fg">ProUni</p>
           <Tag
@@ -74,7 +74,7 @@ export const ProfilePermanenciaFinancing = ({
 
   if (tipo === 'fies') {
     return (
-      <div className="mb-3 rounded-card border border-border-secondary bg-surface-lv2 p-[1.125rem]">
+      <div className="mb-3 rounded-card border border-border-secondary bg-surface-lv2 p-[1.125rem] mx-4">
         <div className="mb-[0.625rem] flex items-start justify-between gap-3">
           <p className="text-sm font-bold text-fg">Fies</p>
           <Tag
@@ -118,7 +118,7 @@ export const ProfilePermanenciaFinancing = ({
   }
 
   return (
-    <div className="mb-3 rounded-card border border-border-secondary bg-surface-lv2 p-[1.125rem]">
+    <div className="mb-3 rounded-card border border-border-secondary bg-surface-lv2 p-[1.125rem] mx-4">
       <div className="mb-[0.625rem] flex items-start justify-between gap-3">
         <p className="text-sm font-bold text-fg">Cotas · reserva de vagas</p>
         <Tag

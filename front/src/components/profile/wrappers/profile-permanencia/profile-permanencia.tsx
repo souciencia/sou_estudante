@@ -5,6 +5,7 @@ import { Tag } from '@/components/ui/tag/tag'
 import type { Module } from '@/lib/module'
 import { buildIesHref } from '@/lib/profile-links'
 import type { Curso } from '@/services/api'
+import { getValidSigla } from '@/utils/siglas'
 import { Profile } from '../..'
 import { ProfilePermanenciaFinancing } from './profile-permanencia-financing'
 import { ProfilePermanenciaReference } from './profile-permanencia-reference'
@@ -25,11 +26,9 @@ export const ProfilePermanencia = ({
   const cidade = curso.localizacao.no_municipio
   const uf = curso.localizacao?.sg_uf
   const subtitulo =
-    curso.instituicao?.sg_ies !== 'INEXISTENTE'
-      ? [curso.instituicao?.no_ies, curso.instituicao?.sg_ies]
-          .filter(Boolean)
-          .join(' · ')
-      : curso.instituicao?.no_ies || undefined
+    [curso.instituicao?.no_ies, getValidSigla(curso.instituicao?.sg_ies)]
+      .filter(Boolean)
+      .join(' · ') || undefined
   const categoriaAdministrativa = curso.instituicao.categoria_administrativa
   const metricas = curso.censo_metricas
   const gratuito = curso.curso.in_gratuito
@@ -49,18 +48,8 @@ export const ProfilePermanencia = ({
     'A Lei de Cotas reserva metade das vagas das instituições federais para quem cursou todo o ensino médio em escola pública. Dentro dessa metade, parte das vagas é destinada a estudantes com renda familiar de até 1 salário mínimo por pessoa, e há reservas específicas para pessoas pretas, pardas e indígenas, quilombolas e pessoas com deficiência. As instituições estaduais, municipais e privadas têm regras próprias. Veja os tipos e os documentos exigidos no Painel de Cotas.'
 
   return (
-    <Profile
-      module={module}
-      className="p-4 pt-0"
-      courseId={curso.sequencial}
-      iesId={idIes}
-    >
-      <Profile.Header
-        badge={'Permanência'}
-        title={titulo}
-        subtitle={subtitulo}
-        className="px-0"
-      >
+    <Profile module={module} courseId={curso.sequencial} iesId={idIes}>
+      <Profile.Header badge={'Permanência'} title={titulo} subtitle={subtitulo}>
         {grau && <Tag label={grau} className="py-[2px]  text-2xs" />}
         {categoriaAdministrativa && (
           <Tag label={categoriaAdministrativa} className="py-[2px]  text-2xs" />
@@ -75,7 +64,7 @@ export const ProfilePermanencia = ({
         matriculados={metricas.qt_mat ?? 0}
       />
 
-      <p className="mb-4 text-xs leading-[1.6] text-fg-muted">
+      <p className="mb-4 text-xs leading-[1.6] text-fg-muted mx-4">
         Cada apoio abaixo mostra{' '}
         <strong className="text-fg">quantos estudantes daquele ano</strong>{' '}
         foram beneficiados. A base muda conforme o dado: bolsas e cotas se
@@ -83,7 +72,7 @@ export const ProfilePermanencia = ({
         matriculados.
       </p>
 
-      <div className="mb-[0.875rem] mt-6 flex items-center gap-[0.625rem]">
+      <div className="mb-[0.875rem] mt-6 flex items-center gap-[0.625rem] mx-4">
         <span className="whitespace-nowrap text-2xs font-bold uppercase tracking-[0.7px] text-fg-muted">
           Apoio à permanência
         </span>
@@ -105,7 +94,7 @@ export const ProfilePermanencia = ({
 
       {!gratuito && (
         <>
-          <div className="mb-[0.875rem] mt-6 flex items-center gap-[0.625rem]">
+          <div className="mb-[0.875rem] mt-6 flex items-center gap-[0.625rem] mx-4">
             <span className="whitespace-nowrap text-2xs font-bold uppercase tracking-[0.7px] text-fg-muted">
               Bolsas e financiamento
             </span>
@@ -129,7 +118,7 @@ export const ProfilePermanencia = ({
             descricao={DESC_FIES}
           />
 
-          <Callout v="module" className="text-fg-muted">
+          <Callout v="module" className="text-fg-muted mx-4">
             <strong className="text-fg">Bolsa não é financiamento.</strong> Uma
             bolsa não é devolvida — mas pode não cobrir tudo: o ProUni integral
             cobre a mensalidade inteira, enquanto o parcial cobre 50%, e o
@@ -138,7 +127,7 @@ export const ProfilePermanencia = ({
             entender a diferença antes de decidir.
           </Callout>
 
-          <Callout v="module" className="text-fg-muted mt-2">
+          <Callout v="module" className="text-fg-muted mt-2 mx-4">
             <span className="flex items-start gap-2">
               <LifeBuoy className="mt-[1.5px] shrink-0 size-3.5" />
               <span>
@@ -148,7 +137,7 @@ export const ProfilePermanencia = ({
             </span>
           </Callout>
 
-          <Callout v="module" className="text-fg-muted mt-2">
+          <Callout v="module" className="text-fg-muted mt-2 mx-4">
             <strong className="text-fg">
               Existem outras formas de financiamento ou custeio
             </strong>
@@ -158,7 +147,7 @@ export const ProfilePermanencia = ({
         </>
       )}
 
-      <div className="mb-[0.875rem] mt-6 flex items-center gap-[0.625rem]">
+      <div className="mb-[0.875rem] mt-6 flex items-center gap-[0.625rem] mx-4">
         <span className="whitespace-nowrap text-2xs font-bold uppercase tracking-[0.7px] text-fg-muted">
           Reserva de vagas · cotas
         </span>
@@ -172,7 +161,7 @@ export const ProfilePermanencia = ({
         descricao={DESC_COTAS}
       />
 
-      <Profile.Section title="Continue sua rota" className="px-0">
+      <Profile.Section title="Continue sua rota">
         <Route
           module="4"
           variant="inline"

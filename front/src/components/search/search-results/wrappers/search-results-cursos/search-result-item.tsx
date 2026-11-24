@@ -9,6 +9,8 @@ import { parseEnadeLevel } from '@/lib/enade'
 import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
 import { cn } from '@/utils/cn'
+import { getValidSigla } from '@/utils/siglas'
+import { buildTurno } from '@/utils/turno'
 
 interface SearchResultItemProps {
   curso: Curso
@@ -21,10 +23,7 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
   // Extrair dados da estrutura completa
   const nomeCurso = curso.curso?.no_curso || 'Curso não especificado'
   const instituicao = curso.instituicao?.no_ies || ''
-  const siglaInstituicao =
-    curso.instituicao.sg_ies === 'INEXISTENTE'
-      ? undefined
-      : curso.instituicao.sg_ies
+  const siglaInstituicao = getValidSigla(curso.instituicao.sg_ies)
   const modalidade = curso.curso?.no_modalidade_ensino || ''
   const municipio = curso.localizacao?.no_municipio || ''
   const uf = curso.localizacao?.sg_uf || ''
@@ -33,10 +32,10 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
   const conceitoEnade = parseEnadeLevel(curso.enade?.conceito_faixa_enade)
   const taxaDesistencia = curso.tda?.tda
 
-  // Dados do SISU (primeira oferta do curso)
+  // Dados do SISU
   const temSisu = curso.sisu?.tem_sisu ?? false
-  const oferta = curso.sisu?.ofertas?.[0]
-  const turno = oferta?.turno || ''
+  const turnos = buildTurno(curso)
+  const turno = turnos.value === 'Não informado' ? '' : turnos.value
   const gratuito = curso.curso?.in_gratuito
 
   // Localização
