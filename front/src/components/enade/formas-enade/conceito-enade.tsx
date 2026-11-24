@@ -199,22 +199,40 @@ const CONCEITOS: Record<'1' | '2' | '3' | '4' | '5' | 'sc', ReactNode> = {
   ),
 }
 
+const NARROW_VIEWBOX = '0 0 55 100'
+
+// Recorte do mar para a máscara (ancorado à direita): quantas unidades do mar
+// cheio (100×100) são cortadas à esquerda. O nível 5 corta mais para manter o
+// sol (cx=85) visível na faixa estreita.
+const NARROW_OFFSET: Record<string, number> = {
+  '1': 22,
+  '2': 22,
+  '3': 22,
+  '4': 22,
+  '5': 40,
+  sc: 22,
+}
+
 interface ConceitoEnadeProps {
   level: EnadeLevel
   className?: string
   preserveAspectRatio?: string
+  variant?: 'full' | 'narrow'
 }
 
 export function ConceitoEnade({
   level,
   className,
   preserveAspectRatio = 'xMidYMid slice',
+  variant = 'full',
 }: ConceitoEnadeProps) {
   const key = typeof level === 'number' ? String(level) : 'sc'
+  const narrow = variant === 'narrow'
+  const drawing = CONCEITOS[key as keyof typeof CONCEITOS]
 
   return (
     <svg
-      viewBox="0 0 100 100"
+      viewBox={narrow ? NARROW_VIEWBOX : '0 0 100 100'}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio={preserveAspectRatio}
@@ -222,7 +240,11 @@ export function ConceitoEnade({
       aria-hidden="true"
       focusable="false"
     >
-      {CONCEITOS[key as keyof typeof CONCEITOS]}
+      {narrow ? (
+        <g transform={`translate(-${NARROW_OFFSET[key]} 0)`}>{drawing}</g>
+      ) : (
+        drawing
+      )}
     </svg>
   )
 }

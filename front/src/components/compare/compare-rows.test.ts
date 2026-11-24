@@ -55,9 +55,9 @@ describe('buildCompareSections', () => {
     expect(labels['Oferta no Sisu']).toBe('Sim')
   })
 
-  it('marca "SC" como sem conceito', () => {
+  it('marca "Sem conceito" como sem conceito', () => {
     const sections = buildCompareSections([
-      buildCurso({ enade: { conceito_faixa_enade: 'SC' } }),
+      buildCurso({ enade: { conceito_faixa_enade: 'Sem conceito' } }),
     ])
 
     const qualidade = sections.find((section) => section.title === 'Qualidade')
@@ -66,6 +66,19 @@ describe('buildCompareSections', () => {
     )
 
     expect(conceito?.values[0]).toBe('Sem conceito')
+  })
+
+  it('marca "Sem avaliação" como sem avaliação', () => {
+    const sections = buildCompareSections([
+      buildCurso({ enade: { conceito_faixa_enade: 'Sem avaliação' } }),
+    ])
+
+    const qualidade = sections.find((section) => section.title === 'Qualidade')
+    const conceito = qualidade?.rows.find(
+      (row) => row.label === 'Conceito Enade',
+    )
+
+    expect(conceito?.values[0]).toBe('Sem avaliação')
   })
 
   it('vira célula indefinida para curso não encontrado', () => {

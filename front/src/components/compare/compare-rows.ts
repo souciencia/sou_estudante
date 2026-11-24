@@ -63,8 +63,9 @@ function enadeLabel(raw?: string): string | undefined {
   if (!raw) return undefined
   const normalized = raw.trim()
   if (/^[1-5]$/.test(normalized)) return `Nota ${normalized}`
-  if (normalized.toUpperCase() === 'SC') return 'Sem conceito'
-  return 'Sem avaliação'
+  if (normalized === 'Sem conceito') return 'Sem conceito'
+  if (normalized === 'Sem avaliação') return 'Sem avaliação'
+  return undefined
 }
 
 /**

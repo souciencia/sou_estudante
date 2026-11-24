@@ -1,6 +1,7 @@
-import { ArrowRight, MapPin } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import Link from 'next/link'
 import type { ReactElement } from 'react'
+import { CompareCourseLink } from '@/components/compare/compare-course-link'
 import { MaskEnade } from '@/components/enade/mask-enade/mask-enade'
 import { Card, type CardTag } from '@/components/ui/card'
 import { TagEnade } from '@/components/ui/tag/wrappers/tag-enade/tag-enade'
@@ -9,6 +10,7 @@ import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
 import { getValidSigla } from '@/utils/siglas'
 import { buildTurno } from '@/utils/turno'
+import { cn } from '@/utils/cn'
 
 interface SearchResultItemProps {
   curso: Curso
@@ -70,9 +72,9 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
   }
 
   const cardContent = (
-    <>
+    <div className="flex flex-col items-start gap-2">
       <Card.Backdrop>
-        <MaskEnade level={conceitoEnade} />
+        <MaskEnade level={conceitoEnade} className="translate-x-6 opacity-80" />
       </Card.Backdrop>
       <Card.Header>
         <div>
@@ -88,17 +90,15 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
       {tags.length > 0 && <Card.Tags source={tags} className="pb-3" />}
 
       <Card.ProgressBar
-        title="Taxa de desistência acumulada (5 anos)"
+        title="Taxa de permanência acumulada (5 anos)"
         percentage={
           typeof taxaDesistencia === 'number'
-            ? `${Math.round(taxaDesistencia)}%`
+            ? `${100 - Math.round(taxaDesistencia)}%`
             : undefined
         }
         emptyHint="sem dados"
       />
-
-      {tagsBottom.length > 0 && <Card.Tags source={tagsBottom} />}
-    </>
+    </div>
   )
 
   const id = curso.sequencial
@@ -114,28 +114,23 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
         : `/cursos/${id}`
 
   return (
-    <div className="space-y-2" data-module={module}>
-      <Card module={module}>
-        <div className="flex flex-col items-start gap-2">
-          <Link
-            href={detailHref}
-            aria-label={`Ver detalhes do curso ${nomeCurso}`}
-            className="block min-w-0 flex-1 flex flex-col rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
-          >
-            {cardContent}
-          </Link>
-          {temSisu && to !== 'ingresso' && (
-            <Link
-              href={`/ingresso/${id}`}
-              aria-label={`Ver ingresso pelo Sisu de ${nomeCurso}`}
-              className="inline-flex items-center gap-1 rounded-full px-1 font-sans text-xs font-bold text-accent-deep hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
-            >
-              Ver ingresso pelo Sisu
-              <ArrowRight className="size-3" aria-hidden="true" />
-            </Link>
-          )}
-        </div>
-      </Card>
-    </div>
+    <Card module={module}>
+      <Link
+        href={detailHref}
+        aria-label={`Ver detalhes do curso ${nomeCurso}`}
+        className="block w-full flex-1 rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
+      >
+        {cardContent}
+      </Link>
+      <footer
+        className={cn(
+          'flex mt-4 pt-3 -z-10',
+          'bg-no-repeat bg-[length:77%_1px] bg-left-top bg-gradient-to-r from-border-primary to-border-primary',
+        )}
+      >
+        {tagsBottom.length > 0 && <Card.Tags source={tagsBottom} />}
+        <CompareCourseLink courseId={id} module={module} />
+      </footer>
+    </Card>
   )
 }

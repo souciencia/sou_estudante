@@ -323,6 +323,11 @@ body {
       0 4px 10px rgba(0, 0, 0, 0.09);
   }
 
+  .text-stroke-selo {
+    color: white;
+    -webkit-text-stroke: 1px rgb(20, 96, 150);
+  }
+
   /* Mantém a barra de rolagem sempre visível (mesmo em overlay scrollbars). */
   .scrollbar-visible {
     scrollbar-width: thin;
