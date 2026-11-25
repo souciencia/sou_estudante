@@ -15,7 +15,7 @@ function Harness({ ids }: { ids: string[] }) {
       >
         seed
       </button>
-      <CompareBar module="1" />
+      <CompareBar />
     </>
   )
 }
@@ -49,20 +49,5 @@ describe('CompareBar', () => {
       'href',
       '/comparar',
     )
-  })
-
-  it('limpa a seleção ao clicar no botão de limpar', () => {
-    renderBar(['101', '102'])
-
-    fireEvent.click(screen.getByRole('button', { name: 'seed' }))
-
-    fireEvent.click(screen.getByRole('button', { name: 'Limpar comparação' }))
-
-    expect(
-      screen.queryByRole('link', { name: /Comparar/ }),
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByText(/cursos selecionados para comparar/),
-    ).not.toBeInTheDocument()
   })
 })

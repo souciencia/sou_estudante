@@ -1,15 +1,10 @@
 'use client'
 
 import { Typo } from '@/components/ui/typo'
-import type { Module } from '@/lib/module'
-import { MAX_COMPARE, useCompareCursos } from './compare-provider'
 import { Button } from '../ui/button/button'
+import { MAX_COMPARE, useCompareCursos } from './compare-provider'
 
-interface CompareBarProps {
-  module?: Module
-}
-
-export function CompareBar({ module }: CompareBarProps) {
+export function CompareBar() {
   const { ids } = useCompareCursos()
 
   if (ids.length < 2) {
@@ -22,7 +17,7 @@ export function CompareBar({ module }: CompareBarProps) {
         {ids.length} de {MAX_COMPARE} cursos selecionados para comparar
       </Typo>
 
-      <Button v='solid' href="/comparar" className='text-m2-deep'>
+      <Button v="solid" href="/comparar" className="text-m2-deep">
         {ids.length > 0 ? `Comparar (${ids.length})` : 'Comparar'}
       </Button>
     </div>

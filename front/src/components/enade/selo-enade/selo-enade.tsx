@@ -62,19 +62,19 @@ export function SeloEnade({ level, size = 'md' }: SeloEnadeProps) {
         {text}
       </div>
 
-      {
-        sizeClasses.enade && 
-        <span 
+      {sizeClasses.enade && (
+        <span
           className={cn(
             'font-selo font-normal leading-none text-on-dark',
             'absolute bottom-0',
-            sizeClasses.enade
+            sizeClasses.enade,
           )}
-          >Enade
+        >
+          Enade
         </span>
-      }
-      
-      <div className='absolute top-0 left-0 w-full h-full bg-on-dark/30'></div>
+      )}
+
+      <div className="absolute top-0 left-0 w-full h-full bg-on-dark/30"></div>
     </div>
   )
 }

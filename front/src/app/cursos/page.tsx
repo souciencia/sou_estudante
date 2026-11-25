@@ -14,7 +14,7 @@ export default function CursosPage() {
       searchLabel="Buscar curso"
       module={module}
       searchHeader={<SearchHeaderCursos module={module} />}
-      activeFilters={<CompareBar module={module} />}
+      activeFilters={<CompareBar />}
       filtersPanel={<FiltersPanelCursos module={module} />}
       results={<SearchResultsCursos module={module} />}
       minQueryLength={API_CONFIG.SEARCH_MIN_CHARS}

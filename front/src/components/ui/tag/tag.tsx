@@ -7,7 +7,7 @@ type TagProps = HTMLAttributes<HTMLSpanElement> & {
   module?: Module
   icon?: ReactNode
   source?: string
-  variant?: 'module' | 'curso' | 'destak' | 'none'
+  variant?: 'module' | 'curso' | 'destak' | 'blue' | 'none'
 }
 
 export const Tag = ({
@@ -47,14 +47,10 @@ export const Tag = ({
         className,
       )}
     >
-      <span 
-        data-module={module} 
-        className={cn(
-          'size-1.5 rounded-full -translate-x-1.5',
-          'bg-fg/15'
-          )}
-        >
-      </span>
+      <span
+        data-module={module}
+        className={cn('size-1.5 rounded-full -translate-x-1.5', 'bg-fg/15')}
+      ></span>
       {content}
     </span>
   )

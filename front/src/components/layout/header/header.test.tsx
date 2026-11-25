@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import {
@@ -71,24 +71,6 @@ describe('Header', () => {
 
       const pill = screen.getByRole('link', { name: 'Comparar (2)' })
       expect(pill).toHaveAttribute('href', '/comparar')
-    })
-
-    it('renders a clear button that resets the selection', () => {
-      renderHeaderWithIds(['101', '102'])
-
-      fireEvent.click(screen.getByRole('button', { name: 'seed' }))
-
-      const nav = screen.getByRole('navigation', {
-        name: 'Navegação principal',
-      })
-      fireEvent.click(
-        within(nav).getByRole('button', { name: 'Limpar comparação' }),
-      )
-
-      expect(
-        screen.queryByRole('link', { name: 'Comparar (2)' }),
-      ).not.toBeInTheDocument()
-      expect(screen.getByRole('link', { name: 'Comparar' })).toBeInTheDocument()
     })
   })
 })

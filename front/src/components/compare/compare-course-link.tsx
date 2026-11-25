@@ -34,7 +34,7 @@ export function CompareCourseLink({
         onCheckedChange={() => toggle(id)}
         module={module}
         aria-labelledby={labelId}
-        size='sm'
+        size="sm"
       />
       <span id={labelId} className="font-sans text-sm text-fg-muted">
         {label}
