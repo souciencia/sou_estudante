@@ -28,7 +28,7 @@ export function TooltipContent({
     <div
       id={contentId}
       className={cn(
-        'absolute left-0 top-full z-20 mt-2 w-64 rounded-panel border border-border-primary bg-surface-lv2 p-4 pr-9 text-fg shadow-lg',
+        'absolute left-0 top-full z-20 mt-2 w-[calc(100vw_-_2rem)] max-w-[700px] rounded-panel border border-border-primary bg-surface-lv2 p-4 pr-9 text-fg shadow-lg',
         className,
       )}
     >

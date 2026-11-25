@@ -1,7 +1,4 @@
-import { IconInfo } from '@/assets/icon-info'
-import { IconLupa } from '@/assets/icon-lupa'
 import { ShapeCurve } from '@/assets/shape-curve'
-import { Button } from '@/components/ui/button/button'
 import { BussolaHero } from './bussola/bussola-hero'
 
 export const Hero = () => {
@@ -38,17 +35,6 @@ export const Hero = () => {
         e conheça as instituições — com dados públicos, atualizados e de fácil
         compreensão.
       </p>
-
-      <div className="relative z-[2] mt-[1.6rem] flex flex-wrap justify-center gap-2.5">
-        <Button href="/cursos/" v="solid" s="big">
-          <IconLupa />
-          Buscar curso
-        </Button>
-        <Button href="#howto" v="translucid" s="big">
-          <IconInfo />
-          Como funciona
-        </Button>
-      </div>
       <ShapeCurve />
     </section>
   )

@@ -1,7 +1,13 @@
-export const ShapeCurve = () => {
+import { cn } from '@/utils/cn'
+
+export interface Props {
+  className?: string
+}
+
+export const ShapeCurve = (className: Props) => {
   return (
     <svg
-      className="absolute inset-x-0 bottom-0 block h-9 w-full"
+      className={cn('absolute inset-x-0 bottom-0 block h-9 w-full', className)}
       viewBox="0 0 1440 36"
       fill="none"
       preserveAspectRatio="none"
