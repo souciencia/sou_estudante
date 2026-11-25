@@ -21,7 +21,12 @@ const buildCurso = (): Curso => ({
 describe('CompareMatrix', () => {
   it('renderiza uma coluna por curso com nome e instituição', () => {
     render(
-      <CompareMatrix cursos={[buildCurso()]} onRemove={() => {}} module="5" />,
+      <CompareMatrix
+        cursos={[buildCurso()]}
+        onRemove={() => {}}
+        onClear={() => {}}
+        module="5"
+      />,
     )
 
     expect(screen.getByText('Ciência da Computação')).toBeInTheDocument()
@@ -34,6 +39,7 @@ describe('CompareMatrix', () => {
       <CompareMatrix
         cursos={[buildCurso(), buildCurso()]}
         onRemove={onRemove}
+        onClear={() => {}}
       />,
     )
 
@@ -42,8 +48,25 @@ describe('CompareMatrix', () => {
     expect(onRemove).toHaveBeenCalledWith(1)
   })
 
+  it('chama onClear ao clicar em "Remover todos"', () => {
+    const onClear = vi.fn()
+    render(
+      <CompareMatrix
+        cursos={[buildCurso()]}
+        onRemove={() => {}}
+        onClear={onClear}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Remover todos' }))
+
+    expect(onClear).toHaveBeenCalledTimes(1)
+  })
+
   it('mostra "Curso não encontrado" para coluna sem dados', () => {
-    render(<CompareMatrix cursos={[null]} onRemove={() => {}} />)
+    render(
+      <CompareMatrix cursos={[null]} onRemove={() => {}} onClear={() => {}} />,
+    )
 
     expect(screen.getByText('Curso não encontrado')).toBeInTheDocument()
     expect(screen.getAllByText('—').length).toBeGreaterThan(0)
