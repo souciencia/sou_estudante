@@ -1,19 +1,10 @@
 'use client'
 
 import { Typo } from '@/components/ui/typo'
-import type { Module } from '@/lib/module'
-import { CompareActions } from './compare-actions'
+import { Button } from '../ui/button/button'
 import { MAX_COMPARE, useCompareCursos } from './compare-provider'
 
-interface CompareBarProps {
-  module?: Module
-}
-
-/**
- * CTA de comparação exibido na busca de cursos quando há 2+ cursos
- * selecionados: resume a seleção e leva a /comparar.
- */
-export function CompareBar({ module }: CompareBarProps) {
+export function CompareBar() {
   const { ids } = useCompareCursos()
 
   if (ids.length < 2) {
@@ -21,11 +12,14 @@ export function CompareBar({ module }: CompareBarProps) {
   }
 
   return (
-    <div className="mt-4 flex items-center justify-between gap-4 rounded-panel border border-m5-accent/40 bg-m5-accent/10 p-4">
-      <Typo v="accent" s="sm" t="p" className="text-m5-deep">
+    <div className="mt-4 flex items-center justify-between gap-4 rounded-panel bg-m2-accent/20 p-4">
+      <Typo v="accent" s="sm" t="p" className="text-m2-deep font-bold">
         {ids.length} de {MAX_COMPARE} cursos selecionados para comparar
       </Typo>
-      <CompareActions module={module} />
+
+      <Button v="solid" href="/comparar" className="text-m2-deep">
+        {ids.length > 0 ? `Comparar (${ids.length})` : 'Comparar'}
+      </Button>
     </div>
   )
 }

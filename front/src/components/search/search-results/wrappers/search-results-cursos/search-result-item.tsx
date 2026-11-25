@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { ReactElement } from 'react'
 import { CompareCourseLink } from '@/components/compare/compare-course-link'
 import { MaskEnade } from '@/components/enade/mask-enade/mask-enade'
+import { SeloEnade } from '@/components/enade/selo-enade/selo-enade'
 import { Card, type CardTag } from '@/components/ui/card'
 import { TagEnade } from '@/components/ui/tag/wrappers/tag-enade/tag-enade'
 import { parseEnadeLevel } from '@/lib/enade'
@@ -51,24 +52,24 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
 
   // Montar tags dinâmicas
   const tags: Array<string | CardTag | ReactElement> = []
-  const tagsBottom: Array<string | CardTag | ReactElement> = []
+
   tags.push(<TagEnade key="enade" level={conceitoEnade} />)
-  if (gratuito) tags.push({ label: 'Gratuito', tone: 'green' })
-  if (temSisu) tags.push({ label: 'Com vagas no Sisu', tone: 'blue' })
+  if (gratuito) tags.push({ label: 'Gratuito', tone: 'destak' })
+  if (temSisu) tags.push({ label: 'Com vagas no Sisu', tone: 'destak' })
   if (modalidade) tags.push(modalidade)
   if (turno && turno.toLowerCase() !== modalidade.toLowerCase()) {
     tags.push(turno)
   }
   if (localizacaoTag) {
-    tagsBottom.push({
+    tags.push({
       label: localizacaoTag,
       icon: <MapPin aria-hidden className="size-3" />,
       source: 'Censo',
-      tone: 'blue',
+      tone: 'curso',
     })
   }
   if (vagasTag) {
-    tagsBottom.push({ label: vagasTag, source: 'Censo' })
+    tags.push({ label: vagasTag, source: 'Censo' })
   }
 
   const cardContent = (
@@ -76,7 +77,8 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
       <Card.Backdrop>
         <MaskEnade level={conceitoEnade} className="translate-x-6 opacity-80" />
       </Card.Backdrop>
-      <Card.Header>
+      <Card.Header className="gap-3">
+        <SeloEnade level={conceitoEnade} size="md" />
         <div>
           <h4 className="font-display font-bold text-base">{nomeCurso}</h4>
           <h5 className="font-sans text-fg-muted text-sm">
@@ -90,10 +92,10 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
       {tags.length > 0 && <Card.Tags source={tags} className="pb-3" />}
 
       <Card.ProgressBar
-        title="Taxa de permanência acumulada (5 anos)"
+        title="Taxa de desistência acumulada (5 anos)"
         percentage={
           typeof taxaDesistencia === 'number'
-            ? `${100 - Math.round(taxaDesistencia)}%`
+            ? `${Math.round(taxaDesistencia)}%`
             : undefined
         }
         emptyHint="sem dados"
@@ -128,7 +130,6 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
           'bg-no-repeat bg-[length:77%_1px] bg-left-top bg-gradient-to-r from-border-primary to-border-primary',
         )}
       >
-        {tagsBottom.length > 0 && <Card.Tags source={tagsBottom} />}
         <CompareCourseLink courseId={id} module={module} />
       </footer>
     </Card>

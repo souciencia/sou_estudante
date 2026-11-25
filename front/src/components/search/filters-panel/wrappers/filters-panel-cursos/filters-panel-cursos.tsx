@@ -10,6 +10,7 @@ import {
 } from '@/components/search/filters-panel/filters-panel'
 import { useMunicipioFilterPanel } from '@/components/search/filters-panel/use-municipio-filter-panel'
 import { MunicipioFilters } from '@/components/search/municipio-filter/municipio-filters'
+import { SearchHelp } from '@/components/search/search-help/search-help'
 import { SortingOptionsCursos } from '@/components/search/sorting-options/wrappers/sorting-options-cursos/sorting-options-cursos'
 import type { Module } from '@/lib/module'
 import { ufOptions } from '@/lib/uf'
@@ -138,34 +139,38 @@ export function FiltersPanelCursos({
     : undefined
 
   return (
-    <FiltersPanel
-      sections={SECTIONS}
-      aggregations={aggregations}
-      activeValues={getActiveValues}
-      onToggle={onToggle}
-      onApply={onApply}
-      onClear={resetFilters}
-      activeFilters={<ActiveFiltersCursos module={module} />}
-      leading={
-        <SortingOptionsCursos
-          module={module}
-          trailing={<SimilarResultsToggle />}
-        />
-      }
-      afterSection={(section, ctx) =>
-        section.key === 'uf' ? (
-          <MunicipioFilters
-            ufs={ctx.activeValues('uf')}
-            municipios={municipios}
-            selected={ctx.activeValues('municipio')}
-            onToggle={(codigo) => ctx.onToggle('municipio', codigo)}
-            availableCodigos={availableCodigos}
+    <>
+      <FiltersPanel
+        sections={SECTIONS}
+        aggregations={aggregations}
+        activeValues={getActiveValues}
+        onToggle={onToggle}
+        onApply={onApply}
+        onClear={resetFilters}
+        activeFilters={<ActiveFiltersCursos module={module} />}
+        leading={
+          <SortingOptionsCursos
             module={module}
+            trailing={<SimilarResultsToggle />}
           />
-        ) : null
-      }
-      module={module}
-      className={className}
-    />
+        }
+        afterSection={(section, ctx) =>
+          section.key === 'uf' ? (
+            <MunicipioFilters
+              ufs={ctx.activeValues('uf')}
+              municipios={municipios}
+              selected={ctx.activeValues('municipio')}
+              onToggle={(codigo) => ctx.onToggle('municipio', codigo)}
+              availableCodigos={availableCodigos}
+              module={module}
+            />
+          ) : null
+        }
+        module={module}
+        className={className}
+      />
+
+      <SearchHelp module={module} />
+    </>
   )
 }

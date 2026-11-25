@@ -80,24 +80,27 @@ describe('SearchResultItem', () => {
   it('adiciona o curso à comparação ao clicar no link do rodapé', () => {
     renderItem(<SearchResultItem curso={buildCurso(false)} />)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Comparar' }))
+    fireEvent.click(
+      screen.getByRole('switch', { name: 'Incluir na comparação' }),
+    )
 
     expect(
-      screen.getByRole('button', { name: 'Adicionado à comparação' }),
-    ).toHaveAttribute('aria-pressed', 'true')
+      screen.getByRole('switch', { name: 'Incluído na comparação' }),
+    ).toHaveAttribute('aria-checked', 'true')
   })
 
   it('remove o curso da comparação ao clicar novamente no link', () => {
     renderItem(<SearchResultItem curso={buildCurso(false)} />)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Comparar' }))
     fireEvent.click(
-      screen.getByRole('button', { name: 'Adicionado à comparação' }),
+      screen.getByRole('switch', { name: 'Incluir na comparação' }),
+    )
+    fireEvent.click(
+      screen.getByRole('switch', { name: 'Incluído na comparação' }),
     )
 
-    expect(screen.getByRole('button', { name: 'Comparar' })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
+    expect(
+      screen.getByRole('switch', { name: 'Incluir na comparação' }),
+    ).toHaveAttribute('aria-checked', 'false')
   })
 })

@@ -37,6 +37,9 @@ dist/
 .DS_Store
 *.pem
 
+# imagens (assets de mídia não versionados)
+public/img/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

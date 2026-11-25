@@ -30,7 +30,8 @@ export function CourseSearchEntry({
       module={module}
       onSearchSubmit={handleSubmit}
       submitLabel="Buscar"
-      className={cn(className)}
+      className={cn('w-full max-w-4xl mx-auto drop-shadow-lg', className)}
+      translucid
     />
   )
 }

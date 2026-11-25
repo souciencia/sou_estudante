@@ -39,6 +39,12 @@
   --color-m4-deep: oklch(41% 0.1961 296);
   --color-m5-deep: oklch(51% 0.1368 049);
 
+  --color-m1-tag: oklch(93.6% 1.225 121.24);
+  --color-m2-tag: oklch(86.5% 0.075 239.68);
+  --color-m3-tag: oklch(72.9% 0.205 347.95);
+  --color-m4-tag: oklch(65.7% 0.221 302.89);
+  --color-m5-tag: oklch(75.4% 0.165 52.47);
+
   --color-surface-lv0: oklch(93% 0.0222 312);
   --color-surface-lv0-top: oklch(93% 0.03 250);
   --color-surface-lv1: oklch(97% 0.0102 311);
@@ -88,6 +94,7 @@
 
   --color-muted: oklch(96.7% 0 264);
   --color-fg: oklch(19.19% 0.0441 309.16);
+  --color-fg-tag: oklch(30.19% 0.0441 309.16);
   --color-fg-muted: oklch(45.48% 0.0339 305.48);
   --color-on-dark: oklch(100% 0 0);
 
@@ -105,6 +112,7 @@
   --color-accent: var(--color-m1-accent);
   --color-accent-deep: var(--color-m1-deep);
   --color-accent-fg: var(--color-m1-deep);
+  --color-accent-tag: var(--color-m1-tag);
 
   /*  Tipografia · Famílias */
   --font-mono: "DM Mono", ui-monospace, monospace; /* dados numéricos */
@@ -113,6 +121,7 @@
   --font-sans: "Source Sans 3", system-ui, sans-serif;
   --font-selo: "Rubik Mono One", system-ui;
 
+  --text-enade-selo: 0.45rem;
   --text-xs: 0.75rem; /* 12px */
   --text-sm: 0.875rem; /* 14px */
   --text-base: 1rem; /* 16px */
@@ -151,26 +160,31 @@
   --color-accent: var(--color-m1-accent);
   --color-accent-deep: var(--color-m1-deep);
   --color-accent-fg: var(--color-m1-deep);
+  --color-accent-tag: var(--color-m1-tag);
 }
 [data-module="2"] {
   --color-accent: var(--color-m2-accent);
   --color-accent-deep: var(--color-m2-deep);
   --color-accent-fg: var(--color-m2-deep);
+  --color-accent-tag: var(--color-m2-tag);
 }
 [data-module="3"] {
   --color-accent: var(--color-m3-accent);
   --color-accent-deep: var(--color-m3-deep);
   --color-accent-fg: var(--color-m3-deep);
+  --color-accent-tag: var(--color-m3-tag);
 }
 [data-module="4"] {
   --color-accent: var(--color-m4-accent);
   --color-accent-deep: var(--color-m4-deep);
   --color-accent-fg: var(--color-m4-deep);
+  --color-accent-tag: var(--color-m4-tag);
 }
 [data-module="5"] {
   --color-accent: var(--color-m5-accent);
   --color-accent-deep: var(--color-m5-deep);
   --color-accent-fg: var(--color-m5-deep);
+  --color-accent-tag: var(--color-m5-tag);
 }
 
 /* Temas do Callout (Scoped-Variable Pattern, sem React Context) */
@@ -216,66 +230,6 @@ body {
   color: var(--color-fg);
   /* Títulos usam a mesma família do corpo. */
   --font-display: var(--font-sans);
-}
-
-/*  Bússola da Hero da Página Inicial */
-.hero-bussola {
-  position: absolute;
-  top: 50%;
-  right: -80px;
-  transform: translateY(-50%);
-  width: 188px;
-  height: 188px;
-  opacity: 0.34;
-  z-index: 0;
-  pointer-events: none;
-}
-.hero-bussola .contorno,
-.hero-bussola .seta {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.hero-bussola .contorno {
-  animation: bussola-contorno 10s ease-in-out infinite;
-}
-.hero-bussola .seta {
-  animation: bussola-seta 5.6s ease-in-out infinite;
-}
-
-@keyframes move-forever {
-  0% {
-    transform: translate3d(-90px, 0, 0);
-  }
-  100% {
-    transform: translate3d(85px, 0, 0);
-  }
-}
-
-@keyframes bussola-contorno {
-  0%,
-  100% {
-    transform: rotate(-6deg);
-  }
-  50% {
-    transform: rotate(6deg);
-  }
-}
-@keyframes bussola-seta {
-  0%,
-  100% {
-    transform: rotate(12deg);
-  }
-  50% {
-    transform: rotate(-14deg);
-  }
-}
-@media (min-width: 860px) {
-  .hero-bussola {
-    width: 312px;
-    height: 312px;
-    right: 16px;
-    opacity: 1;
-  }
 }
 
 /* Transição de página (fade + leve subida) */

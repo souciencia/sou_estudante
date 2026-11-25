@@ -1,11 +1,16 @@
-import { Hero2 } from '@/components/layout/hero/hero2'
+import { BussolaHero } from '@/components/layout/hero/bussola/bussola-hero-2'
+import { CourseSearchEntry } from '@/components/search/course-search-entry/course-search-entry'
 import { Route } from '@/components/ui/route/route'
 import { MODULES } from '@/lib/module'
+import '../bussola2.css'
 
 export default function Home() {
   return (
-    <div className="bg-surface-lv1 rounded-b-lg mx-auto w-full min-[860px]:max-w-home shadw">
-      <Hero2 />
+    <div className="flex flex-col align-center bg-surface-lv1 rounded-b-lg mx-auto w-full min-[860px]:max-w-home shadw">
+      <div className="relative mt-50">
+        <BussolaHero aria-hidden />
+        <CourseSearchEntry />
+      </div>
 
       <div className="px-5 pb-8 pt-10">
         <section>
@@ -25,14 +30,15 @@ export default function Home() {
             <br />
             para começar.
           </p>
-
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2.5 max-w-[820px] mx-auto">
-            {MODULES.map((module) => (
-              <Route key={module} module={module} />
-            ))}
-          </div>
         </section>
       </div>
+      <section>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2.5 max-w-[820px] mx-auto">
+          {MODULES.map((module) => (
+            <Route key={module} module={module} />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

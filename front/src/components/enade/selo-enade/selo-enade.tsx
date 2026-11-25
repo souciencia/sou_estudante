@@ -8,19 +8,22 @@ export interface SeloEnadeProps {
 
 const SIZE_CLASSES = {
   sm: {
-    container: 'h-8 w-8 rounded-control',
+    container: 'size-8 rounded-control',
     numeric: 'text-base',
     nonNumeric: 'text-xs',
+    enade: null,
   },
   md: {
-    container: 'h-10 w-10 rounded-control',
+    container: 'size-12 rounded-control',
     numeric: 'text-xl',
     nonNumeric: 'text-sm',
+    enade: 'text-[9px]',
   },
   lg: {
-    container: 'h-20 w-20 rounded-card',
+    container: 'size-20 rounded-card',
     numeric: 'text-4xl',
     nonNumeric: 'text-xl',
+    enade: 'text-[12px]',
   },
 } as const
 
@@ -58,6 +61,20 @@ export function SeloEnade({ level, size = 'md' }: SeloEnadeProps) {
       >
         {text}
       </div>
+
+      {sizeClasses.enade && (
+        <span
+          className={cn(
+            'font-selo font-normal leading-none text-on-dark',
+            'absolute bottom-0',
+            sizeClasses.enade,
+          )}
+        >
+          Enade
+        </span>
+      )}
+
+      <div className="absolute top-0 left-0 w-full h-full bg-on-dark/30"></div>
     </div>
   )
 }

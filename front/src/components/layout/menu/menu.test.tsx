@@ -177,7 +177,7 @@ describe('Menu', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('shows the number of selected courses and the clear action in the nav', () => {
+  it('shows the number of selected courses in the nav', () => {
     render(
       <CompareProvider>
         <Seed ids={['101', '102']} />
@@ -192,9 +192,6 @@ describe('Menu', () => {
     const link = within(nav).getByRole('link', { name: 'Comparar (2)' })
     expect(link).toHaveClass('font-bold', 'text-accent-deep')
     expect(link.parentElement).toHaveClass('border-accent')
-    expect(
-      within(nav).getByRole('button', { name: 'Limpar comparação' }),
-    ).toBeInTheDocument()
   })
 
   it('shows the number of selected courses in the drawer', () => {

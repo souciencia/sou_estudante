@@ -26,7 +26,7 @@ function isNotFound(error: unknown): boolean {
  * os busca individualmente (React Query) para montar a matriz lado a lado.
  */
 export function Comparar({ module }: CompararProps) {
-  const { ids, toggle } = useCompareCursos()
+  const { ids, toggle, clear } = useCompareCursos()
 
   const queries = useQueries({
     queries: ids.map((id) => ({
@@ -72,6 +72,7 @@ export function Comparar({ module }: CompararProps) {
       <CompareMatrix
         cursos={cursos}
         onRemove={(index) => toggle(ids[index])}
+        onClear={clear}
         module={module}
       />
     </>

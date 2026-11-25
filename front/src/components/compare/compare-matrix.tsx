@@ -3,12 +3,15 @@ import { Fragment } from 'react'
 import type { Module } from '@/lib/module'
 import type { Curso } from '@/services/api/types'
 import { cn } from '@/utils/cn'
+import { Button } from '../ui/button/button'
 import { buildCompareSections } from './compare-rows'
 
 interface CompareMatrixProps {
   /** Cursos a comparar, na ordem das colunas; `null` = não encontrado. */
   cursos: (Curso | null)[]
   onRemove: (index: number) => void
+  /** Limpa a seleção de comparação (remove todos os cursos). */
+  onClear: () => void
   module?: Module
 }
 
@@ -20,6 +23,7 @@ interface CompareMatrixProps {
 export function CompareMatrix({
   cursos,
   onRemove,
+  onClear,
   module,
 }: CompareMatrixProps) {
   const sections = buildCompareSections(cursos)
@@ -49,15 +53,16 @@ export function CompareMatrix({
                     <div className="font-sans text-sm text-fg-muted">
                       {curso.instituicao?.no_ies}
                     </div>
-                    <button
-                      type="button"
+                    <Button
+                      module={module}
+                      v="outline"
                       onClick={() => onRemove(index)}
                       aria-label={`Remover ${curso.curso?.no_curso ?? 'curso'}`}
-                      className="inline-flex items-center gap-1 rounded-full px-1 font-sans text-xs font-bold text-accent-deep hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-deep"
+                      className="px-3 py-0.5 text-xs"
                     >
                       <X className="size-3" aria-hidden="true" />
                       Remover
-                    </button>
+                    </Button>
                   </div>
                 ) : (
                   <div className="font-sans text-sm text-fg-muted">
@@ -69,6 +74,13 @@ export function CompareMatrix({
           </tr>
         </thead>
         <tbody>
+          <tr className="border-b border-border-primary">
+            <td colSpan={cursos.length + 1} className="p-4 text-right">
+              <Button module={module} v="outline" onClick={onClear}>
+                Remover todos
+              </Button>
+            </td>
+          </tr>
           {sections.map((section) => (
             <Fragment key={section.title}>
               <tr className="border-t border-border-primary bg-muted">

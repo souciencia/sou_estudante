@@ -33,6 +33,7 @@ export interface SearchAutocompleteProps {
   minChars?: number
   /** Quando informado, exibe um botão de envio com este rótulo. */
   submitLabel?: string
+  translucid?: boolean
 }
 
 export function SearchAutocomplete({
@@ -47,6 +48,7 @@ export function SearchAutocomplete({
   listLabel,
   minChars = API_CONFIG.SUGGEST_MIN_CHARS,
   submitLabel,
+  translucid,
 }: SearchAutocompleteProps) {
   const inputId = useId()
   const listboxId = `${inputId}-listbox`
@@ -202,6 +204,7 @@ export function SearchAutocomplete({
           'font-sans text-base text-fg placeholder:text-fg-muted',
           'focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent-deep',
           'transition-colors duration-200',
+          translucid ? 'bg-surface-lv2/90' : 'bg-surface-lv2',
         )}
       />
 

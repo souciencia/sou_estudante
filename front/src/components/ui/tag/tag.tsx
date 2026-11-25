@@ -7,7 +7,7 @@ type TagProps = HTMLAttributes<HTMLSpanElement> & {
   module?: Module
   icon?: ReactNode
   source?: string
-  variant?: 'module' | 'curso' | 'blue' | 'green' | 'none'
+  variant?: 'module' | 'curso' | 'destak' | 'blue' | 'none'
 }
 
 export const Tag = ({
@@ -28,11 +28,11 @@ export const Tag = ({
   )
 
   const colors = {
-    module: 'bg-accent/20 border-accent-deep/20 text-accent-deep',
-    curso: 'bg-tag-curso-surface border-tag-curso-border text-tag-curso-deep',
-    blue: 'bg-sky-100 border-sky-600 text-sky-800',
-    green: 'bg-green-100 border-green-600 text-green-800',
-    none: 'bg-white border-border-secondary text-fg-muted',
+    module: 'bg-accent-tag text-accent-deep',
+    curso: 'bg-m2-tag/50 text-fg-tag',
+    blue: 'bg-sky-100 text-sky-800',
+    destak: 'bg-green-100 text-green-800',
+    none: 'bg-gray-300 text-fg-muted',
   }
 
   return (
@@ -40,13 +40,17 @@ export const Tag = ({
       data-module={module}
       {...props}
       className={cn(
-        'mr-1 inline-flex items-center gap-1 rounded-2xl border px-2 py-1',
+        'inline-flex items-center gap-1 rounded-r-xs pl-4 pr-2 py-1 mr-1 ',
         'font-semibold font-sans text-fg-muted text-xs',
-        'transition duration-300',
+        '[clip-path:polygon(7px_0%,100%_0%,100%_100%,7px_100%,0%_50%)]',
         colors[variant],
         className,
       )}
     >
+      <span
+        data-module={module}
+        className={cn('size-1.5 rounded-full -translate-x-1.5', 'bg-fg/15')}
+      ></span>
       {content}
     </span>
   )
