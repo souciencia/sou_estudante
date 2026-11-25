@@ -1,12 +1,14 @@
 'use client'
 
 import { Info, MapPin, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
 import { BackLink } from '@/components/ui/back-link/back-link'
 import { Button } from '@/components/ui/button/button'
 import { Callout } from '@/components/ui/callout'
 import { Card } from '@/components/ui/card'
 import { SkeletonCard } from '@/components/ui/card/skeleton-card'
 import { Checkbox } from '@/components/ui/checkbox/checkbox'
+import { Dialog } from '@/components/ui/dialog/dialog'
 import { ErrorMessage } from '@/components/ui/error-message'
 import { IconModule } from '@/components/ui/icon-module/icon-module'
 import { IconTile } from '@/components/ui/icon-tile/icon-tile'
@@ -56,7 +58,7 @@ export function BaseComponents() {
         </States>
       </SubSection>
 
-      <SubSection title="Tag · variant (module | curso | blue | green | none)">
+      <SubSection title="Tag · variant (module | curso | blue | destak | none)">
         <States>
           <State label="module">
             <Tag label="Gratuito" variant="module" module="1" />
@@ -67,8 +69,8 @@ export function BaseComponents() {
           <State label="blue">
             <Tag label="Com vagas no Sisu" variant="blue" />
           </State>
-          <State label="green">
-            <Tag label="Gratuito" variant="green" />
+          <State label="destak">
+            <Tag label="Gratuito" variant="destak" />
           </State>
           <State label="none">
             <Tag label="Presencial" />
@@ -212,6 +214,14 @@ export function BaseComponents() {
         </States>
       </SubSection>
 
+      <SubSection title="Dialog · modal centrado">
+        <States>
+          <State label="abrir">
+            <DialogDemo />
+          </State>
+        </States>
+      </SubSection>
+
       <SubSection title="Callout · v (blue | gold | module)">
         <div className="grid gap-4 md:grid-cols-2">
           <Callout v="blue">
@@ -314,6 +324,33 @@ export function BaseComponents() {
 }
 
 const BUTTON_VARIANTS = ['chip', 'solid', 'outline'] as const
+
+function DialogDemo() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button v="outline" onClick={() => setOpen(true)}>
+        Abrir diálogo
+      </Button>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        labelledBy="ds-dialog-title"
+      >
+        <h3
+          id="ds-dialog-title"
+          className="font-display text-lg font-bold text-fg"
+        >
+          Exemplo de diálogo
+        </h3>
+        <p className="mt-2 text-sm text-fg-muted">
+          Modal centrado com véu, foco preso e fechamento por Esc.
+        </p>
+      </Dialog>
+    </>
+  )
+}
 
 const TYPO_STATES = [
   { label: 'normal · sm', v: 'normal', s: 'sm' },
