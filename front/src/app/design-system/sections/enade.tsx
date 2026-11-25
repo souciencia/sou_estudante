@@ -69,7 +69,7 @@ export function EnadeSection() {
             <Card.Backdrop>
               <MaskEnade level={5} />
             </Card.Backdrop>
-            <Card.Header>
+            <Card.Header className="gap-3">
               <SeloEnade level={5} size="md" />
               <div>
                 <h4 className="font-display font-bold text-base">

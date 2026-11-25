@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { ReactElement } from 'react'
 import { CompareCourseLink } from '@/components/compare/compare-course-link'
 import { MaskEnade } from '@/components/enade/mask-enade/mask-enade'
+import { SeloEnade } from '@/components/enade/selo-enade/selo-enade'
 import { Card, type CardTag } from '@/components/ui/card'
 import { TagEnade } from '@/components/ui/tag/wrappers/tag-enade/tag-enade'
 import { parseEnadeLevel } from '@/lib/enade'
@@ -76,7 +77,8 @@ export function SearchResultItem({ curso, module, to }: SearchResultItemProps) {
       <Card.Backdrop>
         <MaskEnade level={conceitoEnade} className="translate-x-6 opacity-80" />
       </Card.Backdrop>
-      <Card.Header>
+      <Card.Header className="gap-3">
+        <SeloEnade level={conceitoEnade} size="md" />
         <div>
           <h4 className="font-display font-bold text-base">{nomeCurso}</h4>
           <h5 className="font-sans text-fg-muted text-sm">
