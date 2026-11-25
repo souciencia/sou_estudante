@@ -65,17 +65,6 @@ export const ProfileCursosQuality = ({
         calendários distintos.
       </Callout>
 
-      <Callout v="gold">
-        <span className="inline-flex gap-2">
-          <TrendingUp
-            className="size-3 scale-125 translate-y-0.5"
-            aria-hidden="true"
-          />
-          Em versões futuras: a progressão das notas ao longo dos ciclos, para
-          ler tendências de avaliação.
-        </span>
-      </Callout>
-
       <ProfileCursosRetentionCard
         taxa={curso.tda?.tda}
         anoInicio={curso.tda?.nu_ano_ingresso_tda}
