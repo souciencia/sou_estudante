@@ -1,6 +1,7 @@
 import { ProfileRoutes } from '@/components/profile/profile-routes'
 import { MODULE_META, MODULES } from '@/lib/module'
 import { Section, SubSection } from '../kit'
+import { TooltipIcon } from '@/components/ui/tooltip/tooltip-icon'
 
 export function Experiments() {
   return (
@@ -24,6 +25,10 @@ export function Experiments() {
           ))}
         </div>
       </SubSection>
+      <SubSection title="Testes">
+            <TooltipIcon />
+      </SubSection>
+
     </Section>
   )
 }
