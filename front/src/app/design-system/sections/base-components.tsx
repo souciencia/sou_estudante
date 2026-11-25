@@ -14,6 +14,7 @@ import { Route } from '@/components/ui/route/route'
 import { Spinner } from '@/components/ui/spinner'
 import { Switch } from '@/components/ui/switch/switch'
 import { Tag } from '@/components/ui/tag/tag'
+import { Tooltip } from '@/components/ui/tooltip'
 import { Typo } from '@/components/ui/typo'
 import { MODULES } from '@/lib/module'
 import { Section, State, States, SubSection } from '../kit'
@@ -188,6 +189,27 @@ export function BaseComponents() {
             <Route module="5" variant="list" />
           </div>
         </div>
+      </SubSection>
+
+      <SubSection title="Tooltip · clique para abrir (tema por módulo)">
+        <States>
+          {MODULES.map((module) => (
+            <State key={module} label={`module ${module}`}>
+              <Tooltip module={module}>
+                <Tooltip.Icon />
+                <Tooltip.Content>
+                  Conteúdo explicativo com acento do módulo {module}.
+                </Tooltip.Content>
+              </Tooltip>
+            </State>
+          ))}
+          <State label="sm">
+            <Tooltip module="1" size="sm">
+              <Tooltip.Icon />
+              <Tooltip.Content>Variante compacta (sm).</Tooltip.Content>
+            </Tooltip>
+          </State>
+        </States>
       </SubSection>
 
       <SubSection title="Callout · v (blue | gold | module)">

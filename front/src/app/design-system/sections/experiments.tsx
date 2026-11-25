@@ -1,7 +1,7 @@
 import { ProfileRoutes } from '@/components/profile/profile-routes'
 import { MODULE_META, MODULES } from '@/lib/module'
 import { Section, SubSection } from '../kit'
-import { TooltipIcon } from '@/components/ui/tooltip/tooltip-icon'
+import { Tooltip } from '@/components/ui/tooltip'
 
 export function Experiments() {
   return (
@@ -10,25 +10,20 @@ export function Experiments() {
       title="Experiments"
       description="Componentes em exploração (v2), ainda não integrados às páginas."
     >
-      <SubSection title="ProfileRoutes · acento por módulo">
-        <div className="flex flex-col gap-4">
-          {MODULES.filter((module) => module !== '5').map((module) => (
-            <div
-              key={module}
-              className="overflow-hidden rounded-panel border border-border-primary bg-surface-lv2-lv2-lv2"
-            >
-              <p className="px-5 pt-3 text-xs font-semibold text-fg-muted">
-                module {module} · {MODULE_META[module].title}
-              </p>
-              <ProfileRoutes module={module} className="border-b-0" />
-            </div>
-          ))}
-        </div>
-      </SubSection>
       <SubSection title="Testes">
-            <TooltipIcon />
-      </SubSection>
+        <Tooltip module='4'>
+          <Tooltip.Icon/>
+          <Tooltip.Content>
+            
+Crie um componente chamado TooltipIcon, em `components/ui/tooltip/`.  Termine o componente deixando-o funcional e com a capacidade de mudar de cores conforme `data-module`. 
+- quero que o conteúdo de tooltipContent apareça através do click. Deve haver um botão para fechar. 
+- No icone, deve haver um hover com a mensagem "Clique para saber mais"
 
+Implemente as funcionalidades e a estilização. 
+          </Tooltip.Content>
+        </Tooltip>
+ 
+      </SubSection>
     </Section>
   )
 }
