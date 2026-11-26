@@ -1,6 +1,5 @@
 'use client'
 
-import { TrendingUp } from 'lucide-react'
 import { MarLegenda } from '@/components/enade/formas-enade/mar-legenda'
 import { SeloEnade } from '@/components/enade/selo-enade/selo-enade'
 import { Callout } from '@/components/ui/callout'
@@ -63,17 +62,6 @@ export const ProfileCursosQuality = ({
         O conceito Enade é avaliado por ciclos — nem todos os cursos são
         avaliados no mesmo ano. Áreas de saúde, exatas e humanidades têm
         calendários distintos.
-      </Callout>
-
-      <Callout v="gold">
-        <span className="inline-flex gap-2">
-          <TrendingUp
-            className="size-3 scale-125 translate-y-0.5"
-            aria-hidden="true"
-          />
-          Em versões futuras: a progressão das notas ao longo dos ciclos, para
-          ler tendências de avaliação.
-        </span>
       </Callout>
 
       <ProfileCursosRetentionCard

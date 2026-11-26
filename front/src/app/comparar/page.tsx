@@ -3,7 +3,7 @@ import { Comparar } from '@/components/compare/comparar'
 import { CourseSearchRedirect } from '@/components/search/course-search-redirect/course-search-redirect'
 // import { RoutesBar } from '@/components/layout/routes-bar/routes-bar'
 import { Callout } from '@/components/ui/callout'
-import { IconModule } from '@/components/ui/icon-module/icon-module'
+import { IconHome } from '@/components/ui/icon-home/icon-home'
 import { MODULE_META, type Module } from '@/lib/module'
 
 const module: Module = '5'
@@ -16,8 +16,10 @@ export default function CompararPage() {
         {/* <RoutesBar module={module} /> */}
         <header className="mb-6">
           <div className="mb-2 flex items-center gap-2 font-sans text-xs font-bold tracking-[0.9px] text-accent-deep uppercase">
-            <IconModule module={module} />
+            <IconHome module={module} />
             {meta.badge}
+            {' — '}
+            {meta.title}
           </div>
 
           <h1 className="block font-sans text-display font-bold leading-[1.08] tracking-[-0.02em] text-fg">
@@ -28,6 +30,8 @@ export default function CompararPage() {
           </h1>
 
           <p className="mt-1.5 font-sans text-base text-fg-muted">
+            {meta.list.description}
+            <br />
             {meta.page.subtitle}
           </p>
         </header>
