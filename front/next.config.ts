@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
   // Gera um servidor mínimo autocontido para a imagem de produção (Dockerfile)
   output: 'standalone',
 
+  // Imagens estáticas (capturas do modal de ajuda) são servidas direto de /public,
+  // sem o endpoint /_next/image, que exige `sharp` no build standalone.
+  images: {
+    unoptimized: true,
+  },
+
   // Proxy para a API do backend (resolve CORS e comunicação interna Docker)
   async rewrites() {
     return [

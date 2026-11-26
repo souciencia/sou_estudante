@@ -77,7 +77,7 @@ export const SEARCH_HELP_CONTENT: HelpSection[] = [
         blocks: [
           {
             kind: 'paragraph',
-            text: 'Também dá para incluir um curso na comparação pelo botão "Comparar" dentro do perfil do curso. Quando o curso já está selecionado, o rótulo muda para "Na comparação".',
+            text: 'Também dá para incluir um curso na comparação pelo botão "Adicionar à comparação" dentro do perfil do curso. Depois de incluído, o botão vira "Ir para a Comparação" e leva você à página de comparação.',
           },
         ],
         image: {
