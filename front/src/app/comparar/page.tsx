@@ -29,6 +29,7 @@ export default function CompararPage() {
           </h1>
 
           <p className="mt-1.5 font-sans text-base text-fg-muted">
+            {meta.list.description}<br/>
             {meta.page.subtitle}
           </p>
         </header>
