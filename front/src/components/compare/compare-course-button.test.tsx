@@ -12,35 +12,23 @@ function renderButton(courseId: number) {
 }
 
 describe('CompareCourseButton', () => {
-  it('mostra "Comparar" quando o curso não está na comparação', () => {
+  it('mostra "Adicionar à comparação" quando o curso não está na comparação', () => {
     renderButton(101)
-
-    expect(screen.getByRole('button', { name: /Comparar/ })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
-  })
-
-  it('alterna para "Na comparação" ao clicar', () => {
-    renderButton(101)
-
-    fireEvent.click(screen.getByRole('button', { name: /Comparar/ }))
 
     expect(
-      screen.getByRole('button', { name: /Na comparação/ }),
-    ).toHaveAttribute('aria-pressed', 'true')
+      screen.getByRole('button', { name: /Adicionar à comparação/ }),
+    ).toBeInTheDocument()
   })
 
-  it('remove o curso da comparação ao clicar novamente', () => {
+  it('alterna para o link "Ir para a Comparação" ao clicar', () => {
     renderButton(101)
 
-    const button = screen.getByRole('button', { name: /Comparar/ })
-    fireEvent.click(button)
-    fireEvent.click(screen.getByRole('button', { name: /Na comparação/ }))
-
-    expect(screen.getByRole('button', { name: /Comparar/ })).toHaveAttribute(
-      'aria-pressed',
-      'false',
+    fireEvent.click(
+      screen.getByRole('button', { name: /Adicionar à comparação/ }),
     )
+
+    expect(
+      screen.getByRole('link', { name: /Ir para a Comparação/ }),
+    ).toHaveAttribute('href', '/comparar')
   })
 })

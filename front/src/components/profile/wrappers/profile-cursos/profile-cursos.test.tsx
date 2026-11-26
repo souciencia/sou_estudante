@@ -96,12 +96,11 @@ describe('ProfileCursos', () => {
     ).toHaveAttribute('href', '/permanencia/1')
   })
 
-  it('shows the compare button and the link to the comparison page', () => {
+  it('shows the compare button', () => {
     render(<ProfileCursos curso={curso} />)
 
-    expect(screen.getByRole('button', { name: /Comparar/ })).toBeInTheDocument()
     expect(
-      screen.getByRole('link', { name: /Ir para a comparação/ }),
-    ).toHaveAttribute('href', '/comparar')
+      screen.getByRole('button', { name: /Adicionar à comparação/ }),
+    ).toBeInTheDocument()
   })
 })

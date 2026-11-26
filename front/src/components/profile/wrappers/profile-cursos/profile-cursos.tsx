@@ -107,12 +107,6 @@ export const ProfileCursos = ({ curso, module = '1' }: ProfileCursosProps) => {
           description="Indicadores oficiais e perfil da IES — Telescópio"
         />
         {id !== undefined && <CompareCourseButton courseId={id} />}
-        <Route
-          module="5"
-          variant="inline"
-          title="Ir para a comparação"
-          description="Veja os cursos selecionados lado a lado — Sextante"
-        />
       </Profile.Section>
     </Profile>
   )
