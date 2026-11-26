@@ -59,6 +59,7 @@ export function LayoutSearchPage({
             <div className="mb-2 flex items-center gap-2 font-sans text-xs font-bold tracking-[0.9px] text-accent-deep uppercase">
               <IconHome module={module} />
               {meta.badge}
+              {" — "}{meta.title}
             </div>
 
             <h1 className="block font-sans text-display font-bold leading-[1.08] tracking-[-0.02em] text-fg">
