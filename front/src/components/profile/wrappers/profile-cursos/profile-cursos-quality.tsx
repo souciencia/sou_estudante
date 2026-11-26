@@ -1,6 +1,5 @@
 'use client'
 
-import { TrendingUp } from 'lucide-react'
 import { MarLegenda } from '@/components/enade/formas-enade/mar-legenda'
 import { SeloEnade } from '@/components/enade/selo-enade/selo-enade'
 import { Callout } from '@/components/ui/callout'

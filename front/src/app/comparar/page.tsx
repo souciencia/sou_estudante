@@ -3,8 +3,8 @@ import { Comparar } from '@/components/compare/comparar'
 import { CourseSearchRedirect } from '@/components/search/course-search-redirect/course-search-redirect'
 // import { RoutesBar } from '@/components/layout/routes-bar/routes-bar'
 import { Callout } from '@/components/ui/callout'
-import { MODULE_META, type Module } from '@/lib/module'
 import { IconHome } from '@/components/ui/icon-home/icon-home'
+import { MODULE_META, type Module } from '@/lib/module'
 
 const module: Module = '5'
 const meta = MODULE_META[module]
@@ -18,7 +18,8 @@ export default function CompararPage() {
           <div className="mb-2 flex items-center gap-2 font-sans text-xs font-bold tracking-[0.9px] text-accent-deep uppercase">
             <IconHome module={module} />
             {meta.badge}
-            {" — "}{meta.title}
+            {' — '}
+            {meta.title}
           </div>
 
           <h1 className="block font-sans text-display font-bold leading-[1.08] tracking-[-0.02em] text-fg">
@@ -29,7 +30,8 @@ export default function CompararPage() {
           </h1>
 
           <p className="mt-1.5 font-sans text-base text-fg-muted">
-            {meta.list.description}<br/>
+            {meta.list.description}
+            <br />
             {meta.page.subtitle}
           </p>
         </header>
