@@ -3,8 +3,8 @@ import { Comparar } from '@/components/compare/comparar'
 import { CourseSearchRedirect } from '@/components/search/course-search-redirect/course-search-redirect'
 // import { RoutesBar } from '@/components/layout/routes-bar/routes-bar'
 import { Callout } from '@/components/ui/callout'
-import { IconModule } from '@/components/ui/icon-module/icon-module'
 import { MODULE_META, type Module } from '@/lib/module'
+import { IconHome } from '@/components/ui/icon-home/icon-home'
 
 const module: Module = '5'
 const meta = MODULE_META[module]
@@ -16,7 +16,7 @@ export default function CompararPage() {
         {/* <RoutesBar module={module} /> */}
         <header className="mb-6">
           <div className="mb-2 flex items-center gap-2 font-sans text-xs font-bold tracking-[0.9px] text-accent-deep uppercase">
-            <IconModule module={module} />
+            <IconHome module={module} />
             {meta.badge}
           </div>
 

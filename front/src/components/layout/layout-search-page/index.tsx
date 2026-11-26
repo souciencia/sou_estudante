@@ -3,9 +3,9 @@ import { type ReactNode, Suspense } from 'react'
 // Dependência deliberada de `search/`: o layout da página de busca precisa saber
 // se há um termo em `q` (SearchGate) para decidir entre os blocos e o estado vazio.
 import { SearchGate } from '@/components/search/search-gate/search-gate'
-import { IconModule } from '@/components/ui/icon-module/icon-module'
 import { Typo } from '@/components/ui/typo'
 import { MODULE_META, type Module } from '@/lib/module'
+import { IconHome } from '@/components/ui/icon-home/icon-home'
 
 const DEFAULT_EMPTY_PROMPT = 'Faça uma busca para ver os resultados'
 
@@ -57,7 +57,7 @@ export function LayoutSearchPage({
         {meta && module && (
           <header className="mb-6">
             <div className="mb-2 flex items-center gap-2 font-sans text-xs font-bold tracking-[0.9px] text-accent-deep uppercase">
-              <IconModule module={module} />
+              <IconHome module={module} />
               {meta.badge}
             </div>
 
